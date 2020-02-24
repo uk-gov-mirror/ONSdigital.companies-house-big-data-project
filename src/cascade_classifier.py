@@ -26,7 +26,7 @@ gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
 # load the cat detector Haar cascade, then detect cat faces in the input image
 detector = cv2.CascadeClassifier(args["cascade"])
-rects = detector.detectMultiScale(gray, scaleFactor = 1.1, minNeighbors = 10, minSize = (20, 20))
+rects = detector.detectMultiScale(gray, scaleFactor = 2.0, minNeighbors = 10, minSize = (60, 30))
 
 print("[INFO] Found {0} companies house stamps".format(len(rects)))
 
@@ -47,10 +47,9 @@ print("[INFO] Output from the classifier written to filesystem in: " + output_pa
 def shou_classifier_output():
     '''
     '''
-    return pass
+    pass
 
-def show_processed_output()
+def show_processed_output():
     '''
     '''
-    return pass
-    
+    pass
