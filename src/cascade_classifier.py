@@ -41,15 +41,14 @@ for (i, (x, y, w, h)) in enumerate(rects):
 status = cv2.imwrite(output_path + "test.png", image)
 print("[INFO] Output from the classifier written to filesystem in: " + output_path, "[STATUS]: " + str(status))
 
-# show the detected cat faces
-#cv2.imshow("Companies House Stamps", image)
-#cv2.waitKey(0)
-def shou_classifier_output():
+def show_classifier_output(title, imgs):
     '''
     '''
-    pass
+    return cv2.imshow(title, imgs)
 
-def show_processed_output():
+def show_processed_output(title, imgs):
     '''
     '''
-    pass
+    return cv2.imshow(title, imgs)
+
+cv2.waitKey(0)
