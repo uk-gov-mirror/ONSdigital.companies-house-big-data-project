@@ -45,6 +45,8 @@ def classifier_process(image, path):
     
 def main():
     '''
+	
+	EXE on a Windows machine " python cascade_classifier.py -i ..\data\input\test_img_04.tif -c ..\data\cascade_files\chp_stamp_cascade_classifier_20200224.xml -s 1.2 -m 10 -o ..\data\output\classifier_output\ -p ..\data\output\processed_images\ "
     '''
     
     # construct the argument parse and parse the arguments
@@ -53,6 +55,14 @@ def main():
         help = "path to the input image")
     ap.add_argument("-c", "--cascade_file", required = True,
         help = "path to cascade classifier.")
+    ap.add_argument("-s", "--scale_factor", required = True,
+        help = "cascade classifier scale factor.")
+    ap.add_argument("-m", "--min_neighbors", required = True,
+        help = "cascade classifier min neighbors.")
+    ap.add_argument("-w", "--cascade_width", required = False,
+        help = "cascade classifier starting sample width.")
+    ap.add_argument("-y", "--cascade_height", required = False,
+        help = "cascade classifier starting sample height.")
     ap.add_argument("-o", "--classifier_output_dir", required = True,
         help = "path to classifier output.")
     ap.add_argument("-p", "--processed_images_dir", required = True,
@@ -63,13 +73,18 @@ def main():
     image = classifier_input(args["input_imgs"])
     gray = imgs_to_grey(image)
 
+    #
     detector = cv2.CascadeClassifier(args["cascade_file"])
-    rects = classifier(detector, gray, 1.2, 10)
-    
+    rects = classifier(detector,
+                       gray,
+                       args["scale_factor"],
+                       args["min_neighbors"])
+
     print("[INFO] Found " + str(classifier_output_count(rects)) + " companies house stamps.\n")
-    
+
+    #
     classifier_output(rects, image, args["classifier_output_dir"])
-    
+
     #
     classifier_process(image, args["processed_images_dir"])
 
