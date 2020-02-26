@@ -51,25 +51,27 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("-i", "--input_imgs", required = True,
         help = "path to the input image")
-    ap.add_argument("-c", "--cascade",
-        help = "path to companies house stamp detector.")
-    ap.add_argument("-o", "--output_imgs", required = True,
-        help = "path to classifier output")
+    ap.add_argument("-c", "--cascade_file", required = True,
+        help = "path to cascade classifier.")
+    ap.add_argument("-o", "--classifier_output_dir", required = True,
+        help = "path to classifier output.")
+    ap.add_argument("-p", "--processed_images_dir", required = True,
+        help = "path to images processed by the classifier.")
     args = vars(ap.parse_args())
 
     # load the input image and convert it to grayscale
     image = classifier_input(args["input_imgs"])
     gray = imgs_to_grey(image)
 
-    detector = cv2.CascadeClassifier(args["cascade"])
+    detector = cv2.CascadeClassifier(args["cascade_file"])
     rects = classifier(detector, gray, 1.2, 10)
     
     print("[INFO] Found " + str(classifier_output_count(rects)) + " companies house stamps.\n")
     
-    classifier_output(rects, image, args["output_imgs"])
+    classifier_output(rects, image, args["classifier_output_dir"])
     
     #
-    classifier_process(image, args["output_imgs"])
+    classifier_process(image, args["processed_images_dir"])
 
 #    cv2.waitKey(0)
 
