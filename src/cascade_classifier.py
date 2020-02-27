@@ -1,8 +1,12 @@
 # import the necessary packages
+from os import listdir
+from os.path import isfile, join
+import glob
 import argparse
 import sys
 import cv2
-import numpy as np
+import numpy
+import time
 
 def imgs_to_grey(image):
     '''
@@ -11,6 +15,12 @@ def imgs_to_grey(image):
     
 def classifier_input(path):
     '''
+    '''
+    '''
+    cv_img = []
+    for img in path:
+        n = cv2.imread(img, cv2.IMREAD_GRAYSCALE)
+        cv_img.append(n)
     '''
     return cv2.imread(path)
 
@@ -46,7 +56,7 @@ def classifier_process(image, path):
 def main():
     '''
 	
-    EXE on Mac " python3 cascade_classifier.py -i ../data/input/test_img_04.tif -c ../data/cascade_files/chp_stamp_cascade_classifier_20200224.xml -s 1.2 -m 10 -x 60 -y 30 -o ../data/output/classifier_output/ -p ../data/output/processed_images/ "
+    EXE on Mac " python3 cascade_classifier.py -d ../data/input/test_img_04.tif -c ../data/cascade_files/chp_stamp_cascade_classifier_20200224.xml -s 1.2 -m 10 -x 60 -y 30 -o ../data/output/classifier_output/ -p ../data/output/processed_images/ "
  
 	EXE on a Windows machine " python cascade_classifier.py -i ..\data\input\test_img_04.tif -c ..\data\cascade_files\chp_stamp_cascade_classifier_20200224.xml -s 1.2 -m 10 -o ..\data\output\classifier_output\ -p ..\data\output\processed_images\ "
     
@@ -54,8 +64,8 @@ def main():
     
     # construct the argument parse and parse the arguments
     ap = argparse.ArgumentParser()
-    ap.add_argument("-i", "--input_imgs", required = True,
-        help = "path to the input image")
+    ap.add_argument("-d", "--input_imgs", required = True,
+        help = "path to a directory containing images to be used as input data")
     ap.add_argument("-c", "--cascade_file", required = True,
         help = "path to cascade classifier.")
     ap.add_argument("-s", "--scale_factor", required = True,
@@ -97,4 +107,10 @@ def main():
 
 if __name__ == "__main__":
 
+    process_start = time.time()
+    
     main()
+    
+    print("-"*50)
+    print("Process Complete")
+    print("The time taken to process an image is : ", "{}".format((time.time() - process_start)/60, 2), " minutes")
