@@ -14,10 +14,10 @@ def classifier_input(path):
     '''
     return cv2.imread(path)
 
-def classifier(detector, imgs, scale_factor, min_neighbors):
+def classifier(detector, imgs, scale_factor, min_neighbors, w, h):
     '''
     '''
-    return detector.detectMultiScale(imgs, scale_factor, min_neighbors, minSize = (60, 30))
+    return detector.detectMultiScale(imgs, scale_factor, min_neighbors, minSize = (w, h))
 
 def classifier_outputdd(title, imgs):
     '''
@@ -46,7 +46,10 @@ def classifier_process(image, path):
 def main():
     '''
 	
+    EXE on Mac " python3 cascade_classifier.py -i ../data/input/test_img_04.tif -c ../data/cascade_files/chp_stamp_cascade_classifier_20200224.xml -s 1.2 -m 10 -x 60 -y 30 -o ../data/output/classifier_output/ -p ../data/output/processed_images/ "
+ 
 	EXE on a Windows machine " python cascade_classifier.py -i ..\data\input\test_img_04.tif -c ..\data\cascade_files\chp_stamp_cascade_classifier_20200224.xml -s 1.2 -m 10 -o ..\data\output\classifier_output\ -p ..\data\output\processed_images\ "
+    
     '''
     
     # construct the argument parse and parse the arguments
@@ -59,9 +62,9 @@ def main():
         help = "cascade classifier scale factor.")
     ap.add_argument("-m", "--min_neighbors", required = True,
         help = "cascade classifier min neighbors.")
-    ap.add_argument("-w", "--cascade_width", required = False,
+    ap.add_argument("-x", "--cascade_width", required = True,
         help = "cascade classifier starting sample width.")
-    ap.add_argument("-y", "--cascade_height", required = False,
+    ap.add_argument("-y", "--cascade_height", required = True,
         help = "cascade classifier starting sample height.")
     ap.add_argument("-o", "--classifier_output_dir", required = True,
         help = "path to classifier output.")
@@ -77,8 +80,10 @@ def main():
     detector = cv2.CascadeClassifier(args["cascade_file"])
     rects = classifier(detector,
                        gray,
-                       args["scale_factor"],
-                       args["min_neighbors"])
+                       float(args["scale_factor"]),
+                       int(args["min_neighbors"]),
+                       int(args["cascade_width"]),
+                       int(args["cascade_height"]))
 
     print("[INFO] Found " + str(classifier_output_count(rects)) + " companies house stamps.\n")
 
