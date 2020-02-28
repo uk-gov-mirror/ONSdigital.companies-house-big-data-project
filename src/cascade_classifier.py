@@ -7,22 +7,29 @@ import sys
 import cv2
 import numpy
 import time
+from skimage.io import imread_collection
 
 def imgs_to_grey(image):
     '''
     '''
     return cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    
+
 def classifier_input(path):
-    '''
-    '''
     '''
     cv_img = []
     for img in path:
         n = cv2.imread(img, cv2.IMREAD_GRAYSCALE)
         cv_img.append(n)
+		
+	import os
+import cv2
+path_of_images = r"E:\companies_house_project\repos\companies_house_project\data\input"
+list_of_images = os.listdir(path_of_images)
+for image in list_of_images:
+    img = cv2.imread(os.path.join(path_of_images, image))
     '''
-    return cv2.imread(path)
+#    return cv2.imread(path)
+	return imread_collection(path)
 
 def classifier(detector, imgs, scale_factor, min_neighbors, w, h):
     '''
@@ -58,7 +65,7 @@ def main():
 	
     EXE on Mac " python3 cascade_classifier.py -d ../data/input/test_img_04.tif -c ../data/cascade_files/chp_stamp_cascade_classifier_20200224.xml -s 1.2 -m 10 -x 60 -y 30 -o ../data/output/classifier_output/ -p ../data/output/processed_images/ "
  
-	EXE on a Windows machine " python cascade_classifier.py -i ..\data\input\test_img_04.tif -c ..\data\cascade_files\chp_stamp_cascade_classifier_20200224.xml -s 1.2 -m 10 -o ..\data\output\classifier_output\ -p ..\data\output\processed_images\ "
+	EXE on a Windows machine " python cascade_classifier.py -d ..\data\input\test_img_04.tif -c ..\data\cascade_files\chp_stamp_cascade_classifier_20200224.xml -s 1.2 -m 10 -x 60 -y 30 -o ..\data\output\classifier_output\ -p ..\data\output\processed_images\ "
     
     '''
     
