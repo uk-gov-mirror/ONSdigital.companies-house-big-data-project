@@ -7,18 +7,25 @@ import sys
 import cv2
 import numpy
 import time
-from skimage.io import imread_collection
 
-def imgs_to_grey(image):
+def imgs_to_grey(path):
     '''
     '''
-    return cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    if path is None:
+        raise ValueError("Specify a path to an image.")
+    if type(path) not in [""]:
+        raise TypeError("The value of the path argument must be a of type string")
+    return cv2.cvtColor(path, cv2.COLOR_BGR2GRAY)
 
 def classifier_input(path):
     '''
     '''
+    if path is None:
+        raise ValueError("Specify a path to an image.")
+    if type(path) not in [""]:
+        raise TypeError("The value of the path argument must be a of type string")
     return cv2.imread(path)
-
+    
 def classifier(detector, imgs, scale_factor, min_neighbors, w, h):
     '''
     '''
