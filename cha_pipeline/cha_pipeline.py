@@ -5,9 +5,8 @@ import argparse
 import sys
 import cv2
 
-import cst_data_processing
-import cst_classifier
-from cst_classifier import classifier_input, imgs_to_grey, classifier, classifier_output_count, classifier_output, classifier_process
+from src.data_processing.cst_data_processing import DataProcessing
+from src.classifier.cst_classifier import Classifier
 
 def main():
     
