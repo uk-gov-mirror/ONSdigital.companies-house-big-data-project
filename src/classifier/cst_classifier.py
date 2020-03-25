@@ -24,17 +24,17 @@ class Classifier:
 	#        raise TypeError("The value of the path argument must be a of type string")
 			return cv2.imread(path)
 		
-	#def classifier(detector, imgs, scale_factor, min_neighbors, w, h):
-	#    '''
-	#    '''
-	#    return detector.detectMultiScale(imgs, scale_factor, min_neighbors, minSize = (w, h))
+	def ensemble(detector, imgs, scale_factor, min_neighbors, w, h):
+	    '''
+	    '''
+	    return detector.detectMultiScale(imgs, scale_factor, min_neighbors, minSize = (w, h))
 
-	def classifier_output_show(title, imgs):
+	def display_classifier_output(title, imgs):
 		'''
 		'''
 		return cv2.imshow(title, imgs)
 
-	def classifier_output_count(imgs):
+	def count_classifier_output(imgs):
 		'''
 		'''
 		return len(imgs)

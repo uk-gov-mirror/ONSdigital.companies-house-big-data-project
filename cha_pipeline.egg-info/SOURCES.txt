@@ -10,5 +10,9 @@ src/classifier/cst_classifier.py
 src/data_processing/__init__.py
 src/data_processing/cst_data_processing.py
 tests/__init__.py
-tests/test_cascade_classifier.py
 tests/test_classifier_input.py
+tests/test_classifier_output.py
+tests/test_classifier_process.py
+tests/test_count_classifier_output.py
+tests/test_ensemble.py
+tests/test_imgs_to_grey.py
