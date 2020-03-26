@@ -36,27 +36,24 @@ def main():
 
     # load the input image and convert it to grayscale
     for image in listdir(args["input_imgs"]):
-        img = classifier_input(join(args["input_imgs"], image))
-        grey = imgs_to_grey(img)
+        img = Classifier.classifier_input(join(args["input_imgs"], image))
+        grey = Classifier.imgs_to_grey(img)
 
-        rects = classifier(detector,
+        rects = Classifier.ensemble(detector,
                            grey,
                            float(args["scale_factor"]),
                            int(args["min_neighbors"]),
                            int(args["cascade_width"]),
                            int(args["cascade_height"]))
 
-        print("\n[INFO] Found " + str(classifier_output_count(rects)) + " companies house stamps.")
+        print("\n[INFO] Found " + str(Classifier.count_classifier_output(rects)) + " companies house stamps.")
 
-        #
-        classifier_output(rects, img, args["classifier_output_dir"])
+        Classifier.classifier_output(rects, img, args["classifier_output_dir"])
 
-        #
-        classifier_process(img, join(args["processed_images_dir"], image))
+        Classifier.classifier_process(img, join(args["processed_images_dir"], image))
 
-        #
         if args["show_classifier_output"] == "True": 
-            classifier_output_show(image, img)
+            Classifier.display_classifier_output(image, img)
             cv2.waitKey(0)
             cv2.destroyAllWindows()
         else:

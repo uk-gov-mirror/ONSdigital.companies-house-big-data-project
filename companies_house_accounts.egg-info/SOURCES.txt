@@ -1,8 +1,8 @@
 setup.py
-cha_pipeline.egg-info/PKG-INFO
-cha_pipeline.egg-info/SOURCES.txt
-cha_pipeline.egg-info/dependency_links.txt
-cha_pipeline.egg-info/top_level.txt
+companies_house_accounts.egg-info/PKG-INFO
+companies_house_accounts.egg-info/SOURCES.txt
+companies_house_accounts.egg-info/dependency_links.txt
+companies_house_accounts.egg-info/top_level.txt
 src/__init__.py
 src/test.py
 src/classifier/__init__.py

@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name = "cha_pipeline",
+    name = "companies_house_accounts",
     version = "1.0.0",
     description = "ons companies house project repos",
     url = "http:",

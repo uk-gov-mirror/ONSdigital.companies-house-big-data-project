@@ -9,8 +9,8 @@ class Classifier:
 	def imgs_to_grey(path):
 		'''
 		'''
-		if path is None:
-			raise ValueError("Specify a path to an image.")
+		#if path is None:
+		#	raise ValueError("Specify a path to an image.")
 	#   if type(path) not in [""]:
 	#       raise TypeError("The value of the path argument must be a of type string")
 		return cv2.cvtColor(path, cv2.COLOR_BGR2GRAY)
@@ -18,11 +18,11 @@ class Classifier:
 	def classifier_input(path):
 		'''
 		'''
-		if path is None:
-			raise ValueError("Specify a path to an image.")
+		#if path is None:
+		#	raise ValueError("Specify a path to an image.")
 	#    if type(path) not in [cv2.imread(path)]:
 	#        raise TypeError("The value of the path argument must be a of type string")
-			return cv2.imread(path)
+		return cv2.imread(path)
 		
 	def ensemble(detector, imgs, scale_factor, min_neighbors, w, h):
 	    '''
