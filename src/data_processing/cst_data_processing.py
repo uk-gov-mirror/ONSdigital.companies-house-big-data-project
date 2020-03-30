@@ -111,17 +111,43 @@ class DataProcessing:
 					region_of_interest
 				)
 
-	def pos_details(files):
-		'''
-		'''
-		for f in files:
-			#
-			f_title, f_details = splitext(f + " " + "1" + " " + "0" + " " + "0" + " " + str(cv2.imread(join(path, f)).shape))
-			#
-			f_type, f_num, f_xcord, f_ycord, f_height, f_width, f_num_channels = f_details.split(" ")
-			strip_f_height = f_height.strip(",")[1:]
-			strip_f_width = f_width.strip(",")
-			#
-			return "{}{} {} {} {} {} {}".format(f_title, f_type, f_num, f_xcord, f_ycord, strip_f_width, strip_f_height)
+def get_file_details(files, n_objects = 1, x_coord = 0, y_coord = 0):
+    """
+    Returns details for a singular file.
+    
+    Arguments:
+        files:     list of files to filter
+        n_objects: number of object identified in scene
+        x_coord:   horizontal position of object
+        y_coord:   vertical position of object
+    Returns:
+        List of files with specified extensions
+    Raises:
+        None
+    """
+    for f in files:
+        f_title, f_details = splitext(f + " " + str(n_objects) + " " + str(x_coord) + " " + str(y_coord) + " " + str(cv2.imread(join(path, f)).shape))
+        f_type, f_num, f_xcoord, f_ycoord, f_height, f_width, f_num_channels = f_details.split(" ")
+        strip_f_height = f_height.strip(",")[1:]
+        strip_f_width = f_width.strip(",")
 
-#pos_details(select_extensions(import_files(path), ".png"))
+        return "{}{} {} {} {} {} {}".format(f_title, f_type, f_num, f_xcoord, f_ycoord, strip_f_width, strip_f_height)
+
+def rename_files(input_folder, file_name = "chp_signature", extension = ".png"):
+    """
+    Renames all files in a directory to systematic structure.
+    
+    Arguments:
+        input_folder: directory to read in files
+        file_name:    naming convention to standardise to
+        extension:    save to specific file type
+    Returns:
+        None
+    Raises:
+        None
+    """
+    i = 0
+    for file in input_folder:
+        new_name ="{}{}{}".format(file_name, "_", i)
+        rename(path + file, path + new_name + extension)
+        i += 1
