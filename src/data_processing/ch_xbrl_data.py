@@ -64,7 +64,7 @@ class XbrlDataProcessing:
 	    df = df.withColumn('principal_activity', 
 			       F.when(F.col('name') == tag_name, 1).otherwise(0))\
 		   .withColumn('no_principal_activity',
-		    	F.when(F.col('value') == matching_string, 1).otherwise(0))\
+		    	       F.when(F.col('value') == matching_string, 1).otherwise(0))\
 		   .orderBy([column_name, 'principal_activity'], ascending = False)\
        		   .groupBy([column_name, 'doc_balancesheetdate', 'value'])\
        		   .agg(F.first('principal_activity').alias('principal_activity'),
