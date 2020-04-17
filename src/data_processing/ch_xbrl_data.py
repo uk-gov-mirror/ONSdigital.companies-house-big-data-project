@@ -61,25 +61,15 @@ class XbrlDataProcessing:
 	    matching_string = 'No description of principal activity' # value to filter on
 	    column_name = 'doc_companieshouseregisterednumber'    # col to filter on 
 
-	    df = (
-		df
-		.withColumn('principal_activity',
-		    F.when(
-			F.col('name') == tag_name, 1).otherwise(0))
-		.withColumn('no_principal_activity',
-		    F.when(
-			F.col('value') == matching_string, 1).otherwise(0))
-		.orderBy([column_name, 'principal_activity'],
-		    ascending = False)
-		.groupBy([column_name, 'doc_balancesheetdate', 'value'])
-		.agg(
-		    F.first('principal_activity').alias('principal_activity'),
-		    F.first('no_principal_activity').alias('no_principal_activity')
-		)
-		.filter(
-		    F.col('principal_activity') == has_tag_name)
-		.filter(
-		    F.col('no_principal_activity') == has_matching_string)
-	    )
-
+	    df = df.withColumn('principal_activity', 
+			       F.when(F.col('name') == tag_name, 1).otherwise(0))\
+		   .withColumn('no_principal_activity',
+		    	F.when(F.col('value') == matching_string, 1).otherwise(0))\
+		   .orderBy([column_name, 'principal_activity'], ascending = False)\
+       		   .groupBy([column_name, 'doc_balancesheetdate', 'value'])\
+       		   .agg(F.first('principal_activity').alias('principal_activity'),
+		    	F.first('no_principal_activity').alias('no_principal_activity'))\
+    		   .filter(F.col('principal_activity') == has_tag_name)\
+		   .filter(F.col('no_principal_activity') == has_matching_string))
+	
 	    return(df)
