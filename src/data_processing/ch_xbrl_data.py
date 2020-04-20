@@ -73,3 +73,25 @@ class XbrlDataProcessing:
 		   .filter(F.col('no_principal_activity') == has_matching_string))
 	
 	    return(df)
+        
+	def xbrl_import(fp, year, month):
+	    """
+	    This function reads in the data for the chosen year and month from a
+	    parquet file  and creates a new spark data frame.
+
+	    Args:
+		fp: The file path for the data source
+		year: The year of the data
+		month: The month of the data
+
+	    Returns: 
+		A Spark Data frame
+
+	    Raises:
+		None
+	    """
+
+	    import_fp = fp+'/'+str(year)+'_'+str(month).lower()+'_parsed.parquet'
+	    df = spark.read.parquet(import_fp)
+
+	    return(df)
