@@ -19,6 +19,7 @@ class XbrlDataProcessing:
 		Raises:
 			None
 		"""
+    
 		object = (
 			dataframe\
 			.groupBy(name_column)\
@@ -80,18 +81,46 @@ class XbrlDataProcessing:
 	    parquet file  and creates a new spark data frame.
 
 	    Args:
-		fp: The file path for the data source
-		year: The year of the data
-		month: The month of the data
+  		  fp: The file path for the data source
+		    year: The year of the data
+		    month: The month of the data
 
 	    Returns: 
-		A Spark Data frame
+		    A Spark Data frame
 
 	    Raises:
-		None
+    		None
 	    """
-
-	    import_fp = fp+'/'+str(year)+'_'+str(month).lower()+'_parsed.parquet'
+      
+      import_fp = fp+'/'+str(year)+'_'+str(month).lower()+'_parsed.parquet'
 	    df = spark.read.parquet(import_fp)
 
 	    return(df)
+
+	def tag_count(df):
+	    """
+	    This function takes a spark data frame as an argument and does a groupby
+	    to get all the values within the column headed ‘name’. These values are
+	    referred to as ‘tags’. The total number of tags are counted for the whole
+	    dataset and ordered by the count from high to low.
+
+	    Args:
+    		df: A Spark DataFrame
+
+	    Returns:
+		    A function object
+        
+      Raises:
+    		None
+	    """
+      
+	    object = (df
+		     .groupBy('name')
+		     .agg(
+		     F.count(
+		      'doc_companieshouseregisterednumber').alias('tag_count')
+		     )
+		     .orderBy(F.col('tag_count'),ascending=False)
+		     )
+
+	    return(object)
