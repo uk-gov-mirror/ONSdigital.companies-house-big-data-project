@@ -6,10 +6,25 @@ class BinaryClassiferMetrics:
     '''
         pass
         
-    def accuracy():
+    def accuracy(tp: int, tn: int, fp: int, fn: int):
     '''
+    Calculate the accuracy as a ratio of the number of correct predictions to the total number of predictions.
+    
+    Arguments:
+        tp: number of true positives
+        tn: number of true negatives
+        fp: number of false positives
+        fn: number of false negatives
+        
+    Raises:
+        None
+    
+    Returns:
+        Integer
+    
+    acc = ( tp + tn ) / (tp + tn + fp + fn)
     '''
-        pass
+        return (tp + tn) / (tp + tn + fp + fn)
         
     def precision():
     '''
