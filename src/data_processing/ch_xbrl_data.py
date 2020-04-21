@@ -86,7 +86,7 @@ class XbrlDataProcessing:
 		    month: The month of the data
 
 	    Returns: 
-		    A Spark Data frame
+		A Spark Data frame
 
 	    Raises:
     		None
@@ -108,9 +108,9 @@ class XbrlDataProcessing:
     		df: A Spark DataFrame
 
 	    Returns:
-		    A function object
+		A function object
         
-      Raises:
+            Raises:
     		None
 	    """
       
@@ -124,3 +124,43 @@ class XbrlDataProcessing:
 		     )
 
 	    return(object)
+	
+	def tag_distribution(dataframe, tag_contains, tag_col, crn_col):
+	    """
+	    Provision of distribution of values (referred to as 'tags') attributed to column 'name'.
+	    A tag (string type) is specified, filtered by, and counted across unique company records to determine its relative
+	    dataset coverage.
+
+	    Args:
+		dataframe:    a spark dataframe 
+		tag_contains: the value to filter 
+		tag_col:      the column the value is attributed to
+		crn_col:      the column name for crn values
+		
+	    Returns:
+		A spark dataFrame
+		
+	    Raises:
+		None
+	    """
+
+	    dataframe = (
+		dataframe
+		.filter(
+		    F.col(tag_col).contains(tag_contains))
+		.groupBy(tag_col)
+		.agg(
+		    F.count(crn_col).alias('count'),
+		    F.countDistinct(crn_col).alias('dist_count')
+		)
+		.withColumn(
+		    '%_coverage', (
+		    F.col('dist_count') / dataframe.select(crn_col).dropDuplicates(
+		    ).count()) * 100
+		)
+		.withColumn('duplicate_frac',
+		    F.col('count') / F.col('dist_count'))
+		.orderBy('%_coverage', ascending=False)
+	    )
+
+	    return dataframe
