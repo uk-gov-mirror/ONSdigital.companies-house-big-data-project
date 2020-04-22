@@ -46,7 +46,7 @@ class BinaryClassiferMetrics:
     
     def metrics_reports(accuracy: float, precision: float, recall: float, specificity: float):
         '''
-        Something here.
+        Outputs the performance metrics values of a binary classifier to the terminal. The performance metrics are accuracy, precision, recall and specificity. Values for each metric are between 0.0 and 1.0.
         
         Arguments:
             accuracy:       instance of the accuracy object.
