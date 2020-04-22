@@ -1,4 +1,5 @@
 import pyspark.sql.functions as F
+from pyspark.sql.functions import regexp_replace
 
 class XbrlDataProcessing:
 	'''
