@@ -48,6 +48,46 @@ class BinaryClassifierMetrics:
         if (tp + fp) is not 0:
             return tp / (tp + fp)
     
+    def recall(tp: int, fn: int):
+        '''
+        Calculate the recall as a ratio of the number of true positives 
+        to the total number of real positives. 
+        
+        Arguments:
+            tp: number of true positives
+            fn: number of false negatives  
+        
+        Raises:
+            None
+        
+        Returns:
+            float
+        
+        recall = tp / (tp + fn)
+        '''
+        if (tp + fn) is not 0:
+            return tp / (tp + fn)
+    
+    def specificity(tn: int, fn: int):
+        '''
+        Calculate the specificity as a ratio of the number of true negatives 
+        to the total number of reported negatives.
+        
+        Arguments:
+            tn: number of true negatives
+            fn: number of false negatives  
+        
+        Raises:
+            None
+        
+        Returns:
+            float
+        
+        specificity = tn / (tn + fn)
+        '''
+        if (tn + fn) is not 0:
+            return tn / (tn + fn)
+    
     def metrics_reports(accuracy: float, precision: float, recall: float, specificity: float):
         '''
         Outputs the performance metrics values of a binary classifier to the terminal. 
@@ -72,4 +112,4 @@ class BinaryClassifierMetrics:
 
         print(output)
 
-BinaryClassifierMetrics.metrics_reports(0.9, 1.0, 0.8, 0.9)
+
