@@ -4,12 +4,66 @@ import time
 import argparse
 import sys
 import cv2
+import configparser
+
+config = configparser.ConfigParser()
+config.read("cha_pipeline.cfg")
+
+xbrl_web_scraper = config.get('cha_workflow', 'xbrl_web_scraper')
+xbrl_functions = config.get('cha_workflow', 'xbrl_functions')
+pdf_web_scraper = config.get('cha_workflow', 'pdf_web_scraper')
+pdfs_to_images = config.get('cha_workflow', 'pdfs_to_images')
+train_classifier_model = config.get('cha_workflow', 'train_classifier_model')
+binary_classifier = config.get('cha_workflow', 'binary_classifier')
+ocr_functions = config.get('cha_workflow', 'ocr_functions')
+nlp_functions = config.get('cha_workflow', 'nlp_functions')
+merge_xbrl_to_pdf_data = config.get('cha_workflow', 'merge_xbrl_to_pdf_data')
 
 from src.data_processing.cst_data_processing import DataProcessing
 from src.classifier.cst_classifier import Classifier
 
+
 def main():
-    
+
+    print("-"*50)
+
+    # Execute module xbrl_web_scraper
+    if xbrl_web_scraper == str(True):
+        print("XBRL web scraper running...")
+
+    # Run all xbrl related functions in order
+    if xbrl_functions == str(True):
+        print("Running all XBRL functions...")
+
+    # Execute PDF web scraper
+    if pdf_web_scraper == str(True):
+        print("PDF web scraper running...")
+
+    # Convert PDF files to images
+    if pdfs_to_images == str(True):
+        print("Converting all PDFs to images...")
+
+    # Train the Classifier model
+    if train_classifier_model == str(True):
+        print("Training classifier model...")
+
+    # Execute binary Classifier
+    if binary_classifier == str(True):
+        print("Executing binary classifier...")
+
+    # Execute OCR
+    if ocr_functions == str(True):
+        print("Running all OCR functions...")
+
+    # Execute NLP
+    if nlp_functions == str(True):
+        print("Running all NLP functions...")
+
+    # Merge xbrl and PDF file data
+    if merge_xbrl_to_pdf_data == str(True):
+        print("Merging XBRL and PDF data...")
+
+    """
     # construct the argument parse and parse the arguments
     ap = argparse.ArgumentParser()
     ap.add_argument("-d", "--input_imgs", required = True,
@@ -59,12 +113,14 @@ def main():
         else:
             pass
 
-if __name__ == "__main__":
+    """
 
+
+if __name__ == "__main__":
     process_start = time.time()
-    
+
     main()
-    
-    print("-"*50)
+
+    print("-" * 50)
     print("Process Complete")
-    print("The time taken to process an image is: ", "{}".format((time.time() - process_start)/60, 2), " minutes")
+    print("The time taken to process an image is: ", "{}".format((time.time() - process_start) / 60, 2), " minutes")
