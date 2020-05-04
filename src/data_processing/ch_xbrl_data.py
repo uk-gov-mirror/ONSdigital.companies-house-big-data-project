@@ -19,6 +19,7 @@ class XbrlDataProcessing:
 		Raises:
 			None
 		"""
+    
 		object = (
 			dataframe\
 			.groupBy(name_column)\
@@ -73,3 +74,93 @@ class XbrlDataProcessing:
 		   .filter(F.col('no_principal_activity') == has_matching_string))
 	
 	    return(df)
+        
+	def xbrl_import(fp, year, month):
+	    """
+	    This function reads in the data for the chosen year and month from a
+	    parquet file  and creates a new spark data frame.
+
+	    Args:
+  		  fp: The file path for the data source
+		    year: The year of the data
+		    month: The month of the data
+
+	    Returns: 
+		A Spark Data frame
+
+	    Raises:
+    		None
+	    """
+      
+      import_fp = fp+'/'+str(year)+'_'+str(month).lower()+'_parsed.parquet'
+	    df = spark.read.parquet(import_fp)
+
+	    return(df)
+
+	def tag_count(df):
+	    """
+	    This function takes a spark data frame as an argument and does a groupby
+	    to get all the values within the column headed ‘name’. These values are
+	    referred to as ‘tags’. The total number of tags are counted for the whole
+	    dataset and ordered by the count from high to low.
+
+	    Args:
+    		df: A Spark DataFrame
+
+	    Returns:
+		A function object
+        
+            Raises:
+    		None
+	    """
+      
+	    object = (df
+		     .groupBy('name')
+		     .agg(
+		     F.count(
+		      'doc_companieshouseregisterednumber').alias('tag_count')
+		     )
+		     .orderBy(F.col('tag_count'),ascending=False)
+		     )
+
+	    return(object)
+	
+	def tag_distribution(dataframe, tag_contains, tag_col, crn_col):
+	    """
+	    Provision of distribution of values (referred to as 'tags') attributed to column 'name'.
+	    A tag (string type) is specified, filtered by, and counted across unique company records to determine its relative
+	    dataset coverage.
+
+	    Args:
+		dataframe:    a spark dataframe 
+		tag_contains: the value to filter 
+		tag_col:      the column the value is attributed to
+		crn_col:      the column name for crn values
+		
+	    Returns:
+		A spark dataFrame
+		
+	    Raises:
+		None
+	    """
+
+	    dataframe = (
+		dataframe
+		.filter(
+		    F.col(tag_col).contains(tag_contains))
+		.groupBy(tag_col)
+		.agg(
+		    F.count(crn_col).alias('count'),
+		    F.countDistinct(crn_col).alias('dist_count')
+		)
+		.withColumn(
+		    '%_coverage', (
+		    F.col('dist_count') / dataframe.select(crn_col).dropDuplicates(
+		    ).count()) * 100
+		)
+		.withColumn('duplicate_frac',
+		    F.col('count') / F.col('dist_count'))
+		.orderBy('%_coverage', ascending=False)
+	    )
+
+	    return dataframe
