@@ -225,3 +225,31 @@ class XbrlDataProcessing:
 		output = print("Error: wanted_tag needs to be a string or list")
 
 	    return output
+
+	def str_to_date(df, date_col, replace = "y", col_name = None):
+	    """
+	    Inputs:
+		df: dataframe (Spark Dataframe)
+		date_col: name of date column (string)
+		replace: optio for new date column to be replace original column, "y" or "n" respectively (string, "y" or "n")
+		col_name: if replace = "n", name of new date column (string)
+
+	    Description:
+		Converts a string column (in a standard date format i.e. dd/mm/yyyy etc.)
+
+	    Output:
+		Return dataframe either; replacing original column with date format or creating
+		new column of date format
+	    """
+	    if type(date_col) != str:
+		output = print("Error: date_col needs to be a string")
+
+	    else:
+		if replace == "y":
+		    output = df.withColumn(date_col, F.to_date(F.col(date_col)))
+		elif replace == "n":
+		    output = df.withColumn(col_name, F.to_date(F.col(date_col)))
+		else:
+		    output = print('Error: replace needs to be a "y" or "n"')
+
+	    return output
