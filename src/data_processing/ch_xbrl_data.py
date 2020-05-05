@@ -1,4 +1,5 @@
 import pyspark.sql.functions as F
+from pyspark.sql.functions import regexp_replace
 
 class XbrlDataProcessing:
 	'''
@@ -164,3 +165,27 @@ class XbrlDataProcessing:
 	    )
 
 	    return dataframe
+
+	def cleaning_df(dataframe):
+	    """
+	    This function lowercases and removes specified punctuation for data in the
+	    ‘description’ column.
+
+	    Args:
+		dataframe: A Spark DataFrame
+
+	    Returns: 
+		dataframe: A Spark DataFrame
+
+	    Raises:
+		None
+	    """
+
+	    cleaned_df = (
+		dataframe
+		.withColumn("Description",F.lower(F.col("Description")))
+		.withColumn('Description', regexp_replace(
+		    'Description', '[()\;#,.]', ''))
+	    )
+
+	    return(cleaned_df)
