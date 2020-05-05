@@ -63,6 +63,7 @@ def main():
     if merge_xbrl_to_pdf_data == str(True):
         print("Merging XBRL and PDF data...")
 
+
     """
     # construct the argument parse and parse the arguments
     ap = argparse.ArgumentParser()
@@ -112,7 +113,6 @@ def main():
             cv2.destroyAllWindows()
         else:
             pass
-
     """
 
 
