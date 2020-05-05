@@ -8,8 +8,63 @@ import cv2
 from src.data_processing.cst_data_processing import DataProcessing
 from src.classifier.cst_classifier import Classifier
 
+xbrl_web_scraper = True
+xbrl_functions = True
+pdf_web_scraper = True
+pdfs_to_images = True
+train_classifier_model = True
+binary_classifier = True
+ocr_functions = True
+nlp_functions = True
+merge_xbrl_to_pdf_data = True
+
 def main():
     
+    # Execute module xbrl_web_scaper
+    if xbrl_web_scraper == True:
+        print("XBRL web scrapper running...")
+        
+    # Run all xbrl related functions in order
+    if xbrl_web_scraper == True:
+        print("Running all XBRL functions...")
+    
+    # Execute PDF web scraper
+    if xbrl_web_scraper == True:
+        print("PDF web scrapper running...")
+    
+    # Convert PDF files to images
+    if xbrl_web_scraper == True:
+        print("Converting all PDFs to images...")
+        
+    # Train the Classifier model
+    if xbrl_web_scraper == True:
+        print("Training classifier model...")
+        
+    # Execute binary Classifier
+    if xbrl_web_scraper == True:
+        print("Executing binary classifier...")
+    
+    # Execute OCR
+    if xbrl_web_scraper == True:
+        print("Running all OCR functions...")
+        
+    # Execute NLP
+    if xbrl_web_scraper == True:
+        print("Running all NLP functions...")
+    
+    # Merge xbrl and PDF file data
+    if xbrl_web_scraper == True:
+        print("Merging XBRL and PDF data...")
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    """
     # construct the argument parse and parse the arguments
     ap = argparse.ArgumentParser()
     ap.add_argument("-d", "--input_imgs", required = True,
@@ -58,6 +113,8 @@ def main():
             cv2.destroyAllWindows()
         else:
             pass
+            
+    """
 
 if __name__ == "__main__":
 
