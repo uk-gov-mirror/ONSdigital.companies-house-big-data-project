@@ -189,3 +189,39 @@ class XbrlDataProcessing:
 	    )
 
 	    return(cleaned_df)
+
+	def tag_extraction(df, tag_col, wanted_tag):
+	    """
+	    Inputs:
+		df = dataframe (Spark Dataframe)
+		tag_col = name of column that contains tag names (string)
+		wanted_tag: name of extracted tag(s) (string or list)
+
+	    Description:
+		Functin filters dataframe to extract xbrl tags, returning the filtered dataframe.
+		Trows error is tags wants are not a string or list.
+
+		Output: Dataframe filtered to contain only the required tag(s) (Spark Dataframe)
+	    """
+
+	    if isinstance(wanted_tag, str) == True:
+		t = 1
+		tag = []
+		tag.append(wanted_tag)
+
+	    elif isinstance(wanted_tag, list) == True:
+		t = 1
+		tag = wanted_tag
+
+	    if isinstance(wanted_tag, (str, list)) == False:
+		t = 0
+
+	    if t == 1:
+		output = (df
+			    .filter(F.col(tag_col).isin(tag))
+			    )
+
+	    if t == 0:
+		output = print("Error: wanted_tag needs to be a string or list")
+
+	    return output
