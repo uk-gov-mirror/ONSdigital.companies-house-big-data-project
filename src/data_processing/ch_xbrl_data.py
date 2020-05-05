@@ -253,3 +253,27 @@ class XbrlDataProcessing:
 		    output = print('Error: replace needs to be a "y" or "n"')
 
 	    return output
+
+	def unique_entries(df, col_name, out_list = True):
+	    """
+	    Input:
+		df: dataframe (Spark Dataframe)
+		col_name: name of column you want to find unique values of (string)
+		out_list: option to choose output as a list or dataframe (True or False respectively)
+
+	    Description:
+		Function takes a dataframe as input and selects the specified column, outputting
+		the unique values present within that column, as either a list or filtered dataframe
+
+	    Output:
+		List or dataframe column of unique values
+	    """
+	    unique = df.select(col_name).dropDuplicates()
+
+	    if out_list == True:
+		output = [row[col_name] for row in unique.collect()]
+
+	    if out_list == False:
+		output = unique
+
+	    return output
