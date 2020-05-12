@@ -138,5 +138,5 @@ class BinaryClassifierMetrics:
         '''
         output = "\nThe performance metrics of the binary classifier presented with image ??? "\
                  "are as follows:\naccuracy = {}\nprecision = {}\nrecall = {}\nspecificity = {}"\
-                 \n".format(accuracy, precision, recall, specificity)
+                 .format(accuracy, precision, recall, specificity)
         print(output)

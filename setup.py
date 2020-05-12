@@ -9,5 +9,5 @@ setup(
     author_email = "robert.stone@ons.gov.uk",
     license = "MIT",
     packages = find_packages(exclude=["companies_house_accounts.tests"]),
-    install_requires = ["numpy", "scikit-image", "scikit-learn", "opencv-python", "pyspark"]        
+    install_requires = ["opencv-python"]        
 )
