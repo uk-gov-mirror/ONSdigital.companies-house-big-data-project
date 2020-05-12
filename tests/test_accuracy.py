@@ -28,27 +28,16 @@ class TestAccuracy(unittest.TestCase):
         # Assert
         self.assertNotEqual(metrics.accuracy(tp = 1, tn = 1, fp = 1, fn = 1), 0.8)
 
-    def test_types_pos(self):
+    def test_types(self):
+        """
+        """
+        self.assertRaises()
+
+    def test_values(self):
         """
         """
         pass
 
-    def test_types_neg(self):
-        """
-
-        """
-        pass
-
-    def test_values_pos(self):
-        """
-        """
-        pass
-
-    def test_values_neg(self):
-        """
-
-        """
-        pass
 
         
 

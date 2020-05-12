@@ -51,6 +51,11 @@ class BinaryClassifierMetrics:
         
         accuracy = ( tp + tn ) / (tp + tn + fp + fn)
         '''
+
+        if tp is None or tn is None or fp is None or fn is None:
+            raise ValueError("Specify integer values")
+        if type(tp) not in [int] or type(tn) not in [int] or type(fp) not in [int] or type(fn) not in [int]:
+            raise TypeError("Specify integer types")
         if (tp + tn + fp + fn) is not 0:
             return (tp + tn) / (tp + tn + fp + fn)
 
