@@ -1,10 +1,30 @@
 class BinaryClassifierMetrics:
     '''
     '''
-    def binary_confusion_matrix():
+    def binary_confusion_matrix(pred: int, files: str):
         '''
+        Calculates the number of true positives, true negatives, false positives and
+        false negatives from the output of the classifier, where the true values are
+        extracted from the corresponding file names
+
+        Arguments:
+            pred:  output from classifier
+            files: list of file names
+
+        Raises:
+            None
+
+        Returns:
+            tuple 
         '''
-        pass
+
+        exp = [1 if i.rfind('positive') else 0 for i in files]
+        tp = sum(1 for i, j in zip(pred, exp) if i + j is 2)
+        tn = sum(1 for i, j in zip(pred, exp) if i + j is 0)
+        fp = sum(1 for i, j in zip(pred, exp) if i is 1 and j is 0)
+        fn = sum(1 for i, j in zip(pred, exp) if i is 0 and j is 1)
+
+        return tp, tn, fp, fn
         
     def accuracy(tp: int, tn: int, fp: int, fn: int):
         '''
