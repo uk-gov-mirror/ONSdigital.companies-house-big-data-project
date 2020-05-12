@@ -1,6 +1,11 @@
 class BinaryClassifierMetrics:
     '''
     '''
+
+    def __init__(self):
+        self.__init__
+
+    @staticmethod
     def binary_confusion_matrix(pred: int, files: str):
         '''
         Calculates the number of true positives, true negatives, false positives and
@@ -25,7 +30,8 @@ class BinaryClassifierMetrics:
         fn = sum(1 for i, j in zip(pred, exp) if i is 0 and j is 1)
 
         return tp, tn, fp, fn
-        
+
+    @staticmethod
     def accuracy(tp: int, tn: int, fp: int, fn: int):
         '''
         Calculate the accuracy as a ratio of the number of correct predictions 
@@ -47,7 +53,8 @@ class BinaryClassifierMetrics:
         '''
         if (tp + tn + fp + fn) is not 0:
             return (tp + tn) / (tp + tn + fp + fn)
-        
+
+    @staticmethod
     def precision(tp: int, fp: int):
         '''
         Calculate the precision as a ratio of the number of true positives 
@@ -67,7 +74,8 @@ class BinaryClassifierMetrics:
         '''
         if (tp + fp) is not 0:
             return tp / (tp + fp)
-    
+
+    @staticmethod
     def recall(tp: int, fn: int):
         '''
         Calculate the recall as a ratio of the number of true positives 
@@ -87,7 +95,8 @@ class BinaryClassifierMetrics:
         '''
         if (tp + fn) is not 0:
             return tp / (tp + fn)
-    
+
+    @staticmethod
     def specificity(tn: int, fn: int):
         '''
         Calculate the specificity as a ratio of the number of true negatives 
@@ -107,7 +116,8 @@ class BinaryClassifierMetrics:
         '''
         if (tn + fn) is not 0:
             return tn / (tn + fn)
-    
+
+    @staticmethod
     def metrics_reports(accuracy: float, precision: float, recall: float, specificity: float):
         '''
         Outputs the performance metrics values of a binary classifier to the terminal. 
@@ -129,7 +139,4 @@ class BinaryClassifierMetrics:
         output = "\nThe performance metrics of the binary classifier presented with image ??? "\
                  "are as follows:\naccuracy = {}\nprecision = {}\nrecall = {}\nspecificity = {}"\
                  \n".format(accuracy, precision, recall, specificity)
-
         print(output)
-
-
