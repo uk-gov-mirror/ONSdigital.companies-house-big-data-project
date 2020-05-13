@@ -44,11 +44,12 @@ class BinaryClassifierMetrics:
             fn: number of false negatives
         
         Raises:
-            None
+            Exception if a None value is specified as an argument.
+            Exception if the type of a value specified as an argument is not an int.
         
         Returns:
             float
-        
+
         accuracy = ( tp + tn ) / (tp + tn + fp + fn)
         '''
 
@@ -70,13 +71,19 @@ class BinaryClassifierMetrics:
             fp: number of false positives  
         
         Raises:
-            None
+            Exception if a None value is specified as an argument.
+            Exception if the type of a value specified as an argument is not an int.
         
         Returns:
             float
         
         precision = tp / (tp + fp)
         '''
+
+        if tp is None or fp is None:
+            raise ValueError("Specify integer values")
+        if type(tp) not in [int] or type(fp) not in [int]:
+            raise TypeError("Specify integer types")
         if (tp + fp) is not 0:
             return tp / (tp + fp)
 
