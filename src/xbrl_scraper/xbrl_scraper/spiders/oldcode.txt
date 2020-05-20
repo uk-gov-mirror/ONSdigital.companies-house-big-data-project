@@ -1,0 +1,48 @@
+import scrapy
+from scrapy.linkextractors import LinkExtractor
+from scrapy.spiders import Rule, CrawlSpider
+
+class XBRLScraper(CrawlSpider):
+#class XBRLScraper(scrapy.Spider):
+
+    name = "xbrl_scraper"
+
+    #allowed_domains = ['http://download.companieshouse.gov.uk/en_accountsdata.html']
+    allowed_domains = ['download.companieshouse.gov.uk/en_accountsdata.html']
+    start_urls = ['http://download.companieshouse.gov.uk/en_accountsdata.html']
+
+    rules = [
+        Rule(
+            LinkExtractor(
+                canonicalize=True,
+                unique=True
+            ),
+            follow=True,
+            callback="parse_items"
+        )
+    ]
+
+    def start_requests(self):
+        for url in self.start_urls:
+            yield scrapy.Request(url, callback=self.parse_items, dont_filter=True)
+
+    def parse_items(self, response):
+
+        print("Reached here")
+
+        items = []
+
+        links = LinkExtractor(canonicalize=True, unique=True).extract_links(response)
+
+        print("Creating list of urls...")
+        print(len(links))
+        for link in links:
+
+            item = link.url
+
+            print(item)
+            items.append(item)
+
+        #exit(0)
+
+        return items
