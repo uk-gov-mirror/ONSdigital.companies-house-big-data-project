@@ -119,13 +119,20 @@ class BinaryClassifierMetrics:
             fn: number of false negatives  
         
         Raises:
-            None
+            Exception if a None value is specified as an argument.
+            Exception if the type of a value specified as an argument is not an int.
         
         Returns:
             float
         
         specificity = tn / (tn + fn)
         '''
+
+
+        if tn is None or fn is None:
+            raise ValueError("Specify integer values")
+        if type(tn) not in [int] or type(fn) not in [int]:
+            raise TypeError("Specify integer types")
         if (tn + fn) is not 0:
             return tn / (tn + fn)
 
