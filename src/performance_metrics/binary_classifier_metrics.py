@@ -98,13 +98,19 @@ class BinaryClassifierMetrics:
             fn: number of false negatives  
         
         Raises:
-            None
+            Exception if a None value is specified as an argument.
+            Exception if the type of a value specified as an argument is not an int.
         
         Returns:
             float
         
         recall = tp / (tp + fn)
         '''
+
+        if tp is None or fn is None:
+            raise ValueError("Specify integer values")
+        if type(tp) not in [int] or type(fn) not in [int]:
+            raise TypeError("Specify integer types")
         if (tp + fn) is not 0:
             return tp / (tp + fn)
 
