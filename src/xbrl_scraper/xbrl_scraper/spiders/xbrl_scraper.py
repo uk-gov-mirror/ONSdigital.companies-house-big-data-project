@@ -1,29 +1,16 @@
-import os
 from os import listdir
 from os.path import isfile, join
-import scrapy
-from scrapy.linkextractors import LinkExtractor
-from scrapy.spiders import Rule, CrawlSpider
+from scrapy.spiders import CrawlSpider
 from scrapy.item import Item, Field
-from scrapy.http import Request, Response
-
-from scrapy.pipelines.files import FilesPipeline
-from urllib.parse import urlparse
-import requests
 import hashlib
 
-class MyItem(Item):
+class ZipFile(Item):
     file_urls = Field()
     files = Field()
 
 class XBRLSpider(CrawlSpider):
 
     name = "xbrl_scraper"
-
-    # custom_settings = {
-    #      'ITEM_PIPELINES' : {'scrapy.pipelines.files.FilesPipeline': 1},
-    #      'FILES_STORE' : "/shares/data/20200519_companies_house_accounts/xbrl_scraped_data_testing/"
-    # }
 
     allowed_domains = ['download.companieshouse.gov.uk/en_accountsdata.html']
     start_urls = ['http://download.companieshouse.gov.uk/en_accountsdata.html']
@@ -48,9 +35,9 @@ class XBRLSpider(CrawlSpider):
 
         # Yield items for download
         for link in filtered_links:
-            yield MyItem(file_urls=[link])
+            yield ZipFile(file_urls=[link])
 
-        #item = MyItem(file_urls=['http://download.companieshouse.gov.uk/Accounts_Bulk_Data-2020-05-19.zip'])
+        #item = ZipFile(file_urls=['http://download.companieshouse.gov.uk/Accounts_Bulk_Data-2020-05-19.zip'])
 
         # 0c393a225a7afbfaa3f6e7bb7387da19af85f6ec
         # This is a hash of 'http://download.companieshouse.gov.uk/Accounts_Bulk_Data-2020-05-19.zip'
