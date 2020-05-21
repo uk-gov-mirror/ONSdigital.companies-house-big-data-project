@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name = "companies_house_accounts",
-    version = "1.0.4",
+    version = "1.0.5",
     description = "ons companies house project repos",
     url = "https://github.com/spudinator/companies_house_accounts.git",
     author = "Robert Stone",
