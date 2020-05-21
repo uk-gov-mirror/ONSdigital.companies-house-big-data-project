@@ -18,7 +18,19 @@ class XBRLSpider(CrawlSpider):
     filepath = "/shares/data/20200519_companies_house_accounts/xbrl_scraped_data_testing/full"
 
     def parse(self, response):
+        """
+        Extracts all zip files from the scraped website given by the variable "response"
+        Outputs zip file information to be downloaded by scrapy's internal pipeline.
 
+        Arguments:
+            self:
+            response: web page scraped from website crawled by scraper
+        Returns:
+            ExtractedZipFile :  Url, checksum and path to scraped zip file.
+                                This will then be downloaded by scrapy
+        Raises:
+            None
+        """
         # Get a list of all filenames excluding directories and file extensions
         files = [f.split(".")[0] for f in listdir(self.filepath) if isfile(join(self.filepath, f))]
 
