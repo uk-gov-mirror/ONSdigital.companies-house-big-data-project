@@ -4,7 +4,7 @@ from scrapy.spiders import CrawlSpider
 from scrapy.item import Item, Field
 import hashlib
 
-class ZipFile(Item):
+class ExtractedZipFile(Item):
     file_urls = Field()
     files = Field()
 
@@ -35,9 +35,9 @@ class XBRLSpider(CrawlSpider):
 
         # Yield items for download
         for link in filtered_links:
-            yield ZipFile(file_urls=[link])
+            yield ExtractedZipFile(file_urls=[link])
 
-        #item = ZipFile(file_urls=['http://download.companieshouse.gov.uk/Accounts_Bulk_Data-2020-05-19.zip'])
+        #yield ExtractedZipFile(file_urls=['http://download.companieshouse.gov.uk/Accounts_Bulk_Data-2020-05-19.zip'])
 
         # 0c393a225a7afbfaa3f6e7bb7387da19af85f6ec
         # This is a hash of 'http://download.companieshouse.gov.uk/Accounts_Bulk_Data-2020-05-19.zip'
