@@ -1,7 +1,8 @@
 import cv2
 from os import listdir
-from os.path import isfile, join
+from os.path import isfile, join, exists
 import random
+import zipfile, tarfile
 
 class DataProcessing:
 	def import_files(directory):
@@ -110,6 +111,41 @@ class DataProcessing:
 						+ ".png",
 					region_of_interest
 				)
+				
+	def extract_compressed_files(self, file_source, file_dest):
+		"""
+		Extracts .zip files from a given directory or filename
+		to a given file directory.
+		
+		Arguments:
+			file_source: source of files of interest, either a filename
+						 or a directory
+			file_dest: destination directory to save extracted files to
+		Returns:
+			None
+		Raises:
+			None
+		"""
+		if exists(file_source):
+			if isfile(file_source):
+				files = [file_source]
+			else:
+				files = [file_source + f for f in listdir(file_source)]
+				
+			print("Extracting files...")
+			for file in files:
+				if file.endswith('.zip'):
+					with zipfile.ZipFile(file, 'r') as zip_ref:
+						zip_ref.extractall(file_dest)
+					print("Extraction complete")
+				else:
+					print("File extension " + file.split('.')[1] + " not supported")
+					print("Failed to extract file " + file)
+		else:
+			print("File not found: " + file_source)
+			
+#myobj = DataProcessing()
+#myobj.extract_compressed_files(file_source, file_dest)
 
 def get_file_details(files, n_objects = 1, x_coord = 0, y_coord = 0):
     """
