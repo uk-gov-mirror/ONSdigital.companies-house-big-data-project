@@ -12,8 +12,13 @@ class XBRLSpider(CrawlSpider):
 
     name = "xbrl_scraper"
 
-    allowed_domains = ['download.companieshouse.gov.uk/en_accountsdata.html']
-    start_urls = ['http://download.companieshouse.gov.uk/en_accountsdata.html']
+    #allowed_domains = ['download.companieshouse.gov.uk/en_accountsdata.html']
+    #start_urls = ['http://download.companieshouse.gov.uk/en_accountsdata.html']
+
+    allowed_domains = ['download.companieshouse.gov.uk/en_monthlyaccountsdata.html',
+                       'download.companieshouse.gov.uk/historicmonthlyaccountsdata.html']
+    start_urls = ['http://download.companieshouse.gov.uk/en_monthlyaccountsdata.html',
+                  'http://download.companieshouse.gov.uk/historicmonthlyaccountsdata.html']
 
     filepath = "/shares/data/20200519_companies_house_accounts/xbrl_scraped_data_testing/full"
 
