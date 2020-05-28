@@ -143,25 +143,38 @@ class BinaryClassifierMetrics:
             return tn / (tn + fn)
 
     @staticmethod
-    def metrics_reports(accuracy: float, precision: float, recall: float, specificity: float):
-        '''
-        Outputs the performance metrics values of a binary classifier to the terminal. 
-        The performance metrics are accuracy, precision, recall and specificity. 
+    def metrics_report(accuracy: float, precision: float, recall: float, specificity: float):
+        """
+        Outputs the performance metrics values of a binary classifier to the terminal.
+        The performance metrics are accuracy, precision, recall and specificity.
         Values for each metric are between 0.0 and 1.0.
-        
+
         Arguments:
             accuracy:       instance of the accuracy object.
             precision:      instance of the precision object.
             recall:         instance of the recall object.
             specificity:    instance of the specificity object.
-        
+
         Raises:
-            None
-        
+            ValueError if no argument is given or floats passed are not less than or equal to 1.
+            TypeError if arguments passed are not floats.
+
         Returns:
-            String
-        '''
-        output = "\nThe performance metrics of the binary classifier presented with image ??? "\
-                 "are as follows:\naccuracy = {}\nprecision = {}\nrecall = {}\nspecificity = {}"\
-                 .format(accuracy, precision, recall, specificity)
+            None
+        """
+
+        args = [accuracy, precision, recall, specificity]
+
+        output = "The performance metrics of the binary classifier presented with image ??? are:\naccuracy = {}" \
+                 "\nprecision = {}\nrecall = {}\nspecificity = {}".format(accuracy, precision, recall, specificity)
+
+        if any(arg is None for arg in args):
+            raise ValueError("Specify float values")
+
+        if any(type(arg) != type(float) for arg in args):
+            raise TypeError("Specify float types")
+
+        if any(arg > 1 for arg in args):
+            raise ValueError("Specify float types less than or equal to 1")
+
         print(output)
