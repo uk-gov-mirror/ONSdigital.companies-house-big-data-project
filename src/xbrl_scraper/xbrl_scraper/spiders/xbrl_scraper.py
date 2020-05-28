@@ -1,24 +1,26 @@
 from os import listdir
 from os.path import isfile, join
 from scrapy.spiders import CrawlSpider
-from scrapy.item import Item, Field
+#from src.xbrl_scraper.xbrl_scraper.items import XbrlScraperItem
 import hashlib
+import scrapy
 
-class ExtractedZipFile(Item):
-    file_urls = Field()
-    files = Field()
+class XbrlScraperItem(scrapy.Item):
+    file_urls = scrapy.Field()
+    files = scrapy.Field()
+    file_name = scrapy.Field()
 
 class XBRLSpider(CrawlSpider):
 
     name = "xbrl_scraper"
 
-    #allowed_domains = ['download.companieshouse.gov.uk/en_accountsdata.html']
-    #start_urls = ['http://download.companieshouse.gov.uk/en_accountsdata.html']
+    allowed_domains = ['download.companieshouse.gov.uk/en_accountsdata.html']
+    start_urls = ['http://download.companieshouse.gov.uk/en_accountsdata.html']
 
-    allowed_domains = ['download.companieshouse.gov.uk/en_monthlyaccountsdata.html',
-                       'download.companieshouse.gov.uk/historicmonthlyaccountsdata.html']
-    start_urls = ['http://download.companieshouse.gov.uk/en_monthlyaccountsdata.html',
-                  'http://download.companieshouse.gov.uk/historicmonthlyaccountsdata.html']
+    # allowed_domains = ['download.companieshouse.gov.uk/en_monthlyaccountsdata.html',
+    #                    'download.companieshouse.gov.uk/historicmonthlyaccountsdata.html']
+    # start_urls = ['http://download.companieshouse.gov.uk/en_monthlyaccountsdata.html',
+    #               'http://download.companieshouse.gov.uk/historicmonthlyaccountsdata.html']
 
     filepath = "/shares/data/20200519_companies_house_accounts/xbrl_scraped_data_testing/full"
 
@@ -51,10 +53,10 @@ class XBRLSpider(CrawlSpider):
         filtered_links = [link for link in links if hashlib.sha1(link.encode('utf-8')).hexdigest() not in files]
 
         # Yield items for download
-        for link in filtered_links:
-            yield ExtractedZipFile(file_urls=[link])
+        #for link in filtered_links:
+        #    yield XbrlScraperItem(file_urls=[link])
 
-        #yield ExtractedZipFile(file_urls=['http://download.companieshouse.gov.uk/Accounts_Bulk_Data-2020-05-19.zip'])
+        yield XbrlScraperItem(file_urls=['http://download.companieshouse.gov.uk/Accounts_Bulk_Data-2020-05-19.zip'])
 
         # 0c393a225a7afbfaa3f6e7bb7387da19af85f6ec
         # This is a hash of 'http://download.companieshouse.gov.uk/Accounts_Bulk_Data-2020-05-19.zip'

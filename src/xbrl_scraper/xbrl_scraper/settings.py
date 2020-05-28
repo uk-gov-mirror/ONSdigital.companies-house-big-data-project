@@ -69,7 +69,8 @@ ROBOTSTXT_OBEY = True
 # }
 ITEM_PIPELINES = {
     #'xbrl_scraper.pipelines.files.MyFilesPipeline': 1,
-    'scrapy.pipelines.files.FilesPipeline': 1,
+    'xbrl_scraper.pipelines.XbrlScraperPipeline': 1,
+    #'scrapy.pipelines.files.FilesPipeline': 1,
 }
 FILES_STORE = "/shares/data/20200519_companies_house_accounts/xbrl_scraped_data_testing/"
 

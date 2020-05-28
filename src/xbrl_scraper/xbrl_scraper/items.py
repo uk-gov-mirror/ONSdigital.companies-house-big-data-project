@@ -9,6 +9,6 @@ import scrapy
 
 
 class XbrlScraperItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+    file_urls = scrapy.Field()
+    files = scrapy.Field()
+    file_name = scrapy.Field()
