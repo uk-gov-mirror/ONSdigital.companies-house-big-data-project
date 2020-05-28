@@ -1,0 +1,538 @@
+<html
+xmlns='http://www.w3.org/1999/xhtml'
+xmlns:iso4217='http://www.xbrl.org/2003/iso4217'
+xmlns:ix='http://www.xbrl.org/2008/inlineXBRL'
+xmlns:link='http://www.xbrl.org/2003/linkbase'
+xmlns:xbrli='http://www.xbrl.org/2003/instance'
+xmlns:xlink='http://www.w3.org/1999/xlink'
+xmlns:ixt='http://www.xbrl.org/inlineXBRL/transformation/2010-04-20'
+xmlns:ixt2='http://www.xbrl.org/inlineXBRL/transformation/2011-07-31'
+xmlns:ifrs="http://xbrl.iasb.org/taxonomy/2009-04-01/ifrs"
+xmlns:uk-ifrs="https://xbrl.frc.org.uk/FRS-102/2014-09-01"
+xmlns:uk-aurep="http://xbrl.frc.org.uk/reports/2014-09-01/aurep"
+xmlns:uk-curr="http://xbrl.frc.org.uk/cd/2014-09-01/currencies"
+xmlns:uk-bus="http://xbrl.frc.org.uk/cd/2014-09-01/business"
+xmlns:uk-direp="http://xbrl.frc.org.uk/reports/2014-09-01/direp"
+xmlns:uk-core="http://xbrl.frc.org.uk/fr/2014-09-01/core"
+xmlns:uk-countries="http://xbrl.frc.org.uk/cd/2014-09-01/countries-regions"
+xmlns:xbrldi='http://xbrl.org/2006/xbrldi'>
+<head>
+<meta content='application/xhtml+xml; charset=UTF-8' http-equiv='Content-Type' />
+<title>340 City Road Management Company Limited  iXBRL</title>
+<style type='text/css'>
+td {   text-align: left  }
+td.rowName  {  text-align: left  }
+td.majorTotal  {   border-top-style: double;  border-bottom-style: double  }
+td.total {  border-top: thin solid black;  border-bottom-style: double  }
+td.minorTotal {  border-top: thin solid black; border-bottom: thin solid black; }
+td.subtotal  {  border-top: thin solid black;  }
+td.listEnd { border-bottom-style: double  }
+td.section  {  font-size: 200%; text-align: left  }
+td.Admin {font-family:Arial; font-size:9pt; text-align:left; font-weight:Bold;  }
+td.AudFirmSig {font-family:Arial; font-size:9pt; text-align:left; font-weight:Bold;  }
+td.BodyText {font-family:Arial; font-size:9pt; text-align:justify; text-decoration:none }
+td.ClientName {font-family:Arial; font-size:12pt; text-align:left; font-weight:Bold;  }
+td.ClientName10 {font-family:Arial; font-size:11pt; text-align:left; font-weight:Bold;  }
+td.ClientNameCover {font-family:Arial; font-size:12pt; text-align:center; font-weight:Bold;  }
+td.ClientNameCover10 {font-family:Arial; font-size:11pt; text-align:center; font-weight:Bold;  }
+td.Column3 {font-family:Arial; font-size:9pt; text-align:center; font-weight:Bold;  }
+td.Column4 {font-family:Arial; font-size:9pt; text-align:center; text-decoration:none }
+td.Column5 {font-family:Arial; font-size:9pt; text-align:center; font-weight:Bold;  }
+td.Column6 {font-family:Arial; font-size:9pt; text-align:right; font-weight:Bold;  }
+td.Column7 {font-family:Arial; font-size:9pt; text-align:center; text-decoration:none }
+td.ContextFigure {font-family:Arial; font-size:10pt; text-align:right; text-decoration:none }
+td.ContextPage {font-family:Arial; font-size:10pt; text-align:left; text-decoration:none }
+td.CoverFirm {font-family:Arial; font-size:10pt; text-align:right; font-weight:Bold;  }
+td.CoverPage {font-family:Arial; font-size:12pt; text-align:center; font-weight:Bold;  }
+td.CoverRight {font-family:Arial; font-size:9pt; text-align:right; font-weight:Bold;  }
+td.DirStatText {font-family:Arial; font-size:9pt; text-align:justify; text-decoration:none }
+td.Divider {font-family:Arial; font-size:10pt; text-align:center; font-weight:Bold; text-decoration:Underline }
+td.Figure1 {font-family:Arial; font-size:9pt; text-align:right; font-weight:Bold;  }
+td.Figure2 {font-family:Arial; font-size:9pt; text-align:right; text-decoration:none }
+td.Footer {font-family:Arial; font-size:9pt; text-align:right; font-weight:Bold;  }
+td.FooterText {font-family:Arial; font-size:8pt; text-align:center; text-decoration:none }
+td.FormatError {font-family:Arial; font-size:8pt; text-align:left; font-weight:Bold; text-decoration:Underline }
+td.Full3 {font-family:Arial; font-size:9pt; text-align:justify; text-decoration:none }
+td.Full4Reg {font-family:Arial; font-size:9pt; text-align:justify; text-decoration:none }
+td.Guarantee {font-family:Arial; font-size:8pt; text-align:center; font-weight:Bold;  }
+td.Guarantee1 {font-family:Arial; font-size:8pt; text-align:left; font-weight:Bold;  }
+td.Heading3 {font-family:Arial; font-size:9pt; text-align:center; font-weight:Bold;  }
+td.Heading4 {font-family:Arial; font-size:9pt; text-align:left; font-weight:Bold;  }
+td.Heading8 {font-family:Arial; font-size:9pt; text-align:center; font-weight:Bold; font-style:Italic;  }
+td.Left {font-family:Arial; font-size:9pt; text-align:left; text-decoration:none }
+td.Left2 {font-family:Arial; font-size:9pt; text-align:justify; text-decoration:none }
+td.Left2B {font-family:Arial; font-size:9pt; text-align:left; font-weight:Bold;  }
+td.Left2Reg {font-family:Arial; font-size:9pt; text-align:left; text-decoration:none }
+td.Left3 {font-family:Arial; font-size:9pt; text-align:left; font-weight:Bold;  }
+td.Left4 {font-family:Arial; font-size:9pt; text-align:left; font-weight:Bold;  }
+td.Left4Reg {font-family:Arial; font-size:9pt; text-align:left; text-decoration:none }
+td.LeftFull {font-family:Arial; font-size:9pt; text-align:justify; font-weight:Bold;  }
+td.NameSigs2 {font-family:Arial; font-size:9pt; text-align:left; font-weight:Bold;  }
+td.NameSigsLeft3 {font-family:Arial; font-size:9pt; text-align:left; font-weight:Bold;  }
+td.NameSigsLeft4 {font-family:Arial; font-size:9pt; text-align:left; font-weight:Bold;  }
+td.NameSigsLeftFull {font-family:Arial; font-size:9pt; text-align:justify; font-weight:Bold;  }
+td.NamesSigs {font-family:Arial; font-size:9pt; text-align:left; font-weight:Bold;  }
+td.NoteHeading {font-family:Arial; font-size:9pt; text-align:left; font-weight:Bold;  }
+td.PageName {font-family:Arial; font-size:14pt; text-align:left; font-weight:Bold;  }
+td.Supplement {font-family:Arial; font-size:11pt; text-align:left; font-weight:Bold;  }
+td.Supplementary2 {font-family:Arial; font-size:9pt; text-align:left; font-weight:Bold;  }
+td.YearEnd {font-family:Arial; font-size:9pt; text-align:left; text-decoration:none }
+</style>
+</head>
+<body>
+<div style='display:none'>
+<ix:header>
+<ix:hidden>
+<ix:nonNumeric contextRef='Curr_Period' name='uk-bus:NameProductionSoftware'>Relate AccountsProduction v2.3.1</ix:nonNumeric>
+<ix:nonNumeric contextRef='Curr_Period' name='uk-bus:VersionProductionSoftware'>v2.3.1</ix:nonNumeric>
+<ix:nonNumeric contextRef='Comp_End' name='uk-bus:StartDateForPeriodCoveredByReport'>2018-07-01</ix:nonNumeric>
+<ix:nonNumeric contextRef='Curr_Period' name='uk-bus:EntityDormantTruefalse' format='ixt2:booleanfalse'>The company was not dormant during the period</ix:nonNumeric>
+<ix:nonNumeric contextRef='Curr_Period' name='uk-bus:EntityTradingStatus' format='ixt2:nocontent'>The company was trading for the entire period</ix:nonNumeric>
+<ix:nonNumeric contextRef='uk-bus_AuditExempt-NoAccountantsReport_Hidden' name='uk-bus:AccountsStatusAuditedOrUnaudited' format='ixt2:nocontent'>Unaudited Accounts</ix:nonNumeric>
+<ix:nonNumeric contextRef='uk-bus_AccountingStandards_Hidden' name='uk-bus:AccountingStandardsApplied' format='ixt2:nocontent'>FRS 105 Accounts</ix:nonNumeric>
+<ix:nonNumeric contextRef='CompanySecretaryDirector_1' name='uk-direp:DirectorSigningDirectorsReport'/>
+<ix:nonNumeric contextRef='CompanySecretaryDirector_1' name='uk-core:DirectorSigningFinancialStatements'/>
+<ix:nonNumeric contextRef='uk-bus_PrivateLimitedCompanyLtd_Hidden' name='uk-bus:LegalFormEntity' format='ixt2:nocontent'></ix:nonNumeric>
+<ix:nonNumeric contextRef='Curr_Period' name='uk-bus:DescriptionPrincipalActivities'>The company continues to own the freehold land at 340 City Road, London and maintains the building exterior and common parts.</ix:nonNumeric>
+<ix:nonNumeric contextRef='Curr_End' name='uk-aurep:DateAuditorsReport' format='ixt:datelonguk'>31 March 2020</ix:nonNumeric>
+<ix:nonFraction contextRef='Curr_Period' decimals='0' name='uk-core:AverageNumberEmployeesDuringPeriod' scale='0' unitRef='Pure' format='ixt:numcommadot'>0</ix:nonFraction>
+<ix:nonFraction contextRef='Comp_Period' decimals='0' name='uk-core:AverageNumberEmployeesDuringPeriod' scale='0' unitRef='Pure' format='ixt:numcommadot'>0</ix:nonFraction>
+</ix:hidden>
+<ix:references>
+<link:schemaRef xlink:type="simple" xlink:href="https://xbrl.frc.org.uk/FRS-102/2014-09-01/FRS-102-2014-09-01.xsd"/> 
+</ix:references>
+<ix:resources>
+<xbrli:context id="Curr_End">
+<xbrli:entity>
+<xbrli:identifier scheme="http://www.companieshouse.gov.uk/">3656433</xbrli:identifier>
+</xbrli:entity>
+<xbrli:period>
+<xbrli:instant>2019-06-30</xbrli:instant>
+</xbrli:period>
+</xbrli:context>
+<xbrli:context id="Comp_End">
+<xbrli:entity>
+<xbrli:identifier scheme="http://www.companieshouse.gov.uk/">3656433</xbrli:identifier>
+</xbrli:entity>
+<xbrli:period>
+<xbrli:instant>2018-06-30</xbrli:instant>
+</xbrli:period>
+</xbrli:context>
+<xbrli:context id="Comp_Start">
+<xbrli:entity>
+<xbrli:identifier scheme="http://www.companieshouse.gov.uk/">3656433</xbrli:identifier>
+</xbrli:entity>
+<xbrli:period>
+<xbrli:instant>2017-06-30</xbrli:instant>
+</xbrli:period>
+</xbrli:context>
+<xbrli:context id="Curr_Period">
+<xbrli:entity>
+<xbrli:identifier scheme="http://www.companieshouse.gov.uk/">3656433</xbrli:identifier>
+</xbrli:entity>
+<xbrli:period>
+<xbrli:startDate>2018-07-01</xbrli:startDate>
+<xbrli:endDate>2019-06-30</xbrli:endDate>
+</xbrli:period>
+</xbrli:context>
+<xbrli:context id="Comp_Period">
+<xbrli:entity>
+<xbrli:identifier scheme="http://www.companieshouse.gov.uk/">3656433</xbrli:identifier>
+</xbrli:entity>
+<xbrli:period>
+<xbrli:startDate>2017-07-01</xbrli:startDate>
+<xbrli:endDate>2018-06-30</xbrli:endDate>
+</xbrli:period>
+</xbrli:context>
+<xbrli:context id="uk-bus_PrivateLimitedCompanyLtd_Hidden">
+<xbrli:entity>
+<xbrli:identifier scheme="http://www.companieshouse.gov.uk/">3656433</xbrli:identifier>
+<xbrli:segment>
+<xbrldi:explicitMember dimension="uk-bus:LegalFormEntityDimension">uk-bus:PrivateLimitedCompanyLtd</xbrldi:explicitMember>
+</xbrli:segment>
+</xbrli:entity>
+<xbrli:period>
+<xbrli:startDate>2018-07-01</xbrli:startDate>
+<xbrli:endDate>2019-06-30</xbrli:endDate>
+</xbrli:period>
+</xbrli:context>
+<xbrli:context id="uk-bus_AbridgedAccounts_1">
+<xbrli:entity>
+<xbrli:identifier scheme="http://www.companieshouse.gov.uk/">3656433</xbrli:identifier>
+<xbrli:segment>
+<xbrldi:explicitMember dimension="uk-bus:AccountsTypeDimension">uk-bus:AbridgedAccounts</xbrldi:explicitMember>
+</xbrli:segment>
+</xbrli:entity>
+<xbrli:period>
+<xbrli:startDate>2018-07-01</xbrli:startDate>
+<xbrli:endDate>2019-06-30</xbrli:endDate>
+</xbrli:period>
+</xbrli:context>
+<xbrli:context id="uk-core_CapitalReserve_2">
+<xbrli:entity>
+<xbrli:identifier scheme="http://www.companieshouse.gov.uk/">3656433</xbrli:identifier>
+<xbrli:segment>
+<xbrldi:explicitMember dimension="uk-core:EquityClassesDimension">uk-core:CapitalReserve</xbrldi:explicitMember>
+</xbrli:segment>
+</xbrli:entity>
+<xbrli:period>
+<xbrli:instant>2019-06-30</xbrli:instant>
+</xbrli:period>
+</xbrli:context>
+<xbrli:context id="uk-core_CapitalReserve_3">
+<xbrli:entity>
+<xbrli:identifier scheme="http://www.companieshouse.gov.uk/">3656433</xbrli:identifier>
+<xbrli:segment>
+<xbrldi:explicitMember dimension="uk-core:EquityClassesDimension">uk-core:CapitalReserve</xbrldi:explicitMember>
+</xbrli:segment>
+</xbrli:entity>
+<xbrli:period>
+<xbrli:instant>2018-06-30</xbrli:instant>
+</xbrli:period>
+</xbrli:context>
+<xbrli:context id="ParentLargestGroupCountry">
+<xbrli:entity>
+<xbrli:identifier scheme="http://www.companieshouse.gov.uk/">3656433</xbrli:identifier>
+<xbrli:segment>
+<xbrldi:explicitMember dimension="uk-countries:CountriesDimension"></xbrldi:explicitMember>
+</xbrli:segment>
+</xbrli:entity>
+<xbrli:period>
+<xbrli:startDate>2018-07-01</xbrli:startDate>
+<xbrli:endDate>2019-06-30</xbrli:endDate>
+</xbrli:period>
+</xbrli:context>
+<xbrli:context id="CompanySecretaryDirector_1">
+<xbrli:entity>
+<xbrli:identifier scheme="http://www.companieshouse.gov.uk/">3656433</xbrli:identifier>
+<xbrli:segment>
+<xbrldi:explicitMember dimension="uk-bus:EntityOfficersDimension">uk-bus:CompanySecretaryDirector1</xbrldi:explicitMember>
+</xbrli:segment>
+</xbrli:entity>
+<xbrli:period>
+<xbrli:startDate>2018-07-01</xbrli:startDate>
+<xbrli:endDate>2019-06-30</xbrli:endDate>
+</xbrli:period>
+</xbrli:context>
+<xbrli:context id="uk-bus_AuditExempt-NoAccountantsReport_Hidden">
+<xbrli:entity>
+<xbrli:identifier scheme="http://www.companieshouse.gov.uk/">3656433</xbrli:identifier>
+<xbrli:segment>
+<xbrldi:explicitMember dimension="uk-bus:AccountsStatusDimension">uk-bus:AuditExempt-NoAccountantsReport</xbrldi:explicitMember>
+</xbrli:segment>
+</xbrli:entity>
+<xbrli:period>
+<xbrli:startDate>2018-07-01</xbrli:startDate>
+<xbrli:endDate>2019-06-30</xbrli:endDate>
+</xbrli:period>
+</xbrli:context>
+<xbrli:context id="uk-bus_AccountingStandards_Hidden">
+<xbrli:entity>
+<xbrli:identifier scheme="http://www.companieshouse.gov.uk/">3656433</xbrli:identifier>
+<xbrli:segment>
+<xbrldi:explicitMember dimension="uk-bus:AccountingStandardsDimension">uk-bus:Micro-entities</xbrldi:explicitMember>
+</xbrli:segment>
+</xbrli:entity>
+<xbrli:period>
+<xbrli:startDate>2018-07-01</xbrli:startDate>
+<xbrli:endDate>2019-06-30</xbrli:endDate>
+</xbrli:period>
+</xbrli:context>
+<!--Unit Section-->
+<xbrli:unit id='Pure'>
+<xbrli:measure>xbrli:pure</xbrli:measure>
+</xbrli:unit>
+<xbrli:unit id='GBP'>
+<xbrli:measure>iso4217:GBP</xbrli:measure>
+</xbrli:unit>
+<xbrli:unit id="Shares">
+<xbrli:measure>xbrli:shares</xbrli:measure>
+</xbrli:unit>
+</ix:resources>
+</ix:header>
+</div>
+<table style='border-collapse: collapse' width='650'>
+<tr>
+<td> </td>
+</tr>
+</table>
+<table style='border-collapse: collapse' width='650'>
+<tr>
+<td  class ='CoverRight'   colspan ='100' style="width:78%"><b>Company Number: <ix:nonNumeric contextRef='Curr_Period' name='uk-bus:UKCompaniesHouseRegisteredNumber'>3656433</ix:nonNumeric></b></td>
+</tr></table>
+<table style='border-collapse: collapse' width='650'>
+<tr><td>&#160;</td></tr>
+<tr><td>&#160;</td></tr>
+<tr>
+<td  class ='ClientNameCover'   colspan ='100' style="width:78%"><b><ix:nonNumeric contextRef='Curr_Period' name='uk-bus:EntityCurrentLegalOrRegisteredName'>340 City Road Management Company Limited</ix:nonNumeric></b></td>
+</tr></table>
+<table style='border-collapse: collapse' width='650'>
+<tr><td>&#160;</td></tr>
+<tr>
+<td  class ='CoverPage'   colspan ='100' style="width:78%"><b><ix:nonNumeric contextRef='uk-bus_AbridgedAccounts_1' name='uk-bus:AccountsTypeFullOrAbbreviated' format='ixt2:nocontent'>Unaudited Financial Statements</ix:nonNumeric></b></td>
+</tr></table>
+<table style='border-collapse: collapse' width='650'>
+<tr><td>&#160;</td></tr>
+<tr>
+<td  class ='CoverPage'   colspan ='100' style="width:78%"><b>for the year ended <ix:nonNumeric contextRef='Curr_End' name='uk-bus:EndDateForPeriodCoveredByReport' format='ixt:datelonguk'>30 June 2019</ix:nonNumeric></b></td>
+</tr></table>
+<table style='border-collapse: collapse; page-break-before: always' width='650'>
+<tr>
+<td  class ='ClientName'   colspan ='100' style="width:69%"><b>340 City Road Management Company Limited</b></td>
+</tr></table>
+<table style='border-collapse: collapse' width='650'>
+<tr>
+<td  class ='Guarantee1'   colspan ='100' style="width:69%"><b>Company Number: <ix:nonNumeric contextRef='Curr_Period' name='uk-bus:UKCompaniesHouseRegisteredNumber'>3656433</ix:nonNumeric></b></td>
+</tr></table>
+<table style='border-collapse: collapse' width='650'>
+<tr>
+<td  class ='PageName'  style="width:69%"><b>STATEMENT OF FINANCIAL POSITION</b></td>
+<td  class ='BodyText'   colspan ='100' style="width:10%"></td>
+</tr>
+<tr>
+<td  class ='YearEnd'   colspan ='100' style="width:69%">as at <ix:nonNumeric contextRef='Curr_End' name='uk-bus:BalanceSheetDate' format='ixt:datelonguk'>30 June 2019</ix:nonNumeric></td>
+</tr></table>
+<table style='border-collapse: collapse' width='650'>
+<tr><td><br/></td></tr>
+</table>
+<table style='border-collapse: collapse' width='650'>
+<tr>
+<td>&#160; </td>
+<td style="width:41%">&#160; </td>
+<td  class ='Figure1'  style="width:19%"><b>2019</b></td>
+<td style="width:8%">&#160; </td>
+<td  class ='Figure2'  style="width:11%">2018 </td>
+</tr>
+<tr>
+<td  > </td>
+<td style="width:41%">&#160; </td>
+<td  class ='Figure1'  style="width:19%"><b>&#163;</b></td>
+<td style="width:8%">&#160; </td>
+<td  class ='Figure2'  style="width:11%">&#163; </td>
+</tr>
+<tr>
+<td></td>
+<td style="width:41%">&#160;</td>
+</tr>
+<tr>
+<td  > </td>
+<td  class ='Left'  style="width:41%">Fixed Assets </td>
+<td  class ='Figure1'  style="width:19%"><b><ix:nonFraction contextRef='Curr_End' decimals='0' name='uk-core:Non-currentAssets' scale='0' unitRef='GBP' format='ixt:numcommadot'>7,069</ix:nonFraction></b></td>
+<td style="width:8%">&#160; </td>
+<td  class ='Figure2'  style="width:11%"><ix:nonFraction contextRef='Comp_End' decimals='0' name='uk-core:Non-currentAssets' scale='0' unitRef='GBP' format='ixt:numcommadot'>7,069</ix:nonFraction> </td>
+</tr>
+<tr>
+<td  > </td>
+<td style="width:41%">&#160; </td>
+<td class='Figure1' style="width:19%">&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;</td>
+<td style="width:8%">&#160; </td>
+<td class='Figure1' style="width:11%">&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;</td>
+</tr>
+<tr>
+<td  > </td>
+<td  class ='Left'  style="width:41%">Current assets </td>
+<td  class ='Figure1'  style="width:19%"><b><ix:nonFraction contextRef='Curr_End' decimals='0' name='uk-core:CurrentAssets' scale='0' unitRef='GBP' format='ixt:numcommadot'>19,437</ix:nonFraction></b></td>
+<td style="width:8%">&#160; </td>
+<td  class ='Figure2'  style="width:11%"><ix:nonFraction contextRef='Comp_End' decimals='0' name='uk-core:CurrentAssets' scale='0' unitRef='GBP' format='ixt:numcommadot'>17,188</ix:nonFraction> </td>
+</tr>
+<tr>
+<td  > </td>
+<td  class ='Left'  style="width:41%">Creditors: amounts falling due within one year </td>
+<td  class ='Figure1'  style="width:19%"><b>(<ix:nonFraction contextRef='Curr_End' decimals='0' name='uk-core:CurrentLiabilities' scale='0' unitRef='GBP' format='ixt:numcommadot'>16,840</ix:nonFraction>)</b></td>
+<td style="width:8%">&#160; </td>
+<td  class ='Figure2'  style="width:11%">(<ix:nonFraction contextRef='Comp_End' decimals='0' name='uk-core:CurrentLiabilities' scale='0' unitRef='GBP' format='ixt:numcommadot'>14,694</ix:nonFraction>) </td>
+</tr>
+<tr>
+<td  > </td>
+<td style="width:41%">&#160; </td>
+<td class='Figure1' style="width:19%">&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;</td>
+<td style="width:8%">&#160; </td>
+<td class='Figure1' style="width:11%">&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;</td>
+</tr>
+<tr>
+<td  > </td>
+<td  class ='Heading4'  style="width:41%"><b>Net Current Assets</b></td>
+<td  class ='Figure1'  style="width:19%"><b><ix:nonFraction contextRef='Curr_End' decimals='0' name='uk-core:NetCurrentAssetsLiabilities' scale='0' unitRef='GBP' format='ixt:numcommadot'>2,597</ix:nonFraction></b></td>
+<td style="width:8%">&#160; </td>
+<td  class ='Figure2'  style="width:11%"><ix:nonFraction contextRef='Comp_End' decimals='0' name='uk-core:NetCurrentAssetsLiabilities' scale='0' unitRef='GBP' format='ixt:numcommadot'>2,494</ix:nonFraction> </td>
+</tr>
+<tr>
+<td  > </td>
+<td style="width:41%">&#160; </td>
+<td class='Figure1' style="width:19%">&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;</td>
+<td style="width:8%">&#160; </td>
+<td class='Figure1' style="width:11%">&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;</td>
+</tr>
+<tr>
+<td  > </td>
+<td  class ='Heading4'  style="width:41%"><b>Total Assets less Current Liabilities</b></td>
+<td  class ='Figure1'  style="width:19%"><b>9,666</b></td>
+<td style="width:8%">&#160; </td>
+<td  class ='Figure2'  style="width:11%">9,563 </td>
+</tr>
+<tr>
+<td  > </td>
+<td  class ='Left'  style="width:41%">Creditors: amounts falling due after more than one year </td>
+<td  class ='Figure1'  style="width:19%"><b>(<ix:nonFraction contextRef='Curr_End' decimals='0' name='uk-core:Non-currentLiabilities' scale='0' unitRef='GBP' format='ixt:numcommadot'>6,760</ix:nonFraction>)</b></td>
+<td style="width:8%">&#160; </td>
+<td  class ='Figure2'  style="width:11%">(<ix:nonFraction contextRef='Comp_End' decimals='0' name='uk-core:Non-currentLiabilities' scale='0' unitRef='GBP' format='ixt:numcommadot'>6,760</ix:nonFraction>) </td>
+</tr>
+<tr>
+<td  > </td>
+<td  class ='Left'  style="width:41%">Accruals and deferred income </td>
+<td  class ='Figure1'  style="width:19%"><b>(717)</b></td>
+<td style="width:8%">&#160; </td>
+<td  class ='Figure2'  style="width:11%">(717) </td>
+</tr>
+<tr>
+<td  > </td>
+<td style="width:41%">&#160; </td>
+<td class='Figure1' style="width:19%">&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;</td>
+<td style="width:8%">&#160; </td>
+<td class='Figure1' style="width:11%">&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;</td>
+</tr>
+<tr>
+<td  > </td>
+<td  class ='Heading4'  style="width:41%"><b>Net Assets</b></td>
+<td  class ='Figure1'  style="width:19%"><b><ix:nonFraction contextRef='Curr_End' decimals='0' name='uk-core:NetAssetsLiabilities' scale='0' unitRef='GBP' format='ixt:numcommadot'>2,189</ix:nonFraction></b></td>
+<td style="width:8%">&#160; </td>
+<td  class ='Figure2'  style="width:11%"><ix:nonFraction contextRef='Comp_End' decimals='0' name='uk-core:NetAssetsLiabilities' scale='0' unitRef='GBP' format='ixt:numcommadot'>2,086</ix:nonFraction> </td>
+</tr>
+<tr>
+<td  > </td>
+<td style="width:41%">&#160; </td>
+<td class='Figure1' style="width:19%">&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;</td>
+<td style="width:8%">&#160; </td>
+<td class='Figure1' style="width:11%">&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;</td>
+</tr>
+<tr>
+<td></td>
+<td style="width:41%">&#160;</td>
+</tr>
+<tr>
+<td  > </td>
+<td  class ='Heading4'  style="width:41%"><b>Capital and Reserves</b></td>
+<td  class ='Figure1'  style="width:19%"><b><ix:nonFraction contextRef='uk-core_CapitalReserve_2' decimals='0' name='uk-core:Equity' scale='0' unitRef='GBP' format='ixt:numcommadot'>2,189</ix:nonFraction></b></td>
+<td style="width:8%">&#160; </td>
+<td  class ='Figure2'  style="width:11%"><ix:nonFraction contextRef='uk-core_CapitalReserve_3' decimals='0' name='uk-core:Equity' scale='0' unitRef='GBP' format='ixt:numcommadot'>2,086</ix:nonFraction> </td>
+</tr>
+<tr>
+<td  > </td>
+<td style="width:41%">&#160; </td>
+<td class='Figure1' style="width:19%">&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;</td>
+<td style="width:8%">&#160; </td>
+<td class='Figure1' style="width:11%">&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;</td>
+</tr>
+<tr>
+<td></td>
+<td style="width:41%">&#160;</td>
+</tr>
+<tr>
+<td></td>
+<td  class ='Heading4'  style="width:41%"><b>Notes to the financial statements</b></td>
+</tr>
+</table>
+<table style='border-collapse: collapse' width='650'>
+<tr>
+<td style="width:5%">&#160; </td>
+<td style="width:73%">&#160; </td>
+</tr>
+<tr>
+<td  class ='Heading4'  style="width:5%">1.</td>
+<td  class ='NoteHeading'  style="width:73%"><b>GENERAL INFORMATION</b></td>
+</tr>
+<tr>
+<td style="width:5%"></td>
+<td style="width:73%">&#160;</td>
+</tr>
+<tr>
+<td style="width:5%"></td>
+<td  class ='BodyText'   colspan ='100' style="width:73%">340 City Road Management Company Limited is a company limited by shares incorporated in United Kingdom. The registered office of the company is Handel House, 95 High Street, Edgware&#160;&#160;HA8 7DB. The financial statements have been presented in Pound Sterling (&#163;) which is also the functional currency of the company.</td>
+</tr>
+</table>
+<table style='border-collapse: collapse' width='650'>
+<tr>
+<td>&#160; </td>
+<td style="width:41%">&#160; </td>
+<td style="width:36%">&#160; </td>
+</tr>
+<tr>
+<td></td>
+<td  class ='BodyText'   colspan ='100' style="width:41%"><ix:nonNumeric contextRef='Curr_Period' name='uk-direp:StatementThatCompanyEntitledToExemptionFromAuditUnderSection477CompaniesAct2006RelatingToSmallCompanies'>For the financial year ended 30 June 2019 the company was entitled to exemption from audit under section 477 of the Companies Act 2006.</ix:nonNumeric></td>
+</tr>
+<tr>
+<td></td>
+<td style="width:41%">&#160;</td>
+</tr>
+<tr>
+<td></td>
+<td  class ='BodyText'   colspan ='100' style="width:41%"><ix:nonNumeric contextRef='Curr_Period' name='uk-direp:StatementThatMembersHaveNotRequiredCompanyToObtainAnAudit'>The directors confirm that the members have not required the company to obtain an audit of its financial statements for the year in question in accordance with section 476 of the Companies Act 2006.</ix:nonNumeric></td>
+</tr>
+<tr>
+<td></td>
+<td style="width:41%">&#160;</td>
+</tr>
+<tr>
+<td></td>
+<td  class ='BodyText'   colspan ='100' style="width:41%"><ix:nonNumeric contextRef='Curr_Period' name='uk-direp:StatementThatDirectorsAcknowledgeTheirResponsibilitiesUnderCompaniesAct'>The directors acknowledge their responsibilities for ensuring that the company keeps accounting records which comply with section 386 and for preparing financial statements which give a true and fair view of the state of affairs of the company as at the end of the financial year and of its profit and loss for the financial year in accordance with the requirements of sections 394 and 395 and which otherwise comply with the requirements of the Companies Act 2006 relating to financial statements, so far as applicable to the company.</ix:nonNumeric></td>
+</tr>
+<tr>
+<td></td>
+<td style="width:41%">&#160;</td>
+</tr>
+<tr>
+<td></td>
+<td  class ='BodyText'   colspan ='100' style="width:41%"><ix:nonNumeric contextRef='Curr_Period' name='uk-direp:StatementThatAccountsHaveBeenPreparedInAccordanceWithProvisionsSmallCompaniesRegime'>These financial statements have been prepared in accordance with the provisions available to micro-entities in Part 15 of the Companies Act 2006 and delivered in accordance with the provisions applicable to companies subject to the small companies&#39; regime.</ix:nonNumeric></td>
+</tr>
+<tr>
+<td></td>
+<td style="width:41%">&#160;</td>
+</tr>
+<tr>
+<td></td>
+<td  class ='BodyText'   colspan ='100' style="width:41%">The company has taken advantage of the exemption under section 444 not to file the Income Statement.</td>
+</tr>
+<tr>
+<td></td>
+<td style="width:41%">&#160;</td>
+</tr>
+<tr>
+<td></td>
+<td  class ='Heading4'  style="width:41%"><b>Approved by the Board on <ix:nonNumeric contextRef='Curr_End' name='uk-core:DateAuthorisationFinancialStatementsForIssue' format='ixt:datelonguk'>31 March 2020</ix:nonNumeric> and signed on its behalf by:</b></td>
+</tr>
+<tr>
+<td></td>
+<td style="width:41%">&#160;</td>
+</tr>
+<tr>
+<td></td>
+<td style="width:41%">&#160;</td>
+</tr>
+<tr>
+<td  > </td>
+<td  class ='Heading4'  style="width:41%"><b>________________________________</b></td>
+<td  class ='NamesSigs'  style="width:36%">&#160; </td>
+</tr>
+<tr>
+<td  > </td>
+<td  class ='NamesSigs'  style="width:41%"><b><ix:nonNumeric contextRef='CompanySecretaryDirector_1' name='uk-bus:NameEntityOfficer'>S D S Baker</ix:nonNumeric></b></td>
+<td  class ='NamesSigs'  style="width:36%">&#160; </td>
+</tr>
+<tr>
+<td  > </td>
+<td  class ='NamesSigs'  style="width:41%"><b>Director</b></td>
+<td  class ='NamesSigs'  style="width:36%">&#160; </td>
+</tr>
+</table>
+<table style='border-collapse: collapse' width='650'>
+<tr>
+<td style="width:37%"></td>
+<td style="width:5%"></td>
+<td style="width:18%"></td>
+<td  class ='Figure1'  style="width:19%"><b></b></td>
+</tr>
+<tr><td><br/></td></tr>
+<tr><td><br/></td></tr>
+<tr><td><br/></td></tr>
+</table>
+</body></html>

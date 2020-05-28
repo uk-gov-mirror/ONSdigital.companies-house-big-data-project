@@ -1,0 +1,2302 @@
+<?xml version="1.0"?>
+<html xmlns='http://www.w3.org/1999/xhtml' xmlns:iso4217='http://www.xbrl.org/2003/iso4217' xmlns:ix='http://www.xbrl.org/2008/inlineXBRL' xmlns:link='http://www.xbrl.org/2003/linkbase' xmlns:xbrli='http://www.xbrl.org/2003/instance' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:ixt2='http://www.xbrl.org/inlineXBRL/transformation/2011-07-31' xmlns:xbrldi='http://xbrl.org/2006/xbrldi' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:uk-core="http://xbrl.frc.org.uk/fr/2014-09-01/core" xmlns:uk-bus="http://xbrl.frc.org.uk/cd/2014-09-01/business" xmlns:uk-direp="http://xbrl.frc.org.uk/reports/2014-09-01/direp" xmlns:uk-aurep="http://xbrl.frc.org.uk/reports/2014-09-01/aurep" xmlns:uk-accrep="http://xbrl.frc.org.uk/reports/2014-09-01/accrep" xmlns:uk-countries="http://xbrl.frc.org.uk/cd/2014-09-01/countries" xmlns:uk-dpl="http://www.govtalk.gov.uk/uk/fr/tax/dpl-core/2013-10-01" xmlns:uk-dpl-frc="http://www.govtalk.gov.uk/uk/fr/tax/dpl-frc/2015-02-14" xmlns:uk-curr="http://xbrl.frc.org.uk/cd/2014-09-01/currencies">
+<head>
+<style type="text/css">
+body { font-family: sans-serif; font-size: 12px }
+.rightalign { text-align: right }
+h1 { font-size: 100%; font-weight: bold; color: black; }
+h2 { font-size: 100%; font-weight: bold; margin: 0.25em 0 1em 0; text-align: center; }
+h3 { font-size: 100%; font-weight: bold; margin: 0.5em 0 }
+.nospace { padding-top: 0 }
+
+.rnheader { border: 0; padding: 0.1em 0.5em; margin: 0 0 1em 0; }
+
+a.footnoteLink { text-decoration: none; }
+p { margin: 0.5em 0; }
+hr { background-color:#666666; }
+a { color: black;  }
+a:hover { text-decoration: none; }
+</style>
+<title>Accounts</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body xml:lang='en'>
+
+<div style='display:none'>
+<ix:header>
+
+<ix:hidden>
+<ix:nonNumeric contextRef='FY01072018A' name='uk-bus:StartDateForPeriodCoveredByReport' format='ixt2:datedaymonthyearen'>01 July 2018</ix:nonNumeric>
+<ix:nonNumeric contextRef='FY30062019A' name='uk-bus:EndDateForPeriodCoveredByReport' format='ixt2:datedaymonthyearen'>30 June 2019</ix:nonNumeric>
+<ix:nonNumeric contextRef='FY30062019' name='uk-bus:EntityDormantTruefalse' format='ixt2:booleanfalse'></ix:nonNumeric>
+<ix:nonNumeric contextRef='FY30062019' name='uk-bus:EntityTradingStatus' format='ixt2:nocontent'></ix:nonNumeric>
+<ix:nonNumeric contextRef='BUS.FRS102' name='uk-bus:AccountingStandardsApplied' format='ixt2:nocontent'></ix:nonNumeric>
+<ix:nonNumeric contextRef='BUS.FULLACCOUNTS' name='uk-bus:AccountsTypeFullOrAbbreviated' format='ixt2:nocontent'></ix:nonNumeric>
+<ix:nonNumeric contextRef='BUS.AUDITEXEMPT-NOACCOUNTANTSREPORT' name='uk-bus:AccountsStatusAuditedOrUnaudited' format='ixt2:nocontent'></ix:nonNumeric>
+<ix:nonNumeric contextRef='FY30062019' name='uk-bus:DescriptionPrincipalActivities'>No principle activity is included</ix:nonNumeric>
+<ix:nonNumeric contextRef='BUS.PRIVATELIMITEDCOMPANYLTD' name='uk-bus:LegalFormEntity' format='ixt2:nocontent'></ix:nonNumeric>
+</ix:hidden>
+
+<ix:references>
+<link:schemaRef xlink:href="https://xbrl.frc.org.uk/FRS-102/2014-09-01/FRS-102-2014-09-01.xsd" xlink:type="simple"/>
+</ix:references>
+
+<ix:resources><xbrli:context id="FY01072018A">
+<xbrli:entity>
+<xbrli:identifier scheme=" http://www.companieshouse.gov.uk/">10842118</xbrli:identifier>
+</xbrli:entity>
+<xbrli:period>
+<xbrli:instant>2018-07-01</xbrli:instant>
+</xbrli:period>
+</xbrli:context>
+<xbrli:context id="FY30062019A">
+<xbrli:entity>
+<xbrli:identifier scheme=" http://www.companieshouse.gov.uk/">10842118</xbrli:identifier>
+</xbrli:entity>
+<xbrli:period>
+<xbrli:instant>2019-06-30</xbrli:instant>
+</xbrli:period>
+</xbrli:context>
+<xbrli:context id="FY30062019">
+<xbrli:entity>
+<xbrli:identifier scheme=" http://www.companieshouse.gov.uk/">10842118</xbrli:identifier>
+</xbrli:entity>
+<xbrli:period>
+<xbrli:startDate>2018-07-01</xbrli:startDate>
+<xbrli:endDate>2019-06-30</xbrli:endDate>
+</xbrli:period>
+</xbrli:context>
+<xbrli:context id="FY30062018A">
+<xbrli:entity>
+<xbrli:identifier scheme=" http://www.companieshouse.gov.uk/">10842118</xbrli:identifier>
+</xbrli:entity>
+<xbrli:period>
+<xbrli:instant>2018-06-30</xbrli:instant>
+</xbrli:period>
+</xbrli:context>
+<xbrli:context id="FY30062018">
+<xbrli:entity>
+<xbrli:identifier scheme=" http://www.companieshouse.gov.uk/">10842118</xbrli:identifier>
+</xbrli:entity>
+<xbrli:period>
+<xbrli:startDate>2017-07-01</xbrli:startDate>
+<xbrli:endDate>2018-06-30</xbrli:endDate>
+</xbrli:period>
+</xbrli:context>
+<xbrli:context id="CORE.WITHINONEYEARB">
+<xbrli:entity>
+<xbrli:identifier scheme="http://www.companieshouse.gov.uk/">10842118</xbrli:identifier>
+<xbrli:segment>
+<xbrldi:explicitMember dimension="uk-core:MaturitiesOrExpirationPeriodsDimension">uk-core:WithinOneYear</xbrldi:explicitMember>
+</xbrli:segment>
+</xbrli:entity>
+<xbrli:period>
+<xbrli:instant>2019-06-30</xbrli:instant></xbrli:period>
+</xbrli:context>
+<xbrli:context id="PrevCORE.WITHINONEYEARB">
+<xbrli:entity>
+<xbrli:identifier scheme="http://www.companieshouse.gov.uk/">10842118</xbrli:identifier>
+<xbrli:segment>
+<xbrldi:explicitMember dimension="uk-core:MaturitiesOrExpirationPeriodsDimension">uk-core:WithinOneYear</xbrldi:explicitMember>
+</xbrli:segment>
+</xbrli:entity>
+<xbrli:period>
+<xbrli:instant>2018-06-30</xbrli:instant></xbrli:period>
+</xbrli:context>
+<xbrli:context id="CORE.SHARECAPITALB">
+<xbrli:entity>
+<xbrli:identifier scheme="http://www.companieshouse.gov.uk/">10842118</xbrli:identifier>
+<xbrli:segment>
+<xbrldi:explicitMember dimension="uk-core:EquityClassesDimension">uk-core:ShareCapital</xbrldi:explicitMember>
+</xbrli:segment>
+</xbrli:entity>
+<xbrli:period>
+<xbrli:instant>2019-06-30</xbrli:instant></xbrli:period>
+</xbrli:context>
+<xbrli:context id="PrevCORE.SHARECAPITALB">
+<xbrli:entity>
+<xbrli:identifier scheme="http://www.companieshouse.gov.uk/">10842118</xbrli:identifier>
+<xbrli:segment>
+<xbrldi:explicitMember dimension="uk-core:EquityClassesDimension">uk-core:ShareCapital</xbrldi:explicitMember>
+</xbrli:segment>
+</xbrli:entity>
+<xbrli:period>
+<xbrli:instant>2018-06-30</xbrli:instant></xbrli:period>
+</xbrli:context>
+<xbrli:context id="CORE.RETAINEDEARNINGSACCUMULATEDLOSSESB">
+<xbrli:entity>
+<xbrli:identifier scheme="http://www.companieshouse.gov.uk/">10842118</xbrli:identifier>
+<xbrli:segment>
+<xbrldi:explicitMember dimension="uk-core:EquityClassesDimension">uk-core:RetainedEarningsAccumulatedLosses</xbrldi:explicitMember>
+</xbrli:segment>
+</xbrli:entity>
+<xbrli:period>
+<xbrli:instant>2019-06-30</xbrli:instant></xbrli:period>
+</xbrli:context>
+<xbrli:context id="PrevCORE.RETAINEDEARNINGSACCUMULATEDLOSSESB">
+<xbrli:entity>
+<xbrli:identifier scheme="http://www.companieshouse.gov.uk/">10842118</xbrli:identifier>
+<xbrli:segment>
+<xbrldi:explicitMember dimension="uk-core:EquityClassesDimension">uk-core:RetainedEarningsAccumulatedLosses</xbrldi:explicitMember>
+</xbrli:segment>
+</xbrli:entity>
+<xbrli:period>
+<xbrli:instant>2018-06-30</xbrli:instant></xbrli:period>
+</xbrli:context>
+<xbrli:context id="BUS.DIRECTOR1">
+<xbrli:entity>
+<xbrli:identifier scheme="http://www.companieshouse.gov.uk/">10842118</xbrli:identifier>
+<xbrli:segment>
+<xbrldi:explicitMember dimension="uk-bus:EntityOfficersDimension">uk-bus:Director1</xbrldi:explicitMember>
+</xbrli:segment>
+</xbrli:entity>
+<xbrli:period>
+<xbrli:startDate>2018-07-01</xbrli:startDate>
+<xbrli:endDate>2019-06-30</xbrli:endDate>
+</xbrli:period>
+</xbrli:context>
+<xbrli:context id="BUS.REGISTEREDOFFICE">
+<xbrli:entity>
+<xbrli:identifier scheme="http://www.companieshouse.gov.uk/">10842118</xbrli:identifier>
+<xbrli:segment>
+<xbrldi:explicitMember dimension="uk-bus:EntityContactTypeDimension">uk-bus:RegisteredOffice</xbrldi:explicitMember>
+</xbrli:segment>
+</xbrli:entity>
+<xbrli:period>
+<xbrli:startDate>2018-07-01</xbrli:startDate>
+<xbrli:endDate>2019-06-30</xbrli:endDate>
+</xbrli:period>
+</xbrli:context>
+<xbrli:context id="CURR.POUNDSTERLING">
+<xbrli:entity>
+<xbrli:identifier scheme="http://www.companieshouse.gov.uk/">10842118</xbrli:identifier>
+<xbrli:segment>
+<xbrldi:explicitMember dimension="uk-curr:CurrenciesDimension">uk-curr:PoundSterling</xbrldi:explicitMember>
+</xbrli:segment>
+</xbrli:entity>
+<xbrli:period>
+<xbrli:startDate>2018-07-01</xbrli:startDate>
+<xbrli:endDate>2019-06-30</xbrli:endDate>
+</xbrli:period>
+</xbrli:context>
+<xbrli:context id="CORE.PLANTMACHINERY">
+<xbrli:entity>
+<xbrli:identifier scheme="http://www.companieshouse.gov.uk/">10842118</xbrli:identifier>
+<xbrli:segment>
+<xbrldi:explicitMember dimension="uk-core:PropertyPlantEquipmentClassesDimension">uk-core:PlantMachinery</xbrldi:explicitMember>
+</xbrli:segment>
+</xbrli:entity>
+<xbrli:period>
+<xbrli:startDate>2018-07-01</xbrli:startDate>
+<xbrli:endDate>2019-06-30</xbrli:endDate>
+</xbrli:period>
+</xbrli:context>
+<xbrli:context id="CORE.VEHICLES">
+<xbrli:entity>
+<xbrli:identifier scheme="http://www.companieshouse.gov.uk/">10842118</xbrli:identifier>
+<xbrli:segment>
+<xbrldi:explicitMember dimension="uk-core:PropertyPlantEquipmentClassesDimension">uk-core:Vehicles</xbrldi:explicitMember>
+</xbrli:segment>
+</xbrli:entity>
+<xbrli:period>
+<xbrli:startDate>2018-07-01</xbrli:startDate>
+<xbrli:endDate>2019-06-30</xbrli:endDate>
+</xbrli:period>
+</xbrli:context>
+<xbrli:context id="CORE.FURNITUREFITTINGS">
+<xbrli:entity>
+<xbrli:identifier scheme="http://www.companieshouse.gov.uk/">10842118</xbrli:identifier>
+<xbrli:segment>
+<xbrldi:explicitMember dimension="uk-core:PropertyPlantEquipmentClassesDimension">uk-core:FurnitureFittings</xbrldi:explicitMember>
+</xbrli:segment>
+</xbrli:entity>
+<xbrli:period>
+<xbrli:startDate>2018-07-01</xbrli:startDate>
+<xbrli:endDate>2019-06-30</xbrli:endDate>
+</xbrli:period>
+</xbrli:context>
+<xbrli:context id="CORE.OFFICEEQUIPMENT">
+<xbrli:entity>
+<xbrli:identifier scheme="http://www.companieshouse.gov.uk/">10842118</xbrli:identifier>
+<xbrli:segment>
+<xbrldi:explicitMember dimension="uk-core:PropertyPlantEquipmentClassesDimension">uk-core:OfficeEquipment</xbrldi:explicitMember>
+</xbrli:segment>
+</xbrli:entity>
+<xbrli:period>
+<xbrli:startDate>2018-07-01</xbrli:startDate>
+<xbrli:endDate>2019-06-30</xbrli:endDate>
+</xbrli:period>
+</xbrli:context>
+<xbrli:context id="PrevCORE.FURNITUREFITTINGSTOOLSEQUIPMENTB">
+<xbrli:entity>
+<xbrli:identifier scheme="http://www.companieshouse.gov.uk/">10842118</xbrli:identifier>
+<xbrli:segment>
+<xbrldi:explicitMember dimension="uk-core:PropertyPlantEquipmentClassesDimension">uk-core:FurnitureFittingsToolsEquipment</xbrldi:explicitMember>
+</xbrli:segment>
+</xbrli:entity>
+<xbrli:period>
+<xbrli:instant>2018-06-30</xbrli:instant></xbrli:period>
+</xbrli:context>
+<xbrli:context id="CORE.FURNITUREFITTINGSTOOLSEQUIPMENT">
+<xbrli:entity>
+<xbrli:identifier scheme="http://www.companieshouse.gov.uk/">10842118</xbrli:identifier>
+<xbrli:segment>
+<xbrldi:explicitMember dimension="uk-core:PropertyPlantEquipmentClassesDimension">uk-core:FurnitureFittingsToolsEquipment</xbrldi:explicitMember>
+</xbrli:segment>
+</xbrli:entity>
+<xbrli:period>
+<xbrli:startDate>2018-07-01</xbrli:startDate>
+<xbrli:endDate>2019-06-30</xbrli:endDate>
+</xbrli:period>
+</xbrli:context>
+<xbrli:context id="CORE.FURNITUREFITTINGSTOOLSEQUIPMENTB">
+<xbrli:entity>
+<xbrli:identifier scheme="http://www.companieshouse.gov.uk/">10842118</xbrli:identifier>
+<xbrli:segment>
+<xbrldi:explicitMember dimension="uk-core:PropertyPlantEquipmentClassesDimension">uk-core:FurnitureFittingsToolsEquipment</xbrldi:explicitMember>
+</xbrli:segment>
+</xbrli:entity>
+<xbrli:period>
+<xbrli:instant>2019-06-30</xbrli:instant></xbrli:period>
+</xbrli:context>
+<xbrli:context id="BUS.FRS102">
+<xbrli:entity>
+<xbrli:identifier scheme="http://www.companieshouse.gov.uk/">10842118</xbrli:identifier>
+<xbrli:segment>
+<xbrldi:explicitMember dimension="uk-bus:AccountingStandardsDimension">uk-bus:FRS102</xbrldi:explicitMember>
+</xbrli:segment>
+</xbrli:entity>
+<xbrli:period>
+<xbrli:startDate>2018-07-01</xbrli:startDate>
+<xbrli:endDate>2019-06-30</xbrli:endDate>
+</xbrli:period>
+</xbrli:context>
+<xbrli:context id="BUS.FULLACCOUNTS">
+<xbrli:entity>
+<xbrli:identifier scheme="http://www.companieshouse.gov.uk/">10842118</xbrli:identifier>
+<xbrli:segment>
+<xbrldi:explicitMember dimension="uk-bus:AccountsTypeDimension">uk-bus:FullAccounts</xbrldi:explicitMember>
+</xbrli:segment>
+</xbrli:entity>
+<xbrli:period>
+<xbrli:startDate>2018-07-01</xbrli:startDate>
+<xbrli:endDate>2019-06-30</xbrli:endDate>
+</xbrli:period>
+</xbrli:context>
+<xbrli:context id="BUS.AUDITEXEMPT-NOACCOUNTANTSREPORT">
+<xbrli:entity>
+<xbrli:identifier scheme="http://www.companieshouse.gov.uk/">10842118</xbrli:identifier>
+<xbrli:segment>
+<xbrldi:explicitMember dimension="uk-bus:AccountsStatusDimension">uk-bus:AuditExempt-NoAccountantsReport</xbrldi:explicitMember>
+</xbrli:segment>
+</xbrli:entity>
+<xbrli:period>
+<xbrli:startDate>2018-07-01</xbrli:startDate>
+<xbrli:endDate>2019-06-30</xbrli:endDate>
+</xbrli:period>
+</xbrli:context>
+<xbrli:context id="BUS.PRIVATELIMITEDCOMPANYLTD">
+<xbrli:entity>
+<xbrli:identifier scheme="http://www.companieshouse.gov.uk/">10842118</xbrli:identifier>
+<xbrli:segment>
+<xbrldi:explicitMember dimension="uk-bus:LegalFormEntityDimension">uk-bus:PrivateLimitedCompanyLtd</xbrldi:explicitMember>
+</xbrli:segment>
+</xbrli:entity>
+<xbrli:period>
+<xbrli:startDate>2018-07-01</xbrli:startDate>
+<xbrli:endDate>2019-06-30</xbrli:endDate>
+</xbrli:period>
+</xbrli:context>
+<xbrli:unit id='GBP'>
+<xbrli:measure>iso4217:GBP</xbrli:measure>
+</xbrli:unit>
+<xbrli:unit id='Pure'>
+<xbrli:measure>xbrli:pure</xbrli:measure>
+</xbrli:unit>
+</ix:resources>
+
+</ix:header>
+</div>
+
+<table width="100%" style="font-size:8pt">
+<col width="2%"/>
+<col/>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="1" align="center" style="color: #000000;font-size: 11pt;text-decoration:underline;font-weight:bold">SEVERN GAS SERVICES LIMITED</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="1" align="center" style="color: #000000;font-size: 11pt;text-decoration:underline;font-weight:bold">UNAUDITED FINANCIAL STATEMENTS</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="1" align="center" style="color: #000000;font-size: 11pt;text-decoration:underline;font-weight:bold">FOR THE YEAR ENDED 30 JUNE 2019</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+</table>
+<table width="100%" style="font-size:8pt">
+<col width="2%"/>
+<col/>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr style="page-break-before: always"><td colspan="2"> </td></tr>
+</table>
+<table width="100%" style="font-size:8pt">
+<col width="2%"/>
+<col/>
+<col width="49.5%"/>
+<col width="18.6%" align="right"/>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="center" style="color: #000000;font-size: 11pt;text-decoration:underline;font-weight:bold">SEVERN GAS SERVICES LIMITED</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="center" style="color: #000000;font-size: 11pt;text-decoration:underline;font-weight:bold">FINANCIAL STATEMENTS</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="center" style="color: #000000;font-size: 11pt;text-decoration:underline;font-weight:bold">FOR THE YEAR ENDED 30 JUNE 2019</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="left" style="font-weight:bold">DIRECTORS</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="left">S Neale</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="left" style="font-weight:bold">SECRETARY</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="left">S Neale</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="left" style="font-weight:bold">REGISTERED OFFICE</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="left">22 The Lakes Road<br />Bewdley<br />DY12 2QB</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="left" style="font-weight:bold">COMPANY REGISTERED NUMBER</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="left">10842118</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="left" style="font-weight:bold">ACCOUNTANTS</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="left">AIMS</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="left">Chartered Accountants</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="left">Bridge House, Riverside North, Bewdley, DY12 1AB</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="left" style="font-weight:bold">CONTENTS</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="left">Pages</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td align="left">2-3</td>
+<td align="left">Statement of Financial Position</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td align="left">4-8</td>
+<td align="left">Notes to the Financial Statements</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td align="left"> </td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+</table>
+<table width="100%" style="font-size:8pt">
+<col width="2%"/>
+<col/>
+<tr>
+<td>&#160;</td>
+<td colspan="1" align="center">page 1</td>
+</tr>
+<tr style="page-break-before: always"><td colspan="2"> </td></tr>
+</table>
+<table width="100%" style="font-size:8pt">
+<col width="2%"/>
+<col/>
+<col width="6.2%"/>
+<col width="11.8%" align="right"/>
+<col width="11.8%" align="right"/>
+<col width="13.6%" align="right"/>
+<tr>
+<td>&#160;</td>
+<td colspan="5" align="center" style="color: #000000;font-size: 11pt;text-decoration:underline;font-weight:bold"><ix:nonNumeric   contextRef='FY30062019' name='uk-bus:EntityCurrentLegalOrRegisteredName'>SEVERN GAS SERVICES LIMITED</ix:nonNumeric></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="5" align="center">Company registered number: <ix:nonNumeric   contextRef='FY30062019' name='uk-bus:UKCompaniesHouseRegisteredNumber'>10842118</ix:nonNumeric></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="5" align="center" style="color: #000000;font-size: 11pt;text-decoration:underline;font-weight:bold">STATEMENT OF FINANCIAL POSITION AT <ix:nonNumeric   contextRef='FY30062019A' name='uk-bus:BalanceSheetDate' format='ixt2:datedaymonthyearen'><ix:nonNumeric contextRef='FY30062019A' name='uk-bus:EndDateForPeriodCoveredByReport' format='ixt2:datedaymonthyearen'>30 June 2019</ix:nonNumeric></ix:nonNumeric></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td align="center" style="font-weight:bold">Note</td>
+<td align="right" style="font-weight:bold">2019</td>
+<td align="right"> </td>
+<td align="right" style="font-weight:bold;font-style:italic">2018</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td align="right" style="font-weight:bold">&#163;</td>
+<td align="right" style="font-weight:bold">&#163;</td>
+<td align="right" style="font-weight:bold;font-style:italic">&#163;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="5" align="left" style="font-weight:bold">FIXED ASSETS</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td align="left">Property, plant and equipment</td>
+<td align="center"> 3</td>
+<td align="right"> </td>
+<td align="right" style="font-weight:bold"><ix:nonFraction  contextRef='FY30062019A' decimals='0' name='uk-core:PropertyPlantEquipment' unitRef='GBP' format='ixt2:numdotdecimal'>31,387</ix:nonFraction></td>
+<td align="right" style="font-style:italic"><ix:nonFraction  contextRef='FY30062018A' decimals='0' name='uk-core:PropertyPlantEquipment' unitRef='GBP' format='ixt2:numdotdecimal'>18,498</ix:nonFraction></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td align="left" style="font-weight:bold">CURRENT ASSETS</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td style="border-top: solid thin black"> </td>
+<td style="border-top: solid thin black"> </td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td align="left">Cash at bank and in hand</td>
+<td>&#160;</td>
+<td align="right" style="font-weight:bold"><ix:nonFraction  contextRef='FY30062019A' decimals='0' name='uk-core:CashBankOnHand' unitRef='GBP' format='ixt2:numdotdecimal'>84,178</ix:nonFraction></td>
+<td align="right"> </td>
+<td align="right" style="font-style:italic"><ix:nonFraction  contextRef='FY30062018A' decimals='0' name='uk-core:CashBankOnHand' unitRef='GBP' format='ixt2:numdotdecimal'>13,917</ix:nonFraction></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td align="right" style="font-weight:bold;border-top: solid thin black"><ix:nonFraction  contextRef='FY30062019A' decimals='0' name='uk-core:CurrentAssets' unitRef='GBP' format='ixt2:numdotdecimal'>84,178</ix:nonFraction></td>
+<td align="right"> </td>
+<td align="right" style="font-style:italic;border-top: solid thin black"><ix:nonFraction  contextRef='FY30062018A' decimals='0' name='uk-core:CurrentAssets' unitRef='GBP' format='ixt2:numdotdecimal'>13,917</ix:nonFraction></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td align="left" style="font-weight:bold">CREDITORS: Amounts falling due within one year</td>
+<td align="center">4</td>
+<td align="right" style="font-weight:bold"><ix:nonFraction  contextRef='CORE.WITHINONEYEARB' decimals='0' name='uk-core:Creditors' unitRef='GBP' format='ixt2:numdotdecimal'>39,399</ix:nonFraction></td>
+<td align="right"> </td>
+<td align="right" style="font-style:italic"><ix:nonFraction  contextRef='PrevCORE.WITHINONEYEARB' decimals='0' name='uk-core:Creditors' unitRef='GBP' format='ixt2:numdotdecimal'>11,378</ix:nonFraction></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td align="left" style="font-weight:bold">NET CURRENT ASSETS</td>
+<td>&#160;</td>
+<td align="right" style="border-top: solid thin black"> </td>
+<td align="right" style="font-weight:bold"><ix:nonFraction  contextRef='FY30062019A' decimals='0' name='uk-core:NetCurrentAssetsLiabilities' unitRef='GBP' format='ixt2:numdotdecimal'>44,779</ix:nonFraction></td>
+<td align="right" style="font-style:italic;border-top: solid thin black"><ix:nonFraction  contextRef='FY30062018A' decimals='0' name='uk-core:NetCurrentAssetsLiabilities' unitRef='GBP' format='ixt2:numdotdecimal'>2,539</ix:nonFraction></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td align="left" style="font-weight:bold">NET ASSETS</td>
+<td>&#160;</td>
+<td align="right"> </td>
+<td align="right" style="font-weight:bold;border-top: solid thin black">&#163;<ix:nonFraction  contextRef='FY30062019A' decimals='0' name='uk-core:NetAssetsLiabilities' unitRef='GBP' format='ixt2:numdotdecimal'>76,166</ix:nonFraction></td>
+<td align="right" style="font-style:italic;border-top: solid thin black">&#163;<ix:nonFraction  contextRef='FY30062018A' decimals='0' name='uk-core:NetAssetsLiabilities' unitRef='GBP' format='ixt2:numdotdecimal'>21,037</ix:nonFraction></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td style="border-top: solid thin black"> </td>
+<td style="border-top: solid thin black"> </td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="5" align="left" style="font-weight:bold">CAPITAL AND RESERVES</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td align="left">Called up share capital</td>
+<td>&#160;</td>
+<td align="right"> </td>
+<td align="right" style="font-weight:bold"><ix:nonFraction  contextRef='CORE.SHARECAPITALB' decimals='0' name='uk-core:Equity' unitRef='GBP' format='ixt2:numdotdecimal'>1</ix:nonFraction></td>
+<td align="right" style="font-style:italic"><ix:nonFraction  contextRef='PrevCORE.SHARECAPITALB' decimals='0' name='uk-core:Equity' unitRef='GBP' format='ixt2:numdotdecimal'>1</ix:nonFraction></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td align="left">Retained earnings</td>
+<td>&#160;</td>
+<td align="right"> </td>
+<td align="right" style="font-weight:bold"><ix:nonFraction  contextRef='CORE.RETAINEDEARNINGSACCUMULATEDLOSSESB' decimals='0' name='uk-core:Equity' unitRef='GBP' format='ixt2:numdotdecimal'>76,165</ix:nonFraction></td>
+<td align="right" style="font-style:italic"><ix:nonFraction  contextRef='PrevCORE.RETAINEDEARNINGSACCUMULATEDLOSSESB' decimals='0' name='uk-core:Equity' unitRef='GBP' format='ixt2:numdotdecimal'>21,036</ix:nonFraction></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td align="left" style="font-weight:bold">SHAREHOLDERS&#39; FUNDS</td>
+<td>&#160;</td>
+<td align="right"> </td>
+<td align="right" style="font-weight:bold;border-top: solid thin black">&#163;<ix:nonFraction  contextRef='FY30062019A' decimals='0' name='uk-core:Equity' unitRef='GBP' format='ixt2:numdotdecimal'>76,166</ix:nonFraction></td>
+<td align="right" style="font-style:italic;border-top: solid thin black">&#163;<ix:nonFraction  contextRef='FY30062018A' decimals='0' name='uk-core:Equity' unitRef='GBP' format='ixt2:numdotdecimal'>21,037</ix:nonFraction></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td style="border-top: solid thin black"> </td>
+<td style="border-top: solid thin black"> </td>
+</tr>
+</table>
+<table width="100%" style="font-size:8pt">
+<col width="2%"/>
+<col/>
+<tr>
+<td>&#160;</td>
+<td colspan="1" align="center">The notes on pages 4-8 form part of these financial statements</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="1" align="center">page 2</td>
+</tr>
+<tr style="page-break-before: always"><td colspan="2"> </td></tr>
+</table>
+<table width="100%" style="font-size:8pt">
+<col width="2%"/>
+<col/>
+<col width="6.2%"/>
+<col width="11.8%" align="right"/>
+<col width="11.8%" align="right"/>
+<col width="13.6%" align="right"/>
+<tr>
+<td>&#160;</td>
+<td colspan="5" align="center" style="color: #000000;font-size: 11pt;text-decoration:underline;font-weight:bold"><ix:nonNumeric   contextRef='FY30062019' name='uk-bus:EntityCurrentLegalOrRegisteredName'>SEVERN GAS SERVICES LIMITED</ix:nonNumeric></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="5" align="center">Company registered number: <ix:nonNumeric   contextRef='FY30062019' name='uk-bus:UKCompaniesHouseRegisteredNumber'>10842118</ix:nonNumeric></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="5" align="center" style="color: #000000;font-size: 11pt;text-decoration:underline;font-weight:bold">STATEMENT OF FINANCIAL POSITION AT <ix:nonNumeric   contextRef='FY30062019A' name='uk-bus:BalanceSheetDate' format='ixt2:datedaymonthyearen'>30 June 2019</ix:nonNumeric> (CONT.)</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td align="center" style="font-weight:bold">Note</td>
+<td align="right" style="font-weight:bold">2019</td>
+<td align="right"> </td>
+<td align="right" style="font-weight:bold;font-style:italic">2018</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td align="right" style="font-weight:bold">&#163;</td>
+<td align="right" style="font-weight:bold">&#163;</td>
+<td align="right" style="font-weight:bold;font-style:italic">&#163;</td>
+</tr>
+</table>
+<table width="100%" style="font-size:8pt">
+<col width="2%"/>
+<col/>
+<col width="6.2%"/>
+<col width="23.5%" align="right"/>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="left">In approving these financial statements as directors of the company we hereby confirm the following:</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="left"><ix:nonNumeric   contextRef='FY30062019' name='uk-direp:StatementThatCompanyEntitledToExemptionFromAuditUnderSection477CompaniesAct2006RelatingToSmallCompanies'>For the year in question the company was entitled to exemption under section 477 of the Companies Act 2006 relating to small companies.</ix:nonNumeric></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="left"><ix:nonNumeric   contextRef='FY30062019' name='uk-direp:StatementThatMembersHaveNotRequiredCompanyToObtainAnAudit'>The members have not required the company to obtain an audit of its financial statements for the year ended 30 June 2019 in accordance with section 476 of the Companies Act 2006.</ix:nonNumeric></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="left"><ix:nonNumeric   contextRef='FY30062019' name='uk-direp:StatementThatDirectorsAcknowledgeTheirResponsibilitiesUnderCompaniesAct'>The directors acknowledge their responsibilities for: 1) ensuring that the company keeps accounting records which comply with Sections 386 and 386 of the Companies Act 2006, and 2) preparing financial statements that give a true and fair view of the state of affairs of the company at at the end of each financial year and of its profit or loss for the financial year in accordance with the requirements of Sections 394 and 395 and which otherwise comply with the requirements of the Companies Act 2006 relating to the financial statements, so far as they are applicable to the company.<br /></ix:nonNumeric></td>
+</tr>
+<tr>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="left"><ix:nonNumeric   contextRef='FY30062019' name='uk-direp:StatementThatAccountsHaveBeenPreparedInAccordanceWithProvisionsSmallCompaniesRegime'>These financial statements have been prepared and delivered in accordance with the provisions of Part 15 of the Companies Act 2006 relating to small companies</ix:nonNumeric></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="left">In accordance with Section 444 of the Companies Act 2006, the Income Statement has not been delivered.</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="left" style="font-weight:bold">The financial statements were approved  and authorised for issue by the board of directors on <ix:nonNumeric   contextRef='FY30062019A' name='uk-core:DateAuthorisationFinancialStatementsForIssue' format='ixt2:datedaymonthyearen'>25 March 2020</ix:nonNumeric></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="left"> </td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="left">Signed on behalf of the board of directors</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="left"> </td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="left"> </td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="left"><ix:nonNumeric   contextRef='BUS.DIRECTOR1' name='uk-core:DirectorSigningFinancialStatements' format='ixt2:nocontent'><ix:nonNumeric   contextRef='FY30062019' name='uk-bus:NameEntityOfficer'>S Neale</ix:nonNumeric></ix:nonNumeric>, Director</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+</table>
+<table width="100%" style="font-size:8pt">
+<col width="2%"/>
+<col/>
+<tr>
+<td>&#160;</td>
+<td colspan="1" align="center">The notes on pages 4-8 form part of these financial statements</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="1" align="center">page 3</td>
+</tr>
+<tr style="page-break-before: always"><td colspan="2"> </td></tr>
+</table>
+<table width="100%" style="font-size:8pt">
+<col width="2%"/>
+<col/>
+<col width="13.6%" align="right"/>
+<col width="13.6%" align="right"/>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="center" style="color: #000000;font-size: 11pt;text-decoration:underline;font-weight:bold">SEVERN GAS SERVICES LIMITED</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="center" style="color: #000000;font-size: 11pt;text-decoration:underline;font-weight:bold">NOTES TO THE ACCOUNTS</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="center" style="color: #000000;font-size: 11pt;text-decoration:underline;font-weight:bold">FOR THE YEAR ENDED 30 JUNE 2019</td>
+</tr>
+</table>
+<table width="100%" style="font-size:8pt">
+<col width="2%"/>
+<col/>
+<col width="13.6%" align="right"/>
+<col width="13.6%" align="right"/>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="left"> </td>
+</tr>
+<tr>
+<td align="left" style="font-weight:bold">1.</td>
+<td colspan="3" align="left" style="font-weight:bold">SIGNIFICANT ACCOUNTING POLICIES</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+</table>
+<table width="100%" style="font-size:8pt">
+<col width="2%"/>
+<col/>
+<col width="4.9%"/>
+<col width="13.6%" align="right"/>
+<col width="13.6%" align="right"/>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td align="left" style="font-weight:bold">1a.</td>
+<td colspan="4" align="left" style="color: #000000;font-size: 10pt;font-weight:bold">Statement of compliance</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="4" align="left"><ix:nonNumeric   contextRef='FY30062019' name='uk-bus:CountryFormationOrIncorporation' format='ixt2:nocontent'>Severn Gas Services Limited is a private limited company incorporated in England and Wales.</ix:nonNumeric></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="4" align="left">Registered office:</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="4" align="left"><ix:nonNumeric   contextRef='BUS.REGISTEREDOFFICE' name='uk-bus:AddressLine1'>22 The Lakes Road<br />Bewdley<br />DY12 2QB</ix:nonNumeric></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="4" align="left">These financial statements are the first financial statements that comply with FRS 102.  The date of transition is 1 July 2018.</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="4" align="left"><ix:nonNumeric   contextRef='FY30062019' name='uk-core:StatementComplianceWithApplicableReportingFramework'>The transition to FRS 102 has resulted in a small number of changes in accounting policies to those used previously. The nature of these changes and their impact on opening equity and profit for the comparative period are explained in notes and below. These financial statements have been prepared in accordance with the provisions of Section 1A of Financial Reporting Standard 102 &quot;The Financial Reporting Standard applicable in the UK and Republic of Ireland&quot; and the Companies Act 2006.</ix:nonNumeric></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+</table>
+<table width="100%" style="font-size:8pt">
+<col width="2%"/>
+<col/>
+<col width="4.9%"/>
+<col width="13.6%" align="right"/>
+<col width="13.6%" align="right"/>
+<tr>
+<td>&#160;</td>
+<td colspan="4" align="left" style="color: #000000;font-size: 10pt;font-weight:bold">Basis of accounting</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="4" align="left"><ix:nonNumeric   contextRef='FY30062019' name='uk-core:GeneralDescriptionBasisMeasurementUsedInPreparingFinancialStatements'>The financial statements have been prepared under the historical cost convention</ix:nonNumeric>.  The presentation currency is <ix:nonNumeric   contextRef='CURR.POUNDSTERLING' name='uk-bus:PrincipalCurrencyUsedInBusinessReport' format='ixt2:nocontent'>&#163; sterling</ix:nonNumeric>.</td>
+</tr>
+</table>
+<table width="100%" style="font-size:8pt">
+<col width="2%"/>
+<col/>
+<col width="4.9%"/>
+<col width="13.6%" align="right"/>
+<col width="13.6%" align="right"/>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td align="left" style="font-weight:bold">1c.</td>
+<td colspan="4" align="left" style="color: #000000;font-size: 10pt;font-weight:bold">Revenue recognition</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="4" align="left"><ix:nonNumeric   contextRef='FY30062019' name='uk-core:RevenueRecognitionPolicy'>Income is recognised when goods have been delivered to customers such that risks and rewards of ownership have transferred to them.</ix:nonNumeric></td>
+</tr>
+</table>
+<table width="100%" style="font-size:8pt">
+<col width="2%"/>
+<col/>
+<col width="4.9%"/>
+<col width="13.6%" align="right"/>
+<col width="13.6%" align="right"/>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td align="left" style="font-weight:bold">1d.</td>
+<td colspan="4" align="left" style="color: #000000;font-size: 10pt;font-weight:bold">Borrowing costs</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="4" align="left"><ix:nonNumeric   contextRef='FY30062019' name='uk-core:BorrowingCostsPolicy'>Borrowing costs directly attributable to the acquisition, construction or production of qualifying assets, which are assets that necessarily take a substantial period of time to get ready for their intended use or sale, are added to the cost of those assets, until such time as the assets are substantially ready for their intended use or sale. Investment income earned on the temporary investment of specific borrowings pending their expenditure on qualifying assets is deducted from the borrowing costs eligible for capitalisation. All other borrowing costs are recognised in profit or loss in the period in which they are incurred.</ix:nonNumeric></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+</tr>
+</table>
+<table width="100%" style="font-size:8pt">
+<col width="2%"/>
+<col/>
+<col width="4.9%"/>
+<col width="13.6%" align="right"/>
+<col width="13.6%" align="right"/>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td align="left" style="font-weight:bold">1e.</td>
+<td colspan="4" align="left" style="color: #000000;font-size: 10pt;font-weight:bold">Taxation</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="4" align="left"><ix:nonNumeric   contextRef='FY30062019' name='uk-core:TaxPolicy'>Current or deferred tax for the year is recognised in profit or loss, except when they relate to items that are recognised in other comprehensive income or directly in equity, in which case, the current and deferred tax is also recognised in other comprehensive income or directly in equity respectively.</ix:nonNumeric></td>
+</tr>
+</table>
+<table width="100%" style="font-size:8pt">
+<col width="2%"/>
+<col/>
+<tr>
+<td>&#160;</td>
+<td colspan="1" align="center">The notes on pages 4-8 form part of these financial statements</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="1" align="center">page 4</td>
+</tr>
+<tr style="page-break-before: always"><td colspan="2"> </td></tr>
+</table>
+<table width="100%" style="font-size:8pt">
+<col width="2%"/>
+<col/>
+<col width="13.6%" align="right"/>
+<col width="13.6%" align="right"/>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="center" style="color: #000000;font-size: 11pt;text-decoration:underline;font-weight:bold">SEVERN GAS SERVICES LIMITED</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="center" style="color: #000000;font-size: 11pt;text-decoration:underline;font-weight:bold">NOTES TO THE ACCOUNTS (CONT.)</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="center" style="color: #000000;font-size: 11pt;text-decoration:underline;font-weight:bold">FOR THE YEAR ENDED 30 JUNE 2019</td>
+</tr>
+</table>
+<table width="100%" style="font-size:8pt">
+<col width="2%"/>
+<col/>
+<col width="13.6%" align="right"/>
+<col width="13.6%" align="right"/>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="left"> </td>
+</tr>
+<tr>
+<td align="left" style="font-weight:bold">1.</td>
+<td colspan="3" align="left" style="font-weight:bold">SIGNIFICANT ACCOUNTING POLICIES (CONT.)</td>
+</tr>
+</table>
+<table width="100%" style="font-size:8pt">
+<col width="2%"/>
+<col/>
+<col width="39.6%"/>
+<col width="26%" align="right"/>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td align="left" style="font-weight:bold">1f.</td>
+<td colspan="3" align="left" style="font-weight:bold">Property, plant and equipment  </td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="left"><ix:nonNumeric   contextRef='FY30062019' name='uk-core:PropertyPlantEquipmentPolicy'>Depreciation is provided, after taking account of any grants receivable, at the following annual rates in order to write off each asset over its estimated useful life.</ix:nonNumeric></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td align="left">Plant and machinery</td>
+<td align="right"><ix:nonNumeric   contextRef='CORE.PLANTMACHINERY' name='uk-core:DescriptionDepreciationMethodForPropertyPlantEquipment'>Reducing balance 25%</ix:nonNumeric></td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td align="left">Vehicles</td>
+<td align="right"><ix:nonNumeric   contextRef='CORE.VEHICLES' name='uk-core:DescriptionDepreciationMethodForPropertyPlantEquipment'>Reducing balance 25%</ix:nonNumeric></td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td align="left">Fixtures and fittings</td>
+<td align="right"><ix:nonNumeric   contextRef='CORE.FURNITUREFITTINGS' name='uk-core:DescriptionDepreciationMethodForPropertyPlantEquipment'>Reducing balance 15%</ix:nonNumeric></td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td align="left">Equipment</td>
+<td align="right"><ix:nonNumeric   contextRef='CORE.OFFICEEQUIPMENT' name='uk-core:DescriptionDepreciationMethodForPropertyPlantEquipment'>Reducing balance 15%</ix:nonNumeric></td>
+<td>&#160;</td>
+</tr>
+</table>
+<table width="100%" style="font-size:8pt">
+<col width="2%"/>
+<col/>
+<col width="4.9%"/>
+<col width="13.6%" align="right"/>
+<col width="13.6%" align="right"/>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td align="left" style="font-weight:bold">1g.</td>
+<td colspan="4" align="left" style="color: #000000;font-size: 10pt;font-weight:bold">Inventories</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="4" align="left"><ix:nonNumeric   contextRef='FY30062019' name='uk-core:InventoriesPolicy'>Stocks are stated at the lower of cost and net realisable value. Cost includes all costs incurred in bringing each product to its present location and condition.</ix:nonNumeric></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+</table>
+<table width="100%" style="font-size:8pt">
+<col width="2%"/>
+<col/>
+<col width="4.9%"/>
+<col width="13.6%" align="right"/>
+<col width="13.6%" align="right"/>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td align="left" style="font-weight:bold">1h.</td>
+<td colspan="4" align="left" style="color: #000000;font-size: 10pt;font-weight:bold">Short term debtors and creditors</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="4" align="left"><ix:nonNumeric   contextRef='FY30062019' name='uk-core:TradeReceivablesPolicy'>Debtors and creditors receivable or payable within one year are recorded at transaction price. Any losses arising from impairment are recognised in profit and loss.</ix:nonNumeric></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+</table>
+<table width="100%" style="font-size:8pt">
+<col width="2%"/>
+<col/>
+<col width="4.9%"/>
+<col width="13.6%" align="right"/>
+<col width="13.6%" align="right"/>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td align="left" style="font-weight:bold">1i.</td>
+<td colspan="4" align="left" style="color: #000000;font-size: 10pt;font-weight:bold">Cash and cash equivalents</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="4" align="left"><ix:nonNumeric   contextRef='FY30062019' name='uk-core:CashCashEquivalentsPolicy'>Cash and cash equivalents comprise cash at bank and on hand, demand deposits with banks and other short-term highly liquid investments with original maturities of three months or less and bank overdrafts. In the statement of financial position, bank overdrafts are shown within borrowings or current liabilities. For the purpose of statement of cash flows, bank overdrafts which are repayable on demand form an integral part of the Company&#39;s cash management are included as a component of cash and cash equivalents.</ix:nonNumeric></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+</tr>
+</table>
+<table width="100%" style="font-size:8pt">
+<col width="2%"/>
+<col/>
+<col width="4.9%"/>
+<col width="13.6%" align="right"/>
+<col width="13.6%" align="right"/>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td align="left" style="font-weight:bold">1j.</td>
+<td colspan="4" align="left" style="color: #000000;font-size: 10pt;font-weight:bold">Interest bearing borrowings</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="4" align="left"><ix:nonNumeric   contextRef='FY30062019' name='uk-core:BorrowingsPolicy'>All interest-bearing loans and borrowings which are basic financial instruments are initially recognised at the present value of cash payable to the bank (including interest). After initial recognition they are measured at amortised cost using the effective interest rate method, less impairment.  Any difference between the amount initially recognised and redemption value is recognised in profit and loss together with any interest and fees payable.</ix:nonNumeric></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+</table>
+<table width="100%" style="font-size:8pt">
+<col width="2%"/>
+<col/>
+<tr>
+<td>&#160;</td>
+<td colspan="1" align="center">The notes on pages 4-8 form part of these financial statements</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="1" align="center">page 5</td>
+</tr>
+<tr style="page-break-before: always"><td colspan="2"> </td></tr>
+</table>
+<table width="100%" style="font-size:8pt">
+<col width="2%"/>
+<col/>
+<col width="13.6%" align="right"/>
+<col width="13.6%" align="right"/>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="center" style="color: #000000;font-size: 11pt;text-decoration:underline;font-weight:bold">SEVERN GAS SERVICES LIMITED</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="center" style="color: #000000;font-size: 11pt;text-decoration:underline;font-weight:bold">NOTES TO THE ACCOUNTS (CONT.)</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="center" style="color: #000000;font-size: 11pt;text-decoration:underline;font-weight:bold">FOR THE YEAR ENDED 30 JUNE 2019</td>
+</tr>
+</table>
+<table width="100%" style="font-size:8pt">
+<col width="2%"/>
+<col/>
+<col width="13.6%" align="right"/>
+<col width="13.6%" align="right"/>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="left"> </td>
+</tr>
+<tr>
+<td align="left" style="font-weight:bold">1.</td>
+<td colspan="3" align="left" style="font-weight:bold">SIGNIFICANT ACCOUNTING POLICIES (CONT.)</td>
+</tr>
+</table>
+<table width="100%" style="font-size:8pt">
+<col width="2%"/>
+<col/>
+<col width="4.9%"/>
+<col width="13.6%" align="right"/>
+<col width="13.6%" align="right"/>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td align="left" style="font-weight:bold">1k.</td>
+<td colspan="4" align="left" style="color: #000000;font-size: 10pt;font-weight:bold">Leased assets</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="4" align="left"><ix:nonNumeric   contextRef='FY30062019' name='uk-core:LeasesPolicy'>Assets held under finance leases, which are leases where substantially all the risks and rewards of ownership of the asset have passed to the Company are capitalised in the balance sheet and are depreciated over the shorter of the lease term and the asset&#39;s useful life.  A corresponding liability is recognised for the lower of the fair value of the leased asset and the present value of the minimum lease payments in the balance sheet. Lease payments are apportioned between the reduction of the lease liability and finance charges in the income statement so as to achieve a constant rate of interest on the remaining balance of the liability. Rentals payable under operating leases are charged in the profit and loss account on a straight line basis over the lease term. Lease incentives are recognised over the lease term on a straight line basis.</ix:nonNumeric></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+</table>
+<table width="100%" style="font-size:8pt">
+<col width="2%"/>
+<col/>
+<col width="4.9%"/>
+<col width="13.6%" align="right"/>
+<col width="13.6%" align="right"/>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td align="left" style="font-weight:bold">1l.</td>
+<td colspan="4" align="left" style="color: #000000;font-size: 10pt;font-weight:bold">Foreign currencies</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="4" align="left"><ix:nonNumeric   contextRef='FY30062019' name='uk-core:ForeignCurrencyTranslationOperationsPolicy'>Transactions in foreign currencies are initially recorded in the entity&#146;s functional currency by applying the spot exchange rate ruling at the date of the transaction. Monetary assets and liabilities denominated in foreign currencies are retranslated at the rate of exchange ruling at the balance sheet date. All differences are taken to the profit and loss account.</ix:nonNumeric></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+</table>
+<table width="100%" style="font-size:8pt">
+<col width="2%"/>
+<col/>
+<col width="4.9%"/>
+<col width="13.6%" align="right"/>
+<col width="13.6%" align="right"/>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td align="left" style="font-weight:bold">1m.</td>
+<td colspan="4" align="left" style="color: #000000;font-size: 10pt;font-weight:bold">Employee benefits</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="4" align="left"><ix:nonNumeric   contextRef='FY30062019' name='uk-core:EmployeeBenefitsPolicy'>The obligations for contributions to defined contribution scheme are recognised as an expense as incurred. The assets of the scheme are held separately from those of the Company in an independent administered fund.</ix:nonNumeric></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+</table>
+<table width="100%" style="font-size:8pt">
+<col width="2%"/>
+<col/>
+<col width="4.9%"/>
+<col width="13.6%" align="right"/>
+<col width="13.6%" align="right"/>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td align="left" style="font-weight:bold">1n.</td>
+<td colspan="4" align="left" style="color: #000000;font-size: 10pt;font-weight:bold">Discontinued operations</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="4" align="left"><ix:nonNumeric   contextRef='FY30062019' name='uk-core:DiscontinuedOperationsPolicy'>A discontinued operation is a component of the Company&#39;s business, the operations and cash flows of which can be clearly distinguished from the rest of the Company and which represents a separate major line of business or geographical area of operations, or is part of a signal coordinated disposal of a separate major line of business or geographical area of operations, or is a subsidiary acquired exclusively with a review to resale.</ix:nonNumeric></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+</table>
+<table width="100%" style="font-size:8pt">
+<col width="2%"/>
+<col/>
+<col width="4.9%"/>
+<col width="13.6%" align="right"/>
+<col width="13.6%" align="right"/>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td align="left" style="font-weight:bold">1o.</td>
+<td colspan="4" align="left" style="color: #000000;font-size: 10pt;font-weight:bold">Provisions</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="4" align="left"><ix:nonNumeric   contextRef='FY30062019' name='uk-core:ProvisionsPolicy'>Provisions are recognised when the Company has a present legal or constructive obligation arising as a result of a past event, it is probable that an outflow of economic benefits will be required to settle the obligation and a reliable estimate can be made. Provisions are measured at the present value of the expenditures expected to be required to settle the obligation using a pre-tax rate that reflects current market assessments of the time value of money and the risks specific to the obligation. The increase in the provision due to passage of time is recognised as interest expense.</ix:nonNumeric></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+</table>
+<table width="100%" style="font-size:8pt">
+<col width="2%"/>
+<col/>
+<tr>
+<td>&#160;</td>
+<td colspan="1" align="center">The notes on pages 4-8 form part of these financial statements</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="1" align="center">page 6</td>
+</tr>
+<tr style="page-break-before: always"><td colspan="2"> </td></tr>
+</table>
+<table width="100%" style="font-size:8pt">
+<col width="2%"/>
+<col/>
+<col width="13.6%" align="right"/>
+<col width="13.6%" align="right"/>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="center" style="color: #000000;font-size: 11pt;text-decoration:underline;font-weight:bold">SEVERN GAS SERVICES LIMITED</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="center" style="color: #000000;font-size: 11pt;text-decoration:underline;font-weight:bold">NOTES TO THE ACCOUNTS (CONT.)</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="center" style="color: #000000;font-size: 11pt;text-decoration:underline;font-weight:bold">FOR THE YEAR ENDED 30 JUNE 2019</td>
+</tr>
+</table>
+<table width="100%" style="font-size:8pt">
+<col width="2%"/>
+<col/>
+<col width="13.6%" align="right"/>
+<col width="13.6%" align="right"/>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="left"> </td>
+</tr>
+<tr>
+<td align="left" style="font-weight:bold">1.</td>
+<td colspan="3" align="left" style="font-weight:bold">SIGNIFICANT ACCOUNTING POLICIES (CONT.)</td>
+</tr>
+</table>
+<table width="100%" style="font-size:8pt">
+<col width="2%"/>
+<col/>
+<col width="4.9%"/>
+<col width="13.6%" align="right"/>
+<col width="13.6%" align="right"/>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td align="left" style="font-weight:bold">1p.</td>
+<td colspan="4" align="left" style="color: #000000;font-size: 10pt;font-weight:bold">Judgements and key sources of estimation uncertainty</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="4" align="left"><ix:nonNumeric   contextRef='FY30062019' name='uk-core:GeneralDescriptionCriticalEstimatesJudgements'>In the application of the Company&#39;s accounting policies, management is required to make judgements, estimates and assumptions about the carrying values of assets and liabilities that are not readily apparent from other sources. The estimates and underlying assumptions are based on historical experience and other factors that are considered to be relevant. Actual results may differ from these estimates. The estimates and underlying assumptions are reviewed on an ongoing basis. Revisions to accounting estimates are recognised in the period in which the estimate is revised if the revision affects only that period, or in the period of the revision and future periods if the revision affects both current and future periods. The key sources of estimation uncertainty that have a significant effect on the amounts recognised in the financial statements are described below:</ix:nonNumeric></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+</table>
+<table width="100%" style="font-size:8pt">
+<col width="2%"/>
+<col/>
+<col width="13.6%" align="right"/>
+<col width="13.6%" align="right"/>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td align="left" style="font-weight:bold">2.</td>
+<td colspan="3" align="left" style="font-weight:bold">DIRECTORS AND EMPLOYEES</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="left">The average weekly number of employees during the year were as follows:</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td align="right" style="font-weight:bold">2019</td>
+<td align="right" style="font-weight:bold">2018</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td align="right" style="font-weight:bold">No. </td>
+<td align="right" style="font-weight:bold">No. </td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td align="left">Management and administration</td>
+<td align="right"><ix:nonFraction contextRef='FY30062019' unitRef = 'Pure' decimals='2' scale ='-2' name='uk-core:AdministrationSupportAverageNumberEmployees'>1</ix:nonFraction></td>
+<td align="right"><ix:nonFraction contextRef='FY30062018' unitRef = 'Pure' decimals='2' scale ='-2' name='uk-core:AdministrationSupportAverageNumberEmployees'>1</ix:nonFraction></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td style="border-top: solid thin black"> </td>
+<td style="border-top: solid thin black"> </td>
+</tr>
+</table>
+<table width="100%" style="font-size:8pt">
+<col width="2%"/>
+<col/>
+<tr>
+<td>&#160;</td>
+<td colspan="1" align="center">The notes on pages 4-8 form part of these financial statements</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="1" align="center">page 7</td>
+</tr>
+<tr style="page-break-before: always"><td colspan="2"> </td></tr>
+</table>
+<table width="100%" style="font-size:8pt">
+<col width="2%"/>
+<col/>
+<col width="13.6%" align="right"/>
+<col width="13.6%" align="right"/>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="center" style="color: #000000;font-size: 11pt;text-decoration:underline;font-weight:bold">SEVERN GAS SERVICES LIMITED</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="center" style="color: #000000;font-size: 11pt;text-decoration:underline;font-weight:bold">NOTES TO THE ACCOUNTS (CONT.)</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="center" style="color: #000000;font-size: 11pt;text-decoration:underline;font-weight:bold">FOR THE YEAR ENDED 30 JUNE 2019</td>
+</tr>
+</table>
+<table width="100%" style="font-size:8pt">
+<col width="2%"/>
+<col/>
+<col width="12.4%" align="right"/>
+<col width="12.4%" align="right"/>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td align="left" style="font-weight:bold">3.</td>
+<td colspan="3" align="left" style="font-weight:bold">PROPERTY, PLANT AND EQUIPMENT</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td align="right" style="font-weight:bold">Fixtures &amp;  </td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td align="right" style="font-weight:bold">Equipment</td>
+<td align="right" style="font-weight:bold">Total</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td align="right" style="font-weight:bold">&#163;</td>
+<td align="right" style="font-weight:bold">&#163;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="left" style="font-weight:bold">Cost</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td align="left">At 1 July 2018</td>
+<td align="right"><ix:nonFraction  contextRef='PrevCORE.FURNITUREFITTINGSTOOLSEQUIPMENTB' decimals='0' name='uk-core:PropertyPlantEquipmentGrossCost' unitRef='GBP' format='ixt2:numdotdecimal'>24,465</ix:nonFraction></td>
+<td align="right"><ix:nonFraction  contextRef='FY30062018A' decimals='0' name='uk-core:PropertyPlantEquipmentGrossCost' unitRef='GBP' format='ixt2:numdotdecimal'>24,465</ix:nonFraction></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td align="left">Additions other than through business combinations</td>
+<td align="right"><ix:nonFraction  contextRef='CORE.FURNITUREFITTINGSTOOLSEQUIPMENT' decimals='0' name='uk-core:AdditionsOtherThanThroughBusinessCombinationsPropertyPlantEquipment' unitRef='GBP' format='ixt2:numdotdecimal'>20,454</ix:nonFraction></td>
+<td align="right"><ix:nonFraction  contextRef='FY30062019' decimals='0' name='uk-core:AdditionsOtherThanThroughBusinessCombinationsPropertyPlantEquipment' unitRef='GBP' format='ixt2:numdotdecimal'>20,454</ix:nonFraction></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td align="left">At 30 June 2019</td>
+<td align="right" style="border-top: solid thin black"><ix:nonFraction  contextRef='CORE.FURNITUREFITTINGSTOOLSEQUIPMENTB' decimals='0' name='uk-core:PropertyPlantEquipmentGrossCost' unitRef='GBP' format='ixt2:numdotdecimal'>44,919</ix:nonFraction></td>
+<td align="right" style="border-top: solid thin black"><ix:nonFraction  contextRef='FY30062019A' decimals='0' name='uk-core:PropertyPlantEquipmentGrossCost' unitRef='GBP' format='ixt2:numdotdecimal'>44,919</ix:nonFraction></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td style="border-top: solid thin black"> </td>
+<td style="border-top: solid thin black"> </td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="left" style="font-weight:bold">Depreciation</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td align="left">At 1 July 2018</td>
+<td align="right"><ix:nonFraction  contextRef='PrevCORE.FURNITUREFITTINGSTOOLSEQUIPMENTB' decimals='0' name='uk-core:AccumulatedDepreciationImpairmentPropertyPlantEquipment' unitRef='GBP' format='ixt2:numdotdecimal'>5,967</ix:nonFraction></td>
+<td align="right"><ix:nonFraction  contextRef='FY30062018A' decimals='0' name='uk-core:AccumulatedDepreciationImpairmentPropertyPlantEquipment' unitRef='GBP' format='ixt2:numdotdecimal'>5,967</ix:nonFraction></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td align="left">For the year</td>
+<td align="right"><ix:nonFraction  contextRef='CORE.FURNITUREFITTINGSTOOLSEQUIPMENT' decimals='0' name='uk-core:IncreaseFromDepreciationChargeForYearPropertyPlantEquipment' unitRef='GBP' format='ixt2:numdotdecimal'>7,565</ix:nonFraction></td>
+<td align="right"><ix:nonFraction  contextRef='FY30062019' decimals='0' name='uk-core:IncreaseFromDepreciationChargeForYearPropertyPlantEquipment' unitRef='GBP' format='ixt2:numdotdecimal'>7,565</ix:nonFraction></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td align="left">At 30 June 2019</td>
+<td align="right" style="border-top: solid thin black"><ix:nonFraction  contextRef='CORE.FURNITUREFITTINGSTOOLSEQUIPMENTB' decimals='0' name='uk-core:AccumulatedDepreciationImpairmentPropertyPlantEquipment' unitRef='GBP' format='ixt2:numdotdecimal'>13,532</ix:nonFraction></td>
+<td align="right" style="border-top: solid thin black"><ix:nonFraction  contextRef='FY30062019A' decimals='0' name='uk-core:AccumulatedDepreciationImpairmentPropertyPlantEquipment' unitRef='GBP' format='ixt2:numdotdecimal'>13,532</ix:nonFraction></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td style="border-top: solid thin black"> </td>
+<td style="border-top: solid thin black"> </td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="3" align="left" style="font-weight:bold">Net Book Amounts</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td align="left">At 30 June 2019</td>
+<td align="right"><ix:nonFraction  contextRef='CORE.FURNITUREFITTINGSTOOLSEQUIPMENTB' decimals='0' name='uk-core:PropertyPlantEquipment' unitRef='GBP' format='ixt2:numdotdecimal'>31,387</ix:nonFraction></td>
+<td align="right"><ix:nonFraction  contextRef='FY30062019A' decimals='0' name='uk-core:PropertyPlantEquipment' unitRef='GBP' format='ixt2:numdotdecimal'>31,387</ix:nonFraction></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td align="left">At 30 June 2018</td>
+<td align="right" style="border-top: solid thin black"><ix:nonFraction  contextRef='PrevCORE.FURNITUREFITTINGSTOOLSEQUIPMENTB' decimals='0' name='uk-core:PropertyPlantEquipment' unitRef='GBP' format='ixt2:numdotdecimal'>18,498</ix:nonFraction></td>
+<td align="right" style="border-top: solid thin black"><ix:nonFraction  contextRef='FY30062018A' decimals='0' name='uk-core:PropertyPlantEquipment' unitRef='GBP' format='ixt2:numdotdecimal'>18,498</ix:nonFraction></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td style="border-top: solid thin black"> </td>
+<td style="border-top: solid thin black"> </td>
+</tr>
+</table>
+<table width="100%" style="font-size:8pt">
+<col width="2%"/>
+<col/>
+<col width="13.6%" align="right"/>
+<col width="13.6%" align="right"/>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td align="left" style="font-weight:bold">4.</td>
+<td colspan="3" align="left" style="font-weight:bold">CREDITORS: AMOUNTS FALLING DUE WITHIN ONE YEAR</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td align="right" style="font-weight:bold">2019</td>
+<td align="right" style="font-weight:bold;font-style:italic">2018</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td align="right" style="font-weight:bold">&#163;</td>
+<td align="right" style="font-weight:bold;font-style:italic">&#163;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td align="left">Trade creditors</td>
+<td align="right">(<ix:nonFraction  contextRef='CORE.WITHINONEYEARB' decimals='0' name='uk-core:TradeCreditorsTradePayables' unitRef='GBP' format='ixt2:numdotdecimal'>1</ix:nonFraction>)</td>
+<td align="right" style="font-style:italic"><ix:nonFraction  contextRef='PrevCORE.WITHINONEYEARB' decimals='0' name='uk-core:TradeCreditorsTradePayables' unitRef='GBP' format='ixt2:zerodash'>-</ix:nonFraction></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td align="left">Corporation tax</td>
+<td align="right"><ix:nonFraction  contextRef='CORE.WITHINONEYEARB' decimals='0' name='uk-core:CorporationTaxPayable' unitRef='GBP' format='ixt2:numdotdecimal'>14,146</ix:nonFraction></td>
+<td align="right" style="font-style:italic"><ix:nonFraction  contextRef='PrevCORE.WITHINONEYEARB' decimals='0' name='uk-core:CorporationTaxPayable' unitRef='GBP' format='ixt2:zerodash'>-</ix:nonFraction></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td align="left">Other taxes and social security</td>
+<td align="right"><ix:nonFraction  contextRef='CORE.WITHINONEYEARB' decimals='0' name='uk-core:OtherTaxationSocialSecurityPayable' unitRef='GBP' format='ixt2:numdotdecimal'>149</ix:nonFraction></td>
+<td align="right" style="font-style:italic"><ix:nonFraction  contextRef='PrevCORE.WITHINONEYEARB' decimals='0' name='uk-core:OtherTaxationSocialSecurityPayable' unitRef='GBP' format='ixt2:numdotdecimal'>1,768</ix:nonFraction></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td align="left">Other creditors</td>
+<td align="right"><ix:nonFraction  contextRef='CORE.WITHINONEYEARB' decimals='0' name='uk-core:OtherCreditors' unitRef='GBP' format='ixt2:numdotdecimal'>24,565</ix:nonFraction></td>
+<td align="right" style="font-style:italic"><ix:nonFraction  contextRef='PrevCORE.WITHINONEYEARB' decimals='0' name='uk-core:OtherCreditors' unitRef='GBP' format='ixt2:numdotdecimal'>9,070</ix:nonFraction></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td align="left">Accruals and deferred income</td>
+<td align="right"><ix:nonFraction  contextRef='CORE.WITHINONEYEARB' decimals='0' name='uk-core:AccruedLiabilitiesDeferredIncome' unitRef='GBP' format='ixt2:numdotdecimal'>540</ix:nonFraction></td>
+<td align="right" style="font-style:italic"><ix:nonFraction  contextRef='PrevCORE.WITHINONEYEARB' decimals='0' name='uk-core:AccruedLiabilitiesDeferredIncome' unitRef='GBP' format='ixt2:numdotdecimal'>540</ix:nonFraction></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td align="right" style="border-top: solid thin black">&#163;<ix:nonFraction  contextRef='CORE.WITHINONEYEARB' decimals='0' name='uk-core:Creditors' unitRef='GBP' format='ixt2:numdotdecimal'>39,399</ix:nonFraction></td>
+<td align="right" style="font-style:italic;border-top: solid thin black">&#163;<ix:nonFraction  contextRef='PrevCORE.WITHINONEYEARB' decimals='0' name='uk-core:Creditors' unitRef='GBP' format='ixt2:numdotdecimal'>11,378</ix:nonFraction></td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td style="border-top: solid thin black"> </td>
+<td style="border-top: solid thin black"> </td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+</table>
+<table width="100%" style="font-size:8pt">
+<col width="2%"/>
+<col/>
+<tr>
+<td>&#160;</td>
+<td colspan="1" align="center">The notes on pages 4-8 form part of these financial statements</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr>
+<td>&#160;</td>
+<td colspan="1" align="center">page 8</td>
+</tr>
+</table>
+</body>
+</html>

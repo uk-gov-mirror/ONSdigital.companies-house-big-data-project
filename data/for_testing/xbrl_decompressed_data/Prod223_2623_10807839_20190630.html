@@ -1,0 +1,2234 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:iso4217="http://www.xbrl.org/2003/iso4217" xmlns:ix="http://www.xbrl.org/2008/inlineXBRL"
+      xmlns:link="http://www.xbrl.org/2003/linkbase" xmlns:xbrli="http://www.xbrl.org/2003/instance"
+      xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ixt2="http://www.xbrl.org/inlineXBRL/transformation/2011-07-31"
+      xmlns:xbrldi="http://xbrl.org/2006/xbrldi" xmlns:uk-bus="http://xbrl.frc.org.uk/cd/2014-09-01/business"
+      xmlns:uk-core="http://xbrl.frc.org.uk/fr/2014-09-01/core"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:uk-direp="http://xbrl.frc.org.uk/reports/2014-09-01/direp"
+      xmlns:frs-102="http://xbrl.frc.org.uk/FRS-102/2014-09-01">
+
+
+<head>
+   
+    <style type="text/css">
+    tr.rowHighlight:hover {
+        backgRound: lightBlue !important;
+    }
+
+    .rowHighlight:hover td {
+        backgRound: transparent;
+    }
+
+    /*.divFinalAccount td {
+        font: 11pt Arial;
+        /*text-align: right;
+        font-style: normal;
+        font-size: 11pt;
+        font-family: Arial;
+        padding-right: 1.1mm;
+        font-weight: normal;
+    }*/
+
+    .renderhtml td {
+        text-align: justify !important;
+        font-style: normal;
+        font-size: 12pt;
+        font-family: Arial;
+        padding-right: 1.1mm;
+        font-weight: normal;
+    }
+
+    .divFinalAccount td.u {
+        text-decoration: underline;
+    }
+
+    .divFinalAccount td.t {
+        text-align: justify;
+    }
+
+    divFinalAccount TD.bullet {
+        text-align: justify;
+    }
+
+    .divFinalAccount TD.tu {
+        text-decoration: underline;
+        text-align: justify;
+    }
+
+    .divFinalAccount TD.b {
+        font-weight: bold !important;
+    }
+
+    .divFinalAccount TD.bu {
+        text-decoration: underline;
+        font-weight: bold;
+    }
+
+    .divFinalAccount TD.bt {
+        text-align: justify;
+        font-weight: bold;
+    }
+
+    .divFinalAccount TD.big {
+        text-align: justify;
+        font-weight: bold;
+        font-size: 22px;
+    }
+
+    .hoverElement {
+        cursor: pointer;
+    }
+
+
+
+    .divFinalAccount TD.bc {
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .divFinalAccount TD.i {
+        font-style: normal;
+    }
+
+    .divFinalAccount TD.bi {
+        font-style: normal;
+        font-weight: bold;
+    }
+
+    .divFinalAccount TD.comp {
+        font-style: normal;
+    }
+
+    .divFinalAccount TD.grey {
+        backgRound-color: #e0e0e0;
+        text-align: right;
+        font-weight: bold;
+    }
+
+    .divFinalAccount TD.greyt {
+        backgRound-color: #e0e0e0;
+        text-align: justify;
+        font-weight: bold;
+    }
+
+    .divFinalAccount TD.j {
+        text-align: justify;
+    }
+
+    .divFinalAccount TD.notes {
+        text-align: justify;
+    }
+    .divFinalAccount TD.black {
+        backgRound-color: black;
+        text-align: justify;
+        font-size: 12pt;
+        color: white;
+        font-weight: bold;
+    }
+
+    .divFinalAccount TD.white {
+        text-align: justify;
+        color: white;
+        font-weight: bold;
+    }
+
+    .divFinalAccount TD.bcu {
+        text-decoration: underline;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .divFinalAccount TD.c {
+        text-align: center;
+    }
+
+    .divFinalAccount TD.control {
+        text-align: justify;
+        font-style: normal;
+        color: red;
+    }
+
+    .divFinalAccount TD.clientinput {
+        border-left-style: solid;
+        border-bottom-style: solid;
+        border-right-style: solid;
+        border-top-style: solid;
+        text-align: justify;
+        border-color: grey;
+        border-width: 1px;
+    }
+
+    .divFinalAccount TD.sign {
+        text-align: justify;
+        font-style: normal;
+        vertical-align: bottom;
+        font-weight: normal;
+    }
+
+    .divFinalAccount TR.h1 {
+        height: 4mm;
+    }
+
+    .divFinalAccount TR.h2 {
+        height: 2mm;
+    }
+
+    .divFinalAccount TD.legalst {
+        padding-bottom: 2mm;
+        text-align: center;
+        font-size: 12pt;
+        font-family: Arial;
+        padding-top: 7mm;
+        page-break-after: never;
+        font-weight: bold;
+    }
+
+    .addNote {
+        font-weight: bold !important;
+    }
+
+    .divFinalAccount TD.legal {
+        text-align: justify;
+        font-style: normal;
+        font-size: 12pt;
+        font-family: Arial;
+        font-weight: normal;
+    }
+
+    .divFinalAccount TD.legalstA {
+        padding-bottom: 2mm;
+        text-align: center;
+        font-size: 12pt;
+        font-family: Times;
+        padding-top: 7mm;
+        page-break-after: avoid;
+        font-weight: bold;
+    }
+
+    .divFinalAccount TD.legalA {
+        text-align: justify;
+        font-style: normal;
+        font-size: 12pt;
+        font-family: Times;
+        font-weight: normal;
+    }
+
+    .divFinalAccount div.address {
+        position: absolute;
+        left: 10mm;
+        top: 42mm;
+    }
+
+    .divFinalAccount table.body {
+        position: absolute;
+        top: 70mm;
+    }
+
+    .divFinalAccount hr.1 {
+        width: 100%;
+        height: 5;
+        text-align: center;
+        color: black;
+    }
+
+    .divFinalAccount hr.2 {
+        width: 100%;
+        height: 5;
+        text-align: center;
+        color: black;
+    }
+
+    .divFinalAccount hr.3 {
+        width: 100%;
+        height: 1;
+        text-align: center;
+        color: black;
+    }
+
+    .divFinalAccount hr.4 {
+        width: 100%;
+        height: 2;
+        text-align: center;
+        color: black;
+    }
+
+    .divFinalAccount input.readonly {
+        backgRound-color: #e0e0e0;
+    }
+
+    .divFinalAccount input.q {
+        height: 30;
+        border-style: solid;
+        border-color: navy;
+        border-width: thin;
+    }
+
+    .divFinalAccount div.title {
+        font-weight: bold;
+    }
+
+    .divFinalAccount #center {
+        text-align: center;
+    }
+
+    .divFinalAccount p {
+        text-align: justify;
+    }
+
+    .divFinalAccount p {
+        font: normal 11pt Arial;
+    }
+
+    .divFinalAccount li {
+        font-family: Arial;
+    }
+
+    .divFinalAccount #top {
+        border-top-style: solid;
+        border-color: black;
+        border-width: 1px;
+    }
+
+    .divFinalAccount #bottom {
+        border-bottom-style: solid;
+        border-color: black;
+        border-width: 1px;
+    }
+
+    .divFinalAccount #both {
+        border-bottom-style: solid;
+        border-top-style: solid;
+        border-color: black;
+        border-width: 1px;
+    }
+
+    .divFinalAccount #doublebottom {
+        border-bottom-style: double;
+        border-color: black;
+    }
+
+    .divFinalAccount #doublebottom2 {
+        border-bottom-style: double;
+        border-top-style: solid;
+        border-color: black;
+    }
+
+    .divFinalAccount #total {
+        border-bottom-style: double;
+        border-top-style: solid;
+        border-color: black;
+        border-top-width: 1px;
+    }
+
+    .divFinalAccount tr.orange {
+        backgRound-color: orange;
+    }
+
+    .divFinalAccount tr.red {
+        backgRound-color: red;
+    }
+
+    .divFinalAccount .pagebefore {
+        page-break-before: always;
+    }
+
+    .divFinalAccount .pageafter {
+        page-break-after: always;
+    }
+
+    .pageafter {
+        page-break-after: always;
+    }
+
+
+    .divFinalAccount .pagenever {
+        page-break-after: avoid;
+    }
+
+    .divFinalAccount .pageboth {
+        page-break-after: always;
+        page-break-before: always;
+    }
+
+    .divFinalAccount #clientbutton {
+        border-top: 1px;
+        text-decoration: none;
+        text-transform: uppercase;
+        backgRound-color: navy;
+        text-align: center;
+        font-size: 11px;
+        font-family: Verdana;
+        padding: 4px;
+        border-left: 1px;
+        color: #FFF;
+        font-weight: bold;
+    }
+
+    .divFinalAccount #clienttable {
+        text-decoration: none;
+        width: 70%;
+        text-transform: uppercase;
+        text-align: justify;
+    }
+
+    .divFinalAccount #clientheading {
+        border-top: none;
+        border-right: none;
+        text-align: justify;
+        font-size: 11px;
+        font-family: Verdana;
+        border-style: solid;
+        padding: 4px;
+        border-left: none;
+        border-color: navy;
+        font-weight: bold;
+        border-width: 1px;
+    }
+
+    .divFinalAccount A {
+        text-decoration: none;
+    }
+
+    @media screen {
+        .divFinalAccount tr.odd {
+            backgRound-color: #ddffdd;
+        }
+
+        .divFinalAccount A {
+            font-weight: normal !important;
+        }
+
+        .divFinalAccount .footer {
+            display: none;
+        }
+
+        .divFinalAccount .lastfooter {
+            display: none;
+        }
+    }
+
+    @media print {
+        .divFinalAccount A {
+            color: black;
+        }
+
+        .divFinalAccount table.footer {
+            position: relative;
+            top: -11mm;
+        }
+
+        .divFinalAccount .noprint {
+            display: none;
+        }
+
+        .divFinalAccount table.header {
+            position: relative;
+            top: -11mm;
+        }
+
+        .divFinalAccount table.firstheader {
+            margin-bottom: 11mm;
+        }
+
+        .divFinalAccount table.secondheader {
+            position: relative;
+            top: -11mm;
+        }
+
+
+        table.secondheader {
+            position: relative;
+            top: -11mm;
+        }
+
+        table.firstheader {
+            margin-bottom: 11mm;
+        }
+    }
+
+    /*Shanks Edits*/
+    td {
+        font: normal 12pt Arial;
+    }
+
+    tr.spaceUnder > td {
+        padding-bottom: 15em;
+    }
+
+     tr.spaceUnder1 > td {
+        padding-bottom: 10em;
+    }
+    .custom_boldGrey {
+        font: bold 12pt Arial;
+        color: #7d7d7d;
+        display: block;
+        min-width: 185px;
+        float: left;
+        margin-right: 5px;
+    }
+
+    table.table td {
+        font: Arial;
+        color: black;
+    }
+
+    tr.CompanyInfoTbl td.Order1 {
+        width: 48%;
+        text-align: justify;
+        font: bold 12pt Arial;
+        padding-left: 15%;
+    }
+
+    tr.CompanyInfoTbl td.Order2 {
+        width: 2%;
+        text-align: center;
+        font: bold 12pt Arial;
+    }
+
+    tr.CompanyInfoTbl td.Order3 {
+        width: 48%;
+        text-align: justify;
+        font: normal 12pt Arial;
+        padding-left: 2%;
+        /*padding-left: 55%;*/
+    }
+
+    tr.textReport p {
+        line-height: 20px !important;
+        font: normal 12pt Arial;
+        color: black;
+    }
+
+    td.FullTotal {
+        font-weight: bold !important;
+        border-top: 1px solid black !important;
+        border-bottom: 3px solid black !important;
+        text-align: right !important;
+    }
+
+    td.FullTotalNumeric {
+        font-weight: bold !important;
+        border-top: 1px solid black !important;
+        border-bottom: 3px solid black !important;
+        text-align: right !important;
+    }
+
+    td.CategoryTotal {
+        border-top: 1px solid black !important;
+        text-align: right !important;
+    }
+
+
+    td.CategoryTotalNumeric {
+        border-top: 1px solid black !important;
+        text-align: right !important;
+    }
+
+    ul.bulletlist li {
+        list-style-type: disc;
+        list-style-position: outside;
+        margin-left: 0%;
+        padding-left: 2%;
+        line-height: 20px;
+    }
+
+    ul.in-para li {
+        margin-left: 20px;
+        padding-left: 5px;
+    }
+
+    table.tb_dbhandled {
+        border-collapse: collapse;
+        table-layout: auto;
+        width: 100%;
+    }
+
+        table.tb_dbhandled td {
+            /*border: solid 1px #fab;*/
+            word-wrap: break-word;
+            padding: 1px 1px 1px 5px; /*T-R-B-L*/
+            /*width: 100%;*/
+        }
+
+    td.numeric {
+        text-align: right !important;
+        font-family: Arial;
+    }
+
+    td.date {
+        text-align: center !important;
+    }
+
+    .renderhtml td, .renderhtml {
+        text-align: justify;
+        font-family: Arial;
+        /*padding: 0px 0px 0px 10px;*/
+        margin: 0px 0px 0px 10px;
+    }
+
+     .renderhtmlprint td, .renderhtmlprint {
+        font-family: Arial;
+        /*padding: 0px 0px 0px 10px;*/
+        margin: 0px 0px 0px 10px;
+    }
+    /* Report Outline - Generic Components */
+    .statutoryinfo {
+        font: bold 12pt Arial;
+        text-align: right;
+    }
+
+    .report_title {
+        text-align: center;
+        font: bold 26pt Arial;
+        color: black;
+    }
+
+    .report_subtitle {
+        text-align: center;
+        font: bold 22pt Arial;
+    }
+
+    .page_header {
+        text-align: justify;
+        font: bold 11pt Arial;
+    }
+
+    td.page_header span.span_left {
+        display: inline-block;
+        text-align: justify;
+        width: 70%;
+        font: bold 14pt Arial;
+    }
+
+    td.page_header span.span_right {
+        display: inline-block;
+        text-align: right;
+        width: 28%;
+    }
+
+    .table_of_content_title {
+        text-align: center;
+        font: bold 22pt Arial;
+        color: black !important;
+    }
+
+    .page_title {
+        text-align: center;
+        font: bold 20pt Arial;
+        color: black;
+    }
+
+    .page_title_plm {
+        text-align: center;
+        font: bold 20pt Arial;
+        color: black;
+    }
+
+    .page_subtitle {
+        text-align: center;
+        line-height: 3;
+        font: bold 18pt Arial;
+    }
+
+    .page_subtitle_p {
+        text-align: center;
+        line-height: 3;
+        font: bold 18pt Arial;
+    }
+
+        .page_subtitle_p p {
+            font-weight: bold;
+        }
+
+    .page_leftfootnote {
+        text-align: justify;
+        font: bold 12pt Arial;
+    }
+
+    .page_rightfootnote {
+        text-align: right;
+        width: 100%;
+        font: bold 12pt Arial;
+    }
+
+    .page_centrefootnote {
+        text-align: center;
+        width: 100%;
+        font: bold 12pt Arial;
+    }
+
+    td.center, .center {
+        text-align: center !important;
+    }
+
+    .dbText {
+        font: bold 12pt Arial;
+        color: red;
+    }
+
+    /*divider*/
+    margin_TopBottom8px {
+        margin-top: 8px;
+        margin-bottom: 8px;
+    }
+
+    td.list_items li.list_heading,
+    tr.list_items li.list_heading {
+        font-weight: bold;
+    } 
+
+    td.list_items li.list_desc,
+    tr.list_items li.list_desc {
+        font-weight: normal;
+        margin: 2px 0px 20px 0px;
+        /*padding: 0px 0px 0px 10px;*/
+    }
+
+    .b {
+        font-weight: bold !important;
+    }
+
+    .table_of_content_table td {
+        cursor: default !important;
+    }
+
+    .page_content_Director {
+        text-align: justify;
+        font: bold 12pt Arial;
+    }
+
+    .page_notetofinac_title {
+        text-align: left;
+        font: bold 22pt Arial;
+        color: black;
+    }
+
+    .page_notetofinac_subtitle {
+        text-align: left;
+        line-height: 3;
+        font: bold 18pt Arial;
+    }
+
+    .table_of_content_td_left {
+        padding-left: 4%;
+        font: 16pt Arial;
+        padding-top: 20px;
+        text-align: justify;
+    }
+
+    .table_of_content_td_right {
+        padding-right: 4%;
+        font: 16pt Arial;
+        padding-top: 20px;
+         text-align: justify;
+    }
+
+
+
+    tr td.list_desc, tr td.b, .h1 td, .rowHighlight td, .bulletlist li span, .bulletlist li {
+        text-align: justify;
+    }
+</style>
+    <title>Accounts</title>
+</head>
+
+<body xml:lang="en">
+    <div class="divFinalAccount" style="margin-left:auto;margin-right:auto;">
+        <div style="display:none">
+            <ix:header>
+                <ix:hidden>
+                    <ix:nonNumeric contextRef="FY1_start" name="uk-bus:StartDateForPeriodCoveredByReport">2018-07-01</ix:nonNumeric>
+                     <ix:nonNumeric contextRef="FY1_end" name="uk-bus:EndDateForPeriodCoveredByReport">2019-06-30</ix:nonNumeric>
+                    <ix:nonNumeric contextRef="FY1_period" name="uk-bus:UKCompaniesHouseRegisteredNumber">10807839</ix:nonNumeric>
+                    <ix:nonNumeric contextRef="FY1_period" name="uk-bus:EntityCurrentLegalOrRegisteredName">C Constructions Ltd</ix:nonNumeric>
+                    <ix:nonNumeric contextRef="FY1_period" name="uk-bus:EntityDormantTruefalse" format="ixt2:booleanfalse">false</ix:nonNumeric>
+                    
+                    
+                    
+                </ix:hidden>
+                <ix:references>
+                    <!-- FRC taxonomy entry points, same entry point will be used for FRS 105 as well -->
+                    <!-- FRS102A -->
+                    <link:schemaRef xmlns:uk-bus="http://xbrl.frc.org.uk/cd/2014-09-01/business"
+                                    xlink:href="https://xbrl.frc.org.uk/FRS-102/2014-09-01/FRS-102-2014-09-01.xsd" xlink:type="simple" />
+
+                   
+                </ix:references>
+                <ix:resources>
+                    <xbrli:context id="FY1_period">
+                        <xbrli:entity>
+                            <xbrli:identifier scheme="http://www.companieshouse.gov.uk/">10807839</xbrli:identifier>
+                        </xbrli:entity>
+                        <xbrli:period>
+                            <xbrli:startDate>2018-07-01</xbrli:startDate>
+                            <xbrli:endDate>2019-06-30</xbrli:endDate>
+                        </xbrli:period>
+                    </xbrli:context>
+                    <xbrli:context id="FY1_period_director1">
+                        <xbrli:entity>
+                            <xbrli:identifier scheme="http://www.companieshouse.gov.uk/">10807839</xbrli:identifier>
+                            <xbrli:segment>
+                                <xbrldi:explicitMember dimension="uk-bus:EntityOfficersDimension">uk-bus:Director1</xbrldi:explicitMember>
+                            </xbrli:segment>
+                        </xbrli:entity>
+                        <xbrli:period>
+                            <xbrli:startDate>2018-07-01</xbrli:startDate>
+                            <xbrli:endDate>2019-06-30</xbrli:endDate>
+                        </xbrli:period>
+                    </xbrli:context>
+                    
+                    <xbrli:context id="FY1_period_accounting_status">
+                        <xbrli:entity>
+                            <xbrli:identifier scheme="http://www.companieshouse.gov.uk/">10807839</xbrli:identifier>
+                            <xbrli:segment>
+                                <xbrldi:explicitMember dimension="uk-bus:AccountsStatusDimension">uk-bus:AuditExempt-NoAccountantsReport
+</xbrldi:explicitMember>
+                            </xbrli:segment>
+                        </xbrli:entity>
+                        <xbrli:period>
+                            <xbrli:startDate>2018-07-01</xbrli:startDate>
+                            <xbrli:endDate>2019-06-30</xbrli:endDate>
+                        </xbrli:period>
+                    </xbrli:context>
+                    
+                    <xbrli:context id="FY1_period_accounting_standards">
+                        <xbrli:entity>
+                            <xbrli:identifier scheme="http://www.companieshouse.gov.uk/">10807839</xbrli:identifier>
+                            <xbrli:segment>
+                                <xbrldi:explicitMember dimension="uk-bus:AccountingStandardsDimension">uk-bus:SmallEntities</xbrldi:explicitMember>
+                            </xbrli:segment>
+                        </xbrli:entity>
+                        <xbrli:period>
+                            <xbrli:startDate>2018-07-01</xbrli:startDate>
+                            <xbrli:endDate>2019-06-30</xbrli:endDate>
+                        </xbrli:period>
+                    </xbrli:context>
+                    <xbrli:context id="FY1_period_accounts_type">
+                        <xbrli:entity>
+                            <xbrli:identifier scheme="http://www.companieshouse.gov.uk/">10807839</xbrli:identifier>
+                            <xbrli:segment>
+                                <xbrldi:explicitMember dimension="uk-bus:AccountsTypeDimension">uk-bus:FullAccounts</xbrldi:explicitMember>
+                            </xbrli:segment>
+                        </xbrli:entity>
+                        <xbrli:period>
+                            <xbrli:startDate>2018-07-01</xbrli:startDate>
+                            <xbrli:endDate>2019-06-30</xbrli:endDate>
+                        </xbrli:period>
+                    </xbrli:context>
+                    <xbrli:context id="FY1_period_legal_entity">
+                        <xbrli:entity>
+                            <xbrli:identifier scheme="http://www.companieshouse.gov.uk/">10807839</xbrli:identifier>
+                            <xbrli:segment>
+                                <xbrldi:explicitMember dimension="uk-bus:LegalFormEntityDimension">uk-bus:PrivateLimitedCompanyLtd</xbrldi:explicitMember>
+                            </xbrli:segment>
+                        </xbrli:entity>
+                        <xbrli:period>
+                            <xbrli:startDate>2018-07-01</xbrli:startDate>
+                            <xbrli:endDate>2019-06-30</xbrli:endDate>
+                        </xbrli:period>
+                    </xbrli:context>
+                    <xbrli:context id="FY1_start">
+                        <xbrli:entity>
+                            <xbrli:identifier scheme="http://www.companieshouse.gov.uk/">10807839</xbrli:identifier>
+                        </xbrli:entity>
+                        <xbrli:period>
+                            <xbrli:instant>2018-07-01</xbrli:instant>
+                        </xbrli:period>
+                    </xbrli:context>
+                    <xbrli:context id="FY1_end">
+                        <xbrli:entity>
+                            <xbrli:identifier scheme="http://www.companieshouse.gov.uk/">10807839</xbrli:identifier>
+                        </xbrli:entity>
+                        <xbrli:period>
+                            <xbrli:instant>2019-06-30</xbrli:instant>
+                        </xbrli:period>
+                    </xbrli:context>
+                    <xbrli:context id="eFY0" xmlns="http://www.xbrl.org/2003/instance">
+                        <xbrli:entity>
+                            <xbrli:identifier scheme="http://www.companieshouse.gov.uk/">10807839</xbrli:identifier>
+                        </xbrli:entity>
+                        <xbrli:period>
+                            <xbrli:instant>2018-06-30</xbrli:instant>
+                        </xbrli:period>
+                    </xbrli:context>
+                    <xbrli:unit id="Pure">
+                        <xbrli:measure>xbrli:pure</xbrli:measure>
+                    </xbrli:unit>
+                    <xbrli:unit id="GBP">
+                        <xbrli:measure>iso4217:GBP</xbrli:measure>
+                    </xbrli:unit>
+                </ix:resources>
+            </ix:header>
+        </div>
+
+        
+
+<table style="width:100%">
+    <tr>
+        <td class="statutoryinfo">Registered number: 10807839 (England and Wales)</td>
+    </tr>
+    <!-- #region Submission Data - Do not modify or delete this section as it is required in submission-->
+    <tr style="display:none;">
+        <td>
+            <table>
+                <tr>
+                    <td> <ix:nonNumeric contextRef="FY1_period" name="uk-bus:UKCompaniesHouseRegisteredNumber">10807839</ix:nonNumeric></td>
+                </tr>
+                <tr>
+                    <td><ix:nonNumeric contextRef="FY1_period_legal_entity" name="uk-bus:LegalFormEntity" format="ixt2:nocontent">This company is a private limited company</ix:nonNumeric></td>
+                </tr>
+                <tr>
+                    <td><ix:nonNumeric contextRef="FY1_period" name="uk-bus:DescriptionPrincipalActivities">This company sells stuff to other companies</ix:nonNumeric></td>
+                </tr>
+                <tr>
+                    <td><ix:nonNumeric contextRef="FY1_period" name="uk-bus:EntityTradingStatus" format="ixt2:nocontent">The company was trading for the entire period</ix:nonNumeric></td>
+                </tr>
+                <tr>
+                    <td><ix:nonNumeric contextRef="FY1_period_accounts_type" name="uk-bus:AccountsTypeFullOrAbbreviated" format="ixt2:nocontent">Full Accounts</ix:nonNumeric></td>
+                </tr>
+                <tr>
+                    <td><ix:nonNumeric contextRef="FY1_end" name="uk-bus:EndDateForPeriodCoveredByReport">2019-06-30</ix:nonNumeric></td>
+                </tr>
+                <tr>
+                    <td><ix:nonNumeric contextRef="FY1_period" name="uk-bus:EntityDormantTruefalse">false</ix:nonNumeric></td>
+                </tr>
+                <tr>
+                    <td><ix:nonNumeric contextRef="FY1_period" name="uk-bus:EntityCurrentLegalOrRegisteredName">C Constructions Ltd</ix:nonNumeric></td>
+                </tr>
+                <tr>
+                    <td><ix:nonNumeric contextRef="FY1_period_accounting_standards" name="uk-bus:AccountingStandardsApplied" format="ixt2:nocontent">The accounts were prepared in accordance with FRS102A</ix:nonNumeric></td>
+                </tr>
+                <tr>
+                    <td><ix:nonNumeric contextRef="FY1_period_accounting_status" name="uk-bus:AccountsStatusAuditedOrUnaudited" format="ixt2:nocontent">The accounts have been audited</ix:nonNumeric></td>
+                </tr>
+                <tr>
+                    <td>
+                        <ix:nonNumeric contextRef="FY1_period_director1" name="uk-core:DirectorSigningFinancialStatements" />
+                        <ix:nonNumeric contextRef="FY1_period_director1" name="uk-direp:DirectorSigningDirectorsReport" />
+                        <ix:nonNumeric contextRef="FY1_period_director1" name="uk-bus:NameEntityOfficer">Costica Turcu</ix:nonNumeric>
+                    </td>
+                </tr>
+                <tr>
+                    <td><ix:nonNumeric contextRef="FY1_start" name="uk-bus:StartDateForPeriodCoveredByReport">2018-07-01</ix:nonNumeric></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+
+  
+    
+    <tr class="spaceUnder">
+        <td></td>
+    </tr>
+ 
+    <tr>
+        <td class="breadcrumb report_title">
+
+            
+        </td>
+    </tr>
+    <tr>
+        <td class="breadcrumb center" title="cd:BusinessReportName context:yFY1" colspan="11">
+            <span class="report_title">
+C Constructions Ltd<br />
+
+            Filleted Accounts
+            </span>
+            <br />
+            <span class="report_subtitle">
+                
+ For  
+   
+ 
+ the year ended 
+30 June 2019 
+
+            </span>
+        </td>
+    </tr>    
+    <tr class="spaceUnder">
+        <td></td>
+    </tr>
+   
+</table>
+
+        <div class="pageafter"></div>
+         <table class="header" style="width:100%;">
+    <tr>
+        <td>
+            <hr class="col-lg-12 FixedHeight margin_TopBottom8px" /> 
+        </td>
+    </tr>
+    <tr class=" breadcrumb">
+        <td class="page_header">
+            <span class="span_left">
+                C Constructions Ltd
+            </span>
+          </td>
+    </tr>
+     <tr>
+         <td style="padding-bottom:5em;"></td>
+     </tr>
+</table>
+ 
+
+
+
+ <table class="table table_of_content_table" style="width:100%;">
+     <tr>
+         <td class="table table_of_content_title" colspan="11">
+             Table of contents
+         </td>
+    </tr>
+     <tr>
+         <td style="padding-bottom:5em;"></td>
+     </tr>
+    <tr>
+        <td class="table_of_content_td_left">
+            Company information
+        </td>
+        <td class="table_of_content_td_right">
+            3
+        </td>
+    </tr>
+    <tr>
+        <td class="table_of_content_td_left">
+            Abridged balance sheet
+        </td>
+        <td class="table_of_content_td_right">
+            4
+        </td>
+    </tr>
+    <tr>
+        <td class="table_of_content_td_left">
+            Notes to the financial statements
+        </td>
+        <td class="table_of_content_td_right">
+            5
+        </td>
+    </tr>
+</table>     
+        <div class="pageafter"></div>
+
+        
+
+ <table class="header" style="width:100%;">
+    <tr>
+        <td>
+            <hr class="col-lg-12 FixedHeight margin_TopBottom8px" /> 
+        </td>
+    </tr>
+    <tr class=" breadcrumb">
+        <td class="page_header">
+            <span class="span_left">
+                C Constructions Ltd
+            </span>
+          </td>
+    </tr>
+     <tr>
+         <td style="padding-bottom:5em;"></td>
+     </tr>
+</table>
+ 
+
+
+
+<table class="accounts" style="width:100%;">
+
+    <tr>
+        <td class="page_title" colspan="11">
+            Company information
+        </td>
+    </tr>
+    <tr class="block_header">
+        <td class="page_subtitle" colspan="11">
+            <span>
+                
+ For  
+   
+ 
+ the year ended 
+30 June 2019 
+
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <td style="padding-bottom:10em;"></td>
+    </tr>
+
+    <tr class="CompanyInfoTbl">
+        <td class="Order1">
+            <span> Director </span>
+        </td>
+        <td class="Order2">:</td>
+                    <td class="Order3">Costica Turcu</td>
+    </tr>
+    <tr>
+        <td style="padding-bottom:1em;"></td>
+    </tr>
+
+
+        <tr class="CompanyInfoTbl">
+            <td class="Order1"><span>Registered office</span></td>
+            <td class="Order2">:</td>
+                <td class="Order3">1 Wyndale Avenue</td>
+        </tr>
+    
+        <tr class="CompanyInfoTbl">
+            <td class="Order1"></td>
+            <td class="Order2"></td>
+            <td class="Order3"> London</td>
+        </tr>
+            <tr class="CompanyInfoTbl">
+            <td class="Order1"></td>
+            <td class="Order2"></td>
+            <td class="Order3">United Kingdom</td>
+        </tr>
+            <tr class="CompanyInfoTbl">
+            <td class="Order1"></td>
+            <td class="Order2"></td>
+            <td class="Order3">NW9 8HS</td>
+        </tr>
+        <tr>
+        <td style="padding-bottom: 1em;"></td>
+    </tr>
+
+    <tr class="CompanyInfoTbl">
+        <td class="Order1">Company number</td>
+        <td class="Order2">:</td>
+        <td class="Order3">10807839</td>
+    </tr>
+
+    <tr class="spaceUnder">
+        <td></td>
+    </tr>
+  
+   
+    <tr>
+        <td style="width:100%;" colspan="3" >
+            <table style="width:100%;">
+                <tr>
+                                        <td style="width:60%;">
+                       
+
+                                
+                    </td>
+
+                        <td style="width:30%;"></td>
+                        <td style="width:30%;"></td>
+                    
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+            <div class="page_centrefootnote add_form_label">
+                3
+            </div>
+        <div class="pageafter"></div>
+
+        
+
+
+
+
+
+
+
+
+     <table class="header" style="width:100%;">
+    <tr>
+        <td>
+            <hr class="col-lg-12 FixedHeight margin_TopBottom8px" /> 
+        </td>
+    </tr>
+    <tr class=" breadcrumb">
+        <td class="page_header">
+            <span class="span_left">
+                C Constructions Ltd
+            </span>
+          </td>
+    </tr>
+     <tr>
+         <td style="padding-bottom:5em;"></td>
+     </tr>
+</table>
+ 
+
+
+
+
+    <table class="tb_dbhandled">
+        <tr>
+            <td class="page_title" colspan="6">
+
+                Abridged balance sheet
+            </td>
+        </tr>
+        <tr class="block_header">
+            <td class="page_subtitle" colspan="6">
+                As at
+30 June 2019
+            </td>
+        </tr>
+        <tr>
+            <td style="padding-bottom:2em;" colspan="6"></td>
+        </tr></table>
+    <table class="tb_dbhandled">
+        <tr>
+            <td style="width:70%"></td>
+            <td style="width:5%"></td>
+                <td style="width:5%"></td>
+    <td class="b numeric" style="width:10%">2019</td>
+                            <td style="width:5%"></td>
+    <td class="b numeric" style="width:10%">2018</td>
+        </tr>
+        <tr>
+            <td class="bt"></td>
+            <td class="b date">Notes</td>
+                <td></td>
+    <td class="b numeric">&#163;</td>
+                            <td></td>
+    <td class="b numeric">&#163;</td>
+        </tr>
+
+
+
+
+
+        
+            <tr class=" rowHighlight">
+                <td class="b">Current assets</td>
+                <td></td>
+                    <td></td>
+                    <td></td>
+                                    <td></td>
+                    <td></td>
+            </tr>
+
+
+            <tr class=" rowHighlight">
+                <td>Debtors</td>
+                <td class="date">
+                    
+                </td>
+                    <td></td>
+                    <td class="hoverElement numeric">
+                        
+                           
+18,945                        
+                    </td>
+                                    <td></td>
+                    <td class="comp hoverElement numeric">
+                        
+                          
+414                        
+                    </td>
+            </tr>
+
+
+
+            <tr class=" rowHighlight">
+                <td>Cash and cash equivalents</td>
+                <td class="date">
+                    
+                </td>
+                    <td></td>
+                    <td class="hoverElement numeric">
+                        
+                           
+-                        
+                    </td>
+                                    <td></td>
+                    <td class="comp hoverElement numeric">
+                        
+                         
+315                        
+                    </td>
+            </tr>
+
+            <tr class=" rowHighlight">
+                <td></td>
+                <td class="date">
+                    
+                </td>
+                    <td></td>
+                    <td title="pt:ProfitLossForPeriod context:yFY1" class="hoverElement numeric CategoryTotal">
+                        
+                          
+18,945                        
+                    </td>
+                                    <td></td>
+                    <td title="pt:ProfitLossForPeriod context:yFY1" class="comp hoverElement numeric CategoryTotal">
+                        
+                          
+729                        
+                    </td>
+            </tr>
+    <tr>
+        <td style="padding-bottom:1em;" colspan="6"></td>
+    </tr>
+
+            <tr class=" rowHighlight">
+                <td class="b">Current liabilities</td>
+                <td/>
+                    <td></td>
+                    <td></td>
+                                    <td></td>
+                    <td></td>
+            </tr>
+        
+            <tr class=" rowHighlight">
+                <td>Creditors: Amounts falling due within one year</td>                
+                <td class="date">
+                    
+                </td>
+                    <td></td>
+                    <td class="hoverElement numeric">
+                        
+                           
+(21,335)                        
+                    </td>
+                                    <td></td>
+                    <td class="comp hoverElement numeric">
+                        
+                          
+(433)                        
+                    </td>
+            </tr>
+
+            <tr class=" rowHighlight">
+                <td>Corporation tax payable</td>
+                <td class="date">
+                    
+                </td>
+                    <td></td>
+                    <td class="hoverElement numeric">
+                        
+                          
+(37)                        
+                    </td>
+                                    <td></td>
+                    <td class="comp hoverElement numeric">
+                        
+                          
+(37)                        
+                    </td>
+            </tr>
+
+            <tr class=" rowHighlight">
+                <td/>
+                <td class="date">
+                    
+                </td>
+                    <td></td>
+                    <td title="pt:ProfitLossForPeriod context:yFY1" class="hoverElement numeric CategoryTotal">
+                        
+                           
+(21,372)                        
+                    </td>
+                                    <td></td>
+                    <td title="pt:ProfitLossForPeriod context:yFY1" class="comp hoverElement numeric CategoryTotal">
+                        
+                         
+(470)                        
+                    </td>
+            </tr>
+        <tr>
+            <td style="padding-bottom:1em;" colspan="6"></td>
+        </tr>
+
+
+            <tr class=" rowHighlight">
+                <td>
+Net current (liabilities)/assets                </td>                
+                <td class="date">
+                    
+                </td>
+                    <td></td>
+                    <td class="hoverElement numeric">
+                        
+                           
+(2,427)                        
+                    </td>
+                                    <td></td>
+                    <td class="comp hoverElement numeric">
+                        
+                        
+259                        
+                    </td>
+            </tr>
+
+            <tr class=" rowHighlight">
+                <td>Total assets less current liabilities</td>                
+                <td class="date">
+                    
+                </td>
+                    <td></td>
+    <td title="pt:ProfitLossForPeriod context:yFY1" class="hoverElement numeric CategoryTotal">
+        
+          
+(2,427)        
+    </td>
+                                    <td></td>
+    <td title="pt:ProfitLossForPeriod context:yFY1" class="comp hoverElement numeric CategoryTotal">
+        
+           
+259        
+    </td>
+            </tr>
+
+
+
+
+                  
+            <tr class="rowHighlight">
+                <td class="b">
+Net (liabilities)/assets                </td>                
+                <td class="date">
+                    
+                </td>
+                    <td></td>
+                    <td title="pt:ProfitLossForPeriod context:yFY1" class="hoverElement numeric FullTotal">
+                        
+                         
+(2,427)                        
+                    </td>
+                                    <td></td>
+                    <td title="pt:ProfitLossForPeriod context:yFY1" class="comp hoverElement numeric FullTotal">
+                        
+                         
+259                        
+                    </td>
+            </tr>
+    <tr>
+        <td style="padding-bottom:1em;" colspan="6"></td>
+    </tr>
+         
+
+            <tr class=" rowHighlight">
+                <td class="b">Capital and reserves</td>
+                <td></td>
+                    <td></td>
+                    <td></td>
+                                    <td></td>
+                    <td></td>                    
+            </tr>
+
+            <tr class=" rowHighlight">
+                <td>Called up share capital</td>                
+                <td class="date">
+                    
+                </td>
+                    <td></td>
+                    <td class="hoverElement numeric">
+                        
+                          
+100                        
+                    </td>
+                                    <td></td>
+                    <td class="comp hoverElement numeric">
+                        
+                           
+100                        
+                    </td>
+            </tr>
+
+            <tr class=" rowHighlight">
+                <td>Retained earnings</td>
+                <td class="date">
+                    
+                </td>
+                    <td></td>
+                    <td class="hoverElement numeric">
+                        
+                          
+(2,527)                        
+                    </td>
+                                    <td></td>
+                    <td class="comp hoverElement numeric">
+                        
+                          
+159                        
+                    </td>
+            </tr>
+        
+            <tr class=" rowHighlight">
+                    <td class="bt"> Shareholder&#39;s funds</td>
+               
+                <td class="date">
+                    
+                </td>
+                    <td></td>
+                    <td title="pt:ProfitLossForPeriod context:yFY1" class="hoverElement numeric FullTotal">
+                        
+                          
+(2,427)                        
+                    </td>
+                                    <td></td>
+                    <td title="pt:ProfitLossForPeriod context:yFY1" class="comp hoverElement numeric FullTotal">
+                        
+                           
+259                        
+                    </td>
+            </tr>
+            <tr>
+                <td style="padding-bottom:1em;" colspan="6"></td>
+            </tr>
+
+        
+        <tr>
+            <td style="padding-bottom:1em;" colspan="6"></td>
+        </tr>
+        
+        <tr style="page-break-before: auto">
+                <td colspan="6">
+                    <span>The notes on pages 7 to 12 are an integral part of these financial statements.</span><br />
+                    <span>For the year ended  30 June 2019 the company was entitled to exemption from audit under section 477 of the Companies Act 2006.</span><br />
+                    <span>The members have not required the company to obtain an audit in accordance with section 476 of the Companies Act 2006.</span><br />
+                    <span>The director acknowledges his responsibility for complying with the requirements of the Companies Act 2006 with respect to accounting records and the preparation of accounts.</span><br />
+                    <span>These accounts have been prepared in accordance with the special provisions of the Companies Act 2006 applicable to companies subject to the small companies&#39; regime and in accordance with FRS 102 &quot;The Financial Reporting Standard applicable in the UK and Republic of Ireland&quot; Section 1A.</span>
+                        <br /><span>The profit and loss account has not been delivered to the Registrar of Companies in accordance with the special provisions applicable to companies subject to the small entities regime. All the members of the company have consented to the drawing up of the abridged balance sheet.</span>
+
+                </td>
+           
+        </tr>
+        <tr>
+            <td style="padding-bottom:1em;" colspan="6"></td>
+        </tr>
+        <tr class="h2">
+            <td class="bt" style="text-align: justify;font-weight:bold;" colspan="6">
+                These financial statements were approved by the Board of directors on 31 March 2020 and were signed on its behalf by:
+            </td>
+        </tr>
+        <tr>
+            <td style="padding-bottom:1em;" colspan="6"></td>
+        </tr>
+        <tr class="h1">
+            <td class="t" colspan="6">.............................</td>
+        </tr>
+        
+            <tr>
+                <td class="page_leftfootnote" colspan="6">
+                    Costica Turcu (Director)
+                </td>
+            </tr>            
+        <tr>
+            <td class="page_leftfootnote" colspan="6">Company registration number: 10807839</td>
+        </tr>
+         
+    </table>
+       
+         
+    <div style="display:none;">
+        /* == Copy of Frs105 Balance Sheet for XML COntent  ============================================================ */
+            <table class="accounts" width="100%">
+                <tr class="h2">
+                    <td style="width:75%;"></td>
+                    <td class="spc"></td>
+                    <td style="width:8%;"></td>
+                    
+                    <td class="spc"></td>
+                    <td style="width:8%;"></td>
+                    
+                    <td class="spc"></td>
+                    <td style="width:8%;"></td>
+                </tr>
+                <tr>
+                    <td class="bc" colspan="7" style="text-align: justify;">
+                        Balance sheet at
+                            <span style="display:none" > <ix:nonNumeric contextRef="FY1_end" name="uk-bus:BalanceSheetDate">2019-06-30</ix:nonNumeric></span>
+                           <span>30 June 2019</span>
+
+                    </td>
+                </tr>
+                <tr class="h2">
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    
+                    <td class="spc"></td>
+                    <td></td>
+                    
+                    <td class="spc"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="spc" />
+                    <td> </td>
+                        <td class="spc"></td>
+                        <td class="b">2019</td>
+                                            <td class="spc"></td>
+                        <td class="b">2018</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td class="bt"><!--Notes--></td>
+                        <td class="spc"></td>
+                        <td class="b">&#163;</td>
+                                            <td class="spc"></td>
+                        <td class="b">&#163;</td>
+                </tr>
+                <tr class="h2">
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    
+                    <td class="spc"></td>
+                    <td></td>
+                    
+                </tr>
+
+                
+                <tr style="display:none;" class="h2">
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    
+                    <td class="spc"></td>
+                    <td></td>
+                    
+                </tr>
+                    <tr class="h2">
+                        <td></td>
+                        <td class="spc"></td>
+                        <td></td>
+                        <td class="spc"></td>
+                        <td></td>
+                        
+                        <td class="spc"></td>
+                        <td></td>
+                        
+                    </tr>
+                    <tr class=" rowHighlight">
+                        <td>Current Assets</td>
+                        <td class="spc"></td>
+                        <td></td>
+                            <td class="spc"></td>
+                            <td class="lhoverElement">
+                                16,717
+                            </td>
+                                                    <td class="spc"></td>
+                            <td class="comp hoverElement">
+                                729
+                            </td>
+                    </tr>
+                
+
+                    <tr class="h2">
+                        <td></td>
+                        <td class="spc"></td>
+                        <td></td>
+                        <td class="spc"></td>
+                        <td></td>
+                        
+                        <td class="spc"></td>
+                        <td></td>
+                        
+                    </tr>
+                    <tr class=" rowHighlight">
+                        <td>Prepayments and accrued income</td>
+                        <td class="spc"></td>
+                        <td></td>
+                            <td class="spc"></td>
+                            <td class="lhoverElement">
+                                
+                                    <ix:nonFraction contextRef="FY1_end" format="ixt2:numdotdecimal" decimals="0" name="uk-core:PrepaymentsAccruedIncomeNotExpressedWithinCurrentAssetSubtotal" unitRef="GBP">2,228</ix:nonFraction>
+                                
+                            </td>
+                                                    <td class="spc"></td>
+                            <td class="comp hoverElement">
+                                
+                                    <ix:nonFraction contextRef="eFY0" decimals="0" name="uk-core:PrepaymentsAccruedIncomeNotExpressedWithinCurrentAssetSubtotal" unitRef="GBP">0</ix:nonFraction>
+                                
+                            </td>
+                    </tr>
+                                    <tr class="h2">
+                        <td></td>
+                        <td class="spc"></td>
+                        <td></td>
+                        <td class="spc"></td>
+                        <td></td>
+                        
+                        <td class="spc"></td>
+                        <td></td>
+                        
+                    </tr>
+                    <tr class=" rowHighlight">
+                        <td>Creditors: amounts falling due within one year</td>
+                        <td class="spc"></td>
+                        <td> </td>
+                            <td class="spc"></td>
+                            <td class="lhoverElement">
+                                 (21,372)
+                            </td>
+                                                    <td class="spc"></td>
+                            <td class="comp hoverElement">
+                                 (470)
+                            </td>
+                    </tr>
+                                    <tr class="h2">
+                        <td></td>
+                        <td class="spc"></td>
+                        <td></td>
+                        <td class="spc"></td>
+                        <td></td>
+                        
+                        <td class="spc"></td>
+                        <td></td>
+                        
+                    </tr>
+                    <tr class=" rowHighlight">
+                        <td>Net current assets (liabilities)</td>
+                        <td class="spc"></td>
+                        <td></td>
+                            <td class="spc"></td>
+                            <td class="hoverElement">
+                                (2,427)
+                            </td>
+                                                    <td class="spc"></td>
+                            <td class="comp hoverElement">
+                                 259
+                            </td>
+                    </tr>
+                                    <tr class="h2">
+                        <td></td>
+                        <td class="spc"></td>
+                        <td></td>
+                        <td class="spc"></td>
+                        <td></td>
+                        
+                        <td class="spc"></td>
+                        <td></td>
+                        
+                    </tr>
+                    <tr class=" rowHighlight">
+                        <td>Total assets less current liabilities</td>
+                        <td class="spc"></td>
+                        <td></td>
+                            <td class="spc"></td>
+                            <td class="hoverElement">
+                                (2,427)
+                            </td>
+                                                    <td class="spc"></td>
+                            <td class="comp hoverElement">
+                                259
+                            </td>
+                    </tr>
+                
+
+
+
+                <tr class="h2">
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    
+                    <td class="spc"></td>
+                    <td></td>
+                    
+                </tr>
+                    <tr class=" rowHighlight">
+
+                        <td style="text-align: justify;font-weight:bold;" class="bt">Net Assets (liabilities)</td>
+                        <td class="spc"></td>
+                        <td></td>
+                            <td class="spc"></td>
+                            <td style="border-bottom-style: double; border-color: black; border-top-style: solid;border-top-width: 1px;font-weight:bold !important; ">
+                                
+                                    (<ix:nonFraction contextRef="FY1_end" format="ixt2:numdotdecimal" decimals="0" name="uk-core:NetAssetsLiabilities" sign="-" unitRef="GBP">2,427</ix:nonFraction>)
+                                
+
+                            </td>
+                                                    <td class="spc"></td>
+                            <td class="comp hoverElement" style="border-bottom-style: double; border-color: black; border-top-style: solid;border-top-width: 1px; font-weight:bold !important;">
+                                
+                                    <ix:nonFraction contextRef="eFY0" decimals="0" name="uk-core:NetAssetsLiabilities" unitRef="GBP">259</ix:nonFraction>
+                                
+
+                            </td>
+                    </tr>
+
+
+                <tr class="h2">
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    
+                    <td class="spc"></td>
+                    <td></td>
+                    
+                    <td class="spc"></td>
+                    <td></td>
+                </tr>
+
+                    <tr class="h2">
+                        <td></td>
+                        <td class="spc"></td>
+                        <td></td>
+                        
+                        <td class="spc"></td>
+                        <td></td>
+                        
+                        <td class="spc"></td>
+                        <td></td>
+                    </tr>
+                        <tr class="h2">
+                            <td></td>
+                            <td class="spc"></td>
+                            <td></td>
+                            <td class="spc"></td>
+                            <td></td>
+                            
+                            <td class="spc"></td>
+                            <td></td>
+                            
+                        </tr>
+                        <tr class=" rowHighlight">
+                            <td style="text-align: justify;font-weight:bold;" class="bt">Capital and Reserves</td>
+                            <td class="spc"></td>
+                            <td></td>
+                                <td class="spc"></td>
+                                <td style="border-bottom-style: solid; border-color: black; border-top-style: solid;border-bottom-width: 1px;border-top-width: 1px; font-weight:bold !important;" class="hoverElement">
+                                    
+                                        
+                                        (2,427)
+                                    
+                                </td>
+                                                            <td class="spc"></td>
+                                <td class="comp hoverElement" style="border-bottom-style: solid;border-bottom-width: 1px; border-color: black;  border-top-style: solid;  border-top-width: 1px;font-weight:bold !important;">
+                                    
+                                        
+                                        259
+                                    
+                                </td>
+                        </tr>
+                            <tr style="display:none;" class=" rowHighlight">
+                                <td>Called up share capital</td>
+                                <td class="spc"></td>
+                                <td></td>
+                                    <td class="spc"></td>
+                                    <td class="hoverElement">
+                                        100
+                                    </td>
+                                                                    <td class="spc"></td>
+                                    <td class="comp hoverElement">
+
+                                        100
+                                    </td>
+                            </tr>
+                            <tr style="display:none;" class=" rowHighlight">
+                                <td>Profit and loss account</td>
+                                <td class="spc"></td>
+                                <td></td>
+                                    <td class="spc"></td>
+                                    <td class="hoverElement">
+                                        
+                                            
+                                            (2,527)
+                                            
+                                        
+                                    </td>
+                                                                    <td class="spc"></td>
+                                    <td class="comp hoverElement">
+                                        
+                                            
+                                            159
+                                            
+                                        
+                                    </td>
+                            </tr>
+                        <tr style="display:none;" class=" rowHighlight">
+                            <td class="bt">SHAREHOLDER'S FUND</td>
+                            <td class="spc"></td>
+                            <td></td>
+                                <td class="spc"></td>
+                                <td style="border-bottom-style:solid; border-color: black; border-top-style: solid;border-top-width: 1px; " class="hoverElement">
+                                    
+                                        
+                                        (2,427)
+                                    
+                                </td>
+                                                            <td class="spc"></td>
+                                <td class="comp hoverElement" style="border-bottom-style: solid; border-color: black;  border-top-style: solid;  border-top-width: 1px;">
+                                    
+                                        
+                                        259
+                                    
+                                </td>
+                        </tr>
+                <tr class="h2">
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    
+                    <td class="spc"></td>
+                    <td></td>
+                    
+                    <td class="spc"></td>
+                    <td></td>
+                </tr>
+
+
+
+                <tr style="page-break-before: auto">
+                    <td class="notes" colspan="7" style="text-align: justify;">
+                        <span style="display:none">
+                            <ix:nonNumeric contextRef="FY1_period" name="uk-direp:StatementThatCompanyEntitledToExemptionFromAuditUnderSection477CompaniesAct2006RelatingToSmallCompanies">
+                                For the year ending 6/30/2019 the company was entitled to exemption under section 477 of the Companies Act 2006 relating to small companies.
+                            </ix:nonNumeric>
+                        </span>
+                        <span>
+                            For the year ending 30-06-2019 the company was entitled to exemption under section 477 of the Companies Act 2006 relating to small companies.
+                        </span>
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td class="notes" colspan="7" style="text-align: justify;">
+                        <ix:nonNumeric contextRef="FY1_period" name="uk-direp:StatementThatMembersHaveNotRequiredCompanyToObtainAnAudit">
+                            The members have not required the company to obtain an audit for the year in accordance with section 476.
+                        </ix:nonNumeric>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="notes" colspan="7" style="text-align: justify;">
+                        The director acknowledges their responsibilities for complying with the requirements of the Act with respect to accounting records and the preparation of accounts. 
+                        <span style="display:none;">
+                            <ix:nonNumeric contextRef="FY1_period" name="uk-direp:StatementThatDirectorsAcknowledgeTheirResponsibilitiesUnderCompaniesAct">
+                                The directors acknowledge their responsibilities for complying with the requirements of the Act with respect to accounting records and the preparation of accounts.
+                            </ix:nonNumeric>
+                        </span>
+
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="text-align: justify;" class="notes" colspan="7">
+                        <ix:nonNumeric contextRef="FY1_period"
+                                       name="uk-direp:StatementThatAccountsHaveBeenPreparedInAccordanceWithProvisionsSmallCompaniesRegime">
+These accounts have been prepared in accordance with the small companies provisions and delivered in accordance with the provisions applicable to companies subject to the small companies regime.
+                        </ix:nonNumeric>
+                    </td>
+                </tr>
+
+
+
+
+
+
+                <tr class="h2">
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    
+                    <td class="spc"></td>
+                    <td></td>
+                    
+                    <td class="spc"></td>
+                    <td></td>
+                </tr>
+                <tr class="h2">
+                    <td class="bt" style="text-align: justify;font-weight:bold;">
+                        <span>Approved by the board of directors on </span>
+                        <span>31 March 2020</span>
+                        <span style="display:none;">
+                            
+                            <ix:nonNumeric contextRef="FY1_end" name="uk-core:DateAuthorisationFinancialStatementsForIssue">2020-03-31</ix:nonNumeric>
+
+
+                        </span>
+                        
+                        <span>
+                            and signed on behalf of the board,
+                        </span>
+                    </td>
+                    <td class="spc"></td>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                </tr>
+                <tr class="h2">
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                </tr>
+                <tr class="h2">
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                </tr>
+                <tr class="h2">
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>.............................</td>
+
+                    <td class="spc"></td>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span>
+                            
+                            
+                            
+                        </span>
+                    </td>
+
+                    <td class="spc"></td>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                </tr>
+                    <tr>
+                        <td>Costica Turcu</td>
+                        <td class="spc"></td>
+                        <td></td>
+                        <td class="spc"></td>
+                        <td></td>
+                        <td class="spc"></td>
+                        <td></td>
+                        <td class="spc"></td>
+                        <td></td>
+                        <td class="spc"></td>
+                        <td></td>
+                    </tr>
+                <tr>
+                    <td>Director</td>
+                    <td class="spc"></td>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                </tr>
+                <tr class="h2">
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                </tr>
+                <tr class="h2">
+                    <td><b>Company registration number: 10807839</b></td>
+
+                    <td class="spc"></td>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                </tr>
+                <tr class="h2">
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                    <td class="spc"></td>
+                    <td></td>
+                </tr>
+
+
+
+
+
+            </table>
+    
+        </div>
+
+            <div class="page_centrefootnote add_form_label">
+                4
+            </div>
+        <div class="pageafter"></div>      
+        
+        
+
+ <table class="header" style="width:100%;">
+    <tr>
+        <td>
+            <hr class="col-lg-12 FixedHeight margin_TopBottom8px" /> 
+        </td>
+    </tr>
+    <tr class=" breadcrumb">
+        <td class="page_header">
+            <span class="span_left">
+                C Constructions Ltd
+            </span>
+          </td>
+    </tr>
+     <tr>
+         <td style="padding-bottom:5em;"></td>
+     </tr>
+</table>
+ 
+
+
+
+<table class="tb_dbhandled">
+    <tr>
+        <td class="page_notetofinac_title" colspan="11">Notes to the financial statements</td>
+    </tr>
+    <tr class="block_header">
+        <td class="page_notetofinac_subtitle" colspan="11">
+            
+ For  
+   
+ 
+ the year ended 
+30 June 2019 
+
+        </td>
+    </tr>
+    <tr>
+        <td style="padding-bottom:5em;" colspan="11"></td>
+    </tr>
+</table>
+
+
+
+
+    <table class="tb_dbhandled">
+            <tr>
+                <td class="b">
+                 (1) General Information
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="renderhtmlprint" style="padding-left:7px;">
+                        <table class="tb_dbhandled">			<tr>			<td>C Constructions Ltd is a private company limited by shares, domiciled and incorporated in England and Wales.    Its registered office is 1 Wyndale Avenue,London,United Kingdom,NW9 8HS.</td>		</tr>	</table>
+                    </div>
+                </td>
+            </tr>   
+            <tr>
+                <td style="padding-bottom:1em;" colspan="11"></td>
+            </tr>
+            <tr>
+                <td class="b">
+                 (2) Summary of significant accounting policies
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="renderhtmlprint" style="padding-left:7px;">
+                        <table class="tb_dbhandled">			<tr>			<td>The principal accounting policies applied in the preparation of these financial statements are set out below. These policies have been consistently applied to all the years presented, unless otherwise stated.  <br/><span style="font-weight:bold;"><br/>a) Statement of compliance<br/></span><br/>  These individual financial statements have been prepared in accordance with FRS 102 "The Financial Reporting Standard applicable in the UK and Republic of Ireland" Section 1A and Companies Act 2006, as applicable to companies subject to the small companies' regime. <span style="color:red">These financial statements for the year ended 30 June 2019 are the first financial statements of the company prepared in accordance with FRS 102 "The Financial Reporting Standard applicable in the UK and Republic of Ireland" Section 1A. The date of transition is 01 July 2018. The transition from {Enter old standard} to FRS 102 Section 1A is not considered to have had a material effect on the financial statements. </span>[this paragraph is only used in the first year of transition to FRS 102 1A.]  <br/><span style="font-weight:bold;"><br/>b) Basis of preparation<br/></span><br/>  The financial statements have been prepared on the historical cost basis and in accordance with the Companies Act 2006. The presentation and functional currency of the company is pounds sterling. The financial statements are presented in pound units (&#163;) unless stated otherwise.  <br/><span style="font-weight:bold;"><br/>c) Revenue recognition<br/></span><br/>  Turnover is measured at the fair value of the consideration received or receivable and represents amounts receivable for goods supplied and services rendered, stated net of discounts and of Value Added Tax. The company recognises revenue when the amount of revenue can be measured reliably, when it is probable that future economic benefits will flow to the entity and when specific criteria have been met as described below.  <br/><span style="font-weight:bold;font-style:italic !important;"><br/>Sale of goods<br/></span><br/>  Sales of goods are recognised when the company has delivered the goods to the customer, no other significant obligation remains unfulfilled that may affect the customer's acceptance of the products and risks and rewards of ownership have transferred to them.  <br/><span style="font-weight:bold;font-style:italic !important;"><br/>Rendering of services<br/></span><br/>  Rendering of services Revenue from provision of services rendered in the reporting period is recognised when the outcome of a transaction for the rendering of services can be estimated reliably in terms of revenue, costs and its stage of completion of the specific transaction at the end of the reporting period. The stage of completion is determined on the basis of the actual completion of a proportion of the total services to be rendered. When the outcome of a service contract cannot be estimated reliably the company only recognises revenue to the extent of the recoverable expenses recognised.                                                          <br/><br/><span style="font-weight:bold;">d) Financial instruments</span><br/><br/>The company only enters into basic financial instruments transactions that result in the recognition of financial assets and liabilities like trade and other debtors, cash and cash equivalents, trade and other payables, and loans and borrowings. <br/><br/>Financial assets and financial liabilities are recognised when the company becomes a party to the contractual  provisions of the instruments. Financial assets and financial liabilities are initially measured at fair value. <br/><br/><span style="font-weight:bold;font-style:italic !important;">Loans and receivables</span><br/><br/>Loans and receivables are non-derivative financial assets with fixed or determinable payments. These include: <br/><br/><span style="font-weight:bold;font-style:italic !important;">Trade and other debtors</span><br/><br/>Trade and other debtors are initially recognised at fair value, based upon discounted cash flows at prevailing interest rates for similar instruments, or at their nominal amount less impairment losses if due in less than 12 months. Subsequent to initial recognition, trade and other receivables are valued at amortised cost less impairment losses [or if a trade debt is deferred beyond normal business terms, it is measured at the present value of the future cash flows discounted at prevailing interest rates for similar instruments]. <br/><br/><span style="font-weight:bold;font-style:italic !important;">Cash and cash equivalents</span><br/><br/>Cash and cash equivalents comprise cash balances and call deposits. The cash and cash equivalents are stated at their nominal values, as this approximates to amortised cost. <br/><br/><span style="font-weight:bold;font-style:italic !important;">Other financial liabilities</span><br/><br/>Other financial liabilities are subsequently measured at amortised cost using the effective interest method. <br/><br/><span style="font-weight:bold;font-style:italic !important;">Loans and borrowings</span><br/><br/>These are initially recognised at fair value, based upon the nominal amount outstanding. Subsequent to initial recognition, they are recorded at amortised cost. Borrowing costs arising on bank borrowings are expensed as incurred within financial expense using the effective interest method. <br/><br/><span style="font-weight:bold;font-style:italic !important;">Trade and other payables</span><br/><br/>Trade and other payables are initially recognised at fair value,  based upon the nominal amount outstanding. Subsequent to initial recognition, they are recorded at amortised cost. <br/><br/><span style="font-weight:bold;font-style:italic !important;">Effective interest method</span><br/><br/>The effective interest method is a method of calculating the amortised cost of a financial liability and of allocating interest expense over the relevant period. The effective interest rate is the rate that exactly discounts estimated future cash payments (including all fees and points paid or received that form an integral part of the effective interest rate, transaction costs and other premiums or discounts) through the expected life of the financial liability, or (where appropriate) a shorter period, to the net carrying amount on initial recognition. <br/><br/><span style="font-weight:bold;font-style:italic !important;">Impairment of financial assets</span><br/><br/>Financial assets, other than those at fair value, are assessed for indicators of impairment at the end of each reporting period. These financial assets are considered to be impaired when there is objective evidence that, as a result of one or more events that occurred after the initial recognition of the financial asset, the estimated future cash flows of the investment have been affected. Objective evidence of impairment could include default by a debtor and/or significant financial difficulty of the debtors or counterparty. If objective evidence of impairment is found, an impairment loss is recognised in profit or loss. <br/><br/>For financial assets carried at amortised cost, the amount of the impairment loss recognised is the difference between the asset's carrying amount and the present value of estimated future cash flows, discounted at the financial asset's original effective interest rate. <br/><br/><span style="font-weight:bold;font-style:italic !important;">Offsetting of financial instruments</span><br/><br/>Financial assets and financial liabilities are offset and the net amount reported in the balance sheet if, and only if, there is a currently enforceable legal right to offset the recognised amounts and there is an intention to settle on a net basis, or to realise the assets and settle the liabilities simultaneously. <br/><br/><span style="font-weight:bold;font-style:italic !important;">Derecognition of financial assets</span><br/><br/>The company derecognises a financial asset when the contractual rights to the cash flows from the asset expire, or when it transfers the financial asset and substantially all  the risks and rewards of ownership of the asset to another party. Any interest in such transferred financial assets that is created or retained by  the company is recognised as a separate asset or liability. <br/><br/><span style="font-weight:bold;font-style:italic !important;">Derecognition of financial liabilities</span><br/><br/>The company derecognises financial liabilities when, and only when, the company's obligations are discharged, cancelled or have expired. The difference between the carrying amount of the financial liability derecognised and the consideration paid and payable is recognised in profit or loss.        <br/><br/><span style="font-weight:bold;">e) Taxation</span><br/><br/>Taxation expense represents the aggregate amount of current tax and deferred tax recognised in the reporting period.  <br/><br/><span style="font-weight:bold;font-style:italic !important;">Current tax</span><br/><br/>The tax currently payable is based on taxable profit for the year. Taxable profit differs from 'profit before tax' as reported in the profit and loss account because of items of income or expense that are taxable or deductible	in other years and items that are never taxable or deductible. The company's current tax is calculated using tax rates that have been enacted or substantively enacted by the end of the reporting period.    </td>		</tr>	</table>
+                    </div>
+                </td>
+            </tr>   
+            <tr>
+                <td style="padding-bottom:1em;" colspan="11"></td>
+            </tr>
+            <tr>
+                <td class="b">
+                 (3) Critical accounting judgements and key sources of estimation uncertainty
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="renderhtmlprint" style="padding-left:7px;">
+                        <table class="tb_dbhandled">	<tr>		<td>No significant judgements have had to be made by management in preparing these financial statements.	******************************************************OR****************************************************************	<br/>In the application of the company's accounting policies, the directors of the company are required to make judgements, estimates and assumptions about the carrying amounts of assets and liabilities that are not readily apparent from other sources. The estimates and associated assumptions are based on historical experience and other factors that are considered to be relevant. The estimates and underlying assumptions are reviewed on an ongoing basis. Actual results may differ from these estimates.   <br/><span style="text-decoration: underline;font-style: italic;">Impairment of land and buildings</span><br/>  Determining whether the company's land and buildings have been impaired requires estimations of its values in use.  The value in use calculations require the entity to estimate the future cash flows expected to arise from the use of the asset over its estimated useful life and suitable discount rate in order to calculate present values.       <br/><span style="text-decoration: underline;font-style: italic;">Trade and other receivables</span><br/>  The total carrying amount of trade and other receivables are net of impairment losses after giving consideration to past experience of collecting payments, the number of delayed payments in the portfolio, as well as observable changes in national or local economic conditions. A different assessment of these considerations may result in different values being determined.   <br/><span style="text-decoration: underline;font-style: italic;">Contingent liability</span><br/>  Key assumptions have also been made in respect of a contingent liability for legal action taken against the company and are outlined in Note.</td>	</tr></table>
+                    </div>
+                </td>
+            </tr>   
+            <tr>
+                <td style="padding-bottom:1em;" colspan="11"></td>
+            </tr>
+            <tr>
+                <td class="b">
+                 (4) Employees
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="renderhtmlprint" style="padding-left:7px;">
+                        <table border="0" cellpadding="0" cellspacing="0"   style="border-collapse: collapse;width:100%"><tbody><tr><td  style="height:15.0pt;width:100%">During the year, the average number of employees including directors was  [0]  (2018 : 0) </td></tr></tbody></table>
+                    </div>
+                </td>
+            </tr>   
+    </table>
+
+            <div class="page_centrefootnote add_form_label">
+                5
+            </div>
+    </div>
+</body>
+</html>
+
