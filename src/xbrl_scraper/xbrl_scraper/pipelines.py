@@ -6,17 +6,12 @@
 # See: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 
 from scrapy.pipelines.files import FilesPipeline
-from scrapy import Request
 
 class XbrlScraperPipeline(FilesPipeline):
 
-    def get_media_requests(self, item, info):
-        return [Request(x, meta={'filename': item.get('file_name')}) for x in item.get(self.files_urls_field, [])]
-
     def file_path(self, request, response=None, info=None):
         url = request.url
-        media_ext = ".zip"
-        return 'full/%s%s' % ("test", media_ext)
-
-    # def process_item(self, item, spider):
-    #     return item
+        filename = request.url.split("/")[-1]
+        print("URL:")
+        print(url)
+        return filename
