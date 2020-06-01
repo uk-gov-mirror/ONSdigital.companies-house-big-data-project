@@ -4,6 +4,7 @@ from scrapy.spiders import CrawlSpider
 import hashlib
 import scrapy
 import time
+import random
 
 class XbrlScraperItem(scrapy.Item):
     file_urls = scrapy.Field()
@@ -31,8 +32,8 @@ class XBRLSpider(CrawlSpider):
         Arguments:
             self:
             response: web page scraped from website crawled by scraper
-        Returns:
-            ExtractedZipFile :  Url, checksum and path to scraped zip file.
+        Yields:
+            XbrlScraperItem :  Url, checksum and path to scraped zip file.
                                 This will then be downloaded by scrapy
         Raises:
             None
@@ -52,16 +53,14 @@ class XBRLSpider(CrawlSpider):
         filtered_links = [link for link in links if hashlib.sha1(link.encode('utf-8')).hexdigest() not in files]
 
         # Yield items for download
-        x = 0
         for link in filtered_links:
-            print(link)
-            x += 1
-            #if x == 2: break
 
-            time.sleep(4.0) # Add random sleep time
+            # Random sleep to avoid stressing the target server and to
+            # ensure all data in the zip files is downloaded
+            time.sleep((random.random() * 2.0) + 3.0)
 
             #if link == 'http://download.companieshouse.gov.uk/Accounts_Bulk_Data-2020-05-19.zip':
-                #yield XbrlScraperItem(file_urls=[link])
+            yield XbrlScraperItem(file_urls=[link])
 
         #yield XbrlScraperItem(file_urls=['http://download.companieshouse.gov.uk/Accounts_Bulk_Data-2020-05-19.zip'])
 
