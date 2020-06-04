@@ -1,0 +1,1958 @@
+<?xml version="1.0"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:dpl="http://www.hmrc.gov.uk/schemas/ct/dpl/2018-04-02" xmlns:frs="http://xbrl.frc.org.uk/fr/2018-01-01/core" xmlns:frscom="http://xbrl.frc.org.uk/general/2018-01-01/common" xmlns:iso4217="http://www.xbrl.org/2003/iso4217" xmlns:ix="http://www.xbrl.org/2008/inlineXBRL" xmlns:ixt="http://www.xbrl.org/inlineXBRL/transformation/2010-04-20" xmlns:ixt2="http://www.xbrl.org/inlineXBRL/transformation/2011-07-31" xmlns:link="http://www.xbrl.org/2003/linkbase" xmlns:uk-accrep="http://xbrl.frc.org.uk/reports/2018-01-01/accrep" xmlns:uk-aurep="http://xbrl.frc.org.uk/reports/2018-01-01/aurep" xmlns:uk-bus="http://xbrl.frc.org.uk/cd/2018-01-01/business" xmlns:uk-countries="http://www.xbrl.org/uk/cd/2018-01-01/countries" xmlns:uk-direp="http://xbrl.frc.org.uk/reports/2018-01-01/direp" xmlns:xbrldi="http://xbrl.org/2006/xbrldi" xmlns:xbrli="http://www.xbrl.org/2003/instance" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<head>
+		<meta name="generator" content="pinacle 6.0.19"/>
+		<meta name="author" content="Software"/>
+		<meta content="application/xhtml+xml; charset=UTF-8" http-equiv="Content-Type"/>
+		<title>pinacle - Company Accounts (iXBRL 6.0.19)</title>
+		<style type="text/css">    em       { font-style: normal; text-decoration: underline }
+    span.H   { display: none }
+    span.HT  { display: none }
+    span.HF  { display: none }
+    hr.P     { page-break-after: always;
+               color: #FFF;
+               background-color: #FFF;
+               border: 0px solid #FFF;
+               border-bottom: 1px solid #FFF;
+               height: 1px }
+    hr.S     { color: #FFF;
+               background-color: #FFF;
+               border: 0px solid #FFF;
+               border-bottom: 1px solid #000 }
+    hr.D     { color: #FFF;
+               background-color: #FFF;
+               border: 0px solid #FFF;
+               border-top: 1px solid #000;
+               border-bottom: 1px solid #000;
+               height: 3px }
+    td.W6    { width: 6pt;
+               border: solid #FFF 0px;
+               line-height: 1px;
+               text-align: right }
+    td       { border: solid #FFF 0px; vertical-align: bottom }
+    body     { text-align: left;
+               margin: 10mm 7mm 7mm 7mm }
+    p        { margin: 0 auto;
+	           width: 680;
+               background: #FFF;
+	           border-bottom-collapse: collapse;
+               font-family: Times;
+			   font-size: 10.75pt;
+	           text-align: justify }
+    table    { width: 680;
+               background: #FFF;
+               border-collapse: collapse;
+               border: none;
+               font-family: Times;
+               line-height: 10.00pt }
+    table.H  { font-family: Arial;
+               font-size: 12.00pt }
+    table.L  { font-size: 14.40pt }
+    table.M  { font-size: 12.00pt }
+    table.N  { font-size: 10.75pt }
+    table.R  { font-size: 10.25pt }
+    table.S  { font-size: 09.00pt }
+    table.T  { font-size: 07.25pt }
+
+    @media screen {
+      html     { background: #DDDDDD }
+      body     { text-align: center;
+                 margin: 10mm 2mm 10mm 2mm;
+                 background: #DDDDDD }
+      hr.P     { background-color: #DDDDDD;
+                 border-bottom: 1px solid #000 }
+      table    { line-height: 11pt;
+                 margin-left: auto;
+                 margin-right: auto }
+    }
+</style>
+	</head>
+	<body xml:lang="en">
+		<div style="display:none">
+			<ix:header>
+				<ix:hidden>
+					<ix:nonNumeric contextRef="LPoA" name="uk-bus:NameProductionSoftware">pinacle 6.0</ix:nonNumeric>
+					<ix:nonNumeric contextRef="LPoA" name="uk-bus:VersionProductionSoftware">2017.03.01</ix:nonNumeric>
+					<ix:nonNumeric contextRef="LPoA" name="uk-bus:EntityCurrentLegalOrRegisteredName">CADFEAT LTD </ix:nonNumeric>
+					<ix:nonNumeric contextRef="LPoA" name="uk-bus:UKCompaniesHouseRegisteredNumber">06789029</ix:nonNumeric>
+					<ix:nonNumeric contextRef="LEnd" name="uk-bus:StartDateForPeriodCoveredByReport">2019-02-01</ix:nonNumeric>
+					<ix:nonNumeric contextRef="LEnd" name="uk-bus:EndDateForPeriodCoveredByReport">2020-01-31</ix:nonNumeric>
+					<ix:nonNumeric contextRef="LPoA" name="uk-bus:EntityDormantTruefalse">false</ix:nonNumeric>
+					<ix:nonNumeric contextRef="LPDirector1" name="frs:DirectorSigningFinancialStatements"/>
+				</ix:hidden>
+				<ix:references>
+					<link:schemaRef xlink:type="simple" xlink:href="https://xbrl.frc.org.uk/FRS-102/2018-01-01/FRS-102-2018-01-01.xsd"/>
+				</ix:references>
+				<ix:resources>
+					<xbrli:context id="LECurFinInY1">
+						<xbrli:entity>
+							<xbrli:identifier scheme="http://www.companieshouse.gov.uk">06789029</xbrli:identifier>
+							<xbrli:segment>
+								<xbrldi:explicitMember dimension="frs:FinancialInstrumentCurrentNon-currentDimension">frs:CurrentFinancialInstruments</xbrldi:explicitMember>
+								<xbrldi:explicitMember dimension="frs:MaturitiesOrExpirationPeriodsDimension">frs:WithinOneYear</xbrldi:explicitMember>
+							</xbrli:segment>
+						</xbrli:entity>
+						<xbrli:period>
+							<xbrli:instant>2020-01-31</xbrli:instant>
+						</xbrli:period>
+					</xbrli:context>
+					<xbrli:context id="LECurFinInst">
+						<xbrli:entity>
+							<xbrli:identifier scheme="http://www.companieshouse.gov.uk">06789029</xbrli:identifier>
+							<xbrli:segment>
+								<xbrldi:explicitMember dimension="frs:FinancialInstrumentCurrentNon-currentDimension">frs:CurrentFinancialInstruments</xbrldi:explicitMember>
+							</xbrli:segment>
+						</xbrli:entity>
+						<xbrli:period>
+							<xbrli:instant>2020-01-31</xbrli:instant>
+						</xbrli:period>
+					</xbrli:context>
+					<xbrli:context id="LERetErnLoss">
+						<xbrli:entity>
+							<xbrli:identifier scheme="http://www.companieshouse.gov.uk">06789029</xbrli:identifier>
+							<xbrli:segment>
+								<xbrldi:explicitMember dimension="frs:EquityClassesDimension">frs:RetainedEarningsAccumulatedLosses</xbrldi:explicitMember>
+							</xbrli:segment>
+						</xbrli:entity>
+						<xbrli:period>
+							<xbrli:instant>2020-01-31</xbrli:instant>
+						</xbrli:period>
+					</xbrli:context>
+					<xbrli:context id="LEShareCaptl">
+						<xbrli:entity>
+							<xbrli:identifier scheme="http://www.companieshouse.gov.uk">06789029</xbrli:identifier>
+							<xbrli:segment>
+								<xbrldi:explicitMember dimension="frs:EquityClassesDimension">frs:ShareCapital</xbrldi:explicitMember>
+							</xbrli:segment>
+						</xbrli:entity>
+						<xbrli:period>
+							<xbrli:instant>2020-01-31</xbrli:instant>
+						</xbrli:period>
+					</xbrli:context>
+					<xbrli:context id="LEnd">
+						<xbrli:entity>
+							<xbrli:identifier scheme="http://www.companieshouse.gov.uk">06789029</xbrli:identifier>
+						</xbrli:entity>
+						<xbrli:period>
+							<xbrli:instant>2020-01-31</xbrli:instant>
+						</xbrli:period>
+					</xbrli:context>
+					<xbrli:context id="LPAudExNoAcR">
+						<xbrli:entity>
+							<xbrli:identifier scheme="http://www.companieshouse.gov.uk">06789029</xbrli:identifier>
+							<xbrli:segment>
+								<xbrldi:explicitMember dimension="uk-bus:AccountsStatusDimension">uk-bus:AuditExempt-NoAccountantsReport</xbrldi:explicitMember>
+							</xbrli:segment>
+						</xbrli:entity>
+						<xbrli:period>
+							<xbrli:startDate>2019-02-01</xbrli:startDate>
+							<xbrli:endDate>2020-01-31</xbrli:endDate>
+						</xbrli:period>
+					</xbrli:context>
+					<xbrli:context id="LPDirector1">
+						<xbrli:entity>
+							<xbrli:identifier scheme="http://www.companieshouse.gov.uk">06789029</xbrli:identifier>
+							<xbrli:segment>
+								<xbrldi:explicitMember dimension="uk-bus:EntityOfficersDimension">uk-bus:Director1</xbrldi:explicitMember>
+							</xbrli:segment>
+						</xbrli:entity>
+						<xbrli:period>
+							<xbrli:startDate>2019-02-01</xbrli:startDate>
+							<xbrli:endDate>2020-01-31</xbrli:endDate>
+						</xbrli:period>
+					</xbrli:context>
+					<xbrli:context id="LPFullAcc">
+						<xbrli:entity>
+							<xbrli:identifier scheme="http://www.companieshouse.gov.uk">06789029</xbrli:identifier>
+							<xbrli:segment>
+								<xbrldi:explicitMember dimension="uk-bus:AccountsTypeDimension">uk-bus:FullAccounts</xbrldi:explicitMember>
+							</xbrli:segment>
+						</xbrli:entity>
+						<xbrli:period>
+							<xbrli:startDate>2019-02-01</xbrli:startDate>
+							<xbrli:endDate>2020-01-31</xbrli:endDate>
+						</xbrli:period>
+					</xbrli:context>
+					<xbrli:context id="LPOfficEquip">
+						<xbrli:entity>
+							<xbrli:identifier scheme="http://www.companieshouse.gov.uk">06789029</xbrli:identifier>
+							<xbrli:segment>
+								<xbrldi:explicitMember dimension="frs:PropertyPlantEquipmentClassesDimension">frs:OfficeEquipment</xbrldi:explicitMember>
+							</xbrli:segment>
+						</xbrli:entity>
+						<xbrli:period>
+							<xbrli:startDate>2019-02-01</xbrli:startDate>
+							<xbrli:endDate>2020-01-31</xbrli:endDate>
+						</xbrli:period>
+					</xbrli:context>
+					<xbrli:context id="LPOrdClass2">
+						<xbrli:entity>
+							<xbrli:identifier scheme="http://www.companieshouse.gov.uk">06789029</xbrli:identifier>
+							<xbrli:segment>
+								<xbrldi:explicitMember dimension="uk-bus:EntityShareClassesDimension">uk-bus:OrdinaryShareClass2</xbrldi:explicitMember>
+							</xbrli:segment>
+						</xbrli:entity>
+						<xbrli:period>
+							<xbrli:startDate>2019-02-01</xbrli:startDate>
+							<xbrli:endDate>2020-01-31</xbrli:endDate>
+						</xbrli:period>
+					</xbrli:context>
+					<xbrli:context id="LPPlantMach">
+						<xbrli:entity>
+							<xbrli:identifier scheme="http://www.companieshouse.gov.uk">06789029</xbrli:identifier>
+							<xbrli:segment>
+								<xbrldi:explicitMember dimension="frs:PropertyPlantEquipmentClassesDimension">frs:PlantMachinery</xbrldi:explicitMember>
+							</xbrli:segment>
+						</xbrli:entity>
+						<xbrli:period>
+							<xbrli:startDate>2019-02-01</xbrli:startDate>
+							<xbrli:endDate>2020-01-31</xbrli:endDate>
+						</xbrli:period>
+					</xbrli:context>
+					<xbrli:context id="LPPrivCoLtd">
+						<xbrli:entity>
+							<xbrli:identifier scheme="http://www.companieshouse.gov.uk">06789029</xbrli:identifier>
+							<xbrli:segment>
+								<xbrldi:explicitMember dimension="uk-bus:LegalFormEntityDimension">uk-bus:PrivateLimitedCompanyLtd</xbrldi:explicitMember>
+							</xbrli:segment>
+						</xbrli:entity>
+						<xbrli:period>
+							<xbrli:startDate>2019-02-01</xbrli:startDate>
+							<xbrli:endDate>2020-01-31</xbrli:endDate>
+						</xbrli:period>
+					</xbrli:context>
+					<xbrli:context id="LPSmallAccts">
+						<xbrli:entity>
+							<xbrli:identifier scheme="http://www.companieshouse.gov.uk">06789029</xbrli:identifier>
+							<xbrli:segment>
+								<xbrldi:explicitMember dimension="uk-bus:ApplicableLegislationDimension">uk-bus:SmallCompaniesRegimeForAccounts</xbrldi:explicitMember>
+							</xbrli:segment>
+						</xbrli:entity>
+						<xbrli:period>
+							<xbrli:startDate>2019-02-01</xbrli:startDate>
+							<xbrli:endDate>2020-01-31</xbrli:endDate>
+						</xbrli:period>
+					</xbrli:context>
+					<xbrli:context id="LPSmallEnts">
+						<xbrli:entity>
+							<xbrli:identifier scheme="http://www.companieshouse.gov.uk">06789029</xbrli:identifier>
+							<xbrli:segment>
+								<xbrldi:explicitMember dimension="uk-bus:AccountingStandardsDimension">uk-bus:SmallEntities</xbrldi:explicitMember>
+							</xbrli:segment>
+						</xbrli:entity>
+						<xbrli:period>
+							<xbrli:startDate>2019-02-01</xbrli:startDate>
+							<xbrli:endDate>2020-01-31</xbrli:endDate>
+						</xbrli:period>
+					</xbrli:context>
+					<xbrli:context id="LPoA">
+						<xbrli:entity>
+							<xbrli:identifier scheme="http://www.companieshouse.gov.uk">06789029</xbrli:identifier>
+						</xbrli:entity>
+						<xbrli:period>
+							<xbrli:startDate>2019-02-01</xbrli:startDate>
+							<xbrli:endDate>2020-01-31</xbrli:endDate>
+						</xbrli:period>
+					</xbrli:context>
+					<xbrli:context id="PECurFinInY1">
+						<xbrli:entity>
+							<xbrli:identifier scheme="http://www.companieshouse.gov.uk">06789029</xbrli:identifier>
+							<xbrli:segment>
+								<xbrldi:explicitMember dimension="frs:FinancialInstrumentCurrentNon-currentDimension">frs:CurrentFinancialInstruments</xbrldi:explicitMember>
+								<xbrldi:explicitMember dimension="frs:MaturitiesOrExpirationPeriodsDimension">frs:WithinOneYear</xbrldi:explicitMember>
+							</xbrli:segment>
+						</xbrli:entity>
+						<xbrli:period>
+							<xbrli:instant>2019-01-31</xbrli:instant>
+						</xbrli:period>
+					</xbrli:context>
+					<xbrli:context id="PECurFinInst">
+						<xbrli:entity>
+							<xbrli:identifier scheme="http://www.companieshouse.gov.uk">06789029</xbrli:identifier>
+							<xbrli:segment>
+								<xbrldi:explicitMember dimension="frs:FinancialInstrumentCurrentNon-currentDimension">frs:CurrentFinancialInstruments</xbrldi:explicitMember>
+							</xbrli:segment>
+						</xbrli:entity>
+						<xbrli:period>
+							<xbrli:instant>2019-01-31</xbrli:instant>
+						</xbrli:period>
+					</xbrli:context>
+					<xbrli:context id="PEShareCaptl">
+						<xbrli:entity>
+							<xbrli:identifier scheme="http://www.companieshouse.gov.uk">06789029</xbrli:identifier>
+							<xbrli:segment>
+								<xbrldi:explicitMember dimension="frs:EquityClassesDimension">frs:ShareCapital</xbrldi:explicitMember>
+							</xbrli:segment>
+						</xbrli:entity>
+						<xbrli:period>
+							<xbrli:instant>2019-01-31</xbrli:instant>
+						</xbrli:period>
+					</xbrli:context>
+					<xbrli:context id="PEnd">
+						<xbrli:entity>
+							<xbrli:identifier scheme="http://www.companieshouse.gov.uk">06789029</xbrli:identifier>
+						</xbrli:entity>
+						<xbrli:period>
+							<xbrli:instant>2019-01-31</xbrli:instant>
+						</xbrli:period>
+					</xbrli:context>
+					<xbrli:unit id="Pure">
+						<xbrli:measure>xbrli:pure</xbrli:measure>
+					</xbrli:unit>
+					<xbrli:unit id="GBP">
+						<xbrli:measure>iso4217:GBP</xbrli:measure>
+					</xbrli:unit>
+					<xbrli:unit id="Shares">
+						<xbrli:measure>xbrli:shares</xbrli:measure>
+					</xbrli:unit>
+				</ix:resources>
+			</ix:header>
+		</div>
+		<p xmlns="http://www.w3.org/1999/xhtml">
+			<ix:nonNumeric xmlns:ix="http://www.xbrl.org/2008/inlineXBRL" contextRef="LPSmallAccts" name="uk-bus:ApplicableLegislation" format="ixt2:nocontent">
+			</ix:nonNumeric>
+		</p>
+		<p xmlns="http://www.w3.org/1999/xhtml">
+			<ix:nonNumeric xmlns:ix="http://www.xbrl.org/2008/inlineXBRL" contextRef="LPFullAcc" name="uk-bus:AccountsTypeFullOrAbbreviated" format="ixt2:nocontent">
+			</ix:nonNumeric>
+		</p>
+		<p xmlns="http://www.w3.org/1999/xhtml">
+			<ix:nonNumeric xmlns:ix="http://www.xbrl.org/2008/inlineXBRL" contextRef="LPAudExNoAcR" name="uk-bus:AccountsStatusAuditedOrUnaudited" format="ixt2:nocontent">
+			</ix:nonNumeric>
+		</p>
+		<p xmlns="http://www.w3.org/1999/xhtml">
+			<ix:nonNumeric xmlns:ix="http://www.xbrl.org/2008/inlineXBRL" contextRef="LPoA" name="uk-bus:EntityTradingStatus" format="ixt2:nocontent">
+			</ix:nonNumeric>
+		</p>
+		<table xmlns="http://www.w3.org/1999/xhtml" class="N">
+			<colgroup>
+				<col width="608"/>
+				<col width="48"/>
+			</colgroup>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+		</table>
+		<table xmlns="http://www.w3.org/1999/xhtml" class="L">
+			<colgroup>
+				<col width="608"/>
+				<col width="48"/>
+			</colgroup>
+			<tr>
+				<td class="L">
+					<b>                                 CADFEAT LTD</b>
+				</td>
+			</tr>
+		</table>
+		<table xmlns="http://www.w3.org/1999/xhtml" class="N">
+			<colgroup>
+				<col width="608"/>
+				<col width="48"/>
+			</colgroup>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+		</table>
+		<table xmlns="http://www.w3.org/1999/xhtml" class="L">
+			<colgroup>
+				<col width="608"/>
+				<col width="48"/>
+			</colgroup>
+			<tr>
+				<td class="L">
+					<ix:nonNumeric xmlns:ix="http://www.xbrl.org/2008/inlineXBRL" contextRef="LPoA" name="uk-bus:ReportTitle">
+						<b>                             FINANCIAL STATEMENTS</b>
+					</ix:nonNumeric>
+				</td>
+			</tr>
+		</table>
+		<table xmlns="http://www.w3.org/1999/xhtml" class="N">
+			<colgroup>
+				<col width="608"/>
+				<col width="48"/>
+			</colgroup>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+		</table>
+		<table xmlns="http://www.w3.org/1999/xhtml" class="L">
+			<colgroup>
+				<col width="608"/>
+				<col width="48"/>
+			</colgroup>
+			<tr>
+				<td class="L">
+					<b>                          YEAR ENDED 31 JANUARY 2020</b>
+				</td>
+			</tr>
+		</table>
+		<table xmlns="http://www.w3.org/1999/xhtml" class="N">
+			<colgroup>
+				<col width="608"/>
+				<col width="48"/>
+			</colgroup>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+		</table>
+		<table xmlns="http://www.w3.org/1999/xhtml" class="R">
+			<colgroup>
+				<col width="608"/>
+				<col width="48"/>
+			</colgroup>
+			<tr>
+				<td class="R">    Company Registration Number - 06789029</td>
+			</tr>
+		</table>
+		<table xmlns="http://www.w3.org/1999/xhtml" class="N">
+			<colgroup>
+				<col width="608"/>
+				<col width="48"/>
+			</colgroup>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">    KP SIMPSON</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">    Certified Public Accountants</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+		</table>
+		<div xmlns="http://www.w3.org/1999/xhtml">
+			<hr class="P"/>
+		</div>
+		<table xmlns="http://www.w3.org/1999/xhtml" class="N">
+			<colgroup>
+				<col width="648"/>
+				<col width="24"/>
+			</colgroup>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N" align="center">1.</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<b>CADFEAT LTD</b>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<b>COMPANY NUMBER -  06789029</b>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<b>Balance sheet as at</b>
+					<ix:nonNumeric xmlns:ix="http://www.xbrl.org/2008/inlineXBRL" contextRef="LEnd" name="uk-bus:BalanceSheetDate" format="ixt2:datedaymonthyearen">
+						<b>31 January 2020</b>
+					</ix:nonNumeric>
+				</td>
+			</tr>
+			<tr>
+				<td class="N" colspan="100">
+					<hr class="S"/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+		</table>
+		<table xmlns="http://www.w3.org/1999/xhtml" class="N">
+			<colgroup>
+				<col width="280"/>
+				<col width="40"/>
+				<col width="48"/>
+				<col width="96"/>
+				<col width="80"/>
+				<col width="96"/>
+				<col width="32"/>
+			</colgroup>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N" align="center">  2020</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N" align="center">  2019</td>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N" align="center">  ----</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N" align="center">  ----</td>
+			</tr>
+		</table>
+		<table xmlns="http://www.w3.org/1999/xhtml" class="N">
+			<colgroup>
+				<col width="272"/>
+				<col width="40"/>
+				<col width="8"/>
+				<col width="80"/>
+				<col width="80"/>
+				<col width="80"/>
+				<col width="80"/>
+			</colgroup>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N" align="center">Notes</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N" align="center">   &#163;</td>
+				<td class="N" align="center">   &#163;</td>
+				<td class="N" align="center">   &#163;</td>
+				<td class="N" align="center">   &#163;</td>
+			</tr>
+		</table>
+		<table xmlns="http://www.w3.org/1999/xhtml" class="N">
+			<colgroup>
+				<col width="272"/>
+				<col width="40"/>
+				<col width="80"/>
+				<col width="80"/>
+				<col width="80"/>
+				<col width="80"/>
+				<col width="24"/>
+			</colgroup>
+			<tr>
+				<td class="N">
+					<b>FIXED ASSETS</b>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">Tangible assets</td>
+				<td class="N" align="center">4</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td align="right">
+					<ix:nonFraction xmlns:ix="http://www.xbrl.org/2008/inlineXBRL" contextRef="LEnd" decimals="0" name="frs:PropertyPlantEquipment" unitRef="GBP" format="ixt:numcommadot">165</ix:nonFraction>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td align="right">
+					<ix:nonFraction xmlns:ix="http://www.xbrl.org/2008/inlineXBRL" contextRef="PEnd" decimals="0" name="frs:PropertyPlantEquipment" unitRef="GBP" format="ixt:numcommadot">282</ix:nonFraction>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<b>Current assets</b>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">Debtors</td>
+				<td class="N" align="center">5</td>
+				<td align="right">
+					<ix:nonFraction xmlns:ix="http://www.xbrl.org/2008/inlineXBRL" contextRef="LECurFinInst" decimals="0" name="frs:Debtors" unitRef="GBP" format="ixt:numcommadot">1,729</ix:nonFraction>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td align="right">
+					<ix:nonFraction xmlns:ix="http://www.xbrl.org/2008/inlineXBRL" contextRef="PECurFinInst" decimals="0" name="frs:Debtors" unitRef="GBP" format="ixt:numcommadot">3,224</ix:nonFraction>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">Cash at bank and in hand</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td align="right">
+					<ix:nonFraction xmlns:ix="http://www.xbrl.org/2008/inlineXBRL" contextRef="LEnd" decimals="0" name="frs:CashBankOnHand" unitRef="GBP" format="ixt:numcommadot">21,027</ix:nonFraction>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td align="right">
+					<ix:nonFraction xmlns:ix="http://www.xbrl.org/2008/inlineXBRL" contextRef="PEnd" decimals="0" name="frs:CashBankOnHand" unitRef="GBP" format="ixt:numcommadot">23,741</ix:nonFraction>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td/>
+				<td/>
+				<td>
+					<hr class="S"/>
+				</td>
+				<td/>
+				<td>
+					<hr class="S"/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td align="right">
+					<ix:nonFraction xmlns:ix="http://www.xbrl.org/2008/inlineXBRL" contextRef="LEnd" decimals="0" name="frs:CurrentAssets" unitRef="GBP" format="ixt:numcommadot">22,756</ix:nonFraction>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td align="right">
+					<ix:nonFraction xmlns:ix="http://www.xbrl.org/2008/inlineXBRL" contextRef="PEnd" decimals="0" name="frs:CurrentAssets" unitRef="GBP" format="ixt:numcommadot">26,965</ix:nonFraction>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<b>Current liabilities</b>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<b>Creditors</b> - Amounts</td>
+			</tr>
+			<tr>
+				<td class="N">falling due within one year</td>
+				<td class="N" align="center">6</td>
+				<td align="right">
+					<ix:nonFraction xmlns:ix="http://www.xbrl.org/2008/inlineXBRL" contextRef="LECurFinInY1" decimals="0" name="frs:Creditors" unitRef="GBP" format="ixt:numcommadot">5,880</ix:nonFraction>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td align="right">
+					<ix:nonFraction xmlns:ix="http://www.xbrl.org/2008/inlineXBRL" contextRef="PECurFinInY1" decimals="0" name="frs:Creditors" unitRef="GBP" format="ixt:numcommadot">7,121</ix:nonFraction>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td/>
+				<td/>
+				<td>
+					<hr class="S"/>
+				</td>
+				<td/>
+				<td>
+					<hr class="S"/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<b>NET CURRENT ASSETS</b>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td align="right">
+					<ix:nonFraction xmlns:ix="http://www.xbrl.org/2008/inlineXBRL" contextRef="LEnd" decimals="0" name="frs:NetCurrentAssetsLiabilities" unitRef="GBP" format="ixt:numcommadot">16,876</ix:nonFraction>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td align="right">
+					<ix:nonFraction xmlns:ix="http://www.xbrl.org/2008/inlineXBRL" contextRef="PEnd" decimals="0" name="frs:NetCurrentAssetsLiabilities" unitRef="GBP" format="ixt:numcommadot">19,844</ix:nonFraction>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td/>
+				<td/>
+				<td/>
+				<td>
+					<hr class="S"/>
+				</td>
+				<td/>
+				<td>
+					<hr class="S"/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<b>Total assets less current liabilities</b>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td align="right">
+					<ix:nonFraction xmlns:ix="http://www.xbrl.org/2008/inlineXBRL" contextRef="LEnd" decimals="0" name="frs:TotalAssetsLessCurrentLiabilities" unitRef="GBP" format="ixt:numcommadot">17,041</ix:nonFraction>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td align="right">
+					<ix:nonFraction xmlns:ix="http://www.xbrl.org/2008/inlineXBRL" contextRef="PEnd" decimals="0" name="frs:TotalAssetsLessCurrentLiabilities" unitRef="GBP" format="ixt:numcommadot">20,126</ix:nonFraction>
+				</td>
+			</tr>
+			<tr>
+				<td/>
+				<td/>
+				<td/>
+				<td>
+					<hr class="D"/>
+				</td>
+				<td/>
+				<td>
+					<hr class="D"/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<b>CAPITAL AND RESERVES</b>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">Called up share capital</td>
+				<td class="N" align="center">7</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td align="right">
+					<ix:nonFraction xmlns:ix="http://www.xbrl.org/2008/inlineXBRL" contextRef="LEShareCaptl" decimals="0" name="frs:Equity" unitRef="GBP" format="ixt:numcommadot">1</ix:nonFraction>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td align="right">
+					<ix:nonFraction xmlns:ix="http://www.xbrl.org/2008/inlineXBRL" contextRef="PEShareCaptl" decimals="0" name="frs:Equity" unitRef="GBP" format="ixt:numcommadot">1</ix:nonFraction>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">Profit and Loss account</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td align="right">
+					<ix:nonFraction xmlns:ix="http://www.xbrl.org/2008/inlineXBRL" contextRef="LERetErnLoss" decimals="0" name="frs:Equity" unitRef="GBP" format="ixt:numcommadot">17,040</ix:nonFraction>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td align="right">20,125</td>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td/>
+				<td/>
+				<td/>
+				<td>
+					<hr class="S"/>
+				</td>
+				<td/>
+				<td>
+					<hr class="S"/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<b>Shareholders' funds</b>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td align="right">
+					<ix:nonFraction xmlns:ix="http://www.xbrl.org/2008/inlineXBRL" contextRef="LEnd" decimals="0" name="frs:Equity" unitRef="GBP" format="ixt:numcommadot">17,041</ix:nonFraction>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td align="right">
+					<ix:nonFraction xmlns:ix="http://www.xbrl.org/2008/inlineXBRL" contextRef="PEnd" decimals="0" name="frs:Equity" unitRef="GBP" format="ixt:numcommadot">20,126</ix:nonFraction>
+				</td>
+			</tr>
+			<tr>
+				<td/>
+				<td/>
+				<td/>
+				<td>
+					<hr class="D"/>
+				</td>
+				<td/>
+				<td>
+					<hr class="D"/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+		</table>
+		<p xmlns="http://www.w3.org/1999/xhtml">
+			<ix:nonNumeric xmlns:ix="http://www.xbrl.org/2008/inlineXBRL" contextRef="LPoA" name="uk-direp:StatementThatAccountsHaveBeenPreparedInAccordanceWithProvisionsSmallCompaniesRegime">These financial statements have been prepared in accordance with the provisions of FRS102 Section 1A of the Companies Act 2006 relating to small companies. In accordance with section 444 of the Companies Act 2006, the directors' report and the profit and loss account have not been delivered. </ix:nonNumeric>
+		</p>
+		<p xmlns="http://www.w3.org/1999/xhtml">
+			<ix:nonNumeric xmlns:ix="http://www.xbrl.org/2008/inlineXBRL" contextRef="LPoA" name="uk-direp:StatementThatCompanyEntitledToExemptionFromAuditUnderSection477CompaniesAct2006RelatingToSmallCompanies">For the financial year ended 31 January 2020, the company was entitled to exemption from audit under section 477 of the Companies Act 2006; and no notice has been deposited under section 476. </ix:nonNumeric>
+		</p>
+		<p xmlns="http://www.w3.org/1999/xhtml">
+			<ix:nonNumeric xmlns:ix="http://www.xbrl.org/2008/inlineXBRL" contextRef="LPoA" name="uk-direp:StatementThatMembersHaveNotRequiredCompanyToObtainAnAudit">The members have not required the company to obtain an audit. </ix:nonNumeric>
+		</p>
+		<table xmlns="http://www.w3.org/1999/xhtml" class="N">
+			<colgroup>
+				<col width="272"/>
+				<col width="40"/>
+				<col width="80"/>
+				<col width="80"/>
+				<col width="80"/>
+				<col width="80"/>
+				<col width="24"/>
+			</colgroup>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+		</table>
+		<p xmlns="http://www.w3.org/1999/xhtml">
+			<ix:nonNumeric xmlns:ix="http://www.xbrl.org/2008/inlineXBRL" contextRef="LPoA" name="uk-direp:StatementThatDirectorsAcknowledgeTheirResponsibilitiesUnderCompaniesAct">The directors acknowledge their responsibilities for complying with the requirements of the Companies Act 2006 with respect to accounting records and the preparation of financial statements. </ix:nonNumeric>
+		</p>
+		<table xmlns="http://www.w3.org/1999/xhtml" class="N">
+			<colgroup>
+				<col width="272"/>
+				<col width="40"/>
+				<col width="80"/>
+				<col width="80"/>
+				<col width="80"/>
+				<col width="80"/>
+				<col width="24"/>
+			</colgroup>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+		</table>
+		<table xmlns="http://www.w3.org/1999/xhtml" class="N">
+			<colgroup>
+				<col width="560"/>
+				<col width="80"/>
+				<col width="24"/>
+			</colgroup>
+			<tr>
+				<td class="N">Approved by the board of directors on<ix:nonNumeric xmlns:ix="http://www.xbrl.org/2008/inlineXBRL" contextRef="LEnd" name="frs:DateAuthorisationFinancialStatementsForIssue" format="ixt2:datedaymonthyearen">26 March 2020</ix:nonNumeric>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">and signed on their behalf by:</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<b>IAN HARDY</b>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<b>The notes on pages 2 to 3 form an integral part of these accounts.</b>
+				</td>
+			</tr>
+		</table>
+		<div xmlns="http://www.w3.org/1999/xhtml">
+			<hr class="P"/>
+		</div>
+		<table xmlns="http://www.w3.org/1999/xhtml" class="N">
+			<colgroup>
+				<col width="648"/>
+				<col width="24"/>
+			</colgroup>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N" align="center">2.</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<b>CADFEAT LTD</b>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<b>Notes to the Financial Statements</b>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<b>For the year ended 31 January 2020</b>
+				</td>
+			</tr>
+			<tr>
+				<td class="N" colspan="100">
+					<hr class="S"/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N"> 1.  <b>General Information</b>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+		</table>
+		<p xmlns="http://www.w3.org/1999/xhtml">
+			<ix:nonNumeric xmlns:ix="http://www.xbrl.org/2008/inlineXBRL" contextRef="LPPrivCoLtd" name="uk-bus:LegalFormEntity" format="ixt2:nocontent">CADFEAT LTD is a Private Company, limited by shares, domiciled in England and Wales, registration number 06789029. </ix:nonNumeric>
+		</p>
+		<table xmlns="http://www.w3.org/1999/xhtml" class="N">
+			<colgroup>
+				<col width="648"/>
+				<col width="24"/>
+			</colgroup>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+		</table>
+		<p xmlns="http://www.w3.org/1999/xhtml">The company's registered office is 21 ASHFORD GROVE, ABBEY GRANGE, NEWCASTLE, NE5 1QS. </p>
+		<table xmlns="http://www.w3.org/1999/xhtml" class="N">
+			<colgroup>
+				<col width="648"/>
+				<col width="24"/>
+			</colgroup>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N"> 2.  <b>Accounting policies</b>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<b>Basis of accounting</b>
+				</td>
+			</tr>
+		</table>
+		<p xmlns="http://www.w3.org/1999/xhtml">
+			<ix:nonNumeric xmlns:ix="http://www.xbrl.org/2008/inlineXBRL" contextRef="LPSmallEnts" name="uk-bus:AccountingStandardsApplied" format="ixt2:nocontent">The financial statements have been prepared under the historical cost convention in accordance with the accounting policies set out below. These financial statements have been prepared in accordance with FRS102, section 1A - The Financial Reporting Standard applicable in the UK and Republic of Ireland and the Companies Act 2006. </ix:nonNumeric>
+		</p>
+		<table xmlns="http://www.w3.org/1999/xhtml" class="N">
+			<colgroup>
+				<col width="648"/>
+				<col width="24"/>
+			</colgroup>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<b>Revenue recognition</b>
+				</td>
+			</tr>
+		</table>
+		<p xmlns="http://www.w3.org/1999/xhtml">
+			<ix:nonNumeric xmlns:ix="http://www.xbrl.org/2008/inlineXBRL" contextRef="LPoA" name="frs:RevenueRecognitionPolicy">Turnover is measured at the fair value of the consideration received or receivable and represents goods supplied or services rendered, stated net of Value Added Tax. Turnover is reduced for estimated customer returns, rebates and other similar allowances. Turnover from the sale of goods is recognised when goods are delivered and legal title has passed. </ix:nonNumeric>
+		</p>
+		<table xmlns="http://www.w3.org/1999/xhtml" class="N">
+			<colgroup>
+				<col width="648"/>
+				<col width="24"/>
+			</colgroup>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<b>Tangible fixed assets and depreciation</b>
+				</td>
+			</tr>
+		</table>
+		<p xmlns="http://www.w3.org/1999/xhtml">Depreciation is provided, after taking account of any grants receivable, at the following annual rates in order to write off each asset over its estimated useful life: </p>
+		<p xmlns="http://www.w3.org/1999/xhtml">
+			<ix:nonNumeric xmlns:ix="http://www.xbrl.org/2008/inlineXBRL" contextRef="LPPlantMach" name="frs:DescriptionDepreciationMethodForPropertyPlantEquipment">Plant and machinery -1/3 straight line. </ix:nonNumeric>
+		</p>
+		<p xmlns="http://www.w3.org/1999/xhtml">
+			<ix:nonNumeric xmlns:ix="http://www.xbrl.org/2008/inlineXBRL" contextRef="LPOfficEquip" name="frs:DescriptionDepreciationMethodForPropertyPlantEquipment">Office and computer equipment - NN% reducing balance </ix:nonNumeric>
+		</p>
+		<table xmlns="http://www.w3.org/1999/xhtml" class="N">
+			<colgroup>
+				<col width="648"/>
+				<col width="24"/>
+			</colgroup>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<b>Pension costs</b>
+				</td>
+			</tr>
+		</table>
+		<p xmlns="http://www.w3.org/1999/xhtml">
+			<ix:nonNumeric xmlns:ix="http://www.xbrl.org/2008/inlineXBRL" contextRef="LPoA" name="frs:EmployeeBenefitsPolicy">Contributions in respect of the company's defined contribution pension scheme are charged to the profit and loss account for the year in which they are payable to the scheme. Differences between contributions payable and contributions actually paid in the year are shown as either accruals or prepayments at the year end. </ix:nonNumeric>
+		</p>
+		<table xmlns="http://www.w3.org/1999/xhtml" class="N">
+			<colgroup>
+				<col width="648"/>
+				<col width="24"/>
+			</colgroup>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<b>Financial Instruments</b>
+				</td>
+			</tr>
+		</table>
+		<p xmlns="http://www.w3.org/1999/xhtml">
+			<ix:nonNumeric xmlns:ix="http://www.xbrl.org/2008/inlineXBRL" contextRef="LPoA" name="frs:FinancialInstrumentsClassificationPolicy">Basic financial instruments are recognised at amortised cost, except for investments in non-convertible preference and non-puttable ordinary shares which are measured at fair value, with changes recognised in profit or loss. Derivative financial instruments are initially recorded at cost and thereafter at fair value with changes recognised in profit or loss. </ix:nonNumeric>
+		</p>
+		<table xmlns="http://www.w3.org/1999/xhtml" class="N">
+			<colgroup>
+				<col width="416"/>
+				<col width="80"/>
+				<col width="80"/>
+				<col width="24"/>
+			</colgroup>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N"> 3.  <b>Employees</b>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+		</table>
+		<p xmlns="http://www.w3.org/1999/xhtml">The average number of persons employed by the company (including directors) during the year was 1 (2019 - 1). </p>
+		<div xmlns="http://www.w3.org/1999/xhtml">
+			<hr class="P"/>
+		</div>
+		<table xmlns="http://www.w3.org/1999/xhtml" class="N">
+			<colgroup>
+				<col width="648"/>
+				<col width="24"/>
+			</colgroup>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N" align="center">3.</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<b>CADFEAT LTD</b>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<b>Notes to the Financial Statements</b>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<b>For the year ended 31 January 2020</b>
+				</td>
+			</tr>
+			<tr>
+				<td class="N" colspan="100">
+					<hr class="S"/>
+				</td>
+			</tr>
+		</table>
+		<table xmlns="http://www.w3.org/1999/xhtml" class="N">
+			<colgroup>
+				<col width="280"/>
+				<col width="80"/>
+				<col width="80"/>
+				<col width="80"/>
+				<col width="80"/>
+			</colgroup>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N"> 4.  <b>Fixed assets - tangible</b>
+				</td>
+			</tr>
+		</table>
+		<table xmlns="http://www.w3.org/1999/xhtml" class="N">
+			<colgroup>
+				<col width="384"/>
+				<col width="96"/>
+			</colgroup>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N" align="center">Plant and</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N" align="center">Machinery</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N" align="center">   etc.</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<em>Fair value</em>
+				</td>
+				<td class="N" align="center">
+					<em>   &#163;</em>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">At 1 February 2019</td>
+				<td align="right">1,258</td>
+			</tr>
+			<tr>
+				<td class="N">     and 31 January 2020</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<em>Depreciation</em>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">At 1 February 2019</td>
+				<td align="right">976</td>
+			</tr>
+			<tr>
+				<td class="N">Charge for year</td>
+				<td align="right">117</td>
+			</tr>
+			<tr>
+				<td/>
+				<td/>
+				<td>
+					<hr class="S"/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">At 31 January 2020</td>
+				<td align="right">1,093</td>
+			</tr>
+			<tr>
+				<td/>
+				<td/>
+				<td>
+					<hr class="S"/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<em>Net book values</em>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">At 31 January 2020</td>
+				<td align="right">165</td>
+			</tr>
+			<tr>
+				<td/>
+				<td/>
+				<td>
+					<hr class="S"/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">At 1 February 2019</td>
+				<td align="right">282</td>
+			</tr>
+			<tr>
+				<td/>
+				<td/>
+				<td>
+					<hr class="D"/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+		</table>
+		<table xmlns="http://www.w3.org/1999/xhtml" class="N">
+			<colgroup>
+				<col width="648"/>
+				<col width="24"/>
+			</colgroup>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+		</table>
+		<table xmlns="http://www.w3.org/1999/xhtml" class="N">
+			<colgroup>
+				<col width="416"/>
+				<col width="16"/>
+				<col width="56"/>
+				<col width="56"/>
+				<col width="56"/>
+				<col width="24"/>
+			</colgroup>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N" align="center">  2020</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N" align="center">  2019</td>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N" align="center">  ----</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N" align="center">  ----</td>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N" align="center">   &#163;</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N" align="center">   &#163;</td>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+		</table>
+		<table xmlns="http://www.w3.org/1999/xhtml" class="N">
+			<colgroup>
+				<col width="416"/>
+				<col width="80"/>
+				<col width="32"/>
+				<col width="80"/>
+				<col width="24"/>
+			</colgroup>
+			<tr>
+				<td class="N"> 5.  <b>Debtors</b>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">Due within one year:</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">Trade debtors</td>
+				<td align="right">
+					<ix:nonFraction xmlns:ix="http://www.xbrl.org/2008/inlineXBRL" contextRef="LECurFinInst" decimals="0" name="frs:TradeDebtorsTradeReceivables" unitRef="GBP" format="ixt:numcommadot">1,729</ix:nonFraction>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td align="right">
+					<ix:nonFraction xmlns:ix="http://www.xbrl.org/2008/inlineXBRL" contextRef="PECurFinInst" decimals="0" name="frs:TradeDebtorsTradeReceivables" unitRef="GBP" format="ixt:numcommadot">3,224</ix:nonFraction>
+				</td>
+			</tr>
+			<tr>
+				<td/>
+				<td>
+					<hr class="S"/>
+				</td>
+				<td/>
+				<td>
+					<hr class="S"/>
+				</td>
+			</tr>
+		</table>
+		<table xmlns="http://www.w3.org/1999/xhtml" class="N">
+			<colgroup>
+				<col width="416"/>
+				<col width="80"/>
+				<col width="80"/>
+				<col width="24"/>
+			</colgroup>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+		</table>
+		<table xmlns="http://www.w3.org/1999/xhtml" class="N">
+			<colgroup>
+				<col width="416"/>
+				<col width="16"/>
+				<col width="56"/>
+				<col width="56"/>
+				<col width="56"/>
+				<col width="24"/>
+			</colgroup>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N" align="center">  2020</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N" align="center">  2019</td>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N" align="center">  ----</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N" align="center">  ----</td>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N" align="center">   &#163;</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N" align="center">   &#163;</td>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+		</table>
+		<table xmlns="http://www.w3.org/1999/xhtml" class="N">
+			<colgroup>
+				<col width="416"/>
+				<col width="80"/>
+				<col width="32"/>
+				<col width="80"/>
+				<col width="24"/>
+			</colgroup>
+			<tr>
+				<td class="N"> 6.  <b>Creditors</b>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">Amounts falling due within one year:</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">Taxation and social security</td>
+				<td align="right">
+					<ix:nonFraction xmlns:ix="http://www.xbrl.org/2008/inlineXBRL" contextRef="LECurFinInst" decimals="0" name="frs:OtherTaxationSocialSecurityPayable" unitRef="GBP" format="ixt:numcommadot">5,880</ix:nonFraction>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td align="right">
+					<ix:nonFraction xmlns:ix="http://www.xbrl.org/2008/inlineXBRL" contextRef="PECurFinInst" decimals="0" name="frs:OtherTaxationSocialSecurityPayable" unitRef="GBP" format="ixt:numcommadot">7,121</ix:nonFraction>
+				</td>
+			</tr>
+			<tr>
+				<td/>
+				<td>
+					<hr class="S"/>
+				</td>
+				<td/>
+				<td>
+					<hr class="S"/>
+				</td>
+			</tr>
+			<tr>
+				<td/>
+				<td align="right">5,880</td>
+				<td/>
+				<td align="right">7,121</td>
+			</tr>
+			<tr>
+				<td/>
+				<td>
+					<hr class="D"/>
+				</td>
+				<td/>
+				<td>
+					<hr class="D"/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N"> 7.  <b>Called up share capital</b>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+		</table>
+		<p xmlns="http://www.w3.org/1999/xhtml">There was no change in share capital during the year. </p>
+		<table xmlns="http://www.w3.org/1999/xhtml" class="N">
+			<colgroup>
+				<col width="416"/>
+				<col width="80"/>
+				<col width="32"/>
+				<col width="80"/>
+				<col width="24"/>
+			</colgroup>
+			<tr>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+		</table>
+		<table xmlns="http://www.w3.org/1999/xhtml" class="N">
+			<colgroup>
+				<col width="416"/>
+				<col width="80"/>
+				<col width="32"/>
+				<col width="80"/>
+				<col width="24"/>
+			</colgroup>
+			<tr>
+				<td class="N">Allotted, called up and fully paid</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td class="N">
+					<br/>
+				</td>
+			</tr>
+			<tr>
+				<td class="N">shares of &#163;1 each<ix:nonNumeric xmlns:ix="http://www.xbrl.org/2008/inlineXBRL" contextRef="LPOrdClass2" name="uk-bus:DescriptionShareType">Ordinary A</ix:nonNumeric>
+				</td>
+				<td align="right">1</td>
+				<td class="N">
+					<br/>
+				</td>
+				<td align="right">1</td>
+			</tr>
+			<tr>
+				<td/>
+				<td>
+					<hr class="D"/>
+				</td>
+				<td/>
+				<td>
+					<hr class="D"/>
+				</td>
+			</tr>
+		</table>
+		<div xmlns="http://www.w3.org/1999/xhtml">
+			<hr class="P"/>
+		</div>
+	</body>
+</html>
