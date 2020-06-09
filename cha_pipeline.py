@@ -26,7 +26,6 @@ from src.data_processing.cst_data_processing import DataProcessing
 from src.classifier.cst_classifier import Classifier
 from src.performance_metrics.binary_classifier_metrics import BinaryClassifierMetrics
 
-
 def main():
 
     print("-"*50)

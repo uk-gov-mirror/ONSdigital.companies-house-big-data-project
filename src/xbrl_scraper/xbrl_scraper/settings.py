@@ -9,14 +9,10 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-import argparse
-import configparser
-
 BOT_NAME = 'xbrl_scraper'
 
 SPIDER_MODULES = ['xbrl_scraper.spiders']
 NEWSPIDER_MODULE = 'xbrl_scraper.spiders'
-
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'xbrl_scraper (+http://www.yourdomain.com)'
@@ -76,7 +72,7 @@ ITEM_PIPELINES = {
     #'scrapy.pipelines.files.FilesPipeline': 1,
 }
 #FILES_STORE = "/shares/data/20200519_companies_house_accounts/xbrl_scraped_data_testing/"
-FILES_STORE = config.get('xbrl_web_scraper_args', 'scraped_dir')
+FILES_STORE = "/Users/spot/scraped_data/"
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
