@@ -9,6 +9,9 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
+import argparse
+import configparser
+
 BOT_NAME = 'xbrl_scraper'
 
 SPIDER_MODULES = ['xbrl_scraper.spiders']
@@ -72,7 +75,8 @@ ITEM_PIPELINES = {
     'xbrl_scraper.pipelines.XbrlScraperPipeline': 1,
     #'scrapy.pipelines.files.FilesPipeline': 1,
 }
-FILES_STORE = "/shares/data/20200519_companies_house_accounts/xbrl_scraped_data_testing/"
+#FILES_STORE = "/shares/data/20200519_companies_house_accounts/xbrl_scraped_data_testing/"
+FILES_STORE = config.get('xbrl_web_scraper_args', 'scraped_dir')
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
