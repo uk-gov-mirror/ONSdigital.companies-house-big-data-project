@@ -25,7 +25,8 @@ class XBRLSpider(CrawlSpider):
     #               'http://download.companieshouse.gov.uk/historicmonthlyaccountsdata.html']
 
     #filepath = "/shares/data/20200519_companies_house_accounts/xbrl_scraped_data_testing"
-    filepath = "/Users/spot/scraped_data/"
+    #filepath = "/Users/spot/scraped_data/"
+    filepath = "E:/scraped_data"
 
     def parse(self, response):
         """
