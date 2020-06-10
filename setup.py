@@ -9,5 +9,10 @@ setup(
     author_email = "robert.stone@ons.gov.uk",
     license = "MIT",
     packages = find_packages(exclude=["companies_house_accounts.tests"]),
-    install_requires = ["opencv-python"]        
+    install_requires = ["opencv-python"],
+    entry_points = {
+        "console_scripts": [
+            "cha_pipeline = companies_house_accounts.cha_pipeline:main"
+        ]
+    }
 )
