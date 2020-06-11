@@ -12,7 +12,7 @@ setup(
     install_requires = ["opencv-python"],
     entry_points = {
         "console_scripts": [
-            "cha_pipeline = companies_house_accounts.cha_pipeline:main"
+            "cha_pipeline = cha_pipeline:main"
         ]
     }
 )
