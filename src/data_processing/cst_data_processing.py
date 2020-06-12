@@ -1,10 +1,14 @@
 import cv2
-from os import listdir
+from os import listdir, mkdir
 from os.path import isfile, join, exists
 import random
 import zipfile, tarfile
 
 class DataProcessing:
+
+	def __init__(self):
+		self.__init__
+
 	def import_files(directory):
 		"""
 		Returns list of all files present in given directory, complete with file extensions.
@@ -111,8 +115,9 @@ class DataProcessing:
 						+ ".png",
 					region_of_interest
 				)
-				
-	def extract_compressed_files(self, file_source, file_dest):
+
+	@staticmethod
+	def extract_compressed_files(file_source, file_dest):
 		"""
 		Extracts .zip files from a given directory or filename
 		to a given file directory.
@@ -126,25 +131,32 @@ class DataProcessing:
 		Raises:
 			None
 		"""
-		if exists(file_source):
-			if isfile(file_source):
-				files = [file_source]
-			else:
-				files = [file_source + f for f in listdir(file_source)]
-				
-			print("Extracting files...")
-			for file in files:
-				if file.endswith('.zip'):
-					with zipfile.ZipFile(file, 'r') as zip_ref:
-						zip_ref.extractall(file_dest)
-					print("Extraction complete")
+		if exists(file_dest):
+			if exists(file_source):
+				if isfile(file_source):
+					files = [file_source]
 				else:
-					print("File extension " + file.split('.')[1] + " not supported")
-					print("Failed to extract file " + file)
+					files = [file_source + f for f in listdir(file_source)]
+
+				print("Extracting files...")
+				for file in files:
+					if file.endswith('.zip'):
+						mkdir(file_dest + "/" + file.split('.')[0].split("/")[-1])
+						with zipfile.ZipFile(file, 'r') as zip_ref:
+							zip_ref.extractall(file_dest + "/" + file.split('.')[0].split("/")[-1])
+						print("Extracted files from " + file)
+					else:
+						print("File extension " + file.split('.')[1] + " not supported")
+						print("Unable to extract file " + file)
+				print("Extraction complete")
+			else:
+				print("File or directory not found: " + file_source)
 		else:
-			print("File not found: " + file_source)
+			print("Destination directory not valid!: " + file_dest)
 			
 #myobj = DataProcessing()
+#file_source = "/home/peterd/repos/companies_house_accounts/data/for_testing/xbrl_data/accounts_bulk_data-2020-03-24.zip"
+#file_dest = "/home/peterd/repos/companies_house_accounts/data/for_testing/xbrl_data/"
 #myobj.extract_compressed_files(file_source, file_dest)
 
 def get_file_details(files, n_objects = 1, x_coord = 0, y_coord = 0):
