@@ -5,6 +5,8 @@ import hashlib
 import scrapy
 import time
 import random
+import argparse
+import configparser
 
 class XbrlScraperItem(scrapy.Item):
     file_urls = scrapy.Field()
@@ -22,7 +24,10 @@ class XBRLSpider(CrawlSpider):
     # start_urls = ['http://download.companieshouse.gov.uk/en_monthlyaccountsdata.html',
     #               'http://download.companieshouse.gov.uk/historicmonthlyaccountsdata.html']
 
-    filepath = "/shares/data/20200519_companies_house_accounts/xbrl_scraped_data_testing"
+    #filepath = "/shares/data/20200519_companies_house_accounts/xbrl_scraped_data_testing"
+    #filepath = "/Users/spot/scraped_data/"
+    #filepath = "E:/scraped_data"
+    filepath = "/shares/20200519_companies_house_accounts/xbrl_scraped_data/"
 
     def parse(self, response):
         """

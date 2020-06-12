@@ -1,4 +1,4 @@
-from os import listdir
+from os import listdir, chdir, getcwd, popen
 from os.path import isfile, join
 import time
 import argparse
@@ -19,10 +19,12 @@ ocr_functions = config.get('cha_workflow', 'ocr_functions')
 nlp_functions = config.get('cha_workflow', 'nlp_functions')
 merge_xbrl_to_pdf_data = config.get('cha_workflow', 'merge_xbrl_to_pdf_data')
 
+scraped_dir = config.get('xbrl_web_scraper_args', 'scraped_dir')
+xbrl_scraper = config.get('xbrl_web_scraper_args', 'xbrl_scraper')
+
 from src.data_processing.cst_data_processing import DataProcessing
 from src.classifier.cst_classifier import Classifier
 from src.performance_metrics.binary_classifier_metrics import BinaryClassifierMetrics
-
 
 def main():
 
@@ -31,6 +33,11 @@ def main():
     # Execute module xbrl_web_scraper
     if xbrl_web_scraper == str(True):
         print("XBRL web scraper running...")
+        print("Scraping XBRL data to:", scraped_dir)
+        print("Running crawler from:", xbrl_scraper)
+        chdir(xbrl_scraper)
+        print(getcwd())
+        popen("scrapy crawl xbrl_scraper").read()
 
     # Run all xbrl related functions in order
     if xbrl_functions == str(True):
