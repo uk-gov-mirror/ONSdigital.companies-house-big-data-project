@@ -31,6 +31,10 @@ ROBOTSTXT_OBEY = True
 # Disable max download file size
 DOWNLOAD_MAXSIZE = 0
 
+# Set the download timeout to a vary large value to avoid timing out when
+# downloading very large files
+DOWNLOAD_TIMEOUT = 100000
+
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
