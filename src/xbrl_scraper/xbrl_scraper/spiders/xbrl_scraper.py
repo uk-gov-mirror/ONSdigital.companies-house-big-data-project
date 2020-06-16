@@ -30,7 +30,7 @@ class XBRLSpider(CrawlSpider):
     #filepath = "/shares/data/20200519_companies_house_accounts/xbrl_scraped_data_testing"
     #filepath = "/Users/spot/scraped_data/"
     #filepath = "E:/scraped_data"
-    filepath = "/shares/20200519_companies_house_accounts/xbrl_scraped_data/"
+    filepath = "/shares/data/20200519_companies_house_accounts/xbrl_scraped_data/"
 
     def parse(self, response):
         """

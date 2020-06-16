@@ -82,7 +82,7 @@ ITEM_PIPELINES = {
 #FILES_STORE = "/shares/data/20200519_companies_house_accounts/xbrl_scraped_data_testing/"
 #FILES_STORE = "/Users/spot/scraped_data/"
 #FILES_STORE = "E:/scraped_data"
-FILES_STORE = "/shares/20200519_companies_house_accounts/xbrl_scraped_data/"
+FILES_STORE = "/shares/data/20200519_companies_house_accounts/xbrl_scraped_data/"
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
