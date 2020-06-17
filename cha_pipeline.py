@@ -19,8 +19,12 @@ ocr_functions = config.get('cha_workflow', 'ocr_functions')
 nlp_functions = config.get('cha_workflow', 'nlp_functions')
 merge_xbrl_to_pdf_data = config.get('cha_workflow', 'merge_xbrl_to_pdf_data')
 
+# Arguments for the XBRL web scraper
 scraped_dir = config.get('xbrl_web_scraper_args', 'scraped_dir')
 xbrl_scraper = config.get('xbrl_web_scraper_args', 'xbrl_scraper')
+
+unpacker_source_dir = config.get('xbrl_unpacker_args', 'xbrl_unpacker_file_source_dir')
+unpacker_destination_dir = config.get('xbrl_unpacker_args', 'xbrl_unpacker_file_destination_dir')
 
 from src.data_processing.cst_data_processing import DataProcessing
 from src.classifier.cst_classifier import Classifier
@@ -42,6 +46,11 @@ def main():
     # Run all xbrl related functions in order
     if xbrl_functions == str(True):
         print("Running all XBRL functions...")
+        print("Unpacking zip files...")
+        print("Reading from directory: ", unpacker_source_dir)
+        print("Writing to directory: ", unpacker_destination_dir)
+        unpacker = DataProcessing()
+        unpacker.extract_compressed_files(unpacker_source_dir, unpacker_destination_dir)
 
     # Execute PDF web scraper
     if pdf_web_scraper == str(True):

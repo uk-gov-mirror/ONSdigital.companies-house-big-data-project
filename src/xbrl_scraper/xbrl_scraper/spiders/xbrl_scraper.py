@@ -16,18 +16,21 @@ class XBRLSpider(CrawlSpider):
 
     name = "xbrl_scraper"
 
-    allowed_domains = ['download.companieshouse.gov.uk/en_accountsdata.html']
-    start_urls = ['http://download.companieshouse.gov.uk/en_accountsdata.html']
+    # allowed_domains = ['download.companieshouse.gov.uk/en_accountsdata.html']
+    # start_urls = ['http://download.companieshouse.gov.uk/en_accountsdata.html']
 
-    # allowed_domains = ['download.companieshouse.gov.uk/en_monthlyaccountsdata.html',
-    #                    'download.companieshouse.gov.uk/historicmonthlyaccountsdata.html']
-    # start_urls = ['http://download.companieshouse.gov.uk/en_monthlyaccountsdata.html',
-    #               'http://download.companieshouse.gov.uk/historicmonthlyaccountsdata.html']
+    # allowed_domains = ['download.companieshouse.gov.uk/historicmonthlyaccountsdata.html']
+    # start_urls = ['http://download.companieshouse.gov.uk/historicmonthlyaccountsdata.html']
+
+     allowed_domains = ['download.companieshouse.gov.uk/en_monthlyaccountsdata.html',
+                        'download.companieshouse.gov.uk/historicmonthlyaccountsdata.html']
+     start_urls = ['http://download.companieshouse.gov.uk/en_monthlyaccountsdata.html',
+                   'http://download.companieshouse.gov.uk/historicmonthlyaccountsdata.html']
 
     #filepath = "/shares/data/20200519_companies_house_accounts/xbrl_scraped_data_testing"
     #filepath = "/Users/spot/scraped_data/"
     #filepath = "E:/scraped_data"
-    filepath = "/shares/20200519_companies_house_accounts/xbrl_scraped_data/"
+    filepath = "/shares/data/20200519_companies_house_accounts/xbrl_scraped_data/"
 
     def parse(self, response):
         """
@@ -65,6 +68,8 @@ class XBRLSpider(CrawlSpider):
             time.sleep((random.random() * 2.0) + 3.0)
 
             #if link == 'http://download.companieshouse.gov.uk/Accounts_Bulk_Data-2020-05-19.zip':
+            #if link == 'http://download.companieshouse.gov.uk/archive/Accounts_Monthly_Data-December2019.zip':
+
             yield XbrlScraperItem(file_urls=[link])
 
         #yield XbrlScraperItem(file_urls=['http://download.companieshouse.gov.uk/Accounts_Bulk_Data-2020-05-19.zip'])

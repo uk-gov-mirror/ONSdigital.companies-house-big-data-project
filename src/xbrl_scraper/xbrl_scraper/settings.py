@@ -27,6 +27,14 @@ ROBOTSTXT_OBEY = True
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
 #DOWNLOAD_DELAY = 3
+
+# Disable max download file size
+DOWNLOAD_MAXSIZE = 0
+
+# Set the download timeout to a vary large value to avoid timing out when
+# downloading very large files
+DOWNLOAD_TIMEOUT = 100000
+
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
@@ -74,7 +82,7 @@ ITEM_PIPELINES = {
 #FILES_STORE = "/shares/data/20200519_companies_house_accounts/xbrl_scraped_data_testing/"
 #FILES_STORE = "/Users/spot/scraped_data/"
 #FILES_STORE = "E:/scraped_data"
-FILES_STORE = "/shares/20200519_companies_house_accounts/xbrl_scraped_data/"
+FILES_STORE = "/shares/data/20200519_companies_house_accounts/xbrl_scraped_data/"
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
