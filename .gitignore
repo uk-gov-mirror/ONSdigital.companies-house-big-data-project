@@ -7,3 +7,5 @@ data\input\*
 data\output\*
 *data\output\
 *ext_methods.txt
+*.idea/
+.idea/*
