@@ -1,4 +1,4 @@
-from os import listdir
+from os import listdir, getcwd, chdir
 from os.path import isfile, join
 from scrapy.spiders import CrawlSpider
 import hashlib
@@ -6,6 +6,8 @@ import scrapy
 import time
 import random
 import argparse
+import sys
+import cv2
 import configparser
 
 class XbrlScraperItem(scrapy.Item):
@@ -13,7 +15,6 @@ class XbrlScraperItem(scrapy.Item):
     files = scrapy.Field()
 
 class XBRLSpider(CrawlSpider):
-
     name = "xbrl_scraper"
 
     # allowed_domains = ['download.companieshouse.gov.uk/en_accountsdata.html']
@@ -22,15 +23,26 @@ class XBRLSpider(CrawlSpider):
     # allowed_domains = ['download.companieshouse.gov.uk/historicmonthlyaccountsdata.html']
     # start_urls = ['http://download.companieshouse.gov.uk/historicmonthlyaccountsdata.html']
 
-     allowed_domains = ['download.companieshouse.gov.uk/en_monthlyaccountsdata.html',
-                        'download.companieshouse.gov.uk/historicmonthlyaccountsdata.html']
-     start_urls = ['http://download.companieshouse.gov.uk/en_monthlyaccountsdata.html',
-                   'http://download.companieshouse.gov.uk/historicmonthlyaccountsdata.html']
+    config = configparser.ConfigParser()
+    chdir("..")
+    chdir("..")
+    config.read("cha_pipeline.cfg")
+
+    allowed_domains = config.get('xbrl_web_scraper_args', 'allowed_domains').split(",")
+    start_urls = config.get('xbrl_web_scraper_args', 'start_urls').split(",")
+
+    # allowed_domains = ['download.companieshouse.gov.uk/en_monthlyaccountsdata.html',
+    #                     'download.companieshouse.gov.uk/historicmonthlyaccountsdata.html']
+    # start_urls = ['http://download.companieshouse.gov.uk/en_monthlyaccountsdata.html',
+    #                'http://download.companieshouse.gov.uk/historicmonthlyaccountsdata.html']
 
     #filepath = "/shares/data/20200519_companies_house_accounts/xbrl_scraped_data_testing"
     #filepath = "/Users/spot/scraped_data/"
     #filepath = "E:/scraped_data"
-    filepath = "/shares/data/20200519_companies_house_accounts/xbrl_scraped_data/"
+    #filepath = "/shares/data/20200519_companies_house_accounts/xbrl_scraped_data/"
+
+    filepath = config.get('xbrl_web_scraper_args', 'scraped_dir')
+    filepath += "/"
 
     def parse(self, response):
         """

@@ -41,7 +41,8 @@ def main():
         print("Running crawler from:", xbrl_scraper)
         chdir(xbrl_scraper)
         print(getcwd())
-        popen("scrapy crawl xbrl_scraper").read()
+        cmdlinestr = "scrapy crawl xbrl_scraper"
+        popen(cmdlinestr).read()
 
     # Run all xbrl related functions in order
     if xbrl_functions == str(True):
