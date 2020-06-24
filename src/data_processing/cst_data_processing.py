@@ -2,7 +2,8 @@ import cv2
 from os import listdir, mkdir
 from os.path import isfile, join, exists
 import random
-import zipfile, tarfile
+import zipfile
+import shutil
 
 class DataProcessing:
 
@@ -133,21 +134,53 @@ class DataProcessing:
 		"""
 		if exists(file_dest):
 			if exists(file_source):
+
+				# Retrieve a list of all zip files that have been extracted
+				# If no such list exists, create one
+				if exists(file_dest + "/extracted_files.txt"):
+					extracted_files_txt = open(file_dest + "/extracted_files.txt", "r")
+					list_extracted_files = [f.rstrip("\n") for f in extracted_files_txt]
+					extracted_files_txt.close()
+				else:
+					list_extracted_files = []
+				extracted_files_txt = open(file_dest + "/extracted_files.txt", "a+")
+
 				if isfile(file_source):
 					files = [file_source]
 				else:
+					# Retrieve list of all files present in the directory (not folders)
 					files = [file_source + f for f in listdir(file_source)]
+					files = [f for f in files if isfile(f)]
+
+				# Filter out all files from 'files' that have already been extracted
+				files = [f for f in files if f not in list_extracted_files]
 
 				print("Extracting files...")
 				for file in files:
 					if file.endswith('.zip'):
-						mkdir(file_dest + "/" + file.split('.')[0].split("/")[-1])
+
+						directory = file_dest + "/" + file.split('.')[0].split("/")[-1]
+
+						# If the directory for the zip contents exists already, delete it
+						# just in case a previous attempt at extraction was incomplete
+						# Otherwise, create a new directory
+						if exists(directory):
+							shutil.rmtree(directory)
+						else:
+							mkdir(directory)
+
+						# Perform the extraction
 						with zipfile.ZipFile(file, 'r') as zip_ref:
-							zip_ref.extractall(file_dest + "/" + file.split('.')[0].split("/")[-1])
+							zip_ref.extractall(directory)
 						print("Extracted files from " + file)
+
+						# Add extracted filename to file list
+						extracted_files_txt.write(file + "\n")
 					else:
 						print("File extension " + file.split('.')[1] + " not supported")
 						print("Unable to extract file " + file)
+
+				extracted_files_txt.close()
 				print("Extraction complete")
 			else:
 				print("File or directory not found: " + file_source)
@@ -156,6 +189,7 @@ class DataProcessing:
 			
 #myobj = DataProcessing()
 #file_source = "/home/peterd/repos/companies_house_accounts/data/for_testing/xbrl_data/accounts_bulk_data-2020-03-24.zip"
+#file_source = "/home/peterd/repos/companies_house_accounts/data/for_testing/xbrl_data/"
 #file_dest = "/home/peterd/repos/companies_house_accounts/data/for_testing/xbrl_data/"
 #myobj.extract_compressed_files(file_source, file_dest)
 
