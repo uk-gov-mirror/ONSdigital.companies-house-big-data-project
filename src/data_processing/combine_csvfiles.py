@@ -4,13 +4,13 @@ import itertools
 import pandas as pd
 from typing import List, Tuple
 
-def _combine_csv(year: str, files: List[str], outdir: str):
+def combine_csv(files: List[str], outfile: str):
     '''Combines all csv files listed in files into a single cs file using csv.writer.
     Unsuitable if files do not have the same format. Faster than the pandas version.'''
 
     files.sort()
-    new_file = outdir + year + '_xbrl.csv'
-    with open(new_file, "w") as w:
+
+    with open(outfile, "w") as w:
         writer = csv.writer(w, delimiter=',')
         for n, file in enumerate(files):
             with open(file, "r") as f:
@@ -19,13 +19,12 @@ def _combine_csv(year: str, files: List[str], outdir: str):
                 for row in reader:
                  writer.writerow(row)
 
-def _combine_csv_pd(year: str, files: List[str], outdir: str):
+def combine_csv_pd(files: List[str], outfile: str):
     '''Combines all csv files listed in files into a single csv file using pandas'''
 
     files.sort()
-    new_file = outdir+year+'_xbrl.csv'
     combined_csv = pd.concat([pd.read_csv(f, engine = 'python') for f in files])
-    combined_csv.to_csv(new_file, index = False)
+    combined_csv.to_csv(outfile, index = False)
 
 def _add_path(indir: str, files: str):
     '''returns list with paths appended to file names'''
@@ -45,7 +44,7 @@ def merge_files_by_year(indir: str, outdir: str, years: Tuple[int]):
               and i[:4].isnumeric() and int(i[:4]) in range(*years)])
     years = [[k,_add_path(indir, i)] for k, i in itertools.groupby(files, lambda x: x[:4])]
 
-    [_combine_csv(year, files, outdir) for year, files in years]
+    [combine_csv(files, outdir+year+'_xbrl.csv') for year, files in years]
 
 if __name__ == '__main__':
 
