@@ -56,6 +56,48 @@ def main():
     # Execute PDF web scraper
     if pdf_web_scraper == str(True):
         print("PDF web scraper running...")
+        
+        # Get all the filenames from the example folder
+        files, folder_month, folder_year = get_filepaths("/shares/data/20200519_companies_house_accounts/xbrl_unpacked_data/Accounts_monthly_Data-JanuaryToDecember2008")
+
+        print(len(files))
+
+        # Here you can splice/truncate the number of files you want to process for testing
+        files = files[0:30]
+
+        print(folder_month, folder_year)
+
+        # Finally, build a table of all variables from all example (digital) documents
+        # This can take a while
+        results = build_month_table(files)
+
+        print(results.shape)
+
+        results.head(10)
+
+        output_xbrl_month(results, "/shares/data/20200519_companies_house_accounts/logs")
+
+        # Find list of all unqiue tags in dataset
+        list_of_tags = results["name"].tolist()
+        list_of_tags_unique = list(set(list_of_tags))
+
+        print("Longest tag: ", len(max(list_of_tags_unique, key = len)))
+
+        # Output all unqiue tags to a txt file
+        retrieve_list_of_tags(
+            results,
+            "name",
+            "/shares/data/20200519_companies_house_accounts/logs"
+        )
+
+        # Output all unqiue tags and their relative frequencies to a txt file
+        get_tag_counts(
+            results,
+            "name",
+            "/shares/data/20200519_companies_house_accounts/logs"
+        )
+
+        #print(results.shape)
 
     # Convert PDF files to images
     if pdfs_to_images == str(True):
