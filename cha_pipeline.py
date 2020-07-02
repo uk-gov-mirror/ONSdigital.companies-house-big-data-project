@@ -3,7 +3,7 @@ from os.path import isfile, join
 import time
 import argparse
 import sys
-import cv2
+# import cv2
 import configparser
 
 config = configparser.ConfigParser()
@@ -26,13 +26,19 @@ xbrl_scraper = config.get('xbrl_web_scraper_args', 'xbrl_scraper')
 unpacker_source_dir = config.get('xbrl_unpacker_args', 'xbrl_unpacker_file_source_dir')
 unpacker_destination_dir = config.get('xbrl_unpacker_args', 'xbrl_unpacker_file_destination_dir')
 
+xbrl_unpacked_data = config.get('xbrl_parser', 'xbrl_data_dir')
+xbrl_processed_csv = config.get('xbrl_parser', 'xbrl_processed_csv_dir')
+xbrl_tag_frequencies = config.get('xbrl_parser', 'xbrl_tag_frequencies')
+xbrl_tag_list = config.get('xbrl_parser', 'xbrl_tag_list')
+
 from src.data_processing.cst_data_processing import DataProcessing
 from src.classifier.cst_classifier import Classifier
 from src.performance_metrics.binary_classifier_metrics import BinaryClassifierMetrics
+from src.data_processing.xbrl_pd_methods import XbrlExtraction
+
 
 def main():
-
-    print("-"*50)
+    print("-" * 50)
 
     # Execute module xbrl_web_scraper
     if xbrl_web_scraper == str(True):
@@ -56,9 +62,11 @@ def main():
     # Execute PDF web scraper
     if pdf_web_scraper == str(True):
         print("PDF web scraper running...")
-        
+
+        extractor = XbrlExtraction()
+
         # Get all the filenames from the example folder
-        files, folder_month, folder_year = get_filepaths("/shares/data/20200519_companies_house_accounts/xbrl_unpacked_data/Accounts_monthly_Data-JanuaryToDecember2008")
+        files, folder_month, folder_year = extractor.get_filepaths(xbrl_unpacked_data)
 
         print(len(files))
 
@@ -69,35 +77,35 @@ def main():
 
         # Finally, build a table of all variables from all example (digital) documents
         # This can take a while
-        results = build_month_table(files)
+        results = extractor.build_month_table(files)
 
         print(results.shape)
 
         results.head(10)
 
-        output_xbrl_month(results, "/shares/data/20200519_companies_house_accounts/logs")
+        extractor.output_xbrl_month(results, xbrl_processed_csv)
 
-        # Find list of all unqiue tags in dataset
+        # Find list of all unique tags in dataset
         list_of_tags = results["name"].tolist()
         list_of_tags_unique = list(set(list_of_tags))
 
-        print("Longest tag: ", len(max(list_of_tags_unique, key = len)))
+        print("Longest tag: ", len(max(list_of_tags_unique, key=len)))
 
-        # Output all unqiue tags to a txt file
-        retrieve_list_of_tags(
+        # Output all unique tags to a txt file
+        extractor.retrieve_list_of_tags(
             results,
             "name",
-            "/shares/data/20200519_companies_house_accounts/logs"
+            xbrl_tag_list
         )
 
-        # Output all unqiue tags and their relative frequencies to a txt file
-        get_tag_counts(
+        # Output all unique tags and their relative frequencies to a txt file
+        extractor.get_tag_counts(
             results,
             "name",
-            "/shares/data/20200519_companies_house_accounts/logs"
+            xbrl_tag_frequencies
         )
 
-        #print(results.shape)
+        # print(results.shape)
 
     # Convert PDF files to images
     if pdfs_to_images == str(True):
@@ -122,7 +130,6 @@ def main():
     # Merge xbrl and PDF file data
     if merge_xbrl_to_pdf_data == str(True):
         print("Merging XBRL and PDF data...")
-
 
     """
     # construct the argument parse and parse the arguments
