@@ -11,3 +11,4 @@ data\output\*
 .idea/*
 *__pycache__
 __pycache__/*
+third_party_apps/.ipynb_checkpoints/*
