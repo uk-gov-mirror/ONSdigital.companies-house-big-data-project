@@ -10,7 +10,6 @@ from src.data_processing.xbrl_parser import XbrlParser
 
 xbrl_parser = XbrlParser()
 
-
 class XbrlExtraction:
     """
     """

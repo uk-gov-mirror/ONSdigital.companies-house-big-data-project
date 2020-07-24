@@ -8,22 +8,21 @@ from datetime import datetime
 from dateutil import parser
 from bs4 import BeautifulSoup as BS  # Can parse xml or html docs
 
-# Table of variables and values that indicate consolidated status
-consolidation_var_table = {
-    "includedinconsolidationsubsidiary": True,
-    "investmententityrequiredtoapplyexceptionfromconsolidationtruefalse": True,
-    "subsidiaryunconsolidatedtruefalse": False,
-    "descriptionreasonwhyentityhasnotpreparedconsolidatedfinancialstatements": "exist",
-    "consolidationpolicy": "exist"
-}
-
-
 class XbrlParser:
     '''
     '''
 
     def __init__(self):
         self.__init__
+        
+    # Table of variables and values that indicate consolidated status
+    consolidation_var_table = {
+        "includedinconsolidationsubsidiary": True,
+        "investmententityrequiredtoapplyexceptionfromconsolidationtruefalse": True,
+        "subsidiaryunconsolidatedtruefalse": False,
+        "descriptionreasonwhyentityhasnotpreparedconsolidatedfinancialstatements": "exist",
+        "consolidationpolicy": "exist"
+    }
 
     @staticmethod
     def clean_value(string):
