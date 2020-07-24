@@ -26,9 +26,13 @@ xbrl_scraper = config.get('xbrl_web_scraper_args', 'xbrl_scraper')
 unpacker_source_dir = config.get('xbrl_unpacker_args', 'xbrl_unpacker_file_source_dir')
 unpacker_destination_dir = config.get('xbrl_unpacker_args', 'xbrl_unpacker_file_destination_dir')
 
+ocr_source_dir = config.get('xbrl_unpacker_args', 'xbrl_unpacker_file_source_dir')
+ocr_destination_dir = config.get('xbrl_unpacker_args', 'xbrl_unpacker_file_destination_dir')
+
 from src.data_processing.cst_data_processing import DataProcessing
 from src.classifier.cst_classifier import Classifier
 from src.performance_metrics.binary_classifier_metrics import BinaryClassifierMetrics
+from src.ocr_runner.ocr_runner import OcrRunner
 
 def main():
 
@@ -114,7 +118,11 @@ def main():
     # Execute OCR
     if ocr_functions == str(True):
         print("Running all OCR functions...")
-
+        # instance to class
+        ocr_runner = OcrRunner()
+        
+        ocr_runner.
+        
     # Execute NLP
     if nlp_functions == str(True):
         print("Running all NLP functions...")
