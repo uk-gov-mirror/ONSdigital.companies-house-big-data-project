@@ -1,5 +1,6 @@
 from os import listdir
-from os.path import isfile, exists, getsize
+from os.path import isfile, exists, getsize, getmtime
+from datetime import datetime
 
 class XbrlValidatorMethods:
 
@@ -26,7 +27,10 @@ class XbrlValidatorMethods:
 
                 for file in files:
                     print("File: " + file)
-                    print("File size: " + str(getsize(file)))
+                    print("File size: " + str(getsize(file)) + " bytes")
+
+                    file_time = datetime.utcfromtimestamp(getmtime(file))
+                    print("File modified: " + file_time.strftime("%Y-%m-%d %H:%M:%S.%f+00:00 (UTC)"))
             else:
                 print("Specified filepath is not a directory!")
 
