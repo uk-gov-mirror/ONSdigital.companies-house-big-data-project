@@ -14,6 +14,13 @@ set of processed data for build and archive. The high-level processes are:
 9.	Apply Natural Language Processes (NLP) to text data extracted in step 7 to extract patterns from the raw text data.
 10.	Merge processed XBRL data from step 2 with data generated from step 8.
 
+## Webscraping Policy 
+The webscraping done in this project is achieved by utilsing [Scrapy](https://scrapy.org/) and strictly adheres to the [ONS Web Scraping Policy](https://www.ons.gov.uk/aboutus/transparencyandgovernance/datastrategy/datapolicies/webscrapingpolicy).
+For further information on Scrappy please see the following links:
+- [Scrapy Tutorial, Web Scraping Using Python](https://www.accordbox.com/blog/scrapy-tutorial-series-web-scraping-using-python)
+- [Datacamp, Web Scraping with Python](https://www.datacamp.com/courses/web-scraping-with-python)
+
+Noting that the deployment of 'spiders' in this implimentation of Scrapy is automated so we will not cover how to initialise them. 
 ## Installation
 
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install this project's required modules and dependencies.
