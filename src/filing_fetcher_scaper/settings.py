@@ -23,7 +23,7 @@ NEWSPIDER_MODULE = 'filing_fetcher.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-USER_AGENT = config.USER_AGENT
+USER_AGENT = 'office_for_national_statistics_filing_fetcher (+https://www.ons.gov.uk)'
 
 
 # Using API rather than actually scraping/crawling (also Companies House API doesn't have a robots.txt)
