@@ -16,7 +16,7 @@ set of processed data for build and archive. The high-level processes are:
 
 ## Webscraping Policy 
 The webscraping done in this project is achieved by utilsing [Scrapy](https://scrapy.org/) and strictly adheres to the [ONS Web Scraping Policy](https://www.ons.gov.uk/aboutus/transparencyandgovernance/datastrategy/datapolicies/webscrapingpolicy).
-For further information on Scrappy please see the following links:
+For further information on Scrapy please see the following links:
 - [Scrapy Tutorial, Web Scraping Using Python](https://www.accordbox.com/blog/scrapy-tutorial-series-web-scraping-using-python)
 - [Datacamp, Web Scraping with Python](https://www.datacamp.com/courses/web-scraping-with-python)
 
