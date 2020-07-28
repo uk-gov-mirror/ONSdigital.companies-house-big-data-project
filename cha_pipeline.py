@@ -36,7 +36,7 @@ scraped_dir = config.get('xbrl_web_scraper_args', 'scraped_dir')
 xbrl_scraper = config.get('xbrl_web_scraper_args', 'xbrl_scraper')
 
 # Arguments for the XBRL web scraper validator
-# scraped_dir = config.get('xbrl_web_scraper_args', 'scraped_dir')
+# scraped_dir = config.get('xbrl_validator_args', 'scraped_dir')
 
 # Arguments for the XBRL unpacker
 unpacker_source_dir = config.get('xbrl_unpacker_args', 'xbrl_unpacker_file_source_dir')
