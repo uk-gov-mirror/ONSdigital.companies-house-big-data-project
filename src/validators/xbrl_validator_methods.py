@@ -1,11 +1,10 @@
-from os import listdir, mkdir
-from os.path import isfile, join, exists, getsize
+from os import listdir
+from os.path import isfile, exists, getsize
 
 class XbrlValidatorMethods:
 
-	def __init__(self):
-		self.__init__
-
+    def __init__(self):
+	    self.__init__
 
     @staticmethod
     def validate_compressed_files(filepath):
@@ -23,7 +22,7 @@ class XbrlValidatorMethods:
         if exists(filepath):
             if not isfile(filepath):
 
-                files = [filepath + f for f in listdir(file_source)]
+                files = [filepath + f for f in listdir(filepath)]
 
                 for file in files:
                     print("File: " + file)
@@ -33,3 +32,7 @@ class XbrlValidatorMethods:
 
         else:
             print("Specified directory does not exist!")
+
+# myobj = XbrlValidatorMethods()
+# file_source = "/home/peterd/repos/companies_house_accounts/data/for_testing/xbrl_data/"
+# myobj.validate_compressed_files(file_source)

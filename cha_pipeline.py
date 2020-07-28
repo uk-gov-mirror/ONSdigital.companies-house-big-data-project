@@ -20,6 +20,7 @@ config = configparser.ConfigParser()
 config.read("cha_pipeline.cfg")
 
 xbrl_web_scraper = config.get('cha_workflow', 'xbrl_web_scraper')
+xbrl_web_scraper_validator = config.get('cha_workflow', 'xbrl_validator')
 xbrl_unpacker = config.get('cha_workflow', 'xbrl_unpacker')
 xbrl_parser = config.get('cha_workflow', 'xbrl_parser')
 pdf_web_scraper = config.get('cha_workflow', 'pdf_web_scraper')
@@ -33,6 +34,9 @@ merge_xbrl_to_pdf_data = config.get('cha_workflow', 'merge_xbrl_to_pdf_data')
 # Arguments for the XBRL web scraper
 scraped_dir = config.get('xbrl_web_scraper_args', 'scraped_dir')
 xbrl_scraper = config.get('xbrl_web_scraper_args', 'xbrl_scraper')
+
+# Arguments for the XBRL web scraper validator
+# scraped_dir = config.get('xbrl_web_scraper_args', 'scraped_dir')
 
 # Arguments for the XBRL unpacker
 unpacker_source_dir = config.get('xbrl_unpacker_args', 'xbrl_unpacker_file_source_dir')
@@ -48,6 +52,7 @@ from src.data_processing.cst_data_processing import DataProcessing
 from src.classifier.cst_classifier import Classifier
 from src.performance_metrics.binary_classifier_metrics import BinaryClassifierMetrics
 from src.data_processing.xbrl_pd_methods import XbrlExtraction
+from src.validators.xbrl_validator_methods import XbrlValidatorMethods
 
 def main():
     print("-" * 50)
@@ -61,6 +66,12 @@ def main():
         print(getcwd())
         cmdlinestr = "scrapy crawl xbrl_scraper"
         popen(cmdlinestr).read()
+
+    # Validate xbrl data
+    if xbrl_web_scraper_validator == str(True):
+        validator = XbrlValidatorMethods()
+        print("Validating xbrl web scraped data...")
+        validator.validate_compressed_files(scraped_dir)
 
     # Execute module xbrl_unpacker
     if xbrl_unpacker == str(True):
