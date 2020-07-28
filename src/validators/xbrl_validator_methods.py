@@ -23,7 +23,7 @@ class XbrlValidatorMethods:
         if exists(filepath):
             if not isfile(filepath):
 
-                files = [filepath + f for f in listdir(filepath)]
+                files = [filepath + "/" + f for f in listdir(filepath)]
 
                 for file in files:
                     print("File: " + file)
@@ -38,5 +38,5 @@ class XbrlValidatorMethods:
             print("Specified directory does not exist!")
 
 # myobj = XbrlValidatorMethods()
-# file_source = "/home/peterd/repos/companies_house_accounts/data/for_testing/xbrl_data/"
+# file_source = "/home/peterd/repos/companies_house_accounts/data/for_testing/xbrl_data"
 # myobj.validate_compressed_files(file_source)

@@ -36,7 +36,7 @@ scraped_dir = config.get('xbrl_web_scraper_args', 'scraped_dir')
 xbrl_scraper = config.get('xbrl_web_scraper_args', 'xbrl_scraper')
 
 # Arguments for the XBRL web scraper validator
-# scraped_dir = config.get('xbrl_validator_args', 'scraped_dir')
+validator_scraped_dir = config.get('xbrl_validator_args', 'scraped_dir')
 
 # Arguments for the XBRL unpacker
 unpacker_source_dir = config.get('xbrl_unpacker_args', 'xbrl_unpacker_file_source_dir')
@@ -71,7 +71,7 @@ def main():
     if xbrl_web_scraper_validator == str(True):
         validator = XbrlValidatorMethods()
         print("Validating xbrl web scraped data...")
-        validator.validate_compressed_files(scraped_dir)
+        validator.validate_compressed_files(validator_scraped_dir)
 
     # Execute module xbrl_unpacker
     if xbrl_unpacker == str(True):
