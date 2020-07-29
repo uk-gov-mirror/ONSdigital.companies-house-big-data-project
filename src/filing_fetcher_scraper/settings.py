@@ -12,9 +12,9 @@
 import os
 import datetime
 
-import filing_fetcher.configuration
+import src.filing_fetcher_scraper.configuration
 
-config = filing_fetcher.configuration.get_config()
+config = src.filing_fetcher_scraper.configuration.get_config()
 
 BOT_NAME = 'filing_fetcher'
 
