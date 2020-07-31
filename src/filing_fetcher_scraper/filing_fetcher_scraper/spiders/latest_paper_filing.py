@@ -3,12 +3,11 @@ import configparser
 import json
 import logging
 import os
-
 import scrapy
 
-import filing_fetcher.items
-import filing_fetcher.companies
-import filing_fetcher.configuration
+from ..items import FilingItem
+from ..companies import companies_to_scrape
+from ..configuration import get_config
 
 
 def fetch_auth():
@@ -24,7 +23,7 @@ CH_AUTH = fetch_auth()
 
 logger = logging.getLogger(__name__)
 
-config = filing_fetcher.configuration.get_config()
+config = get_config()
 
 FILING_HISTORY_URL = 'https://api.companieshouse.gov.uk/company/{}/filing-history?category=accounts'
 
@@ -40,9 +39,9 @@ class LatestPaperFilingSpider(scrapy.spiders.CrawlSpider):
         """Generates crawler request for given base URL and parse results."""
         logger.info(f"Reading basic company info from: {config.BASIC_COMPANY_INFO_FILEPATH}")
 
-        companies_to_scrape = filing_fetcher.companies.companies_to_scrape(config.BASIC_COMPANY_INFO_FILEPATH)
+        cha_companies_to_scrape = companies_to_scrape(config.BASIC_COMPANY_INFO_FILEPATH)
 
-        for i, company_info in enumerate(companies_to_scrape):
+        for i, company_info in enumerate(cha_companies_to_scrape):
             logger.debug(f"Request {i} - {company_info}")
             company_number = company_info["CompanyNumber"]
 
@@ -60,7 +59,7 @@ class LatestPaperFilingSpider(scrapy.spiders.CrawlSpider):
             except KeyError:
                 logger.warning(f"{path} not found in {data}")
 
-        filing_item = filing_fetcher.items.FilingItem()
+        filing_item = FilingItem()
 
         set_if_present(filing_item, 'company_number', response.meta, 'CompanyNumber')
         set_if_present(filing_item, 'company_status', response.meta, 'CompanyStatus')
