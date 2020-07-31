@@ -46,7 +46,7 @@ xbrl_tag_list = config.get('xbrl_parser_args', 'xbrl_tag_list')
 
 # Arguments for the filing_fetcher
 filed_accounts_scraped_dir = config.get('pdf_web_scraper_args', 'filed_accounts_scraped_dir')
-#filed_accounts_scraper = config.get('pdf_web_scraper_args', 'filed_accounts_scraper')
+filed_accounts_scraper = config.get('pdf_web_scraper_args', 'filed_accounts_scraper')
 
 from src.data_processing.cst_data_processing import DataProcessing
 from src.classifier.cst_classifier import Classifier
@@ -695,19 +695,11 @@ def main():
     if pdf_web_scraper == str(True):
         print("PDF web scraper running...")
         print("Scraping filed accounts as PDF data to:", filed_accounts_scraped_dir)
-        #print("Running crawler from:", filed_accounts_scraper)
-        #chdir(filed_accounts_scraper)
+        print("Running crawler from:", filed_accounts_scraper)
+        chdir(filed_accounts_scraper)
         print(getcwd())
-        conda_init_cmdlinestr = "conda init --all"
-        popen(conda_init_cmdlinestr).read()
-        conda_env_cmdlinestr = "conda env create -f environment.yml"
-        popen(conda_env_cmdlinestr).read()
-        chdir("/home/kirstyc/miniconda3/bin/")
-        print(getcwd())
-        conda_activate_cmdlinestr = "conda activate pdf_downloader"
-        popen(conda_activate_cmdlinestr).read()
-        #paper_filing_cmdlinestr = "scrapy crawl latest_paper_filing"
-        #popen(paper_filing_cmdlinestr).read()
+        paper_filing_cmdlinestr = "scrapy crawl latest_paper_filing"
+        popen(paper_filing_cmdlinestr).read()
 
     # Convert PDF files to images
     if pdfs_to_images == str(True):
