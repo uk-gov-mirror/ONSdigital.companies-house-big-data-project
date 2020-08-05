@@ -3,11 +3,11 @@
 This project aims to independently source XBRL and PDF data from the Companies House accounts website, and produce a merged data
 set of processed data for build and archive. The high-level flow for each process is as follows:
 
-# XBRL
+### XBRL
 1.	Web-scrape all XBRL data from the companies house accounts website. 
 2.	Unpack xbrl files and parse them using xml / html method (BeautifulSoup), converting them into there csv equivalents.
 3.  Filter csv files to produce subsets of the xbrl tags tah tare required for various internal ONS stakeholders. 
-# PDF
+### PDF
 1.	Web-scrape filled accounts from companies house as pdf data.
 2.	Convert each page of the pdf into separate images.
 3.	Create a model of a Cascade Classifier 
