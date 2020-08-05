@@ -1,18 +1,21 @@
 # Companies House Accounts
 
 This project aims to independently source XBRL and PDF data from the Companies House accounts website, and produce a merged data
-set of processed data for build and archive. The high-level processes are:
+set of processed data for build and archive. The high-level flow for each process is as follows:
 
+# XBRL
 1.	Web-scrape all XBRL data from the companies house accounts website. 
-2.	Process web-scraped XBRL data by unzipping it, and then converting all data into their csv equivalent.
-3.	Web-scrape filled accounts from companies house as pdf data.
-4.	Convert each page of the pdf into separate images.
-5.	Create a model of a Cascade Classifier 
-6.	Apply Classifier to identify and extract the cover page and the balance sheet from converted filled accounts data.
-7.	Implement Classifier performance metrics to determine the accuracy and precision of the Classifier.
-8.	Apply Optical Character Recognition (OCR) to images that have been classified in step 5 to convert into text data.
-9.	Apply Natural Language Processes (NLP) to text data extracted in step 7 to extract patterns from the raw text data.
-10.	Merge processed XBRL data from step 2 with data generated from step 8.
+2.	Unpack xbrl files and parse them using xml / html method (BeautifulSoup), converting them into there csv equivalents.
+3.  Filter csv files to produce subsets of the xbrl tags tah tare required for various internal ONS stakeholders. 
+# PDF
+1.	Web-scrape filled accounts from companies house as pdf data.
+2.	Convert each page of the pdf into separate images.
+3.	Create a model of a Cascade Classifier 
+4.	Apply Classifier to identify and extract the cover page and the balance sheet from converted filled accounts data.
+5.	Implement Classifier performance metrics to determine the accuracy and precision of the Classifier.
+6.	Apply Optical Character Recognition (OCR) to images that have been classified in step 5 to convert into text data.
+7.	Apply Natural Language Processes (NLP) to text data extracted in step 7 to extract patterns from the raw text data.
+8.	Merge processed XBRL data from step 2 with data generated from step 8.
 
 ## Webscraping Policy 
 The webscraping done in this project is achieved by utilsing [Scrapy](https://scrapy.org/) and strictly adheres to the [ONS Web Scraping Policy](https://www.ons.gov.uk/aboutus/transparencyandgovernance/datastrategy/datapolicies/webscrapingpolicy).
