@@ -9,10 +9,11 @@ def combine_csv(files: List[str], outfile: str):
     Unsuitable if files do not have the same format. Faster than the pandas version.'''
 
     files.sort()
-
+    print("Processing " + str(len(files)) + " files...")
     with open(outfile, "w") as w:
         writer = csv.writer(w, delimiter=',')
         for n, file in enumerate(files):
+            print("Processing " + file + "...")
             with open(file, "r") as f:
                 reader = csv.reader(f, delimiter=',')
                 if n > 0: next(reader)
@@ -36,20 +37,24 @@ def merge_files_by_year(indir: str, outdir: str, years: Tuple[int]):
     single file given that the years falls within the range specified
     by the user.'''
 
-    if not os.path.exists(outdir):
-        os.mkdir(outdir)
+    if os.path.exists(indir):
 
-    files = os.listdir(indir)
-    files = ([i for i in files if i[-4:] == '.csv'
-              and i[:4].isnumeric() and int(i[:4]) in range(*years)])
-    years = [[k,_add_path(indir, i)] for k, i in itertools.groupby(files, lambda x: x[:4])]
+        if not os.path.exists(outdir):
+            os.mkdir(outdir)
 
-    [combine_csv(files, outdir+year+'_xbrl.csv') for year, files in years]
+        files = os.listdir(indir)
+        files = ([i for i in files if i[-4:] == '.csv'
+                  and i[:4].isnumeric() and int(i[:4]) in range(*years)])
+        years = [[k,_add_path(indir, i)] for k, i in itertools.groupby(files, lambda x: x[:4])]
+
+        [combine_csv(files, outdir+year+'_xbrl.csv') for year, files in years]
+    else:
+        print("Input file path does not exist")
 
 if __name__ == '__main__':
 
     indir = '/shares/data/20200519_companies_house_accounts/xbrl_parsed_data/'
-    outdir = '/home/emmas/test/'
+    outdir = '/home/peterd/test/'
     years = (2008, 2011)
 
     merge_files_by_year(indir, outdir, years)
