@@ -190,7 +190,7 @@ class DataProcessing:
 #myobj = DataProcessing()
 #file_source = "/home/peterd/repos/companies_house_accounts/data/for_testing/xbrl_data/accounts_bulk_data-2020-03-24.zip"
 #file_source = "/home/peterd/repos/companies_house_accounts/data/for_testing/xbrl_data/"
-#file_dest = "/home/peterd/repos/companies_house_accounts/data/for_testing/xbrl_data/"
+#file_dest = "/home/peterd/repos/companies_house_accounts/data/for_testing/xbrl_data_extracted/"
 #myobj.extract_compressed_files(file_source, file_dest)
 
 def get_file_details(files, n_objects = 1, x_coord = 0, y_coord = 0):
