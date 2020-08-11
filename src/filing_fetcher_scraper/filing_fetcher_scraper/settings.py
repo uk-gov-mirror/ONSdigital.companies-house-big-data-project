@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Scrapy settings for filing_fetcher project
+# Scrapy settings for filing_fetcher_scraper project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -12,18 +12,18 @@
 import os
 import datetime
 
-import filing_fetcher.configuration
+from .configuration import get_config
 
-config = filing_fetcher.configuration.get_config()
+config = get_config()
 
-BOT_NAME = 'filing_fetcher'
+BOT_NAME = 'filing_fetcher_scraper'
 
-SPIDER_MODULES = ['filing_fetcher.spiders']
-NEWSPIDER_MODULE = 'filing_fetcher.spiders'
+SPIDER_MODULES = ['filing_fetcher_scraper.spiders']
+NEWSPIDER_MODULE = 'filing_fetcher_scraper.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-USER_AGENT = config.USER_AGENT
+USER_AGENT = 'office_for_national_statistics_filing_fetcher (+https://www.ons.gov.uk)'
 
 
 # Using API rather than actually scraping/crawling (also Companies House API doesn't have a robots.txt)
@@ -61,7 +61,7 @@ DOWNLOAD_DELAY = 0.5
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
-    'filing_fetcher.middlewares.FilingFetcherDownloaderMiddleware': 543,
+    'filing_fetcher_scraper.middlewares.FilingFetcherDownloaderMiddleware': 543,
 }
 
 # Enable or disable extensions

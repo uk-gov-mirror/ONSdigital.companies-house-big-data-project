@@ -4,9 +4,9 @@ import os
 
 import pandas as pd
 
-import filing_fetcher.configuration
+from .configuration import get_config
 
-config = filing_fetcher.configuration.get_config()
+config = get_config()
 
 _digital_reporters = None
 

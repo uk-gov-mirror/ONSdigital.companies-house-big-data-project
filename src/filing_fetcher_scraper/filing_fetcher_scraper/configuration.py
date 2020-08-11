@@ -27,7 +27,7 @@ import yaml
 
 logger = logging.getLogger(__name__)
 
-CONFIG_FILEPATH = str(Path.home().joinpath('config').joinpath('filing_fetcher_config.yml'))
+CONFIG_FILEPATH = str(Path.home().joinpath('config').joinpath('filing_fetcher_config.yml')) #'/home/repos/companies_house_accounts/src/filing_fetcher_scraper/filing_fetcher_config.example.yml' #
 
 
 class Singleton(type):

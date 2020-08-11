@@ -48,6 +48,10 @@ xbrl_processed_csv = config.get('xbrl_parser_args', 'xbrl_processed_csv_dir')
 xbrl_tag_frequencies = config.get('xbrl_parser_args', 'xbrl_tag_frequencies')
 xbrl_tag_list = config.get('xbrl_parser_args', 'xbrl_tag_list')
 
+# Arguments for the filing_fetcher
+filed_accounts_scraped_dir = config.get('pdf_web_scraper_args', 'filed_accounts_scraped_dir')
+filed_accounts_scraper = config.get('pdf_web_scraper_args', 'filed_accounts_scraper')
+
 from src.data_processing.cst_data_processing import DataProcessing
 from src.classifier.cst_classifier import Classifier
 from src.performance_metrics.binary_classifier_metrics import BinaryClassifierMetrics
@@ -701,6 +705,12 @@ def main():
     # Execute PDF web scraper
     if pdf_web_scraper == str(True):
         print("PDF web scraper running...")
+        print("Scraping filed accounts as PDF data to:", filed_accounts_scraped_dir)
+        print("Running crawler from:", filed_accounts_scraper)
+        chdir(filed_accounts_scraper)
+        print(getcwd())
+        paper_filing_cmdlinestr = "scrapy crawl latest_paper_filing"
+        popen(paper_filing_cmdlinestr).read()
 
     # Convert PDF files to images
     if pdfs_to_images == str(True):
