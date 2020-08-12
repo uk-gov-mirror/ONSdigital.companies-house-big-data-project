@@ -67,12 +67,15 @@ def merge_files_by_year(indir: str, outdir: str, year: int, quarter=None):
         # if a quarter has been specified
         if quarter != None:
             files = [f for f in files if f.split("-")[1].split("_")[0] in quarter_list]
+            quarter_str = "q" + str(quarter)
+        else:
+            quarter_str = ""
 
         # Prepend input directory to filenames
         files = [indir + f for f in files]
 
         # Combine the csvs
-        combine_csv(files, outdir + str(year) + '_xbrl.csv')
+        combine_csv(files, outdir + str(year) + quarter_str + '_xbrl.csv')
 
     else:
         print("Input file path does not exist")
@@ -81,7 +84,7 @@ if __name__ == '__main__':
 
     indir = '/shares/data/20200519_companies_house_accounts/xbrl_parsed_data/'
     outdir = '/home/peterd/test/'
-    year = 2010
-    quarter = 1
+    year = 2011
+    quarter = None
 
     merge_files_by_year(indir, outdir, year, quarter)
