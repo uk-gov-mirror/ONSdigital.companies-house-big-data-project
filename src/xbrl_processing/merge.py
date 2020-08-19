@@ -1,3 +1,5 @@
+import pandas as pd
+
 def merge(df1, df2, df1_pk, df2_pk, join_method = "left", pk_keep = "df1"):
     """
     Inputs:
