@@ -49,3 +49,71 @@ class TestMerge(unittest.TestCase):
 
         # Assert
         assert_frame_equal(tp_merge, df6)
+
+    def test_merge_neg(self):
+        """
+        Negative test case for the merge function.
+        """
+        df4 = pd.DataFrame([['A', '10'],
+                            ['B', '20']],
+                           columns=['Name', 'Age'])
+        df5 = pd.DataFrame([['A', 'football'],
+                            ['G', 'swimming']],
+                           columns=['Name', 'Sport'])
+        df6 = pd.DataFrame([['A', '20', 'football']],
+                           columns=['Name', 'Age', 'Sport'])
+        # Assume
+        tp_merge = merge(df4, df5, 'Name', 'Name', 'inner', 'df1')
+
+        # Assert
+        self.assertEqual(tp_merge.equals(df6), False)
+
+    def test_types(self):
+        """
+        Positive test case for the merge function.
+        """
+
+        df4 = pd.DataFrame([['A', '10'],
+                            ['B', '20']],
+                           columns=['Name', 'Age'])
+        df5 = pd.DataFrame([['A', 'football'],
+                            ['G', 'swimming']],
+                           columns=['Name', 'Sport'])
+        df6 = pd.DataFrame([['A', '20', 'football']],
+                           columns=['Name', 'Age', 'Sport'])
+
+        # Assert
+        with self.assertRaises(TypeError):
+            merge(df4, df5, False, 'Name')
+
+        with self.assertRaises(TypeError):
+            merge(df4, df5, ['Name', 'Age'], 'Name')
+
+        with self.assertRaises(TypeError):
+            merge('Name', df5, 'Name', 'Name')
+
+    def test_values(self):
+        """
+        Positive test case for the merge function.
+        """
+
+        df4 = pd.DataFrame([['A', '10'],
+                            ['B', '20']],
+                           columns=['Name', 'Age'])
+        df5 = pd.DataFrame([['A', 'football'],
+                            ['G', 'swimming']],
+                           columns=['Name', 'Sport'])
+        df6 = pd.DataFrame([['A', '20', 'football']],
+                           columns=['Name', 'Age', 'Sport'])
+
+        # Assert
+
+        with self.assertRaises(ValueError):
+            merge(df4, df5, 'Name', 'Name', 'innerr')
+
+        with self.assertRaises(ValueError):
+            merge(df4, df5, 'Name', 'Name', 'inner', 'inner')
+
+        with self.assertRaises(ValueError):
+            merge(df4, df5, 'Name', 'Name', 'both', 'inner')
+
