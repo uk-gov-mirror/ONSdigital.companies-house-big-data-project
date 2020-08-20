@@ -55,7 +55,7 @@ class XbrlExtraction:
                 sys.stdout.write('\n\n')
 
     @staticmethod
-    def retrieve_list_of_tags(dataframe, column, output_folder):
+    def retrieve_list_of_tags(dataframe, column, output_folder, folder_month, folder_year):
         """
         Save dataframe containing all unique tags to txt format in specified directory.
 
@@ -80,7 +80,7 @@ class XbrlExtraction:
                 f.write("%s\n" % item)
 
     @staticmethod
-    def get_tag_counts(dataframe, column, output_folder):
+    def get_tag_counts(dataframe, column, output_folder, folder_month, folder_year):
         """
         Save dataframe containing all unique tags to txt format in specified directory.
 
@@ -136,12 +136,12 @@ class XbrlExtraction:
 
             XbrlExtraction.progressBar("XBRL Accounts Parsed", COUNT, len(list_of_files), bar_length = 50, width = 20)
 
-        print("Average time to process an XBRL file: \x1b[31m{:0f}\x1b[0m".format((time.time() - process_start) / 60, 2), "seconds")
+        print("Average time to process an XBRL file: \x1b[31m{:0f}\x1b[0m".format((time.time() - process_start) / 60, 2), "minutes")
 
         return results
 
     @staticmethod
-    def output_xbrl_month(dataframe, output_folder, file_type = "csv"):
+    def output_xbrl_month(dataframe, output_folder, folder_month, folder_year, file_type = "csv"):
         """
         Save dataframe to csv format in specified directory, with particular naming scheme "YYYY-MM_xbrl_data.csv".
 

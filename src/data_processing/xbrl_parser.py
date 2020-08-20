@@ -196,16 +196,16 @@ class XbrlParser:
             element_dict['name'] = element.name.lower().split(":")[-1]
 
         element_dict['value'] = element.get_text()
-        element_dict['unit'] = retrieve_unit(soup, element)
-        element_dict['date'] = retrieve_date(soup, element)
+        element_dict['unit'] = XbrlParser.retrieve_unit(soup, element)
+        element_dict['date'] = XbrlParser.retrieve_date(soup, element)
 
         # If there's no value retrieved, try raiding the associated context data
         if element_dict['value'] == "":
-            element_dict['value'] = retrieve_from_context(soup, element.attrs['contextref'])
+            element_dict['value'] = XbrlParser.retrieve_from_context(soup, element.attrs['contextref'])
 
         # If the value has a defined unit (eg a currency) convert to numeric
         if element_dict['unit'] != "NA":
-            element_dict['value'] = clean_value(element_dict['value'])
+            element_dict['value'] = XbrlParser.clean_value(element_dict['value'])
 
         # Retrieve sign of element if exists
         try:
@@ -232,7 +232,7 @@ class XbrlParser:
         """
         elements = []
         for each in element_set:
-            element_dict = parse_element(soup, each)
+            element_dict = XbrlParser.parse_element(soup, each)
             if 'name' in element_dict:
                 elements.append(element_dict)
         return (elements)
@@ -360,7 +360,7 @@ class XbrlParser:
         # but should not affect execution speed.
         try:
             element_set = soup.find_all()
-            elements = parse_elements(element_set, soup)
+            elements = XbrlParser.parse_elements(element_set, soup)
             if len(elements) <= 5:
                 raise Exception("Elements should be gte 5, was {}".format(len(elements)))
             return (elements)
@@ -430,14 +430,14 @@ class XbrlParser:
 
         # Get metadata about the accounting standard used
         try:
-            doc['doc_standard_type'], doc['doc_standard_date'], doc['doc_standard_link'] = retrieve_accounting_standard(
+            doc['doc_standard_type'], doc['doc_standard_date'], doc['doc_standard_link'] = XbrlParser.retrieve_accounting_standard(
                 soup)
         except:
             doc['doc_standard_type'], doc['doc_standard_date'], doc['doc_standard_link'] = (0, 0, 0)
 
         # Fetch all the marked elements of the document
         try:
-            doc['elements'] = scrape_elements(soup, filepath)
+            doc['elements'] = XbrlParser.scrape_elements(soup, filepath)
         except Exception as e:
             doc['parsed'] = False
             doc['Error'] = e
