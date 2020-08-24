@@ -5,8 +5,11 @@ set of processed data for build and archive. The high-level flow for each proces
 
 ### XBRL
 1.	Web-scrape all XBRL data from the companies house accounts website. 
-2.	Unpack xbrl files and parse them using xml / html method (BeautifulSoup), converting them into there csv equivalents.
-3.  Filter csv files to produce subsets of the xbrl tags tah tare required for various internal ONS stakeholders. 
+2.	Unpack xbrl files 
+3.  Process and parse xml data / html method (BeautifulSoup), converting them into there csv equivalents.
+4.  Append xbrl csv file on an annual basis
+5.  Convert XBRL melt tables to Pivot tables.
+6.  Filter csv files to produce subsets of the xbrl tags taht are required for various internal ONS stakeholders. 
 ### PDF
 1.	Web-scrape filled accounts from companies house as pdf data.
 2.	Convert each page of the pdf into separate images.
