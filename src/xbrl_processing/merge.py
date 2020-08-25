@@ -1,3 +1,5 @@
+import pandas as pd
+
 def merge(df1, df2, df1_pk, df2_pk, join_method = "left", pk_keep = "df1"):
     """
     Inputs:
@@ -39,7 +41,7 @@ def merge(df1, df2, df1_pk, df2_pk, join_method = "left", pk_keep = "df1"):
     
     # Check the pk_keep is one of 'df1', 'df2', 'both' options
     if pk_keep not in ['df1', 'df2', 'both']:
-        raise ValueError( "The pk_keep should be one of the following: df1, df2, both")
+        raise ValueError("The pk_keep should be one of the following: df1, df2, both")
     
     # Standardise the primary key, depending on pk_keep input.
     if df1_pk != df2_pk:
