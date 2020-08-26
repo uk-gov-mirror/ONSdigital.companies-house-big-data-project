@@ -44,10 +44,20 @@ xbrl_processed_csv = config.get('xbrl_parser_args', 'xbrl_processed_csv_dir')
 xbrl_tag_frequencies = config.get('xbrl_parser_args', 'xbrl_tag_frequencies')
 xbrl_tag_list = config.get('xbrl_parser_args', 'xbrl_tag_list')
 
+# Arguments for OCR runner
+ocr_image_dir = config.get('ocr_args', 'ocr_image_dir')
+ocr_text_dir = config.get('ocr_args', 'ocr_text_dir')
+ocr_image_dir_cs = config.get('ocr_args', 'ocr_image_dir_cs')
+ocr_text_dir_cs = config.get('ocr_args', 'ocr_text_dir_cs')
+ocr_im_type = config.get('ocr_args', 'ocr_im_type')
+ocr_im_type_cs = config.get('ocr_args', 'ocr_im_type_cs')
+tessdata_prefix = config.get('ocr_args', 'tessdata_prefix')
+
 from src.data_processing.cst_data_processing import DataProcessing
 from src.classifier.cst_classifier import Classifier
 from src.performance_metrics.binary_classifier_metrics import BinaryClassifierMetrics
 from src.data_processing.xbrl_pd_methods import XbrlExtraction
+from src.ocr.ocr_runner import RunOCR
 
 def main():
     print("-" * 50)
@@ -706,7 +716,10 @@ def main():
     # Execute OCR
     if ocr_functions == str(True):
         print("Running all OCR functions...")
-        # instance to class
+        os.environ["TESSDATA_PREFIX"] = tessdata_prefix
+        ocr_runner = RunOCR()
+        ocr_runner.image_to_data(ocr_image_dir_cs, ocr_text_dir_cs, ocr_im_type_cs, data=False)
+        ocr_runner.image_to_data(ocr_image_dir, ocr_text_dir, ocr_im_type)
         
     # Execute NLP
     if nlp_functions == str(True):
