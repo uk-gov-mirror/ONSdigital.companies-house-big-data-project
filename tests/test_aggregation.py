@@ -36,12 +36,14 @@ class TestAggregation(unittest.TestCase):
                            columns=['A', 'D', 'E'])
         df3 = pd.DataFrame(df3).set_index('A')
 
-        # Assume
+        # Assume 1
         tp_aggregation1 = aggregation(df1, ['A'], 'first', ['D', 'E'], False)
+        # Assume 2
         tp_aggregation2 = aggregation(df1, ['A'], 'first', ['D', 'E'], True)
 
-        # Assert
+        # Assert 1
         assert_frame_equal(tp_aggregation1, df2)
+        # Assert 2
         assert_frame_equal(tp_aggregation2, df3)
 
     def test_aggregation_neg(self):
@@ -70,13 +72,15 @@ class TestAggregation(unittest.TestCase):
                            columns=['A', 'first  D', 'first  E'])
         df3 = pd.DataFrame(df3).set_index('A')
 
-        # Assume
-        tp_aggregation1 = aggregation(df1, ['A'], 'first', ['D', 'E'], False)
-        tp_aggregation2 = aggregation(df1, ['A'], 'first', ['D', 'E'], True)
+        # Assume 1
+        tn_aggregation1 = aggregation(df1, ['A'], 'first', ['D', 'E'], False)
+        # Assume 2
+        tn_aggregation2 = aggregation(df1, ['A'], 'first', ['D', 'E'], True)
 
-        # Assert
-        self.assertEqual(tp_aggregation1.equals(df2), False)
-        self.assertEqual(tp_aggregation2.equals(df3), False)
+        # Assert 1
+        self.assertNotEqual(tn_aggregation1.equals(df2), True)
+        # Assert 2
+        self.assertNotEqual(tn_aggregation2.equals(df3), True)
 
     def test_types(self):
         """
@@ -107,6 +111,7 @@ class TestAggregation(unittest.TestCase):
         """
         Positive test case for the aggregation function.
         """
+
         # Assume
         df1 = pd.DataFrame([[1, 6, 2, 3, 19],
                             [4, 5, 8, 6, 30],

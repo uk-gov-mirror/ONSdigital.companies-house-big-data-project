@@ -65,14 +65,14 @@ class TestUniqueEntries(unittest.TestCase):
         list1 = [1, 4, 4, 4, 7]
 
         # Assume 1
-        tp_unique_entries1 = unique_entries(df1, 'A', False)
+        tn_unique_entries1 = unique_entries(df1, 'A', False)
         # Assume 2
-        tp_unique_entries2 = unique_entries(df1, 'A', True)
+        tn_unique_entries2 = unique_entries(df1, 'A', True)
 
         # Assert 1
-        self.assertEqual(tp_unique_entries1.reset_index(drop=True).equals(df2.reset_index(drop=True)), False)
+        self.assertNotEqual(tn_unique_entries1.reset_index(drop=True).equals(df2.reset_index(drop=True)), True)
         # Assert 2
-        self.assertNotEqual(tp_unique_entries2 == list1, True)
+        self.assertNotEqual(tn_unique_entries2 == list1, True)
 
     def test_types(self):
         """
