@@ -1,4 +1,7 @@
-def aggregation(df, groupby_cols, agg_method, agg_cols, naming = True):  
+import pandas as pd
+
+
+def aggregation(df, groupby_cols, agg_method, agg_cols, naming = True):
     """
     Inputs:
         df = dataframe you would like to use (dataframe)
