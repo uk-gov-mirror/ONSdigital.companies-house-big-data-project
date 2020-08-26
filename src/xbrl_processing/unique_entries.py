@@ -1,3 +1,6 @@
+import pandas as pd
+
+
 def unique_entries(df, col_name, out_list=True):
     """
     Input:
@@ -13,7 +16,19 @@ def unique_entries(df, col_name, out_list=True):
         :return: List or DataFrame column of unique values
     """
 
+    if not isinstance(df, pd.DataFrame):
+        raise TypeError("The first argument (df) needs to be a dataframe")
+
+    if not isinstance(col_name, str):
+        raise TypeError("The col_name needs to be a string")
+
+    if col_name not in list(df.columns):
+        raise ValueError("The col_name should exist in the dataframe you pass")
+
     unique = df.drop_duplicates(col_name)
+
+    if not isinstance(out_list, bool):
+        raise TypeError("The out_list argument needs to be a Boolean")
 
     if out_list:
         x = unique[col_name].tolist()
@@ -22,4 +37,5 @@ def unique_entries(df, col_name, out_list=True):
         x = unique
         
     output = x
+
     return output
