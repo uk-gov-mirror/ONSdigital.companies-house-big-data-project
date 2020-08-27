@@ -3,7 +3,7 @@ import pandas as pd
 from pandas.testing import assert_frame_equal
 
 # Custom import
-from src.xbrl_processing.unique_entries import unique_entries
+from src.data_processing.xbrl_pd_methods import XbrlSubsets
 
 
 class TestUniqueEntries(unittest.TestCase):
@@ -31,10 +31,13 @@ class TestUniqueEntries(unittest.TestCase):
         # The list the function should return (tp_unique_entries2)
         list1 = [1, 4, 7]
 
+        # Assume
+        subsets = XbrlSubsets()
+
         # Assume 1
-        tp_unique_entries1 = unique_entries(df1, 'A', False)
+        tp_unique_entries1 = subsets.unique_entries(df1, 'A', False)
         # Assume 2
-        tp_unique_entries2 = unique_entries(df1, 'A', True)
+        tp_unique_entries2 = subsets.unique_entries(df1, 'A', True)
 
         # Assert 1
         assert_frame_equal(tp_unique_entries1.reset_index(drop=True),
@@ -64,10 +67,13 @@ class TestUniqueEntries(unittest.TestCase):
         # List that is NOT the same as the one the function should return.
         list1 = [1, 4, 4, 4, 7]
 
+        # Assume
+        subsets = XbrlSubsets()
+
         # Assume 1
-        tn_unique_entries1 = unique_entries(df1, 'A', False)
+        tn_unique_entries1 = subsets.unique_entries(df1, 'A', False)
         # Assume 2
-        tn_unique_entries2 = unique_entries(df1, 'A', True)
+        tn_unique_entries2 = subsets.unique_entries(df1, 'A', True)
 
         # Assert 1
         self.assertNotEqual(tn_unique_entries1.reset_index(drop=True).equals(df2.reset_index(drop=True)), True)
@@ -86,18 +92,21 @@ class TestUniqueEntries(unittest.TestCase):
                             [7, 8, 9, 12, 5]],
                            columns=['A', 'B', 'C', 'D', 'E'])
 
+        # Assume
+        subsets = XbrlSubsets()
+
         # Assert
         with self.assertRaises(TypeError):
-            unique_entries(1.0, 'A', False)
+            subsets.unique_entries(1.0, 'A', False)
 
         with self.assertRaises(TypeError):
-            unique_entries(df1, None, False)
+            subsets.unique_entries(df1, None, False)
 
         with self.assertRaises(TypeError):
-            unique_entries(df1, ['A', 'B'], True)
+            subsets.unique_entries(df1, ['A', 'B'], True)
 
         with self.assertRaises(TypeError):
-            unique_entries(df1, 'A', 'False')
+            subsets.unique_entries(df1, 'A', 'False')
 
     def test_values(self):
         """
@@ -111,9 +120,12 @@ class TestUniqueEntries(unittest.TestCase):
                             [7, 8, 9, 12, 5]],
                            columns=['A', 'B', 'C', 'D', 'E'])
 
+        # Assume
+        subsets = XbrlSubsets()
+
         # Assert
         with self.assertRaises(ValueError):
-            unique_entries(df1, 'I', False)
+            subsets.unique_entries(df1, 'I', False)
 
         with self.assertRaises(ValueError):
-            unique_entries(df1, 'A,B', True)
+            subsets.unique_entries(df1, 'A,B', True)

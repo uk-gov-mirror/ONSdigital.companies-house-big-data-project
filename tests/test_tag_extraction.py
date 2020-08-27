@@ -3,7 +3,7 @@ import pandas as pd
 from pandas.testing import assert_frame_equal
 
 # Custom import
-from src.xbrl_processing.tag_extraction import tag_extraction
+from src.data_processing.xbrl_pd_methods import XbrlSubsets
 
 
 class TestTagExtraction(unittest.TestCase):
@@ -35,10 +35,13 @@ class TestTagExtraction(unittest.TestCase):
                             ['C', '60']],
                            columns=['Name', 'Age'])
 
+        # Assume
+        subsets = XbrlSubsets()
+
         # Assume 1
-        tp_tag_extraction1 = tag_extraction(df1, 'Name', 'A')
+        tp_tag_extraction1 = subsets.tag_extraction(df1, 'Name', 'A')
         # Assume 2
-        tp_tag_extraction2 = tag_extraction(df1, 'Name', ['A', 'C'])
+        tp_tag_extraction2 = subsets.tag_extraction(df1, 'Name', ['A', 'C'])
 
         # Assert 1
         assert_frame_equal(tp_tag_extraction1.reset_index(drop=True),
@@ -73,10 +76,13 @@ class TestTagExtraction(unittest.TestCase):
                             ['C', '60']],
                            columns=['Name', 'Age'])
 
+        # Assume
+        subsets = XbrlSubsets()
+
         # Assume 1
-        tn_tag_extraction1 = tag_extraction(df1, 'Name', 'A')
+        tn_tag_extraction1 = subsets.tag_extraction(df1, 'Name', 'A')
         # Assume 2
-        tn_tag_extraction2 = tag_extraction(df1, 'Name', ['A', 'C'])
+        tn_tag_extraction2 = subsets.tag_extraction(df1, 'Name', ['A', 'C'])
 
         # Assert 1
         self.assertNotEqual(tn_tag_extraction1.reset_index(drop=True).equals(df2.reset_index(drop=True)), True)
@@ -94,19 +100,21 @@ class TestTagExtraction(unittest.TestCase):
                             ['C', '40'],
                             ['D', '50']],
                            columns=['Name', 'Age'])
+        # Assume
+        subsets = XbrlSubsets()
 
         # Assert
         with self.assertRaises(TypeError):
-            tag_extraction(1.0, 'Name', 'A')
+            subsets.tag_extraction(1.0, 'Name', 'A')
 
         with self.assertRaises(TypeError):
-            tag_extraction(df1, 1, 'A')
+            subsets.tag_extraction(df1, 1, 'A')
 
         with self.assertRaises(TypeError):
-            tag_extraction(df1, 'Name', {'A': 'a'})
+            subsets.tag_extraction(df1, 'Name', {'A': 'a'})
 
         with self.assertRaises(TypeError):
-            tag_extraction(df1, 'Name', all)
+            subsets.tag_extraction(df1, 'Name', all)
 
     def test_values(self):
         """
@@ -119,10 +127,12 @@ class TestTagExtraction(unittest.TestCase):
                             ['C', '40'],
                             ['D', '50']],
                            columns=['Name', 'Age'])
+        # Assume
+        subsets = XbrlSubsets()
 
         # Assert
         with self.assertRaises(ValueError):
-            tag_extraction(df1, 'names', 'A')
+            subsets.tag_extraction(df1, 'names', 'A')
 
         with self.assertRaises(ValueError):
-            tag_extraction(df1, 'A', 'Name')
+            subsets.tag_extraction(df1, 'A', 'Name')

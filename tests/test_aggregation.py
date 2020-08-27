@@ -3,7 +3,7 @@ import pandas as pd
 from pandas.testing import assert_frame_equal
 
 # Custom import
-from src.xbrl_processing.aggregation import aggregation
+from src.data_processing.xbrl_pd_methods import XbrlSubsets
 
 
 class TestAggregation(unittest.TestCase):
@@ -36,10 +36,13 @@ class TestAggregation(unittest.TestCase):
                            columns=['A', 'D', 'E'])
         df3 = pd.DataFrame(df3).set_index('A')
 
+        # Assume
+        subsets = XbrlSubsets()
+
         # Assume 1
-        tp_aggregation1 = aggregation(df1, ['A'], 'first', ['D', 'E'], False)
+        tp_aggregation1 = subsets.aggregation(df1, ['A'], 'first', ['D', 'E'], False)
         # Assume 2
-        tp_aggregation2 = aggregation(df1, ['A'], 'first', ['D', 'E'], True)
+        tp_aggregation2 = subsets.aggregation(df1, ['A'], 'first', ['D', 'E'], True)
 
         # Assert 1
         assert_frame_equal(tp_aggregation1, df2)
@@ -72,10 +75,13 @@ class TestAggregation(unittest.TestCase):
                            columns=['A', 'first  D', 'first  E'])
         df3 = pd.DataFrame(df3).set_index('A')
 
+        # Assume
+        subsets = XbrlSubsets()
+
         # Assume 1
-        tn_aggregation1 = aggregation(df1, ['A'], 'first', ['D', 'E'], False)
+        tn_aggregation1 = subsets.aggregation(df1, ['A'], 'first', ['D', 'E'], False)
         # Assume 2
-        tn_aggregation2 = aggregation(df1, ['A'], 'first', ['D', 'E'], True)
+        tn_aggregation2 = subsets.aggregation(df1, ['A'], 'first', ['D', 'E'], True)
 
         # Assert 1
         self.assertNotEqual(tn_aggregation1.equals(df2), True)
@@ -93,19 +99,21 @@ class TestAggregation(unittest.TestCase):
                             [4, 7, 9, 5, 21],
                             [7, 8, 9, 12, 5]],
                            columns=['A', 'B', 'C', 'D', 'E'])
+        # Assume
+        subsets = XbrlSubsets()
 
         # Assert
         with self.assertRaises(TypeError):
-            aggregation(df1, 'A', 'sum', 'B', 'False')
+            subsets.aggregation(df1, 'A', 'sum', 'B', 'False')
 
         with self.assertRaises(TypeError):
-            aggregation(1, 'A', 'sum', 'B', False)
+            subsets.aggregation(1, 'A', 'sum', 'B', False)
 
         with self.assertRaises(TypeError):
-            aggregation(df1, {'A': 'a'}, 'sum', 'B', False)
+            subsets.aggregation(df1, {'A': 'a'}, 'sum', 'B', False)
 
         with self.assertRaises(TypeError):
-            aggregation(df1, 'A', 'sum', 6, True)
+            subsets.aggregation(df1, 'A', 'sum', 6, True)
 
     def test_values(self):
         """
@@ -119,10 +127,12 @@ class TestAggregation(unittest.TestCase):
                             [4, 7, 9, 5, 21],
                             [7, 8, 9, 12, 5]],
                            columns=['A', 'B', 'C', 'D', 'E'])
+        # Assume
+        subsets = XbrlSubsets()
 
         # Assert
         with self.assertRaises(ValueError):
-            aggregation(df1, 'A', 'summation', 'B', False)
+            subsets.aggregation(df1, 'A', 'summation', 'B', False)
 
         with self.assertRaises(ValueError):
-            aggregation(df1, 'A', sum, 'B', False)
+            subsets.aggregation(df1, 'A', sum, 'B', False)
