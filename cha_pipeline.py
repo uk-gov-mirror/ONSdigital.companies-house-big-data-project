@@ -43,14 +43,34 @@ unpacker_source_dir = config.get('xbrl_unpacker_args', 'xbrl_unpacker_file_sourc
 unpacker_destination_dir = config.get('xbrl_unpacker_args', 'xbrl_unpacker_file_destination_dir')
 
 # Arguments for the XBRL parser
-xbrl_unpacked_data = config.get('xbrl_parser_args', 'xbrl_data_dir')
-xbrl_processed_csv = config.get('xbrl_parser_args', 'xbrl_processed_csv_dir')
-xbrl_tag_frequencies = config.get('xbrl_parser_args', 'xbrl_tag_frequencies')
-xbrl_tag_list = config.get('xbrl_parser_args', 'xbrl_tag_list')
+xbrl_unpacked_data = config.get('xbrl_parser_args', 'xbrl_parser_data_dir')
+xbrl_processed_csv = config.get('xbrl_parser_args', 'xbrl_parser_processed_csv_dir')
+xbrl_tag_frequencies = config.get('xbrl_parser_args', 'xbrl_parser_tag_frequencies')
+xbrl_tag_list = config.get('xbrl_parser_args', 'xbrl_parser_tag_list')
 
-# Arguments for the filing_fetcher
+# Arguments for xbrl appender
+
+# Arguments for xbrl melt to pivot table
+
+# Arguments for xbrl subsets
+
+# Arguments for the filing_fetcher scraper
 filed_accounts_scraped_dir = config.get('pdf_web_scraper_args', 'filed_accounts_scraped_dir')
 filed_accounts_scraper = config.get('pdf_web_scraper_args', 'filed_accounts_scraper')
+
+# Arguments for pdfs_to_images
+
+# Arguments for train_classifier_model
+
+# Arguments for binary_classifier
+
+# Arguments for binary_classifier_accuracy
+
+# Arguments for ocr_functions
+
+# Arguments for nlp_functions
+
+# Arguments for merge_xbrl_to_pdf_data
 
 from src.data_processing.cst_data_processing import DataProcessing
 from src.classifier.cst_classifier import Classifier
@@ -98,7 +118,7 @@ def main():
         print(len(files))
 
         # Here you can splice/truncate the number of files you want to process for testing
-        files = files[0:30]
+        files = files[0:40]
 
         print(folder_month, folder_year)
 
@@ -137,6 +157,11 @@ def main():
         )
 
         # print(results.shape)
+
+        tempcsv = pd.read_csv("/home/peterd/test/2015-September_xbrl_data.csv", lineterminator='\n')
+        #print(results.shape)
+        print(tempcsv.head(2500))
+        print(tempcsv.shape)
 
     # Execute PDF web scraper
     if pdf_web_scraper == str(True):
