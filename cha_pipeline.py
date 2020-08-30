@@ -118,7 +118,7 @@ def main():
         print(len(files))
 
         # Here you can splice/truncate the number of files you want to process for testing
-        files = files[0:40]
+        #files = files[0:40]
 
         print(folder_month, folder_year)
 
@@ -158,9 +158,9 @@ def main():
 
         # print(results.shape)
 
-        tempcsv = pd.read_csv("/home/peterd/test/2015-September_xbrl_data.csv", lineterminator='\n')
+        tempcsv = pd.read_csv("/shares/xbrl_parsed_data/2020-April_xbrl_data.csv", lineterminator='\n')
         #print(results.shape)
-        print(tempcsv.head(2500))
+        print(tempcsv.head(5000000))
         print(tempcsv.shape)
 
     # Execute PDF web scraper

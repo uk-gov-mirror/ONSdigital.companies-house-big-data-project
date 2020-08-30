@@ -1,8 +1,8 @@
 [cha_workflow]
 xbrl_web_scraper = False
 xbrl_validator = False
-xbrl_unpacker = False
-xbrl_parser = True
+xbrl_unpacker = True
+xbrl_parser = False
 xbrl_file_appender = False
 xbrl_melt_to_pivot = False
 xbrl_subsets = False
@@ -29,10 +29,10 @@ xbrl_unpacker_file_source_dir = /shares/xbrl_scraped_data/
 xbrl_unpacker_file_destination_dir = /shares/xbrl_unpacked_data
 
 [xbrl_parser_args]
-xbrl_parser_data_dir = /shares/xbrl_unpacked_data/Accounts_Monthly_Data-April2020
-xbrl_parser_processed_csv_dir = /shares/xbrl_parsed_data
-xbrl_parser_tag_frequencies = /shares/logs
-xbrl_parser_tag_list = /shares/logs
+xbrl_parser_data_dir = /shares/xbrl_unpacked_data/Accounts_Monthly_Data-March2020/
+xbrl_parser_processed_csv_dir = /
+xbrl_parser_tag_frequencies = /home/peterd/test
+xbrl_parser_tag_list = /home/peterd/test
 xbrl_parser_process_year = 2015
 xbrl_parser_process_quarter = 3
 xbrl_parser_custom_input = ""
