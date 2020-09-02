@@ -172,6 +172,10 @@ def main():
         print(getcwd())
         paper_filing_cmdlinestr = "scrapy crawl latest_paper_filing"
         popen(paper_filing_cmdlinestr).read()
+        
+    # Append XBRL data on an annual or quarterly basis
+    if xbrl_appender == str(True):
+        print("XBRL appender running...")
 
     # Convert PDF files to images
     if pdfs_to_images == str(True):
