@@ -1,0 +1,130 @@
+.
+├── [ 60M]  Accounts_Monthly_Data-April2010.zip
+├── [118M]  Accounts_Monthly_Data-April2011.zip
+├── [188M]  Accounts_Monthly_Data-April2012.zip
+├── [484M]  Accounts_Monthly_Data-April2013.zip
+├── [580M]  Accounts_Monthly_Data-April2014.zip
+├── [685M]  Accounts_Monthly_Data-April2015.zip
+├── [838M]  Accounts_Monthly_Data-April2016.zip
+├── [889M]  Accounts_Monthly_Data-April2017.zip
+├── [1.2G]  Accounts_Monthly_Data-April2018.zip
+├── [1.3G]  Accounts_Monthly_Data-April2019.zip
+├── [1.2G]  Accounts_Monthly_Data-April2020.zip
+├── [ 70M]  Accounts_Monthly_Data-August2010.zip
+├── [158M]  Accounts_Monthly_Data-August2011.zip
+├── [233M]  Accounts_Monthly_Data-August2012.zip
+├── [519M]  Accounts_Monthly_Data-August2013.zip
+├── [617M]  Accounts_Monthly_Data-August2014.zip
+├── [741M]  Accounts_Monthly_Data-August2015.zip
+├── [881M]  Accounts_Monthly_Data-August2016.zip
+├── [1.1G]  Accounts_Monthly_Data-August2017.zip
+├── [1.3G]  Accounts_Monthly_Data-August2018.zip
+├── [1.4G]  Accounts_Monthly_Data-August2019.zip
+├── [196M]  Accounts_Monthly_Data-December2010.zip
+├── [419M]  Accounts_Monthly_Data-December2011.zip
+├── [648M]  Accounts_Monthly_Data-December2012.zip
+├── [1.2G]  Accounts_Monthly_Data-December2013.zip
+├── [1.4G]  Accounts_Monthly_Data-December2014.zip
+├── [1.5G]  Accounts_Monthly_Data-December2015.zip
+├── [1.9G]  Accounts_Monthly_Data-December2016.zip
+├── [2.5G]  Accounts_Monthly_Data-December2017.zip
+├── [2.8G]  Accounts_Monthly_Data-December2018.zip
+├── [3.1G]  Accounts_Monthly_Data-December2019.zip
+├── [ 67M]  Accounts_Monthly_Data-February2010.zip
+├── [ 97M]  Accounts_Monthly_Data-February2011.zip
+├── [171M]  Accounts_Monthly_Data-February2012.zip
+├── [394M]  Accounts_Monthly_Data-February2013.zip
+├── [531M]  Accounts_Monthly_Data-February2014.zip
+├── [628M]  Accounts_Monthly_Data-February2015.zip
+├── [810M]  Accounts_Monthly_Data-February2016.zip
+├── [864M]  Accounts_Monthly_Data-February2017.zip
+├── [1.1G]  Accounts_Monthly_Data-February2018.zip
+├── [1.2G]  Accounts_Monthly_Data-February2019.zip
+├── [1.3G]  Accounts_Monthly_Data-February2020.zip
+├── [129M]  Accounts_Monthly_Data-January2010.zip
+├── [104M]  Accounts_Monthly_Data-January2011.zip
+├── [201M]  Accounts_Monthly_Data-January2012.zip
+├── [386M]  Accounts_Monthly_Data-January2013.zip
+├── [649M]  Accounts_Monthly_Data-January2014.zip
+├── [731M]  Accounts_Monthly_Data-January2015.zip
+├── [765M]  Accounts_Monthly_Data-January2016.zip
+├── [1.0G]  Accounts_Monthly_Data-January2017.zip
+├── [1.4G]  Accounts_Monthly_Data-January2018.zip
+├── [1.5G]  Accounts_Monthly_Data-January2019.zip
+├── [1.6G]  Accounts_Monthly_Data-January2020.zip
+├── [335M]  Accounts_Monthly_Data-JanuaryToDecember2008.zip
+├── [599M]  Accounts_Monthly_Data-JanuaryToDecember2009.zip
+├── [ 79M]  Accounts_Monthly_Data-July2010.zip
+├── [159M]  Accounts_Monthly_Data-July2011.zip
+├── [224M]  Accounts_Monthly_Data-July2012.zip
+├── [591M]  Accounts_Monthly_Data-July2013.zip
+├── [695M]  Accounts_Monthly_Data-July2014.zip
+├── [834M]  Accounts_Monthly_Data-July2015.zip
+├── [913M]  Accounts_Monthly_Data-July2016.zip
+├── [1.1G]  Accounts_Monthly_Data-July2017.zip
+├── [1.4G]  Accounts_Monthly_Data-July2018.zip
+├── [1.5G]  Accounts_Monthly_Data-July2019.zip
+├── [ 76M]  Accounts_Monthly_Data-June2010.zip
+├── [160M]  Accounts_Monthly_Data-June2011.zip
+├── [212M]  Accounts_Monthly_Data-June2012.zip
+├── [541M]  Accounts_Monthly_Data-June2013.zip
+├── [690M]  Accounts_Monthly_Data-June2014.zip
+├── [849M]  Accounts_Monthly_Data-June2015.zip
+├── [969M]  Accounts_Monthly_Data-June2016.zip
+├── [1.2G]  Accounts_Monthly_Data-June2017.zip
+├── [1.4G]  Accounts_Monthly_Data-June2018.zip
+├── [1.5G]  Accounts_Monthly_Data-June2019.zip
+├── [ 71M]  Accounts_Monthly_Data-March2010.zip
+├── [144M]  Accounts_Monthly_Data-March2011.zip
+├── [207M]  Accounts_Monthly_Data-March2012.zip
+├── [499M]  Accounts_Monthly_Data-March2013.zip
+├── [655M]  Accounts_Monthly_Data-March2014.zip
+├── [789M]  Accounts_Monthly_Data-March2015.zip
+├── [916M]  Accounts_Monthly_Data-March2016.zip
+├── [1.1G]  Accounts_Monthly_Data-March2017.zip
+├── [1.3G]  Accounts_Monthly_Data-March2018.zip
+├── [1.5G]  Accounts_Monthly_Data-March2019.zip
+├── [1.5G]  Accounts_Monthly_Data-March2020.zip
+├── [ 68M]  Accounts_Monthly_Data-May2010.zip
+├── [141M]  Accounts_Monthly_Data-May2011.zip
+├── [206M]  Accounts_Monthly_Data-May2012.zip
+├── [508M]  Accounts_Monthly_Data-May2013.zip
+├── [598M]  Accounts_Monthly_Data-May2014.zip
+├── [702M]  Accounts_Monthly_Data-May2015.zip
+├── [867M]  Accounts_Monthly_Data-May2016.zip
+├── [1.0G]  Accounts_Monthly_Data-May2017.zip
+├── [1.2G]  Accounts_Monthly_Data-May2018.zip
+├── [1.4G]  Accounts_Monthly_Data-May2019.zip
+├── [1.3G]  Accounts_Monthly_Data-May2020.zip
+├── [ 90M]  Accounts_Monthly_Data-November2010.zip
+├── [189M]  Accounts_Monthly_Data-November2011.zip
+├── [313M]  Accounts_Monthly_Data-November2012.zip
+├── [624M]  Accounts_Monthly_Data-November2013.zip
+├── [717M]  Accounts_Monthly_Data-November2014.zip
+├── [916M]  Accounts_Monthly_Data-November2015.zip
+├── [1.1G]  Accounts_Monthly_Data-November2016.zip
+├── [1.4G]  Accounts_Monthly_Data-November2017.zip
+├── [1.6G]  Accounts_Monthly_Data-November2018.zip
+├── [1.7G]  Accounts_Monthly_Data-November2019.zip
+├── [ 83M]  Accounts_Monthly_Data-October2010.zip
+├── [167M]  Accounts_Monthly_Data-October2011.zip
+├── [262M]  Accounts_Monthly_Data-October2012.zip
+├── [622M]  Accounts_Monthly_Data-October2013.zip
+├── [727M]  Accounts_Monthly_Data-October2014.zip
+├── [862M]  Accounts_Monthly_Data-October2015.zip
+├── [948M]  Accounts_Monthly_Data-October2016.zip
+├── [1.3G]  Accounts_Monthly_Data-October2017.zip
+├── [1.5G]  Accounts_Monthly_Data-October2018.zip
+├── [1.6G]  Accounts_Monthly_Data-October2019.zip
+├── [115M]  Accounts_Monthly_Data-September2010.zip
+├── [223M]  Accounts_Monthly_Data-September2011.zip
+├── [314M]  Accounts_Monthly_Data-September2012.zip
+├── [776M]  Accounts_Monthly_Data-September2013.zip
+├── [945M]  Accounts_Monthly_Data-September2014.zip
+├── [1.1G]  Accounts_Monthly_Data-September2015.zip
+├── [1.2G]  Accounts_Monthly_Data-September2016.zip
+├── [1.6G]  Accounts_Monthly_Data-September2017.zip
+├── [1.8G]  Accounts_Monthly_Data-September2018.zip
+└── [2.1G]  Accounts_Monthly_Data-September2019.zip
+
+0 directories, 127 files

@@ -1,0 +1,3 @@
+[console_scripts]
+cha_pipeline = cha_pipeline:main
+

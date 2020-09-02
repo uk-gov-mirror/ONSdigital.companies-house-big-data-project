@@ -1,0 +1,371 @@
+    # Execute module xbrl_parser
+    if xbrl_parser == str(True):
+        print("XBRL parser running...")
+
+        extractor = XbrlExtraction()
+
+        # Get all the filenames from the example folder
+        files, folder_month, folder_year = extractor.get_filepaths(xbrl_unpacked_data)
+
+        print(len(files))
+
+        # Here you can splice/truncate the number of files you want to process for testing
+        files = files[0:30]
+
+        print(folder_month, folder_year)
+
+        # Finally, build a table of all variables from all example (digital) documents
+        # This can take a while
+        results = extractor.build_month_table(files)
+
+        print(results.shape)
+
+        results.head(10)
+
+        extractor.output_xbrl_month(results, xbrl_processed_csv)
+
+        # Find list of all unique tags in dataset
+        list_of_tags = results["name"].tolist()
+        list_of_tags_unique = list(set(list_of_tags))
+
+        print("Longest tag: ", len(max(list_of_tags_unique, key=len)))
+
+        # Output all unique tags to a txt file
+        extractor.retrieve_list_of_tags(
+            results,
+            "name",
+            xbrl_tag_list
+        )
+
+        # Output all unique tags and their relative frequencies to a txt file
+        extractor.get_tag_counts(
+            results,
+            "name",
+            xbrl_tag_frequencies
+        )
+
+        # print(results.shape)
+
+
+
+
+
+ ############################################################
+
+ (base) peterd@meth-dsc-01:~/repos/companies_house_accounts$ python3 cha_pipeline.py
+Traceback (most recent call last):
+  File "cha_pipeline.py", line 11, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+(base) peterd@meth-dsc-01:~/repos/companies_house_accounts$ pip3 install numpy
+Collecting numpy
+  Downloading https://files.pythonhosted.org/packages/22/e7/4b2bdddb99f5f631d8c1de259897c2b7d65dcfcc1e0a6fd17a7f62923500/numpy-1.19.1-cp36-cp36m-manylinux1_x86_64.whl (13.4MB)
+    100% |████████████████████████████████| 13.4MB 88kB/s
+Installing collected packages: numpy
+Successfully installed numpy-1.19.1
+(base) peterd@meth-dsc-01:~/repos/companies_house_accounts$ python3 cha_pipeline.py
+Traceback (most recent call last):
+  File "cha_pipeline.py", line 11, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+(base) peterd@meth-dsc-01:~/repos/companies_house_accounts$ conda install numpy
+Collecting package metadata (current_repodata.json): done
+Solving environment: done
+
+## Package Plan ##
+
+  environment location: /home/peterd/miniconda3
+
+  added / updated specs:
+    - numpy
+
+
+The following packages will be downloaded:
+
+    package                    |            build
+    ---------------------------|-----------------
+    blas-1.0                   |              mkl           6 KB
+    ca-certificates-2020.6.24  |                0         125 KB
+    certifi-2020.6.20          |           py37_0         156 KB
+    conda-4.8.4                |           py37_0         2.9 MB
+    intel-openmp-2020.1        |              217         780 KB
+    mkl-2020.1                 |              217       129.0 MB
+    mkl-service-2.3.0          |   py37he904b0f_0         218 KB
+    mkl_fft-1.1.0              |   py37h23d657b_0         143 KB
+    mkl_random-1.1.1           |   py37h0573a6f_0         322 KB
+    numpy-1.19.1               |   py37hbc911f0_0          21 KB
+    numpy-base-1.19.1          |   py37hfa32c7d_0         4.1 MB
+    ------------------------------------------------------------
+                                           Total:       137.7 MB
+
+The following NEW packages will be INSTALLED:
+
+  blas               pkgs/main/linux-64::blas-1.0-mkl
+  intel-openmp       pkgs/main/linux-64::intel-openmp-2020.1-217
+  mkl                pkgs/main/linux-64::mkl-2020.1-217
+  mkl-service        pkgs/main/linux-64::mkl-service-2.3.0-py37he904b0f_0
+  mkl_fft            pkgs/main/linux-64::mkl_fft-1.1.0-py37h23d657b_0
+  mkl_random         pkgs/main/linux-64::mkl_random-1.1.1-py37h0573a6f_0
+  numpy              pkgs/main/linux-64::numpy-1.19.1-py37hbc911f0_0
+  numpy-base         pkgs/main/linux-64::numpy-base-1.19.1-py37hfa32c7d_0
+
+The following packages will be UPDATED:
+
+  ca-certificates                                2020.1.1-0 --> 2020.6.24-0
+  certifi                                 2020.4.5.1-py37_0 --> 2020.6.20-py37_0
+  conda                                        4.8.3-py37_0 --> 4.8.4-py37_0
+
+
+Proceed ([y]/n)? y
+
+
+Downloading and Extracting Packages
+ca-certificates-2020 | 125 KB    | ############################################################################################################################### | 100%
+mkl_fft-1.1.0        | 143 KB    | ############################################################################################################################### | 100%
+conda-4.8.4          | 2.9 MB    | ############################################################################################################################### | 100%
+blas-1.0             | 6 KB      | ############################################################################################################################### | 100%
+mkl_random-1.1.1     | 322 KB    | ############################################################################################################################### | 100%
+numpy-base-1.19.1    | 4.1 MB    | ############################################################################################################################### | 100%
+numpy-1.19.1         | 21 KB     | ############################################################################################################################### | 100%
+certifi-2020.6.20    | 156 KB    | ############################################################################################################################### | 100%
+intel-openmp-2020.1  | 780 KB    | ############################################################################################################################### | 100%
+mkl-2020.1           | 129.0 MB  | ############################################################################################################################### | 100%
+mkl-service-2.3.0    | 218 KB    | ############################################################################################################################### | 100%
+Preparing transaction: done
+Verifying transaction: done
+Executing transaction: done
+(base) peterd@meth-dsc-01:~/repos/companies_house_accounts$ python3 cha_pipeline.py
+Traceback (most recent call last):
+  File "cha_pipeline.py", line 12, in <module>
+    import pandas as pd
+ModuleNotFoundError: No module named 'pandas'
+(base) peterd@meth-dsc-01:~/repos/companies_house_accounts$ conda install pandas
+Collecting package metadata (current_repodata.json): done
+Solving environment: done
+
+## Package Plan ##
+
+  environment location: /home/peterd/miniconda3
+
+  added / updated specs:
+    - pandas
+
+
+The following packages will be downloaded:
+
+    package                    |            build
+    ---------------------------|-----------------
+    pandas-1.1.0               |   py37he6710b0_0         8.1 MB
+    python-dateutil-2.8.1      |             py_0         215 KB
+    pytz-2020.1                |             py_0         184 KB
+    ------------------------------------------------------------
+                                           Total:         8.5 MB
+
+The following NEW packages will be INSTALLED:
+
+  pandas             pkgs/main/linux-64::pandas-1.1.0-py37he6710b0_0
+  python-dateutil    pkgs/main/noarch::python-dateutil-2.8.1-py_0
+  pytz               pkgs/main/noarch::pytz-2020.1-py_0
+
+
+Proceed ([y]/n)? y
+
+
+Downloading and Extracting Packages
+python-dateutil-2.8. | 215 KB    | ############################################################################################################################### | 100%
+pandas-1.1.0         | 8.1 MB    | ############################################################################################################################### | 100%
+pytz-2020.1          | 184 KB    | ############################################################################################################################### | 100%
+Preparing transaction: done
+Verifying transaction: done
+Executing transaction: done
+(base) peterd@meth-dsc-01:~/repos/companies_house_accounts$ python3 cha_pipeline.py
+Traceback (most recent call last):
+  File "cha_pipeline.py", line 17, in <module>
+    from bs4 import BeautifulSoup as BS  # Can parse xml or html docs
+ModuleNotFoundError: No module named 'bs4'
+(base) peterd@meth-dsc-01:~/repos/companies_house_accounts$ conda install bs4
+Collecting package metadata (current_repodata.json): done
+Solving environment: done
+
+## Package Plan ##
+
+  environment location: /home/peterd/miniconda3
+
+  added / updated specs:
+    - bs4
+
+
+The following packages will be downloaded:
+
+    package                    |            build
+    ---------------------------|-----------------
+    beautifulsoup4-4.9.1       |           py37_0         165 KB
+    bs4-4.9.1                  |                0           4 KB
+    soupsieve-2.0.1            |             py_0          33 KB
+    ------------------------------------------------------------
+                                           Total:         202 KB
+
+The following NEW packages will be INSTALLED:
+
+  beautifulsoup4     pkgs/main/linux-64::beautifulsoup4-4.9.1-py37_0
+  bs4                pkgs/main/noarch::bs4-4.9.1-0
+  soupsieve          pkgs/main/noarch::soupsieve-2.0.1-py_0
+
+
+Proceed ([y]/n)? y
+
+
+Downloading and Extracting Packages
+beautifulsoup4-4.9.1 | 165 KB    | ############################################################################################################################### | 100%
+soupsieve-2.0.1      | 33 KB     | ############################################################################################################################### | 100%
+bs4-4.9.1            | 4 KB      | ############################################################################################################################### | 100%
+Preparing transaction: done
+Verifying transaction: done
+Executing transaction: done
+(base) peterd@meth-dsc-01:~/repos/companies_house_accounts$ python3 cha_pipeline.py
+Traceback (most recent call last):
+  File "cha_pipeline.py", line 55, in <module>
+    from src.data_processing.cst_data_processing import DataProcessing
+  File "/home/peterd/repos/companies_house_accounts/src/data_processing/cst_data_processing.py", line 1, in <module>
+    import cv2
+ModuleNotFoundError: No module named 'cv2'
+(base) peterd@meth-dsc-01:~/repos/companies_house_accounts$ conda install cv2
+Collecting package metadata (current_repodata.json): done
+Solving environment: failed with initial frozen solve. Retrying with flexible solve.
+Collecting package metadata (repodata.json): done
+Solving environment: failed with initial frozen solve. Retrying with flexible solve.
+
+PackagesNotFoundError: The following packages are not available from current channels:
+
+  - cv2
+
+Current channels:
+
+  - https://repo.anaconda.com/pkgs/main/linux-64
+  - https://repo.anaconda.com/pkgs/main/noarch
+  - https://repo.anaconda.com/pkgs/r/linux-64
+  - https://repo.anaconda.com/pkgs/r/noarch
+
+To search for alternate channels that may provide the conda package you're
+looking for, navigate to
+
+    https://anaconda.org
+
+and use the search bar at the top of the page.
+
+
+(base) peterd@meth-dsc-01:~/repos/companies_house_accounts$ conda install opencv
+Collecting package metadata (current_repodata.json): done
+Solving environment: done
+
+## Package Plan ##
+
+  environment location: /home/peterd/miniconda3
+
+  added / updated specs:
+    - opencv
+
+
+The following packages will be downloaded:
+
+    package                    |            build
+    ---------------------------|-----------------
+    bzip2-1.0.8                |       h7b6447c_0          78 KB
+    cairo-1.14.12              |       h8948797_3         906 KB
+    ffmpeg-4.0                 |       hcdf2ecd_0        53.3 MB
+    fontconfig-2.13.0          |       h9420a91_0         227 KB
+    freeglut-3.0.0             |       hf484d3e_5         176 KB
+    freetype-2.10.2            |       h5ab3b9f_0         608 KB
+    glib-2.65.0                |       h3eb4bd4_0         2.9 MB
+    graphite2-1.3.14           |       h23475e2_0          99 KB
+    harfbuzz-1.8.8             |       hffaf4a1_0         507 KB
+    hdf5-1.10.2                |       hba1933b_1         3.8 MB
+    icu-58.2                   |       he6710b0_3        10.5 MB
+    jasper-2.0.14              |       h07fcdf6_1         707 KB
+    jpeg-9b                    |       h024ee3a_2         214 KB
+    libglu-9.0.0               |       hf484d3e_1         271 KB
+    libopencv-3.4.2            |       hb342d67_1        21.8 MB
+    libopus-1.3.1              |       h7b6447c_0         491 KB
+    libpng-1.6.37              |       hbc83047_0         278 KB
+    libtiff-4.1.0              |       h2733197_1         449 KB
+    libuuid-1.0.3              |       h1bed415_2          15 KB
+    libvpx-1.7.0               |       h439df22_0         1.2 MB
+    libxcb-1.14                |       h7b6447c_0         505 KB
+    libxml2-2.9.10             |       he19cac6_1         1.2 MB
+    lz4-c-1.9.2                |       he6710b0_1         190 KB
+    opencv-3.4.2               |   py37h6fd60c2_1          11 KB
+    pcre-8.44                  |       he6710b0_0         212 KB
+    pixman-0.40.0              |       h7b6447c_0         370 KB
+    py-opencv-3.4.2            |   py37hb342d67_1         1.0 MB
+    zstd-1.4.5                 |       h9ceee32_0         619 KB
+    ------------------------------------------------------------
+                                           Total:       102.6 MB
+
+The following NEW packages will be INSTALLED:
+
+  bzip2              pkgs/main/linux-64::bzip2-1.0.8-h7b6447c_0
+  cairo              pkgs/main/linux-64::cairo-1.14.12-h8948797_3
+  ffmpeg             pkgs/main/linux-64::ffmpeg-4.0-hcdf2ecd_0
+  fontconfig         pkgs/main/linux-64::fontconfig-2.13.0-h9420a91_0
+  freeglut           pkgs/main/linux-64::freeglut-3.0.0-hf484d3e_5
+  freetype           pkgs/main/linux-64::freetype-2.10.2-h5ab3b9f_0
+  glib               pkgs/main/linux-64::glib-2.65.0-h3eb4bd4_0
+  graphite2          pkgs/main/linux-64::graphite2-1.3.14-h23475e2_0
+  harfbuzz           pkgs/main/linux-64::harfbuzz-1.8.8-hffaf4a1_0
+  hdf5               pkgs/main/linux-64::hdf5-1.10.2-hba1933b_1
+  icu                pkgs/main/linux-64::icu-58.2-he6710b0_3
+  jasper             pkgs/main/linux-64::jasper-2.0.14-h07fcdf6_1
+  jpeg               pkgs/main/linux-64::jpeg-9b-h024ee3a_2
+  libgfortran-ng     pkgs/main/linux-64::libgfortran-ng-7.3.0-hdf63c60_0
+  libglu             pkgs/main/linux-64::libglu-9.0.0-hf484d3e_1
+  libopencv          pkgs/main/linux-64::libopencv-3.4.2-hb342d67_1
+  libopus            pkgs/main/linux-64::libopus-1.3.1-h7b6447c_0
+  libpng             pkgs/main/linux-64::libpng-1.6.37-hbc83047_0
+  libtiff            pkgs/main/linux-64::libtiff-4.1.0-h2733197_1
+  libuuid            pkgs/main/linux-64::libuuid-1.0.3-h1bed415_2
+  libvpx             pkgs/main/linux-64::libvpx-1.7.0-h439df22_0
+  libxcb             pkgs/main/linux-64::libxcb-1.14-h7b6447c_0
+  libxml2            pkgs/main/linux-64::libxml2-2.9.10-he19cac6_1
+  lz4-c              pkgs/main/linux-64::lz4-c-1.9.2-he6710b0_1
+  opencv             pkgs/main/linux-64::opencv-3.4.2-py37h6fd60c2_1
+  pcre               pkgs/main/linux-64::pcre-8.44-he6710b0_0
+  pixman             pkgs/main/linux-64::pixman-0.40.0-h7b6447c_0
+  py-opencv          pkgs/main/linux-64::py-opencv-3.4.2-py37hb342d67_1
+  zstd               pkgs/main/linux-64::zstd-1.4.5-h9ceee32_0
+
+
+Proceed ([y]/n)? y
+
+
+Downloading and Extracting Packages
+libopencv-3.4.2      | 21.8 MB   | ############################################################################################################################### | 100%
+libvpx-1.7.0         | 1.2 MB    | ############################################################################################################################### | 100%
+py-opencv-3.4.2      | 1.0 MB    | ############################################################################################################################### | 100%
+freetype-2.10.2      | 608 KB    | ############################################################################################################################### | 100%
+fontconfig-2.13.0    | 227 KB    | ############################################################################################################################### | 100%
+libuuid-1.0.3        | 15 KB     | ############################################################################################################################### | 100%
+jasper-2.0.14        | 707 KB    | ############################################################################################################################### | 100%
+pcre-8.44            | 212 KB    | ############################################################################################################################### | 100%
+libopus-1.3.1        | 491 KB    | ############################################################################################################################### | 100%
+bzip2-1.0.8          | 78 KB     | ############################################################################################################################### | 100%
+hdf5-1.10.2          | 3.8 MB    | ############################################################################################################################### | 100%
+zstd-1.4.5           | 619 KB    | ############################################################################################################################### | 100%
+graphite2-1.3.14     | 99 KB     | ############################################################################################################################### | 100%
+libxml2-2.9.10       | 1.2 MB    | ############################################################################################################################### | 100%
+jpeg-9b              | 214 KB    | ############################################################################################################################### | 100%
+glib-2.65.0          | 2.9 MB    | ############################################################################################################################### | 100%
+libtiff-4.1.0        | 449 KB    | ############################################################################################################################### | 100%
+harfbuzz-1.8.8       | 507 KB    | ############################################################################################################################### | 100%
+lz4-c-1.9.2          | 190 KB    | ############################################################################################################################### | 100%
+icu-58.2             | 10.5 MB   | ############################################################################################################################### | 100%
+pixman-0.40.0        | 370 KB    | ############################################################################################################################### | 100%
+libglu-9.0.0         | 271 KB    | ############################################################################################################################### | 100%
+freeglut-3.0.0       | 176 KB    | ############################################################################################################################### | 100%
+ffmpeg-4.0           | 53.3 MB   | ############################################################################################################################### | 100%
+opencv-3.4.2         | 11 KB     | ############################################################################################################################### | 100%
+libxcb-1.14          | 505 KB    | ############################################################################################################################### | 100%
+cairo-1.14.12        | 906 KB    | ############################################################################################################################### | 100%
+libpng-1.6.37        | 278 KB    | ############################################################################################################################### | 100%
+Preparing transaction: done
+Verifying transaction: done
+Executing transaction: done

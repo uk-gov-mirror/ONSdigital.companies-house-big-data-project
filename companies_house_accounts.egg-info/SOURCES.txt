@@ -1,6 +1,8 @@
+setup.py
 companies_house_accounts.egg-info/PKG-INFO
 companies_house_accounts.egg-info/SOURCES.txt
 companies_house_accounts.egg-info/dependency_links.txt
+companies_house_accounts.egg-info/entry_points.txt
 companies_house_accounts.egg-info/requires.txt
 companies_house_accounts.egg-info/top_level.txt
 src/__init__.py
@@ -9,11 +11,17 @@ src/classifier/__init__.py
 src/classifier/cst_classifier.py
 src/data_processing/__init__.py
 src/data_processing/ch_xbrl_data.py
+src/data_processing/combine_csvfiles.py
 src/data_processing/cst_data_processing.py
+src/data_processing/xbrl_parser.py
+src/data_processing/xbrl_pd_methods.py
 src/performance_metrics/__init__.py
 src/performance_metrics/binary_classifier_metrics.py
+src/validators/__init__.py
+src/validators/xbrl_validator_methods.py
 tests/__init__.py
 tests/test_accuracy.py
+tests/test_aggregation.py
 tests/test_classifier_input.py
 tests/test_classifier_output.py
 tests/test_classifier_process.py
@@ -21,3 +29,9 @@ tests/test_count_classifier_output.py
 tests/test_display_classifier_output.py
 tests/test_ensemble.py
 tests/test_imgs_to_grey.py
+tests/test_merge.py
+tests/test_precision.py
+tests/test_recall.py
+tests/test_specificity.py
+tests/test_tag_extraction.py
+tests/test_unique_entries.py

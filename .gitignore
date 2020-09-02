@@ -7,3 +7,8 @@ data\input\*
 data\output\*
 *data\output\
 *ext_methods.txt
+*.idea/
+.idea/*
+*__pycache__
+__pycache__/*
+third_party_apps/.ipynb_checkpoints/*
