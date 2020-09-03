@@ -23,6 +23,7 @@ xbrl_web_scraper = config.get('cha_workflow', 'xbrl_web_scraper')
 xbrl_web_scraper_validator = config.get('cha_workflow', 'xbrl_validator')
 xbrl_unpacker = config.get('cha_workflow', 'xbrl_unpacker')
 xbrl_parser = config.get('cha_workflow', 'xbrl_parser')
+xbrl_file_appender = config.get('cha_workflow', 'xbrl_file_appender')
 pdf_web_scraper = config.get('cha_workflow', 'pdf_web_scraper')
 pdfs_to_images = config.get('cha_workflow', 'pdfs_to_images')
 train_classifier_model = config.get('cha_workflow', 'train_classifier_model')
@@ -49,6 +50,10 @@ xbrl_tag_frequencies = config.get('xbrl_parser_args', 'xbrl_parser_tag_frequenci
 xbrl_tag_list = config.get('xbrl_parser_args', 'xbrl_parser_tag_list')
 
 # Arguments for xbrl appender
+xbrl_file_appender_indir = config.get('xbrl_file_appender_args', 'xbrl_file_appender_indir')
+xbrl_file_appender_outdir = config.get('xbrl_file_appender_args', 'xbrl_file_appender_outdir')
+xbrl_file_appender_year = config.get('xbrl_file_appender_args', 'xbrl_file_appender_year')
+xbrl_file_appender_quarter = config.get('xbrl_file_appender_args', 'xbrl_file_appender_quarter')
 
 # Arguments for xbrl melt to pivot table
 
@@ -77,6 +82,7 @@ from src.classifier.cst_classifier import Classifier
 from src.performance_metrics.binary_classifier_metrics import BinaryClassifierMetrics
 from src.data_processing.xbrl_pd_methods import XbrlExtraction
 from src.validators.xbrl_validator_methods import XbrlValidatorMethods
+from src.data_processing.combine_csvfiles import XbrlCsvAppender
 
 def main():
     print("-" * 50)
@@ -164,8 +170,13 @@ def main():
         print(tempcsv.shape)
 
     # Append XBRL data on an annual or quarterly basis
-    if xbrl_appender == str(True):
+    if xbrl_file_appender == str(True):
+        appender = XbrlCsvAppender()
         print("XBRL appender running...")
+        appender.merge_files_by_year(xbrl_file_appender_indir,
+                                     xbrl_file_appender_outdir,
+                                     xbrl_file_appender_year,
+                                     xbrl_file_appender_quarter)
 
     # Execute PDF web scraper
     if pdf_web_scraper == str(True):
