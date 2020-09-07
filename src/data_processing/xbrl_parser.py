@@ -363,11 +363,13 @@ class XbrlParser:
             elements = XbrlParser.parse_elements(element_set, soup)
             if len(elements) <= 5:
                 raise Exception("Elements should be gte 5, was {}".format(len(elements)))
-            return (elements)
+
         except:
+            # if fails parsing create dummy entry elements so entry still exists in dictonary
+            elements = [{'name': 'NA', 'value': 'NA', 'unit': 'NA', 'date': 'NA'}]
             pass
 
-        return (0)
+        return (elements)
 
     @staticmethod
     def flatten_data(doc):
@@ -412,7 +414,6 @@ class XbrlParser:
         doc['doc_type'] = filepath.split(".")[-1].lower()
         doc['doc_upload_date'] = str(datetime.now())
         doc['arc_name'] = filepath.split("/")[-2]
-        doc['parsed'] = True
 
         # Complicated ones
         sheet_date = filepath.split("/")[-1].split(".")[0].split("_")[-1]
@@ -432,8 +433,10 @@ class XbrlParser:
         try:
             doc['doc_standard_type'], doc['doc_standard_date'], doc['doc_standard_link'] = XbrlParser.retrieve_accounting_standard(
                 soup)
+            doc['parsed'] = True
         except:
             doc['doc_standard_type'], doc['doc_standard_date'], doc['doc_standard_link'] = (0, 0, 0)
+            doc['parsed'] = False
 
         # Fetch all the marked elements of the document
         try:
