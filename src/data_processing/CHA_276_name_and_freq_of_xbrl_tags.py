@@ -52,7 +52,7 @@ def merge_files_by_year(indir: str, outdir: str, year: int, quarter=None):
 
         # Get all csv files which contain the year specified in their filenames
         files = os.listdir(indir)
-        files = ([i for i in files if i[-4:] == '.txt'
+        files = ([i for i in files if i[-4:] == '.csv'
                   and i[:4].isnumeric() and int(i[:4]) == year])
 
         # Sort all files by the month contained in the file name
@@ -82,7 +82,7 @@ def merge_files_by_year(indir: str, outdir: str, year: int, quarter=None):
         files = [indir + f for f in files]
 
         # Combine the csvs
-        combine_csv(files, outdir + str(year) + quarter_str + 'annual_list_of_tags_xbrl.csv')
+        combine_csv(files, outdir + str(year) + quarter_str + '_annual_list_of_tags_xbrl.csv')
 
     else:
         print("Input file path does not exist")
@@ -97,8 +97,14 @@ if __name__ == '__main__':
     merge_files_by_year(indir, outdir, year, quarter)
 
 import pandas as pd
-test = pd.read_csv('/home/kirstyc/test0909/2011_xbrl.csv', header=None, names=['tag_name'])
+test = pd.read_csv('/home/kirstyc/test0909/2011annual_list_of_tags_xbrl.csv', header=None, names=[
+    'tag_name', 'frequency'], delim_whitespace=True, dtype={'frequency':int})
 
+test['frequency'] = test['frequency'].groupby(test['tag_name']).transform('sum')
+annual_2011_v3 = test.sort_values(by='frequency', ascending=False).drop_duplicates().dropna()
+annual_2011_v3['frequency'] = annual_2011_v3['frequency'].astype(int)
+
+annual_2011_v3.dtypes
 
 
 # for CHA_276 - get the tag names and frequencies for each year and create a spreadsheet with a worksheet/tab for each
@@ -158,10 +164,10 @@ def write_to_excel(input_data, directory, filename, sheet_name, create_new_workb
     return output
 
 
-test = write_to_excel(annual_2011, '/home/kirstyc/repos/companies_house_accounts/data/', 'cha_276_2011_list_of_tags', '2011', create_new_workbook = True)
+test3 = write_to_excel(annual_2011_v3, '/home/kirstyc/repos/companies_house_accounts/data/', 'cha_276_2011_list_of_tags_v3', '2011', create_new_workbook = True)
 
-test2 = pd.read_excel('/home/kirstyc/test0909/2011_list_of_tags.xlsx', index_col=0)
-print(test2)
+test3 = pd.read_excel('/home/kirstyc/repos/companies_house_accounts/data/cha_276_2011_list_of_tags_v3.xlsx', index_col=0)
+print(test3)
 
 # Cannot view the xlsx in VM so reading the workbook 'test_cha_276.xlsx' into here to check it, one worksheet at a time
 #data2013 = pd.read_excel('/home/kirstyc/test/test_cha_276.xlsx', sheet_name=['data_2013'])
