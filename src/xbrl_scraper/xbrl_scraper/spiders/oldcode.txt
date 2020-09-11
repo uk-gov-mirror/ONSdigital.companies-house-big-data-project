@@ -104,3 +104,10 @@ class MyFilesPipeline(FilesPipeline):
             print("Hello")
             print(file_url)
 #             yield Request(file_url)
+
+##################################
+
+        tempcsv = pd.read_csv("/home/peterd/test/2013-April_xbrl_data.csv")
+        #print(results.shape)
+        print(tempcsv.head(2500))
+        print(tempcsv.shape)

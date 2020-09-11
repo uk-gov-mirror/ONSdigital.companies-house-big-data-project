@@ -53,12 +53,15 @@ class BinaryClassifierMetrics:
         accuracy = ( tp + tn ) / (tp + tn + fp + fn)
         '''
 
-        if tp is None or tn is None or fp is None or fn is None:
+        args = (tp, tn, fp, fn)
+
+        if any(_ is None for _ in args):
             raise ValueError("Specify integer values")
-        if type(tp) not in [int] or type(tn) not in [int] or type(fp) not in [int] or type(fn) not in [int]:
+        if any(type(_) != int for _ in args):
             raise TypeError("Specify integer types")
-        if (tp + tn + fp + fn) is not 0:
-            return (tp + tn) / (tp + tn + fp + fn)
+
+        if sum(args) != 0:
+            return (tp + tn) / sum(args)
 
     @staticmethod
     def precision(tp: int, fp: int):
@@ -80,12 +83,15 @@ class BinaryClassifierMetrics:
         precision = tp / (tp + fp)
         '''
 
-        if tp is None or fp is None:
+        args = (tp, fp)
+
+        if any(_ is None for _ in args):
             raise ValueError("Specify integer values")
-        if type(tp) not in [int] or type(fp) not in [int]:
+        if any(type(_) != int for _ in args):
             raise TypeError("Specify integer types")
-        if (tp + fp) is not 0:
-            return tp / (tp + fp)
+
+        if sum(args) != 0:
+            return tp / sum(args)
 
     @staticmethod
     def recall(tp: int, fn: int):
@@ -107,12 +113,15 @@ class BinaryClassifierMetrics:
         recall = tp / (tp + fn)
         '''
 
-        if tp is None or fn is None:
+        args = (tp, fn)
+
+        if any(_ is None for _ in args):
             raise ValueError("Specify integer values")
-        if type(tp) not in [int] or type(fn) not in [int]:
+        if any(type(_) != int for _ in args):
             raise TypeError("Specify integer types")
-        if (tp + fn) is not 0:
-            return tp / (tp + fn)
+
+        if sum(args) != 0:
+            return tp / sum(args)
 
     @staticmethod
     def specificity(tn: int, fn: int):
@@ -134,13 +143,15 @@ class BinaryClassifierMetrics:
         specificity = tn / (tn + fn)
         '''
 
+        args = (tn, fn)
 
-        if tn is None or fn is None:
+        if any(_ is None for _ in args):
             raise ValueError("Specify integer values")
-        if type(tn) not in [int] or type(fn) not in [int]:
+        if any(type(_) != int for _ in args):
             raise TypeError("Specify integer types")
-        if (tn + fn) is not 0:
-            return tn / (tn + fn)
+
+        if sum(args) != 0:
+            return tn / sum(args)
 
     @staticmethod
     def metrics_report(accuracy: float, precision: float, recall: float, specificity: float):

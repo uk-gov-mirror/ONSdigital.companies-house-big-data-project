@@ -196,16 +196,16 @@ class XbrlParser:
             element_dict['name'] = element.name.lower().split(":")[-1]
 
         element_dict['value'] = element.get_text()
-        element_dict['unit'] = retrieve_unit(soup, element)
-        element_dict['date'] = retrieve_date(soup, element)
+        element_dict['unit'] = XbrlParser.retrieve_unit(soup, element)
+        element_dict['date'] = XbrlParser.retrieve_date(soup, element)
 
         # If there's no value retrieved, try raiding the associated context data
         if element_dict['value'] == "":
-            element_dict['value'] = retrieve_from_context(soup, element.attrs['contextref'])
+            element_dict['value'] = XbrlParser.retrieve_from_context(soup, element.attrs['contextref'])
 
         # If the value has a defined unit (eg a currency) convert to numeric
         if element_dict['unit'] != "NA":
-            element_dict['value'] = clean_value(element_dict['value'])
+            element_dict['value'] = XbrlParser.clean_value(element_dict['value'])
 
         # Retrieve sign of element if exists
         try:
@@ -232,7 +232,7 @@ class XbrlParser:
         """
         elements = []
         for each in element_set:
-            element_dict = parse_element(soup, each)
+            element_dict = XbrlParser.parse_element(soup, each)
             if 'name' in element_dict:
                 elements.append(element_dict)
         return (elements)
@@ -360,14 +360,16 @@ class XbrlParser:
         # but should not affect execution speed.
         try:
             element_set = soup.find_all()
-            elements = parse_elements(element_set, soup)
+            elements = XbrlParser.parse_elements(element_set, soup)
             if len(elements) <= 5:
                 raise Exception("Elements should be gte 5, was {}".format(len(elements)))
-            return (elements)
+
         except:
+            # if fails parsing create dummy entry elements so entry still exists in dictonary
+            elements = [{'name': 'NA', 'value': 'NA', 'unit': 'NA', 'date': 'NA'}]
             pass
 
-        return (0)
+        return (elements)
 
     @staticmethod
     def flatten_data(doc):
@@ -412,7 +414,6 @@ class XbrlParser:
         doc['doc_type'] = filepath.split(".")[-1].lower()
         doc['doc_upload_date'] = str(datetime.now())
         doc['arc_name'] = filepath.split("/")[-2]
-        doc['parsed'] = True
 
         # Complicated ones
         sheet_date = filepath.split("/")[-1].split(".")[0].split("_")[-1]
@@ -430,14 +431,16 @@ class XbrlParser:
 
         # Get metadata about the accounting standard used
         try:
-            doc['doc_standard_type'], doc['doc_standard_date'], doc['doc_standard_link'] = retrieve_accounting_standard(
+            doc['doc_standard_type'], doc['doc_standard_date'], doc['doc_standard_link'] = XbrlParser.retrieve_accounting_standard(
                 soup)
+            doc['parsed'] = True
         except:
             doc['doc_standard_type'], doc['doc_standard_date'], doc['doc_standard_link'] = (0, 0, 0)
+            doc['parsed'] = False
 
         # Fetch all the marked elements of the document
         try:
-            doc['elements'] = scrape_elements(soup, filepath)
+            doc['elements'] = XbrlParser.scrape_elements(soup, filepath)
         except Exception as e:
             doc['parsed'] = False
             doc['Error'] = e
