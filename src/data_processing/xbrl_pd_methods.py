@@ -401,6 +401,15 @@ class XbrlSubsets:
             :return: DataFrame by either replacing original column with date format or creating a new column of date format
         """
 
+        if not isinstance(df, pd.DataFrame):
+            raise TypeError("The first argument (df) needs to be a dataframe")
+
+        if not isinstance(date_col, str):
+            raise TypeError("The date_col needs to be a string")
+
+        if date_col not in list(df.columns):
+            raise ValueError("The date_col should exist in the dataframe passed")
+
         # if input column is string - convert
         if type(date_col) == str:
             x = pd.to_datetime(df[date_col], infer_datetime_format=True)
@@ -412,6 +421,9 @@ class XbrlSubsets:
                 print('Error: replace needs to be a "y" or "n"')
         # otherwise print error
         else:
-            output = print("Error: date_col needs to be a string")
+            print("Error: date_col needs to be a string")
 
         return df
+
+
+

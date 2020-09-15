@@ -19,17 +19,21 @@ class StrToDate(unittest.TestCase):
                                     ['B', '02/02/2002'],
                                     ['C', '03/03/2003']],
                                     columns=['Name', 'Date'])
-        df2_datetime_inplace = pd.DataFrame([['A', '01/01/2001'],
+        df2_str_date = pd.DataFrame([['A', '01/01/2001'],
+                                     ['B', '02/02/2002'],
+                                     ['C', '03/03/2003']],
+                                    columns=['Name', 'Date'])
+        df3_datetime_inplace = pd.DataFrame([['A', '01/01/2001'],
                                             ['B', '02/02/2002'],
                                             ['C', '03/03/2003']],
                                             columns=['Name', 'Date'])
-        df2_datetime_inplace['Date'] = pd.to_datetime(df2_datetime_inplace['Date'])
+        df3_datetime_inplace['Date'] = pd.to_datetime(df3_datetime_inplace['Date'])
 
-        df3_datetime_new_col = pd.DataFrame([['A', '01/01/2001'],
+        df4_datetime_new_col = pd.DataFrame([['A', '01/01/2001'],
                                             ['B', '02/02/2002'],
                                             ['C', '03/03/2003']],
                                             columns=['Name', 'Date'])
-        df3_datetime_new_col['New Date Col'] = pd.to_datetime(df3_datetime_new_col['Date'])
+        df4_datetime_new_col['New Date Col'] = pd.to_datetime(df4_datetime_new_col['Date'])
 
         # Assume
         subsets = XbrlSubsets()
@@ -38,14 +42,13 @@ class StrToDate(unittest.TestCase):
         tp_str_to_date = subsets.str_to_date(df1_str_date, 'Date', replace="y")
 
         # Assume 2 - create new Date column called 'New Date Col' of type datetime.
-        tp_str_to_date_2 = subsets.str_to_date(df1_str_date, 'Date', replace="n", col_name="New Date Col")
+        tp_str_to_date_2 = subsets.str_to_date(df2_str_date, 'Date', replace="n", col_name="New Date Col")
 
         # Assert 1
-        assert_frame_equal(tp_str_to_date, df2_datetime_inplace)
+        assert_frame_equal(tp_str_to_date.reset_index(drop=True), df3_datetime_inplace.reset_index(drop=True))
 
         # Assert 2
-        assert_frame_equal(tp_str_to_date_2, df3_datetime_new_col)
-
+        assert_frame_equal(tp_str_to_date_2.reset_index(drop=True), df4_datetime_new_col.reset_index(drop=True))
 
     def test_str_to_date_neg(self):
         """
@@ -56,63 +59,76 @@ class StrToDate(unittest.TestCase):
                                      ['B', '02/02/2002'],
                                      ['C', '03/03/2003']],
                                     columns=['Name', 'Date'])
-        df2_datetime_inplace = pd.DataFrame([['A', '01/01/2001'],
+        df2_str_date = pd.DataFrame([['A', '01/01/2001'],
+                                     ['B', '02/02/2002'],
+                                     ['C', '03/03/2003']],
+                                    columns=['Name', 'Date'])
+        df3_datetime_inplace = pd.DataFrame([['A', '01/01/2001'],
                                              ['B', '02/02/2002'],
                                              ['C', '03/03/2003']],
                                             columns=['Name', 'Date'])
-        df2_datetime_inplace['Date'] = pd.to_datetime(df2_datetime_inplace['Date'])
+        df3_datetime_inplace['Date'] = pd.to_datetime(df3_datetime_inplace['Date'])
 
-        df3_datetime_new_col = pd.DataFrame([['A', '01/01/2001'],
+        df4_datetime_new_col = pd.DataFrame([['A', '01/01/2001'],
                                              ['B', '02/02/2002'],
                                              ['C', '03/03/2003']],
                                             columns=['Name', 'Date'])
-        df3_datetime_new_col['New Date Col'] = pd.to_datetime(df3_datetime_new_col['Date'])
-
+        df4_datetime_new_col['New Date Col'] = pd.to_datetime(df4_datetime_new_col['Date'])
 
         # Assume
         subsets = XbrlSubsets()
 
         # Assume 1 - replace type of Date column with datetime instead of string.
-        tn_str_to_date = subsets.str_to_date(df1_str_date, 'Date', replace="y", col_name=None)
+        tn_str_to_date = subsets.str_to_date(df1_str_date, 'Date', replace="y")
 
         # Assume 2 - create new Date column called 'New Date Col' of type datetime.
-        tn_str_to_date_2 = subsets.str_to_date(df1_str_date, 'Date', replace="n", col_name="New Date Col")
+        tn_str_to_date_2 = subsets.str_to_date(df2_str_date, 'Date', replace="n", col_name="New Date Col")
 
         # Assert 1
-        self.assertEqual(tn_str_to_date.equals(df2_datetime_inplace), False)
+        self.assertEqual(tn_str_to_date.equals(df4_datetime_new_col), False)
 
         # Assert 2
-        self.assertEqual(tn_str_to_date_2.equals(df3_datetime_new_col), False)
+        self.assertEqual(tn_str_to_date_2.equals(df3_datetime_inplace), False)
 
-"""
-    def test_values(self):
-        
-        Test case for the recall function.
-        
+    def test_types(self):
+        """
+        Test types for the str_to_date function.
+        """
         # Assume
-        metrics = XbrlSubsets()
+        df1_str_date = pd.DataFrame([['A', '01/01/2001'],
+                                    ['B', '02/02/2002'],
+                                    ['C', '03/03/2003']],
+                                    columns=['Name', 'Date'])
+
+        # Assume
+        subsets = XbrlSubsets()
+
+        # Assert
+        with self.assertRaises(TypeError):
+            subsets.str_to_date(1.0, 'Date')
+
+        with self.assertRaises(TypeError):
+            subsets.str_to_date(df1_str_date, 5)
+
+        with self.assertRaises(TypeError):
+            subsets.str_to_date(df1_str_date, ['Name', 'Date'])
+
+    def test_values(self):
+        """
+        Test values for the str_to_date function.
+        """
+        # Assume
+        df1_str_date = pd.DataFrame([['A', '01/01/2001'],
+                                     ['B', '02/02/2002'],
+                                     ['C', '03/03/2003']],
+                                    columns=['Name', 'Date'])
+
+        # Assume
+        subsets = XbrlSubsets()
 
         # Assert
         with self.assertRaises(ValueError):
-            metrics.str_to_date(None, 2)
+            subsets.unique_entries(df1_str_date, 'Yellow')
 
         with self.assertRaises(ValueError):
-            metrics.str_to_date(1, None)
-
-
-
-import pandas as pd
-df2_datetime_inplace = pd.DataFrame([['A', '01/01/2001'],
-                                            ['B', '02/02/2002'],
-                                            ['C', '03/03/2003']],
-                                            columns=['Name', 'Date'])
-df2_datetime_inplace['Date'] = pd.to_datetime(df2_datetime_inplace['Date'])
-print(df2_datetime_inplace)
-"""
-
-import pandas as pd
-df2_datetime_inplace = pd.DataFrame([['A', '01/01/2001'],
-                                            ['B', '02/02/2002'],
-                                            ['C', '03/03/2003']],
-                                            columns=['Name', 'Date'])
-df2_datetime_inplace['Date'] = pd.to_datetime(df2_datetime_inplace['Date'])
+            subsets.unique_entries(df1_str_date, 'Name, Date')
