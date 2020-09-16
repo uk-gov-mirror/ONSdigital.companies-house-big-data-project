@@ -407,8 +407,11 @@ class XbrlSubsets:
         if not isinstance(date_col, str):
             raise TypeError("The date_col needs to be a string")
 
+        if replace not in ['y','n']:
+            raise ValueError("The replace argument needs to 'y' or 'n'")
+
         if date_col not in list(df.columns):
-            raise ValueError("The date_col should exist in the dataframe passed")
+            raise ValueError("The date_col needs to be a column present in the dataframe passed (df)")
 
         # if input column is string - convert
         if type(date_col) == str:

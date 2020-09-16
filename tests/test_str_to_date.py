@@ -126,9 +126,14 @@ class StrToDate(unittest.TestCase):
         # Assume
         subsets = XbrlSubsets()
 
-        # Assert
+        # Check error raised if string not present in column names
         with self.assertRaises(ValueError):
-            subsets.unique_entries(df1_str_date, 'Yellow')
+            subsets.str_to_date(df1_str_date, 'Yellow')
 
+        #Check erorr if user combines two column names into one string
         with self.assertRaises(ValueError):
-            subsets.unique_entries(df1_str_date, 'Name, Date')
+            subsets.str_to_date(df1_str_date, 'Name, Date')
+
+        #Check error is raised if replace is not 'y' or 'n'
+        with self.assertRaises(ValueError):
+            subsets.str_to_date(df1_str_date, 'Name',replace='q')
