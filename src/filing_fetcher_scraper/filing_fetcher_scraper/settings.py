@@ -76,7 +76,8 @@ ITEM_PIPELINES = {
     'scrapy.pipelines.files.FilesPipeline': 300,
 }
 
-FILES_STORE = os.path.join(os.path.expanduser('~'), 'data', 'companies_house', 'pdfs')
+#FILES_STORE = os.path.join(os.path.expanduser('~'), 'data', 'companies_house', 'pdfs')
+FILES_STORE = "/shares/data/20200519_companies_house_accounts/pdf_scraped_data/"
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
