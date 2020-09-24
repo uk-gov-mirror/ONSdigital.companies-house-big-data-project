@@ -163,7 +163,6 @@ def main():
             # Here you can splice/truncate the number of files you want to process for testing
             # TO BE COMMENTED OUT AFTER TESTING
             #files = files[0:40]
-            files = files[0:5]
 
             print(folder_month, folder_year)
 
