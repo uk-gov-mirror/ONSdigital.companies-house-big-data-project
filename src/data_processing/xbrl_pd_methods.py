@@ -93,6 +93,17 @@ class XbrlExtraction:
         Raises:
             None
         """
+
+        # Check that the input df is actually dataframe type.
+        if not isinstance(dataframe, pd.DataFrame):
+            raise TypeError("The first argument (df) needs to be a dataframe")
+
+        #if not isinstance(groupby_cols, list) or not isinstance(agg_cols, list):
+        #    raise TypeError("The groupby_cols and agg_cols need to be a list")
+
+        if column not in list(dataframe.columns):
+            raise ValueError("The column should exist in the dataframe passed")
+
         cache = dataframe
         cache["count"] = cache.groupby(by = column)[column].transform("count")
         cache.sort_values("count", inplace = True, ascending = False)
