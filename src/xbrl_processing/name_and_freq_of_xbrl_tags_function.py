@@ -20,9 +20,6 @@ def read_in_file(file):
     return input_data
 
 
-test = read_in_file('/home/kirstyc/test/2011_xbrl.csv')
-
-
 # Writes to an Excel workbook
 def write_to_excel(input_data, directory, filename, sheet_name, create_new_workbook = True):
     """
@@ -45,21 +42,9 @@ def write_to_excel(input_data, directory, filename, sheet_name, create_new_workb
     if create_new_workbook:
         with pd.ExcelWriter(directory + filename + '.xlsx') as writer:
             output = input_data.to_excel(writer, sheet_name=sheet_name)
-            #input_data.to_excel(writer, sheet_name=sheet_name)
 
-    if not create_new_workbook: # appends a new worksheet to the workbook
+    if not create_new_workbook:
         with pd.ExcelWriter(directory + filename + '.xlsx', mode='a') as writer:
             output = input_data.to_excel(writer, sheet_name=sheet_name)
 
     return output
-
-
-test1 = write_to_excel(test, '/home/kirstyc/test/', 'cha_276_2011_list_of_tags',
-                       '2011', create_new_workbook=True)
-
-test2 = pd.read_excel('/home/kirstyc/test/cha_276_2011_list_of_tags.xlsx', index_col=0)
-print(test2)
-
-# Cannot view the xlsx in VM so reading the workbook 'test_cha_276.xlsx' into here to check it, one worksheet at a time
-#test3 = pd.read_excel('/home/kirstyc/test/test_cha_276.xlsx', sheet_name=['data_2013'])
-
