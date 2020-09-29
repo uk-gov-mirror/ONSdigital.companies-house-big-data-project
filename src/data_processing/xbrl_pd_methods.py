@@ -110,8 +110,8 @@ class XbrlExtraction:
         if folder_month not in list_months:
             raise ValueError("The month provided should be a valid month from January to December")
 
-        # if not os.path.exists(output_folder):
-        #     raise ValueError("Output folder provided does not exist")
+        if not os.path.exists(output_folder):
+            raise ValueError("Output folder provided does not exist")
 
         if not str.isdigit(folder_year):
             raise ValueError("Year specified must be an integer >= 0")
