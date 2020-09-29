@@ -98,11 +98,23 @@ class XbrlExtraction:
         if not isinstance(dataframe, pd.DataFrame):
             raise TypeError("The first argument (df) needs to be a dataframe")
 
-        #if not isinstance(groupby_cols, list) or not isinstance(agg_cols, list):
-        #    raise TypeError("The groupby_cols and agg_cols need to be a list")
+        if (not isinstance(column, str) or not isinstance(output_folder, str)
+                or not isinstance(folder_month, str) or not isinstance(folder_year, str)):
+            raise TypeError("column, output_folder, folder_month and folder_year must all be strings")
 
         if column not in list(dataframe.columns):
             raise ValueError("The column should exist in the dataframe passed")
+
+        list_months = ["January", "February", "March", "April", "May", "June",
+                       "July", "August", "September", "October", "November", "December"]
+        if folder_month not in list_months:
+            raise ValueError("The month provided should be a valid month from January to December")
+
+        # if not os.path.exists(output_folder):
+        #     raise ValueError("Output folder provided does not exist")
+
+        if not str.isdigit(folder_year):
+            raise ValueError("Year specified must be an integer >= 0")
 
         cache = dataframe
         cache["count"] = cache.groupby(by = column)[column].transform("count")

@@ -23,16 +23,17 @@ class TestGetTagCounts(unittest.TestCase):
 
         return df
 
+    @mock.patch('os.path')
     @mock.patch('pandas.DataFrame.to_csv')
-    def test_get_tag_counts_pos(self, mock_to_csv):
+    def test_get_tag_counts_pos(self, mock_to_csv, mock_path):
         """
         Positive test case for the get_tag_counts function.
         """
         extractor = XbrlExtraction()
-
+        mock_path.exists.return_value = True
         df = self.input_data()
 
-        extractor.get_tag_counts(df, "name", "output_folder", "month", "year")
+        extractor.get_tag_counts(df, "name", "output_folder", "January", "2010")
 
         self.assertTrue(mock_to_csv.called, "CSV file not saved")
 
@@ -48,16 +49,40 @@ class TestGetTagCounts(unittest.TestCase):
         """
         Types test case for the get_tag_counts function.
         """
-        # Assert
-        #with self.assertRaises(TypeError):
-        #    subsets.tag_extraction(1.0, 'Name', 'A')
+
+        extractor = XbrlExtraction()
+        df = self.input_data()
+
+        with self.assertRaises(TypeError):
+            extractor.get_tag_counts(1.0, "name", "output_folder", "month", "year")
+
+        with self.assertRaises(TypeError):
+            extractor.get_tag_counts(df, 1, "output_folder", "month", "year")
+
+        with self.assertRaises(TypeError):
+            extractor.get_tag_counts(df, "name", 1, "month", "year")
+
+        with self.assertRaises(TypeError):
+            extractor.get_tag_counts(df, "name", "output_folder", 1, "year")
+
+        with self.assertRaises(TypeError):
+            extractor.get_tag_counts(df, "name", "output_folder", "month", 1)
 
     def test_get_tag_counts_values(self):
         """
         Values test case for the get_tag_counts function.
         """
-        # Assert
-        #with self.assertRaises(ValueError):
-        #    subsets.tag_extraction(dataframe, 'Surname', 'A','2012', "February")
-        #Need valueError tests for folder name, month and year
-        #check year with integer value 2
+        extractor = XbrlExtraction()
+        df = self.input_data()
+
+        with self.assertRaises(ValueError):
+           extractor.get_tag_counts(df, "three", "output_folder", "month", "year")
+
+        with self.assertRaises(ValueError):
+           extractor.get_tag_counts(df, "name", "output_folder", "notamonth", "year")
+
+        with self.assertRaises(ValueError):
+           extractor.get_tag_counts(df, "name", "notafolder", "January", "year")
+
+        with self.assertRaises(ValueError):
+           extractor.get_tag_counts(df, "name", "output_folder", "January", "notayear")
