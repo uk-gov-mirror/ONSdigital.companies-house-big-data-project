@@ -29,13 +29,26 @@ class TestGetFilepaths(unittest.TestCase):
         self.assertTrue(month == "December", "Incorrect month")
         self.assertTrue(year == "2014", "Incorrect year")
 
-    def test_get_tag_counts_neg(self):
+    @mock.patch('os.listdir')
+    def test_get_tag_counts_neg(self, mock_listdir):
         """
         Negative test case for the get_filepaths function.
 
         Is this test needed?
         """
-        pass
+        extractor = XbrlExtraction()
+
+        # Accounts_Monthly_Data-December2014/Prod224_0013_07971828_20140331.html
+        file = "Prod224_0013_07971828_20140331.html"
+        directory = "Accounts_Monthly_Data-December2014"
+        mock_listdir.return_value = [file]
+
+        files, month, year = extractor.get_filepaths(directory)
+
+        self.assertFalse(files != [directory + "/" + file], "Directory not present")
+        self.assertFalse(month != "December", "Incorrect month")
+        self.assertFalse(year != "2014", "Incorrect year")
+
 
     #@mock.patch('os.listdir')
     def test_get_tag_counts_types(self):
@@ -48,6 +61,14 @@ class TestGetFilepaths(unittest.TestCase):
         # file = "Prod224_0013_07971828_20140331.html"
         # directory = "Accounts_Monthly_Data-December2014"
         # mock_listdir.return_value = [file]
-
+        #int
         with self.assertRaises(TypeError):
             extractor.get_filepaths(1)
+        #list
+        with self.assertRaises(TypeError):
+            extractor.get_filepaths(["Accounts_Monthly_Data-December2014"])
+        #tuple
+        with self.assertRaises(TypeError):
+            extractor.get_filepaths(("Accounts_Monthly_Data-December2014","Accounts_Monthly_Data-December2015"))
+if __name__ == '__main__':
+    unittest.main()
