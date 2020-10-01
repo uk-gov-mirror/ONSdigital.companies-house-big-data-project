@@ -1,0 +1,53 @@
+import pandas
+import unittest
+import unittest.mock as mock
+from pandas.testing import assert_frame_equal
+
+# Custom import
+from src.data_processing.xbrl_pd_methods import XbrlExtraction
+
+class TestGetFilepaths(unittest.TestCase):
+    """
+
+    """
+
+    @mock.patch('os.listdir')
+    def test_get_filepaths_pos(self, mock_listdir):
+        """
+        Positive test case for the get_filepaths function.
+        """
+        extractor = XbrlExtraction()
+
+        # Accounts_Monthly_Data-December2014/Prod224_0013_07971828_20140331.html
+        file = "Prod224_0013_07971828_20140331.html"
+        directory = "Accounts_Monthly_Data-December2014"
+        mock_listdir.return_value = [file]
+
+        files, month, year = extractor.get_filepaths(directory)
+
+        self.assertTrue(files == [directory + "/" + file], "Directory not present")
+        self.assertTrue(month == "December", "Incorrect month")
+        self.assertTrue(year == "2014", "Incorrect year")
+
+    def test_get_tag_counts_neg(self):
+        """
+        Negative test case for the get_filepaths function.
+
+        Is this test needed?
+        """
+        pass
+
+    #@mock.patch('os.listdir')
+    def test_get_tag_counts_types(self):
+        """
+        Types test case for the get_filepaths function.
+        """
+
+        extractor = XbrlExtraction()
+
+        # file = "Prod224_0013_07971828_20140331.html"
+        # directory = "Accounts_Monthly_Data-December2014"
+        # mock_listdir.return_value = [file]
+
+        with self.assertRaises(TypeError):
+            extractor.get_filepaths(1)

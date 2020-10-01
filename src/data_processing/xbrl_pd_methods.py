@@ -26,6 +26,9 @@ class XbrlExtraction:
         Under the assumption that all files within
         the folder are financial records. """
 
+        if not isinstance(directory, str):
+            raise TypeError("The input argument 'directory' needs to be a string")
+
         files = [directory + "/" + filename
                     for filename in os.listdir(directory)
                         if (("htm" in filename.lower()) or ("xml" in filename.lower()))]
