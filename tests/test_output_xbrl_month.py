@@ -1,6 +1,7 @@
-import pandas as pd
+import pandas
 import unittest
 import unittest.mock as mock
+from pandas.testing import assert_frame_equal
 
 # Custom import
 from src.data_processing.xbrl_pd_methods import XbrlExtraction
@@ -11,7 +12,7 @@ class TestOutputXbrlMonth(unittest.TestCase):
     """
     def data_input(self):
 
-        df = pd.DataFrame([['A', '10'],
+        df = pandas.DataFrame([['A', '10'],
                            ['B', '20'],
                            ['A', '30'],
                            ['C', '40'],
@@ -22,7 +23,7 @@ class TestOutputXbrlMonth(unittest.TestCase):
         return df
 
     @mock.patch('os.path')
-    @mock.patch('pd.DataFrame.to_csv')
+    @mock.patch('pandas.DataFrame.to_csv')
     def test_output_xbrl_month_pos(self, mock_to_csv, mock_path):
         """
         Positive test case for the output_xbrl_month function.
@@ -34,3 +35,9 @@ class TestOutputXbrlMonth(unittest.TestCase):
         extractor.output_xbrl_month(df, "output_folder", "January", "2010")
 
         self.assertTrue(mock_to_csv.called, "CSV file not saved")
+
+
+if __name__ == "__main__":
+    unittest.main()
+    main()
+
