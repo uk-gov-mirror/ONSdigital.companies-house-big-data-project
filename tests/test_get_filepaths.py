@@ -30,7 +30,7 @@ class TestGetFilepaths(unittest.TestCase):
         self.assertTrue(year == "2014", "Incorrect year")
 
     @mock.patch('os.listdir')
-    def test_get_tag_counts_neg(self, mock_listdir):
+    def test_get_filepaths_neg(self, mock_listdir):
         """
         Negative test case for the get_filepaths function.
 
@@ -51,7 +51,7 @@ class TestGetFilepaths(unittest.TestCase):
 
 
     #@mock.patch('os.listdir')
-    def test_get_tag_counts_types(self):
+    def test_get_filepaths_types(self):
         """
         Types test case for the get_filepaths function.
         """
