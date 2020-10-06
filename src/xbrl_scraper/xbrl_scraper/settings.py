@@ -18,18 +18,18 @@ NEWSPIDER_MODULE = 'xbrl_scraper.spiders'
 #USER_AGENT = 'xbrl_scraper (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-#CONCURRENT_REQUESTS = 32
+CONCURRENT_REQUESTS = 1
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-#DOWNLOAD_DELAY = 3
+DOWNLOAD_DELAY = 0.5
 
 # Disable max download file size
-DOWNLOAD_MAXSIZE = 0
+#DOWNLOAD_MAXSIZE = 0
 
 # Set the download timeout to a vary large value to avoid timing out when
 # downloading very large files
@@ -53,9 +53,9 @@ DOWNLOAD_TIMEOUT = 100000
 
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
-#SPIDER_MIDDLEWARES = {
-#    'xbrl_scraper.middlewares.XbrlScraperSpiderMiddleware': 543,
-#}
+SPIDER_MIDDLEWARES = {
+    'xbrl_scraper.middlewares.XbrlScraperSpiderMiddleware': 543,
+}
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
@@ -71,20 +71,20 @@ DOWNLOAD_TIMEOUT = 100000
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-# ITEM_PIPELINES = {
-#    'xbrl_scraper.pipelines.XbrlScraperPipeline': 300,
-# }
 ITEM_PIPELINES = {
+    'xbrl_scraper.pipelines.XbrlScraperPipeline': 300,
+ }
+#ITEM_PIPELINES = {
     #'xbrl_scraper.pipelines.files.MyFilesPipeline': 1,
-    'xbrl_scraper.pipelines.XbrlScraperPipeline': 1,
+#    'xbrl_scraper.pipelines.XbrlScraperPipeline': 1,
     #'scrapy.pipelines.files.FilesPipeline': 1,
-}
+#}
 #FILES_STORE = "/shares/data/20200519_companies_house_accounts/xbrl_scraped_data_testing/"
 #FILES_STORE = "/Users/spot/scraped_data/"
 #FILES_STORE = "E:/scraped_data"
-FILES_STORE = "/shares/data/20200519_companies_house_accounts/xbrl_scraped_data/"
+FILES_STORE = "/shares/xbrl_scraped_data/"
 
-# Enable and configure the AutoThrottle extension (disabled by default)
+# Enable and configure utoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
 #AUTOTHROTTLE_ENABLED = True
 # The initial download delay
