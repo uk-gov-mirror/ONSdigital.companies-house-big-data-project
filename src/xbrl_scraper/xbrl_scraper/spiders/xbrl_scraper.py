@@ -28,8 +28,16 @@ class XBRLSpider(CrawlSpider):
     chdir("..")
     config.read("cha_pipeline.cfg")
 
-    allowed_domains = config.get('xbrl_web_scraper_args', 'allowed_domains').split(",")
-    start_urls = config.get('xbrl_web_scraper_args', 'start_urls').split(",")
+    allowed_domains = config.get('xbrl_web_scraper_args', 'allowed_domains').split(',')
+    start_urls = config.get('xbrl_web_scraper_args', 'start_urls').split(',')
+
+    filepath = config.get('xbrl_web_scraper_args', 'scraped_dir')
+    filepath += "/"
+
+    def start_requests(self):
+        for url in self.start_urls:
+            yield scrapy.Request(url=url, callback=self.parse)
+
 
     # allowed_domains = ['download.companieshouse.gov.uk/en_monthlyaccountsdata.html',
     #                     'download.companieshouse.gov.uk/historicmonthlyaccountsdata.html']
@@ -41,8 +49,6 @@ class XBRLSpider(CrawlSpider):
     #filepath = "E:/scraped_data"
     #filepath = "/shares/data/20200519_companies_house_accounts/xbrl_scraped_data/"
 
-    filepath = config.get('xbrl_web_scraper_args', 'scraped_dir')
-    filepath += "/"
 
     def parse(self, response):
         """
@@ -71,7 +77,9 @@ class XBRLSpider(CrawlSpider):
         # This is based on a comparison between the existing files which have SHA1 hashed filenames
         # and the SHA1 hashes of the scraped URLs
         filtered_links = [link for link in links if hashlib.sha1(link.encode('utf-8')).hexdigest() not in files]
-
+        print('==================')
+        print(filtered_links)
+        print('==================')
         # Yield items for download
         for link in filtered_links:
 
