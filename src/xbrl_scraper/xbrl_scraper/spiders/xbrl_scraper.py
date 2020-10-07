@@ -77,9 +77,7 @@ class XBRLSpider(CrawlSpider):
         # This is based on a comparison between the existing files which have SHA1 hashed filenames
         # and the SHA1 hashes of the scraped URLs
         filtered_links = [link for link in links if hashlib.sha1(link.encode('utf-8')).hexdigest() not in files]
-        print('==================')
-        print(filtered_links)
-        print('==================')
+
         # Yield items for download
         for link in filtered_links:
 
