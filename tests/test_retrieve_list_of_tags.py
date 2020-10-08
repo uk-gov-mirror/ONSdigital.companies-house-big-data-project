@@ -41,7 +41,7 @@ class RetrieveListOfTags(unittest.TestCase):
         #define test variables
         df = self.input_data()
         column = 'name'
-        folder = 'test_folder'
+        folder = '/shares/xbrl_parsed_data'
         month = 'January'
         year = '2010'
 
@@ -85,23 +85,30 @@ class RetrieveListOfTags(unittest.TestCase):
         :return:
         '''
         extractor = XbrlExtraction()
+
+        #define test variables
         df = self.input_data()
+        column = 'name'
+        folder = '/shares/xbrl_parsed_data'
+        month = 'January'
+        year = '2010'
+
 
         # check if column not in dataframe raises error
         with self.assertRaises(ValueError):
-            extractor.retrieve_list_of_tags(df, 'potatoe', 'output_folder', 'January', '2010')
+            extractor.retrieve_list_of_tags(df, 'potatoe', folder, month, year)
 
         # check value error for invalid directory
         with self.assertRaises(ValueError):
-            extractor.retrieve_list_of_tags(df, 'name', 'not_real_directory', 'January', '2010')
+            extractor.retrieve_list_of_tags(df, column, 'not_real_directory',  month, year)
 
         # check value error for invalid month
         with self.assertRaises(ValueError):
-            extractor.retrieve_list_of_tags(df, 'name', 'output_folder', 'Jan', '2010')
+            extractor.retrieve_list_of_tags(df, column, folder, 'Jan', year)
 
         # check value error if year not also int
         with self.assertRaises(ValueError):
-            extractor.retrieve_list_of_tags(df, 'name', 'output_folder', 'January', '2k10')
+            extractor.retrieve_list_of_tags(df, column, folder, month, '2k10')
 
 #Is this bit needed?
 if __name__ == '__main__':
