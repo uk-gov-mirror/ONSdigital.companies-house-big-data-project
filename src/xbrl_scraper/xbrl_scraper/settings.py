@@ -29,7 +29,7 @@ CONCURRENT_REQUESTS = 1
 DOWNLOAD_DELAY = 0.5
 
 # Disable max download file size
-#DOWNLOAD_MAXSIZE = 0
+DOWNLOAD_MAXSIZE = 0
 
 #Warning size for large files
 DOWNLOAD_WARNSIZE = 5000000000
