@@ -74,6 +74,7 @@ SPIDER_MIDDLEWARES = {
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
+
 ITEM_PIPELINES = {
     'xbrl_scraper.pipelines.XbrlScraperPipeline': 300,
  }
