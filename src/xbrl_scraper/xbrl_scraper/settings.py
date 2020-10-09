@@ -31,6 +31,9 @@ DOWNLOAD_DELAY = 0.5
 # Disable max download file size
 #DOWNLOAD_MAXSIZE = 0
 
+#Warning size for large files
+DOWNLOAD_WARNSIZE = 5000000000
+
 # Set the download timeout to a vary large value to avoid timing out when
 # downloading very large files
 DOWNLOAD_TIMEOUT = 100000
@@ -74,11 +77,7 @@ SPIDER_MIDDLEWARES = {
 ITEM_PIPELINES = {
     'xbrl_scraper.pipelines.XbrlScraperPipeline': 300,
  }
-#ITEM_PIPELINES = {
-    #'xbrl_scraper.pipelines.files.MyFilesPipeline': 1,
-#    'xbrl_scraper.pipelines.XbrlScraperPipeline': 1,
-    #'scrapy.pipelines.files.FilesPipeline': 1,
-#}
+
 #FILES_STORE = "/shares/data/20200519_companies_house_accounts/xbrl_scraped_data_testing/"
 #FILES_STORE = "/Users/spot/scraped_data/"
 #FILES_STORE = "E:/scraped_data"
