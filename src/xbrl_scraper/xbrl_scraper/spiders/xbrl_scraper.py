@@ -17,17 +17,6 @@ class XbrlScraperItem(scrapy.Item):
 class XBRLSpider(CrawlSpider):
     name = "xbrl_scraper"
 
-    allowed_domains = ['download.companieshouse.gov.uk']
-    #start_urls = ['http://download.companieshouse.gov.uk/en_monthlyaccountsdata.html']
-
-    # allowed_domains = ['download.companieshouse.gov.uk/historicmonthlyaccountsdata.html']
-    # start_urls = ['http://download.companieshouse.gov.uk/historicmonthlyaccountsdata.html']
-
-    #config = configparser.ConfigParser()
-    #chdir("..")
-    #chdir("..")
-    #config.read("cha_pipeline.cfg")
-
     allowed_domains = config.get('xbrl_web_scraper_args', 'allowed_domains').split(',')
     start_urls = config.get('xbrl_web_scraper_args', 'start_urls').split(',')
 
