@@ -71,6 +71,35 @@ class XbrlExtraction:
         Raises:
             None
         """
+        ##TYPE ERRORS
+        # Check that the input df is actually dataframe type.
+        if not isinstance(dataframe, pd.DataFrame):
+            raise TypeError("The first argument (dataframe) needs to be a Pandas Dataframe")
+
+        #Check inputs; column, output_folder, folder_month and folder_year are string types
+        if (not isinstance(column, str) or not isinstance(output_folder, str)
+                or not isinstance(folder_month, str) or not isinstance(folder_year, str)):
+            raise TypeError("column, output_folder, folder_month and folder_year must all be strings")
+
+        ##VALUE ERRORS
+        #CHeck column name present in dataframe
+        if column not in list(dataframe.columns):
+            raise ValueError("The column should exist in the dataframe passed")
+
+        #Define list of valid month arguments
+        list_months = ["January", "February", "March", "April", "May", "June",
+                       "July", "August", "September", "October", "November", "December"]
+        if folder_month not in list_months:
+            raise ValueError("The month provided should be a valid month; from January to December")
+
+        #Check output_folder is a valid directory
+        if not os.path.exists(output_folder):
+            raise ValueError("Output folder provided does not exist")
+
+        #Check year string equivelent to an int (i.e. 2010)
+        if not str.isdigit(folder_year):
+            raise ValueError("Year specified must be an integer >= 0")
+
         list_of_tags = dataframe['name'].tolist()
         list_of_tags_unique = list(set(list_of_tags))
 

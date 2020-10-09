@@ -17,19 +17,19 @@ class XbrlScraperItem(scrapy.Item):
 class XBRLSpider(CrawlSpider):
     name = "xbrl_scraper"
 
-    # allowed_domains = ['download.companieshouse.gov.uk/en_accountsdata.html']
-    # start_urls = ['http://download.companieshouse.gov.uk/en_accountsdata.html']
+    allowed_domains = ['download.companieshouse.gov.uk']
+    #start_urls = ['http://download.companieshouse.gov.uk/en_monthlyaccountsdata.html']
 
     # allowed_domains = ['download.companieshouse.gov.uk/historicmonthlyaccountsdata.html']
     # start_urls = ['http://download.companieshouse.gov.uk/historicmonthlyaccountsdata.html']
 
-    config = configparser.ConfigParser()
-    chdir("..")
-    chdir("..")
-    config.read("cha_pipeline.cfg")
+    #config = configparser.ConfigParser()
+    #chdir("..")
+    #chdir("..")
+    #config.read("cha_pipeline.cfg")
 
-    allowed_domains = config.get('xbrl_web_scraper_args', 'allowed_domains').split(",")
-    start_urls = config.get('xbrl_web_scraper_args', 'start_urls').split(",")
+    #allowed_domains = config.get('xbrl_web_scraper_args', 'allowed_domains').split(",")
+    #start_urls = config.get('xbrl_web_scraper_args', 'start_urls').split(",")
 
     # allowed_domains = ['download.companieshouse.gov.uk/en_monthlyaccountsdata.html',
     #                     'download.companieshouse.gov.uk/historicmonthlyaccountsdata.html']
@@ -39,10 +39,14 @@ class XBRLSpider(CrawlSpider):
     #filepath = "/shares/data/20200519_companies_house_accounts/xbrl_scraped_data_testing"
     #filepath = "/Users/spot/scraped_data/"
     #filepath = "E:/scraped_data"
-    #filepath = "/shares/data/20200519_companies_house_accounts/xbrl_scraped_data/"
+    filepath = "/shares/xbrl_scraped_data/"
 
-    filepath = config.get('xbrl_web_scraper_args', 'scraped_dir')
-    filepath += "/"
+    #filepath = config.get('xbrl_web_scraper_args', 'scraped_dir')
+    #filepath += "/"
+    def start_requests(self):
+        urls = ['http://download.companieshouse.gov.uk/en_monthlyaccountsdata.html']
+        for url in urls:
+            yield scrapy.Request(url = url, callback= self.parse )
 
     def parse(self, response):
         """
@@ -59,8 +63,8 @@ class XBRLSpider(CrawlSpider):
             None
         """
         # Get a list of all filenames excluding directories and file extensions
-        files = [f.split(".")[0] for f in listdir(self.filepath) if isfile(join(self.filepath, f))]
-
+        files = [f.split(".")[0] for f in listdir(self.filepath) if isfile(join(self.filepath, f))] 
+        
         # Extract all links from the web page (the response)
         links = response.xpath('//body//a/@href').extract()
 
