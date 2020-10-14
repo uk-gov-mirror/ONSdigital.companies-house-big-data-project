@@ -84,7 +84,7 @@ class XbrlExtraction:
         """
         Save dataframe containing all unique tags to txt format in specified directory.
 
-        Arguements:
+        Arguments:
             dataframe:     tabular data
             column:        location of xbrl tags
             output_folder: user specified file location
@@ -164,18 +164,43 @@ class XbrlExtraction:
         return results
 
     @staticmethod
-    def output_xbrl_month(dataframe, output_folder, folder_month, folder_year, file_type = "csv"):
+    def output_xbrl_month(dataframe, output_folder, folder_month, folder_year, file_type="csv"):
         """
-        Save dataframe to csv format in specified directory, with particular naming scheme "YYYY-MM_xbrl_data.csv".
+        Save dataframe to csv format in specified directory, with particular naming scheme
+        "YYYY-MM_xbrl_data.csv".
 
         Arguments:
-            dataframe:     tabular data
-            output_folder: user specified file destination
+            dataframe: tabular data (df)
+            output_folder: user specified file destination (str)
+            folder_month: month to include in output folder name (str)
+            folder_year: year to include in output folder name (str)
+            file_type: default is csv (str)
+
         Returns:
             None
         Raises:
             None
         """
+
+        # Check that the input df is actually dataframe type.
+        if not isinstance(dataframe, pd.DataFrame):
+            raise TypeError("The first argument (df) needs to be a dataframe")
+
+        if (not isinstance(output_folder, str) or not isinstance(folder_month, str)
+                or not isinstance(file_type, str) or not isinstance(folder_year, str)):
+            raise TypeError("output_folder, folder_month, folder_year and file_type must all be strings")
+
+        list_months = ["January", "February", "March", "April", "May", "June",
+                       "July", "August", "September", "October", "November", "December"]
+        if folder_month not in list_months:
+            raise ValueError("The month provided should be a valid month from January to December")
+
+        if not os.path.exists(output_folder):
+            raise ValueError("Output folder provided does not exist")
+
+        if not str.isdigit(folder_year):
+            raise ValueError("Year specified must be an integer >= 0")
+
         if file_type == "csv":
             dataframe.to_csv(
                 output_folder
@@ -184,8 +209,8 @@ class XbrlExtraction:
                     + "-"
                     + folder_month
                     + "_xbrl_data.csv",
-                index = False,
-                header = True
+                index=False,
+                header=True
             )
         else:
             print("I need a CSV for now...")
