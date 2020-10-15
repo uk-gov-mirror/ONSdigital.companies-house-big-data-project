@@ -1,6 +1,7 @@
 from os import listdir, chdir, getcwd, popen
 from os.path import isfile, join
 import time
+import math
 import argparse
 import sys
 # import cv2
@@ -169,7 +170,9 @@ def main():
             # Without this, the build_month_table method will be called for every file in the list, not on block
             # Code needed to split files by the number of cores before passing in as an argument
             num_processes = 1
-            files = [files[i:i + num_processes] for i in range(0, len(files), num_processes)]
+            chunk_len = math.ceil(len(files) / num_processes)
+            #print(chunk_len)
+            files = [files[i:i + chunk_len] for i in range(0, len(files), chunk_len)]
 
             print(folder_month, folder_year)
 
