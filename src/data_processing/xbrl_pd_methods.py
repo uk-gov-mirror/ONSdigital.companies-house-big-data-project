@@ -168,6 +168,9 @@ class XbrlExtraction:
     def build_month_table(list_of_files):
         """
         """
+
+        print(list_of_files)
+
         process_start = time.time()
 
         # Empty table awaiting results
@@ -177,6 +180,8 @@ class XbrlExtraction:
 
         # For every file
         for file in list_of_files:
+
+            print("Here")
 
             COUNT += 1
 
