@@ -169,8 +169,6 @@ class XbrlExtraction:
         """
         """
 
-        print(list_of_files)
-
         process_start = time.time()
 
         # Empty table awaiting results
@@ -180,8 +178,6 @@ class XbrlExtraction:
 
         # For every file
         for file in list_of_files:
-
-            print("Here")
 
             COUNT += 1
 

@@ -169,9 +169,8 @@ def main():
             # Argument to pool.map needs to be list containing the already split list of files
             # Without this, the build_month_table method will be called for every file in the list, not on block
             # Code needed to split files by the number of cores before passing in as an argument
-            num_processes = 1
+            num_processes = 2
             chunk_len = math.ceil(len(files) / num_processes)
-            #print(chunk_len)
             files = [files[i:i + chunk_len] for i in range(0, len(files), chunk_len)]
 
             print(folder_month, folder_year)
