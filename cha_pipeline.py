@@ -7,6 +7,7 @@ import sys
 # import cv2
 import configparser
 import multiprocessing as mp
+import concurrent.futures
 
 import os
 import re
@@ -169,7 +170,7 @@ def main():
             # Argument to pool.map needs to be list containing the already split list of files
             # Without this, the build_month_table method will be called for every file in the list, not on block
             # Code needed to split files by the number of cores before passing in as an argument
-            num_processes = 2
+            num_processes = 1
             chunk_len = math.ceil(len(files) / num_processes)
             files = [files[i:i + chunk_len] for i in range(0, len(files), chunk_len)]
 
@@ -177,6 +178,10 @@ def main():
 
             # Finally, build a table of all variables from all example (digital) documents
             # This can take a while
+            # with concurrent.futures.ThreadPoolExecutor(max_workers=num_processes) as executor:
+            #     r = executor.map(extractor.build_month_table, files)
+            # results = pd.concat(r)
+
             pool = mp.Pool(processes=num_processes)
             r = pool.map(extractor.build_month_table, files)
             pool.close()
