@@ -31,7 +31,7 @@ class XbrlExtraction:
 
         files = [directory + "/" + filename
                     for filename in os.listdir(directory)
-                        if (("htm" in filename.lower()) or ("xml" in filename.lower()))]
+                        if ((".htm" in filename.lower()) or (".xml" in filename.lower()))]
 
         month_and_year = ('').join(directory.split('-')[-1:])
         month, year = month_and_year[:-4], month_and_year[-4:]
