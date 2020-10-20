@@ -422,7 +422,7 @@ class XbrlParser:
         doc['doc_companieshouseregisterednumber'] = filepath.split("/")[-1].split(".")[0].split("_")[-2]
 
     #     print(filepath)
-
+        #loop over multithreading here - imports data and parses on seperate threads
         try:
             soup = BS(open(filepath, "rb"), "html.parser")
         except:

@@ -176,6 +176,7 @@ class XbrlExtraction:
         COUNT = 0
 
         # For every file
+        #loop over multiprocessing here - each core works on seperate file
         for file in list_of_files:
 
             COUNT += 1
