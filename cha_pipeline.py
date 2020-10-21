@@ -1,10 +1,13 @@
 from os import listdir, chdir, getcwd, popen
 from os.path import isfile, join
 import time
+import math
 import argparse
 import sys
 # import cv2
 import configparser
+import multiprocessing as mp
+import concurrent.futures
 
 import os
 import re
@@ -162,13 +165,30 @@ def main():
 
             # Here you can splice/truncate the number of files you want to process for testing
             # TO BE COMMENTED OUT AFTER TESTING
-            #files = files[0:40]
+            files = files[0:40]
+
+            # Argument to pool.map needs to be list containing the already split list of files
+            # Without this, the build_month_table method will be called for every file in the list, not on block
+            # Code needed to split files by the number of cores before passing in as an argument
+            num_processes = 1
+            chunk_len = math.ceil(len(files) / num_processes)
+            files = [files[i:i + chunk_len] for i in range(0, len(files), chunk_len)]
 
             print(folder_month, folder_year)
 
             # Finally, build a table of all variables from all example (digital) documents
             # This can take a while
-            results = extractor.build_month_table(files)
+            # with concurrent.futures.ThreadPoolExecutor(max_workers=num_processes) as executor:
+            #     r = executor.map(extractor.build_month_table, files)
+            # results = pd.concat(r)
+
+            pool = mp.Pool(processes=num_processes)
+            r = pool.map(extractor.build_month_table, files)
+            pool.close()
+            pool.join()
+            results = pd.concat(r)
+
+            #results = extractor.build_month_table(files)
 
             print(results.shape)
 
