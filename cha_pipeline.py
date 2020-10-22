@@ -191,7 +191,7 @@ def main():
             print(folder_month, folder_year)
 
             # Code needed to split files by the number of cores before passing in as an argument
-            num_processes = 3
+            num_processes = 4
             chunk_len = math.ceil(len(files) / num_processes)
             files = [files[i:i + chunk_len] for i in range(0, len(files), chunk_len)]
 
@@ -219,7 +219,7 @@ def main():
             print("Longest tag: ", len(max(list_of_tags_unique, key=len)))
 
             # Output all unique tags to a txt file
-            """
+
             ## Commented out while testing parser changes
             
             extractor.retrieve_list_of_tags(
@@ -253,7 +253,7 @@ def main():
                                      xbrl_file_appender_outdir,
                                      xbrl_file_appender_year,
                                      xbrl_file_appender_quarter)
-
+    """
     # Execute PDF web scraper
     if pdf_web_scraper == str(True):
         print("PDF web scraper running...")
@@ -338,9 +338,7 @@ def main():
             cv2.destroyAllWindows()
         else:
             pass
-
-        """
-
+    """
 if __name__ == "__main__":
     process_start = time.time()
 

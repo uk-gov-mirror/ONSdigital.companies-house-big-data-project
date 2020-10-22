@@ -456,7 +456,7 @@ class XbrlParser:
         #loop over multithreading here - imports data and parses on seperate threads
         try:
             file = open(filepath)
-            soup = BS(file, "html.parser")
+            soup = BS(file, "lxml")
         except:
             print("Failed to open: " + filepath)
             return (1)
