@@ -3,7 +3,6 @@ import re
 
 import numpy as np
 import pandas as pd
-
 from datetime import datetime
 from dateutil import parser
 from bs4 import BeautifulSoup as BS  # Can parse xml or html docs
@@ -372,30 +371,62 @@ class XbrlParser:
         return (elements)
 
     @staticmethod
+    def flatten_dict(doc):
+        """
+        NEED TO CHANGE TO REFLEC TNEW FUNCTIONALITY - IF WORKING
+        Takes in a list of dictionaries and combines them into a
+        single dictionary - assumes dictionaries all have same keys
+
+        inputs:
+        doc = list of dictionaries
+
+        outputs:
+        doc_dict - dictionary
+        """
+        #combines list of dictionaries into one dictionary
+        #based on common keys
+        doc_dict = {}
+        for k in doc[0].keys():
+            doc_dict[k] = [d[k] for d in doc]
+
+        return (doc_dict)
+
+    @staticmethod
     def flatten_data(doc):
         """
-        Takes the data returned by process account, with its tree-like
+        Takes the data returned by flatten dict, with its tree-like
         structure and reorganises it into a long-thin format table structure
         suitable for SQL applications.
         """
-
-        # Need to drop components later, so need copy in function
         doc2 = doc.copy()
-        doc_df = pd.DataFrame()
+        #define empty list
+        list_elements = []
 
-        # Pandas should create series, then columns, from dicts when called
-        # like this
-        for element in doc2['elements']:
-            doc_df = doc_df.append(element, ignore_index=True)
+        #loop over each file and create a seperate dataframe
+        #for each set (elements) of parsed tags, appending result
+        #to list
+        for i in range(len(doc2)):
+            df_element = pd.DataFrame.from_dict(doc2[i]['elements'])
+            df_element['key'] = i
 
-        # Dump the "elements" entry in the doc dict
-        doc2.pop("elements")
+            # Dump the "elements" entry in the doc dict
+            doc2[i].pop("elements")
 
-        # Create uniform columns for all other properties
-        for key in doc2:
-            doc_df[key] = doc2[key]
+            list_elements.append(df_element)
 
-        return (doc_df)
+        #combine elements dataframes together
+        df_elements = pd.concat(list_elements)
+
+        # Create uniform columns for metadata (one row per file)
+        df_meta = pd.DataFrame.from_dict(doc2)
+        df_meta['key'] = df_meta.index
+        #merge two datasets based on file number (first parsed file = 0)
+        df_final = df_meta.merge(df_elements,how='left',on='key')
+        #drop key
+        df_final.drop('key',axis=1)
+
+        return df_final
+
 
     @staticmethod
     def process_account(filepath):
@@ -424,7 +455,8 @@ class XbrlParser:
     #     print(filepath)
         #loop over multithreading here - imports data and parses on seperate threads
         try:
-            soup = BS(open(filepath, "rb"), "html.parser")
+            file = open(filepath)
+            soup = BS(file, "html.parser")
         except:
             print("Failed to open: " + filepath)
             return (1)

@@ -2,6 +2,7 @@ from os import listdir, chdir, getcwd, popen
 from os.path import isfile, join
 import time
 import math
+from random import shuffle
 import argparse
 import sys
 # import cv2
@@ -18,7 +19,7 @@ import importlib
 from datetime import datetime
 from dateutil import parser
 from bs4 import BeautifulSoup as BS  # Can parse xml or html docs
-
+pd.set_option("display.max_columns",500)
 config = configparser.ConfigParser()
 config.read("cha_pipeline.cfg")
 
@@ -87,6 +88,7 @@ from src.data_processing.cst_data_processing import DataProcessing
 from src.classifier.cst_classifier import Classifier
 from src.performance_metrics.binary_classifier_metrics import BinaryClassifierMetrics
 from src.data_processing.xbrl_pd_methods import XbrlExtraction
+from src.data_processing.xbrl_parser import XbrlParser
 from src.validators.xbrl_validator_methods import XbrlValidatorMethods
 from src.data_processing.combine_csvfiles import XbrlCsvAppender
 
@@ -123,6 +125,7 @@ def main():
         print("XBRL parser running...")
         
         extractor = XbrlExtraction()
+        parser = XbrlParser()
 
         # Create a list of months based on what quarter in the year has been specified
         if xbrl_parser_process_quarter == "1":
@@ -163,37 +166,50 @@ def main():
 
             print(len(files))
 
+            '''
+            ### Targets largest files
+            #limit to moderate amount of files
+            files = files[0:50000]
             # Here you can splice/truncate the number of files you want to process for testing
             # TO BE COMMENTED OUT AFTER TESTING
-            files = files[0:40]
+            filesize = []
+            for i in range(len(files)):
+                filesize.append((files[i],os.path.getsize(files[i])))
 
-            # Argument to pool.map needs to be list containing the already split list of files
-            # Without this, the build_month_table method will be called for every file in the list, not on block
+            filesize.sort(key = lambda filesize: filesize[1],reverse=True)
+            
+            for i in range(len(filesize)):
+                files[i] = filesize[i][0]
+                
+            total_files = len(files)
+            shuffle(files)
+            files = files
+            '''
+            #files = files[0:3000]
+
+            # TO BE COMMENTED OUT AFTER TESTING
+            print(folder_month, folder_year)
+
             # Code needed to split files by the number of cores before passing in as an argument
-            num_processes = 1
+            num_processes = 3
             chunk_len = math.ceil(len(files) / num_processes)
             files = [files[i:i + chunk_len] for i in range(0, len(files), chunk_len)]
 
-            print(folder_month, folder_year)
-
-            # Finally, build a table of all variables from all example (digital) documents
-            # This can take a while
-            # with concurrent.futures.ThreadPoolExecutor(max_workers=num_processes) as executor:
-            #     r = executor.map(extractor.build_month_table, files)
-            # results = pd.concat(r)
-
+            #define number of processors
             pool = mp.Pool(processes=num_processes)
+            # Finally, build a table of all variables from all example (digital) documents
+            # splitting the load between cpu cores = num_processes
+            # This can take a while (hopefully not anymore!!!)
             r = pool.map(extractor.build_month_table, files)
-            pool.close()
-            pool.join()
-            results = pd.concat(r)
 
-            #results = extractor.build_month_table(files)
+            #combine resultant list of lists
+            r = [item for sublist in r for item in sublist]
 
+            #combine data and convert into dataframe
+            results = parser.flatten_data(r)
             print(results.shape)
 
-            results.head(10)
-
+            #save to csv
             extractor.output_xbrl_month(results, xbrl_processed_csv, folder_month, folder_year)
 
             # Find list of all unique tags in dataset
@@ -203,6 +219,9 @@ def main():
             print("Longest tag: ", len(max(list_of_tags_unique, key=len)))
 
             # Output all unique tags to a txt file
+            """
+            ## Commented out while testing parser changes
+            
             extractor.retrieve_list_of_tags(
                 results,
                 "name",
@@ -270,7 +289,7 @@ def main():
     if merge_xbrl_to_pdf_data == str(True):
         print("Merging XBRL and PDF data...")
 
-    """
+ 
     # construct the argument parse and parse the arguments
     ap = argparse.ArgumentParser()
     ap.add_argument("-d", "--input_imgs", required = True,
@@ -319,8 +338,8 @@ def main():
             cv2.destroyAllWindows()
         else:
             pass
-    """
 
+        """
 
 if __name__ == "__main__":
     process_start = time.time()

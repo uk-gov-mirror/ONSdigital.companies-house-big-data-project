@@ -172,24 +172,24 @@ class XbrlExtraction:
         process_start = time.time()
 
         # Empty table awaiting results
-        results = pd.DataFrame()
+        results = []
+
 
         COUNT = 0
 
         # For every file
-        #loop over multiprocessing here - each core works on seperate file
         for file in list_of_files:
 
             COUNT += 1
 
-            # Read the file
+            # Read the file and parse
             doc = xbrl_parser.process_account(file)
 
-            # tabulate the results
-            doc_df = xbrl_parser.flatten_data(doc)
+            #flatten the elements dict into single dict
+            doc['elements'] = xbrl_parser.flatten_dict(doc['elements'])
 
-            # append to table
-            results = results.append(doc_df)
+            # append results to table
+            results.append(doc)
 
             XbrlExtraction.progressBar("XBRL Accounts Parsed", COUNT, len(list_of_files), bar_length = 50, width = 20)
 
