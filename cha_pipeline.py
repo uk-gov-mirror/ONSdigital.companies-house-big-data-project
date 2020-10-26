@@ -185,13 +185,13 @@ def main():
             shuffle(files)
             files = files
             '''
-            #files = files[0:3000]
+            files = files[0:30]
 
             # TO BE COMMENTED OUT AFTER TESTING
             print(folder_month, folder_year)
 
             # Code needed to split files by the number of cores before passing in as an argument
-            num_processes = 4
+            num_processes = 3
             chunk_len = math.ceil(len(files) / num_processes)
             files = [files[i:i + chunk_len] for i in range(0, len(files), chunk_len)]
 
@@ -201,7 +201,8 @@ def main():
             # splitting the load between cpu cores = num_processes
             # This can take a while (hopefully not anymore!!!)
             r = pool.map(extractor.build_month_table, files)
-
+            pool.close()
+            pool.join()
             #combine resultant list of lists
             r = [item for sublist in r for item in sublist]
 
