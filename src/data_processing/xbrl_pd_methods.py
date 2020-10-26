@@ -191,7 +191,7 @@ class XbrlExtraction:
             # append results to table
             results.append(doc)
 
-            #XbrlExtraction.progressBar("XBRL Accounts Parsed", COUNT, len(list_of_files), bar_length = 50, width = 20)
+            XbrlExtraction.progressBar("XBRL Accounts Parsed", COUNT, len(list_of_files), bar_length = 50, width = 20)
 
         print("Average time to process an XBRL file: \x1b[31m{:0f}\x1b[0m".format((time.time() - process_start) / 60, 2), "minutes")
 
