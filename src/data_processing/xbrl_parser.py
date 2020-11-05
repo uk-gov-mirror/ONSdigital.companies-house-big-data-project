@@ -423,7 +423,7 @@ class XbrlParser:
         #merge two datasets based on file number (first parsed file = 0)
         df_final = df_meta.merge(df_elements,how='left',on='key')
         #drop key
-        df_final.drop('key',axis=1)
+        df_final = df_final.drop('key',axis=1)
 
         return df_final
 
