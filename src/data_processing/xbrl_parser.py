@@ -396,6 +396,8 @@ class XbrlParser:
 
         # loop over each file and create a separate dataframe
         # for each set (elements) of parsed tags, appending result to list
+
+
         for i in range(len(doc2)):
             df_element = pd.DataFrame.from_dict(doc2[i]['elements'])
             df_element['key'] = i
@@ -469,3 +471,16 @@ class XbrlParser:
             return doc
         except Exception as e:
             return e
+
+if __name__ == "__main__":
+    from xbrl_pd_methods import XbrlExtraction
+
+    parser = XbrlParser
+    files = XbrlExtraction.get_filepaths(
+        "/home/dylan_purches/repo/companies-house-big-data-project/data/for_testing/xbrl_decompressed_data"
+    )[0]
+    test_doc = []
+    for i in range(40):
+        test_doc.append(parser.process_account(files[i]))
+
+    parser.flatten_data(test_doc)
