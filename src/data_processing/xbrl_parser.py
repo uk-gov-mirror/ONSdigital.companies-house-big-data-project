@@ -1,8 +1,13 @@
 from bs4 import BeautifulSoup as BS  # Can parse xml or html docs
 from datetime import datetime
 from dateutil import parser
+from src.data_processing.xbrl_pd_methods import XbrlParser
 import pandas as pd
 import os
+
+#For testing only
+import csv
+import time
 
 
 class XbrlParser:
@@ -394,49 +399,58 @@ class XbrlParser:
 
        #check if temp file is already present
         try:
-            os.remove("df_elements.csv")
+            os.remove("/home/dylan_purches/Documents/Data/temp_exports/df_elements.csv")
         except:
             pass
 
         # loop over each file and create a separate dataframe
         # for each set (elements) of parsed tags, appending result to list
         md, hd = 'w', True
+
+        T = len(doc2)
+        t0 = time.time()
         for i in range(len(doc2)):
             #Turn each elements dict into a dataframe
             df_element = pd.DataFrame.from_dict(doc2[i]['elements'])
-            print(df_element.head(5))
+
             if 'sign' not in df_element.columns.values:
-                print("yes!")
                 df_element['sign'] = 'NA'
+
             #Add a key
             df_element['key'] = i
-            # Dump the "elements" entry in the doc dict
+
+            #Dump the "elements" entry in the doc dict
             doc2[i].pop('elements')
             df_element_meta = pd.DataFrame(doc2[i], index =[0])
             df_element_meta['key'] = i
 
+            #Merge the metadata with the elements
             df_element_export = df_element_meta.merge(df_element, how='left', on='key')
             df_element_export = df_element_export.drop('key', axis= 1)
-            print(len(df_element_export.columns.values))
 
-            #append the new element to a csv file stored on the disk
-            df_element_export.to_csv("df_elements.csv", mode=md, header=hd, index=None)
+            #Append the new element to a csv file stored on the disk
+            df_element_export.to_csv(
+                "/home/dylan_purches/Documents/Data/temp_exports/df_elements.csv",
+                mode=md,
+                header=hd,
+                index=None
+            )
+
+            XbrlExtraction.progressBar("Percentage of accounts that have been added", i, T)
+            print("YES")
+            if i % 1000 == 0:
+                with open("/home/dylan_purches/Documents/Data/flatten_data_test_logs.csv", mode = 'w') as log_file:
+                    log_writer = csv.writer(log_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+                    log_writer.writerow([i, (time.time() - t0)/float(60), time.time() - t0])
+
             md, hd = 'a', False
 
         # convert the stored csv back into a pandas df and tidy up
-        df_elements = pd.read_csv("df_elements.csv", index_col=None)
-        os.remove("df_elements.csv")
+        df_elements = pd.read_csv("/home/dylan_purches/Documents/Data/temp_exports/df_elements.csv", index_col=None)
+        os.remove("/home/dylan_purches/Documents/Data/temp_exports/df_elements.csv")
+
         return df_elements
 
-        # Create uniform columns for metadata (one row per file)
-        # df_meta = pd.DataFrame.from_dict(doc2)
-        # df_meta['key'] = df_meta.index
-        # # merge two datasets based on file number (first parsed file = 0)
-        # df_final = df_meta.merge(df_elements, how='left', on='key')
-        # del df_meta, df_elements
-        # # drop key
-        # df_final = df_final.drop('key', axis=1)
-        #return df_final
 
     @staticmethod
     def process_account(filepath):
@@ -493,14 +507,17 @@ class XbrlParser:
             return e
 
 if __name__ == "__main__":
-    from xbrl_pd_methods import XbrlExtraction
 
-    parser = XbrlParser
-    files = XbrlExtraction.get_filepaths(
-        "/home/dylan_purches/repo/companies-house-big-data-project/data/for_testing/xbrl_decompressed_data"
-    )[0]
-    test_doc = []
-    for i in range(5):
-        test_doc.append(parser.process_account(files[i]))
-
-    df = parser.flatten_data(test_doc)
+    print("hello")
+    # parser = XbrlParser
+    # print("Getting file paths")
+    # files = XbrlExtraction.get_filepaths(
+    #     "/home/dylan_purches/Documents/Data/Accounts_Monthly_Data-September2019"
+    # )[0]
+    # doc = []
+    # print("Turning into list")
+    # for i in len(files):
+    #     XbrlExtraction.progressBar("Number of files added to dict", i, len(files))
+    #     doc.append(parser.process_account(files[i]))
+    #
+    # df = parser.flatten_data(doc)
