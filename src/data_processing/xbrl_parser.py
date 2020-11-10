@@ -404,7 +404,7 @@ class XbrlParser:
         for i in range(len(doc2)):
             #Turn each elements dict into a dataframe
             df_element = pd.DataFrame.from_dict(doc2[i]['elements'])
-            #print(df_element.columns.values)
+            print(df_element.head(5))
             if 'sign' not in df_element.columns.values:
                 print("yes!")
                 df_element['sign'] = 'NA'
@@ -416,6 +416,7 @@ class XbrlParser:
             df_element_meta['key'] = i
 
             df_element_export = df_element_meta.merge(df_element, how='left', on='key')
+            df_element_export = df_element_export.drop('key', axis= 1)
             print(len(df_element_export.columns.values))
 
             #append the new element to a csv file stored on the disk
@@ -499,7 +500,7 @@ if __name__ == "__main__":
         "/home/dylan_purches/repo/companies-house-big-data-project/data/for_testing/xbrl_decompressed_data"
     )[0]
     test_doc = []
-    for i in range(40):
+    for i in range(5):
         test_doc.append(parser.process_account(files[i]))
 
     df = parser.flatten_data(test_doc)
