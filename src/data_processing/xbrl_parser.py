@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup as BS  # Can parse xml or html docs
 from datetime import datetime
 from dateutil import parser
 import pandas as pd
+import os
 
 
 class XbrlParser:
@@ -356,9 +357,8 @@ class XbrlParser:
                 raise Exception("Elements should be gte 5, was {}".format(len(elements)))
         except:
             # if fails parsing create dummy entry elements so entry still exists in dictionary
-            elements = [{'name': 'NA', 'value': 'NA', 'unit': 'NA', 'date': 'NA'}]
+            elements = [{'name': 'NA', 'value': 'NA', 'unit': 'NA', 'date': 'NA', 'sign': 'NA'}]
             pass
-
         return elements
 
     @staticmethod
@@ -391,32 +391,51 @@ class XbrlParser:
         doc -- a list of dictionaries
         """
         doc2 = doc.copy()
-        # define empty list
-        list_elements = []
+
+       #check if temp file is already present
+        try:
+            os.remove("df_elements.csv")
+        except:
+            pass
 
         # loop over each file and create a separate dataframe
         # for each set (elements) of parsed tags, appending result to list
-
-
+        md, hd = 'w', True
         for i in range(len(doc2)):
+            #Turn each elements dict into a dataframe
             df_element = pd.DataFrame.from_dict(doc2[i]['elements'])
+            #print(df_element.columns.values)
+            if 'sign' not in df_element.columns.values:
+                print("yes!")
+                df_element['sign'] = 'NA'
+            #Add a key
             df_element['key'] = i
             # Dump the "elements" entry in the doc dict
             doc2[i].pop('elements')
-            list_elements.append(df_element)
+            df_element_meta = pd.DataFrame(doc2[i], index =[0])
+            df_element_meta['key'] = i
 
-        # combine elements dataframes together
-        df_elements = pd.concat(list_elements)
+            df_element_export = df_element_meta.merge(df_element, how='left', on='key')
+            print(len(df_element_export.columns.values))
+
+            #append the new element to a csv file stored on the disk
+            df_element_export.to_csv("df_elements.csv", mode=md, header=hd, index=None)
+            md, hd = 'a', False
+
+        # convert the stored csv back into a pandas df and tidy up
+        df_elements = pd.read_csv("df_elements.csv", index_col=None)
+        os.remove("df_elements.csv")
+        return df_elements
 
         # Create uniform columns for metadata (one row per file)
-        df_meta = pd.DataFrame.from_dict(doc2)
-        df_meta['key'] = df_meta.index
-        # merge two datasets based on file number (first parsed file = 0)
-        df_final = df_meta.merge(df_elements, how='left', on='key')
-        del df_meta, df_elements
-        # drop key
-        df_final = df_final.drop('key', axis=1)
-        return df_final
+        # df_meta = pd.DataFrame.from_dict(doc2)
+        # df_meta['key'] = df_meta.index
+        # # merge two datasets based on file number (first parsed file = 0)
+        # df_final = df_meta.merge(df_elements, how='left', on='key')
+        # del df_meta, df_elements
+        # # drop key
+        # df_final = df_final.drop('key', axis=1)
+        #return df_final
 
     @staticmethod
     def process_account(filepath):
@@ -483,4 +502,4 @@ if __name__ == "__main__":
     for i in range(40):
         test_doc.append(parser.process_account(files[i]))
 
-    parser.flatten_data(test_doc)
+    df = parser.flatten_data(test_doc)
