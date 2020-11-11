@@ -1,13 +1,13 @@
 from bs4 import BeautifulSoup as BS  # Can parse xml or html docs
 from datetime import datetime
 from dateutil import parser
-from src.data_processing.xbrl_pd_methods import XbrlParser
 import pandas as pd
 import os
 
 #For testing only
 import csv
 import time
+import sys
 
 
 class XbrlParser:
@@ -426,6 +426,7 @@ class XbrlParser:
 
             #Merge the metadata with the elements
             df_element_export = df_element_meta.merge(df_element, how='left', on='key')
+            del df_element_meta, df_element
             df_element_export = df_element_export.drop('key', axis= 1)
 
             #Append the new element to a csv file stored on the disk
@@ -436,9 +437,9 @@ class XbrlParser:
                 index=None
             )
 
-            XbrlExtraction.progressBar("Percentage of accounts that have been added", i, T)
             print("YES")
-            if i % 1000 == 0:
+            if i % 100 == 0:
+                print("%3.2f have been processed", i/T)
                 with open("/home/dylan_purches/Documents/Data/flatten_data_test_logs.csv", mode = 'w') as log_file:
                     log_writer = csv.writer(log_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
                     log_writer.writerow([i, (time.time() - t0)/float(60), time.time() - t0])
@@ -507,17 +508,18 @@ class XbrlParser:
             return e
 
 if __name__ == "__main__":
+    from src.data_processing.xbrl_pd_methods import XbrlExtraction
 
-    print("hello")
-    # parser = XbrlParser
-    # print("Getting file paths")
-    # files = XbrlExtraction.get_filepaths(
-    #     "/home/dylan_purches/Documents/Data/Accounts_Monthly_Data-September2019"
-    # )[0]
-    # doc = []
-    # print("Turning into list")
-    # for i in len(files):
-    #     XbrlExtraction.progressBar("Number of files added to dict", i, len(files))
-    #     doc.append(parser.process_account(files[i]))
-    #
-    # df = parser.flatten_data(doc)
+    parser = XbrlParser
+    print("Getting file paths")
+    files = XbrlExtraction.get_filepaths(
+        "/home/dylan_purches/Documents/Data/Accounts_Monthly_Data-September2019"
+    )[0]
+    doc = []
+    print("Turning into list")
+    for i in range(len(files)):
+        print(sys.getsizeof(doc))
+        XbrlExtraction.progressBar("Number of files added to dict", i, len(files))
+        doc.append(parser.process_account(files[i]))
+
+    df = parser.flatten_data(doc)
