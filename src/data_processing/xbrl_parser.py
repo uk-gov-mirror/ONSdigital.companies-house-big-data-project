@@ -9,30 +9,34 @@ class XbrlParser:
 
     def __init__(self):
         """
-        Constructs all the necessary attributes for the XbrlParser object of which there
-        are none.
+        Constructs all the necessary attributes for the XbrlParser object of
+        which there are none.
         """
         self.__init__
         
     # Table of variables and values that indicate consolidated status
     consolidation_var_table = {
         "includedinconsolidationsubsidiary": True,
-        "investmententityrequiredtoapplyexceptionfromconsolidationtruefalse": True,
+        "investmententityrequiredto\
+        applyexceptionfromconsolidationtruefalse": True,
         "subsidiaryunconsolidatedtruefalse": False,
-        "descriptionreasonwhyentityhasnotpreparedconsolidatedfinancialstatements": "exist",
+        "descriptionreasonwhyentityhasnot\
+        preparedconsolidatedfinancialstatements": "exist",
         "consolidationpolicy": "exist"
     }
 
     @staticmethod
     def clean_value(string):
         """
-        Take a value that is stored as a string, clean it and convert to numeric.
-        If it's just a dash, it is taken to mean zero.
+        Take a value that is stored as a string, clean it and convert to
+        numeric. If it's just a dash, it is taken to mean zero.
 
-        Returns the string argument as an int.
-
-        Keyword arguments:
-        string -- The string to be converting to a numeric value
+        Arguments:
+            string: sting to be cleaned and converted
+        Returns:
+            string: cleaned string converted to numeric
+        Raises:
+            None
         """
         if string.strip() == "-":
             return 0.0
@@ -50,15 +54,16 @@ class XbrlParser:
         reference to a context element.
         Finds the relevant context element and retrieves the relevant data.
 
-        Returns a text string.
-
-        Keyword arguments:
-        soup -- BeautifulSoup souped html/xml object
-        contextref -- the id of the context element to be raided
+        Arguments:
+            soup:       BeautifulSoup souped html/xml object
+            contextref: id of the context element to be raided
+        Returns:
+            contents: relevant data from the context
         """
         try:
             context = soup.find("xbrli:context", id=contextref)
-            contents = context.find("xbrldi:explicitmember").get_text().split(":")[-1].strip()
+            contents = context.find("xbrldi:explicitmember").get_text()\
+                .split(":")[-1].strip()
         except:
             contents = ""
 
@@ -75,10 +80,14 @@ class XbrlParser:
         on the way these links are formatted and referenced, within this
         function.  Might need changing someday.
 
-        Returns a 3-tuple (standard, date, original url).
-
-        Keyword arguments:
-        soup -- BeautifulSoup souped html/xml object
+        Arguments:
+            soup: BeautifulSoup souped html/xml object
+        Returns:
+            standard:   The standard for the object
+            date:       The date for the object
+            original_url: The original url of the object
+        Raises:
+            None
         """
         # Find the relevant link by its unique attribute
         link_obj = soup.find("link:schemaref")
@@ -93,7 +102,10 @@ class XbrlParser:
         text = link_obj['xlink:href'].split("/")[-1].split(".")[0]
 
         # Split the extracted text into format and date, return values
-        return text[:-10].strip("-"), text[-10:], link_obj['xlink:href']
+        standard, date, original_url = \
+            text[:-10].strip("-"), text[-10:], link_obj['xlink:href']
+
+        return standard, date, original_url
 
     @staticmethod
     def retrieve_unit(soup, each):
@@ -102,11 +114,13 @@ class XbrlParser:
         its source, alternatively uses element attribute unitref
         if it's not a reference to another element.
 
-        Returns the unit
-
-        Keyword arguments:
-        soup -- BeautifulSoup souped html/xml object
-        each -- element of BeautifulSoup souped object
+        Arguments:
+            soup:   BeautifulSoup souped html/xml object
+            each:   element of BeautifulSoup souped object
+        Returns:
+            the unit of the element
+        Raises:
+            None
         """
         # If not, try to discover the unit string in the soup object
         try:
@@ -128,14 +142,17 @@ class XbrlParser:
         element attribute contextref if it's not a reference
         to another element.
 
-        Returns the date
-
-        Keyword arguments:
-        soup -- BeautifulSoup souped html/xml object
-        each -- element of BeautifulSoup souped object
+        Arguments:
+            soup:   BeautifulSoup souped html/xml object
+            each:   element of BeautifulSoup souped object
+        Returns:
+            date_val: The reporting date of the object
+        Raises:
+            None
         """
-        # Try to find a date tag within the contextref element, starting with the most
-        # specific tags, and starting with those for ixbrl docs as it's the most common file.
+        # Try to find a date tag within the contextref element, starting with
+        # the most specific tags, and starting with those for ixbrl docs as
+        # it's the most common file.
         date_tag_list = ["xbrli:enddate",
                          "xbrli:instant",
                          "xbrli:period",
@@ -146,9 +163,8 @@ class XbrlParser:
         for tag in date_tag_list:
             try:
                 date_str = each['contextref']
-                date_val = parser.parse(soup.find(id=each['contextref']).find(tag).get_text()). \
-                    date(). \
-                    isoformat()
+                date_val = parser.parse(soup.find(id=each['contextref']). \
+                    find(tag).get_text()).date().isoformat()
                 return (date_val)
             except:
                 pass
