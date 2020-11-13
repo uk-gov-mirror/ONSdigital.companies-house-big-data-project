@@ -413,6 +413,7 @@ class XbrlParser:
             #Turn each elements dict into a dataframe
             df_element = pd.DataFrame.from_dict(doc2[i]['elements'])
 
+            #Ensure each element has the same number of columns
             if 'sign' not in df_element.columns.values:
                 df_element['sign'] = 'NA'
 
@@ -434,20 +435,23 @@ class XbrlParser:
                 "/home/dylan_purches/Documents/Data/temp_exports/df_elements.csv",
                 mode=md,
                 header=hd,
-                index=None
+                index=None,
+                sep = ",",
+                quotechar= '"'
             )
 
-            print("YES")
             if i % 100 == 0:
-                print("%3.2f have been processed", i/T)
-                with open("/home/dylan_purches/Documents/Data/flatten_data_test_logs.csv", mode = 'w') as log_file:
-                    log_writer = csv.writer(log_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-                    log_writer.writerow([i, (time.time() - t0)/float(60), time.time() - t0])
-
+                print("%3.2f have been processed"%(i/T))
             md, hd = 'a', False
 
         # convert the stored csv back into a pandas df and tidy up
-        df_elements = pd.read_csv("/home/dylan_purches/Documents/Data/temp_exports/df_elements.csv", index_col=None)
+        df_elements = pd.read_csv(
+            "/home/dylan_purches/Documents/Data/temp_exports/df_elements.csv",
+            index_col=None,
+            header=0,
+            sep=",",
+            lineterminator="\n",
+            quotechar='"')
         os.remove("/home/dylan_purches/Documents/Data/temp_exports/df_elements.csv")
 
         return df_elements
@@ -506,20 +510,3 @@ class XbrlParser:
             return doc
         except Exception as e:
             return e
-
-if __name__ == "__main__":
-    from src.data_processing.xbrl_pd_methods import XbrlExtraction
-
-    parser = XbrlParser
-    print("Getting file paths")
-    files = XbrlExtraction.get_filepaths(
-        "/home/dylan_purches/Documents/Data/Accounts_Monthly_Data-September2019"
-    )[0]
-    doc = []
-    print("Turning into list")
-    for i in range(len(files)):
-        print(sys.getsizeof(doc))
-        XbrlExtraction.progressBar("Number of files added to dict", i, len(files))
-        doc.append(parser.process_account(files[i]))
-
-    df = parser.flatten_data(doc)
