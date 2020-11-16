@@ -2,6 +2,12 @@ from bs4 import BeautifulSoup as BS  # Can parse xml or html docs
 from datetime import datetime
 from dateutil import parser
 import pandas as pd
+import os
+
+#For testing only
+import csv
+import time
+import sys
 
 
 class XbrlParser:
@@ -186,11 +192,14 @@ class XbrlParser:
         For a discovered XBRL tagged element, go through, retrieve its name
         and value and associated metadata.
 
-        Returns a dictionary.
-
-        Keyword arguments:
-        soup -- BeautifulSoup object of accounts document
-        element -- soup object of discovered tagged element
+        Arguments:
+            soup:       BeautifulSoup object of accounts document
+            element:    soup object of discovered tagged element
+        Returns:
+            element_dict:   A dictionary containing the elements name value and
+                            metadata.
+        Raises:
+            None
         """
         if "contextref" not in element.attrs:
             return {}
@@ -236,9 +245,14 @@ class XbrlParser:
         them.  Only keep valid results (test is whether field "name"
         exists).
 
-        Keyword arguments:
-        element_set -- BeautifulSoup iterable search result object
-        soup -- BeautifulSoup object of accounts document
+        Arguments:
+            element_set:    BeautifulSoup iterable search result object
+            soup            BeautifulSoup object of accounts document
+        Returns:
+            elements:   A list of dicts corresponding to the elements of
+                        element_set
+        Raises:
+            None
         """
         elements = []
         for each in element_set:
@@ -255,12 +269,13 @@ class XbrlParser:
         a summary variable relating to the financial state of the enterprise
         by summing all those named that exist.
 
-        Returns a dictionary.
-
-        Keyword arguments:
-        doc -- an extracted document dict, with "elements" entry as created
-               by the 'scrape_clean_elements' functions
-        variable_names -- variables to find and sum if they exist
+        Arguments:
+            doc:            an extracted document dict, with "elements" entry
+                            as created by the 'scrape_clean_elements' functions
+            variable_names: variables to find and sum (of all) if they exist
+        Returns (as a dict):
+            total_assets:   the totals of the given values
+            units:          the units corresponding to the given sum
         """
         # Convert elements to pandas df
         df = pd.DataFrame(doc['elements'])
@@ -275,7 +290,8 @@ class XbrlParser:
         for each in variable_names:
             # Fault-tolerant, will skip whatever isn't numeric
             try:
-                total_assets = total_assets + df[df['name'] == each].iloc[0]['value']
+                total_assets = total_assets + df[df['name'] == each]\
+                    .iloc[0]['value']
                 # Retrieve reporting unit if exists
                 unit = df[df['name'] == each].iloc[0]['unit']
             except:
@@ -290,12 +306,15 @@ class XbrlParser:
         a summary variable relating to the financial state of the enterprise
         by looking for each named, in order.
 
-        Returns a dictionary.
-
-        Keyword arguments:
-        doc -- an extracted document dict, with "elements" entry as created
-               by the 'scrape_clean_elements' functions
-        variable_names -- variables to find and check if they exist
+        Arguments:
+            doc:            an extracted document dict, with "elements" entry
+                            as created by the 'scrape_clean_elements' functions
+            variable_names: variables to find and check if they exist
+        Returns (as a dict):
+            primary_assets: total assets from given variables
+            unit:           units for corresponding assets
+        Raises:
+            None
         """
         # Convert elements to pandas df
         df = pd.DataFrame(doc['elements'])
@@ -325,13 +344,14 @@ class XbrlParser:
         Takes a document (dict) after extraction, and tries to extract
         summary variables relating to the financial state of the enterprise
         by returning all those named that exist.
-
-        Returns a dictionary.
-
-        Keyword arguments:
-        doc -- an extracted document dict, with "elements" entry as created
-               by the 'scrape_clean_elements' functions.
-        variable_names -- variables to find and return if they exist.
+        Arguments:
+            doc:            an extracted document dict, with "elements" entry
+                            as created by the 'scrape_clean_elements' functions.
+            variable_names: variables to find and return if they exist.
+        Returns:
+            results: a dictionary of all the values for each in variable_names
+        Raises:
+            None
         """
         results = {}
 
@@ -354,13 +374,18 @@ class XbrlParser:
     @staticmethod
     def scrape_elements(soup, filepath):
         """
-        Parses an XBRL (xml) company accounts file for all labelled content and extracts the
-        content (and metadata, eg; unitref) of each element found to a dictionary
+        Parses an XBRL (xml) company accounts file for all labelled content and
+        extracts the content (and metadata, eg; unitref) of each element found
+        to a dictionary.
 
-        Returns a lit of dictionaries.
-
-        Keyword arguments:
-        filepath -- A filepath string
+        Arguments:
+            soup:        BeautifulSoup object of accounts document
+            filepath:    A filepath string
+        Returns:
+             elements:  A list of dictionaries containing meta data for each
+                        element
+        Raises:
+            None
         """
         # Try multiple methods of retrieving data, I think only the first is
         # now needed though.  The rest will be removed after testing this
@@ -369,12 +394,14 @@ class XbrlParser:
             element_set = soup.find_all()
             elements = XbrlParser.parse_elements(element_set, soup)
             if len(elements) <= 5:
-                raise Exception("Elements should be gte 5, was {}".format(len(elements)))
+                raise Exception("Elements should be gte 5, was {}".\
+                                format(len(elements)))
         except:
-            # if fails parsing create dummy entry elements so entry still exists in dictionary
-            elements = [{'name': 'NA', 'value': 'NA', 'unit': 'NA', 'date': 'NA'}]
+            # if fails parsing create dummy entry elements so entry still
+            # exists in dictionary
+            elements = [{'name': 'NA', 'value': 'NA', 'unit': 'NA',
+                         'date': 'NA', 'sign': 'NA'}]
             pass
-
         return elements
 
     @staticmethod
@@ -384,12 +411,15 @@ class XbrlParser:
         Takes in a list of dictionaries and combines them into a
         single dictionary - assumes dictionaries all have same keys
 
-        Returns a dictionary (doc_dict).
-
-        Keyword argument:
-        doc -- a list of dictionaries
+        Arguments:
+            doc: a list of dictionaries
+        Returns:
+            doc_dict: a dictionary formed by combing the list of dictionaries.
+        Raises:
+            None
         """
-        # combines list of dictionaries into one dictionary based on common keys
+        # combines list of dictionaries into one dictionary based on common
+        # keys
         doc_dict = {}
         for k in doc[0].keys():
             doc_dict[k] = [d[k] for d in doc]
@@ -403,8 +433,12 @@ class XbrlParser:
         structure and reorganises it into a long-thin format table structure
         suitable for SQL applications.
 
-        Keyword argument:
-        doc -- a list of dictionaries
+        Argument:
+            doc: a list of dictionaries
+        Returns:
+            df_elements: A dataframe containing all data from doc
+        Raises:
+            None
         """
         doc2 = doc.copy()
         # define empty list
@@ -435,11 +469,15 @@ class XbrlParser:
     @staticmethod
     def process_account(filepath):
         """
-        Scrape all of the relevant information from an iXBRL (html) file, upload
-        the elements and some metadata to a mongodb.
+        Scrape all of the relevant information from an iXBRL (html) file,
+        upload the elements and some metadata to a mongodb.
 
-        Keyword argument:
-        filepath -- complete filepath (string) from drive root
+        Arguments:
+            filepath: complete filepath (string) from drive root
+        Returns:
+            doc: dictionary of all data from the relevant file
+        Raises:
+            None
         """
         doc = {}
 
@@ -451,11 +489,14 @@ class XbrlParser:
 
         # Complicated ones
         sheet_date = filepath.split("/")[-1].split(".")[0].split("_")[-1]
-        doc['doc_balancesheetdate'] = datetime.strptime(sheet_date, "%Y%m%d").date().isoformat()
+        doc['doc_balancesheetdate'] = datetime.strptime(sheet_date, "%Y%m%d")\
+            .date().isoformat()
 
-        doc['doc_companieshouseregisterednumber'] = filepath.split("/")[-1].split(".")[0].split("_")[-2]
+        doc['doc_companieshouseregisterednumber'] = filepath.split("/")[-1]\
+            .split(".")[0].split("_")[-2]
 
-        # loop over multithreading here - imports data and parses on seperate threads
+        # loop over multithreading here - imports data and parses on seperate
+        # threads
         try:
             file = open(filepath)
             soup = BS(file, "lxml")
@@ -467,7 +508,8 @@ class XbrlParser:
         try:
             doc['doc_standard_type'],\
                 doc['doc_standard_date'],\
-                doc['doc_standard_link'] = XbrlParser.retrieve_accounting_standard(soup)
+                doc['doc_standard_link'] = XbrlParser\
+                .retrieve_accounting_standard(soup)
             doc['parsed'] = True
         except:
             doc['doc_standard_type'],\
