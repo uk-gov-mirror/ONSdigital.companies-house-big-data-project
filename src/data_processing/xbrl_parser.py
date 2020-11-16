@@ -218,13 +218,16 @@ class XbrlParser:
         element_dict['unit'] = XbrlParser.retrieve_unit(soup, element)
         element_dict['date'] = XbrlParser.retrieve_date(soup, element)
 
-        # If there's no value retrieved, try raiding the associated context data
+        # If there's no value retrieved, try raiding the associated context
+        # data
         if element_dict['value'] == "":
-            element_dict['value'] = XbrlParser.retrieve_from_context(soup, element.attrs['contextref'])
+            element_dict['value'] = XbrlParser.retrieve_from_context(
+                soup, element.attrs['contextref'])
 
         # If the value has a defined unit (eg a currency) convert to numeric
         if element_dict['unit'] != "NA":
-            element_dict['value'] = XbrlParser.clean_value(element_dict['value'])
+            element_dict['value'] = XbrlParser.clean_value(
+                element_dict['value'])
 
         # Retrieve sign of element if exists
         try:
@@ -346,7 +349,7 @@ class XbrlParser:
         by returning all those named that exist.
         Arguments:
             doc:            an extracted document dict, with "elements" entry
-                            as created by the 'scrape_clean_elements' functions.
+                            as created by the 'scrape_clean_elements' functions
             variable_names: variables to find and return if they exist.
         Returns:
             results: a dictionary of all the values for each in variable_names
