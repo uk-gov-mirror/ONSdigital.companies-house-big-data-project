@@ -123,129 +123,134 @@ def main():
     # Execute module xbrl_parser
     if xbrl_parser == str(True):
         print("XBRL parser running...")
-        
-        extractor = XbrlExtraction()
-        parser = XbrlParser()
-
-        # Create a list of months based on what quarter in the year has been specified
-        if xbrl_parser_process_quarter == "1":
-            month_list = ['January', 'February', 'March']
-        elif xbrl_parser_process_quarter == "2":
-            month_list = ['April', 'May', 'June']
-        elif xbrl_parser_process_quarter == "3":
-            month_list = ['July', 'August', 'September']
-        elif xbrl_parser_process_quarter == "4":
-            month_list = ['October', 'November', 'December']
-        else:
-            month_list = ['January', 'February', 'March', 'April', 'May', 'June',
-                          'July', 'August', 'September', 'October', 'November', 'December']
-            if xbrl_parser_process_quarter != "None":
-                print("Invalid quarter specified...processing one year of data!")
-
-        # Create a list of directories from each month present in the month list
-        directory_list = []
-        if xbrl_parser_custom_input == "None":
-            for month in month_list:
-                directory_list.append(xbrl_unpacked_data
-                                      + "/Accounts_Monthly_Data-"
-                                      + month
-                                      + xbrl_parser_process_year)
-
-        # If a custom list has been specified as a comma separated string, use this instead
-        else:
-            folder_list = xbrl_parser_custom_input.split(",")
-            for folder in folder_list:
-                directory_list.append(xbrl_unpacked_data + "/" + folder)
-
-        for directory in directory_list:
-
-            print("Parsing " + directory + "...")
-
-            # Get all the filenames from the example folder
-            files, folder_month, folder_year = extractor.get_filepaths(directory)
-
-            print(len(files))
-
-            '''
-            ### Targets largest files
-            #limit to moderate amount of files
-            files = files[0:50000]
-            # Here you can splice/truncate the number of files you want to process for testing
-            # TO BE COMMENTED OUT AFTER TESTING
-            filesize = []
-            for i in range(len(files)):
-                filesize.append((files[i],os.path.getsize(files[i])))
-
-            filesize.sort(key = lambda filesize: filesize[1],reverse=True)
-            
-            for i in range(len(filesize)):
-                files[i] = filesize[i][0]
-                
-            total_files = len(files)
-            shuffle(files)
-            files = files
-            '''
-            #files = files[0:30]
-
-            # TO BE COMMENTED OUT AFTER TESTING
-            print(folder_month, folder_year)
-
-            # Code needed to split files by the number of cores before passing in as an argument
-            num_processes = 3
-            chunk_len = math.ceil(len(files) / num_processes)
-            files = [files[i:i + chunk_len] for i in range(0, len(files), chunk_len)]
-
-            #define number of processors
-            pool = mp.Pool(processes=num_processes)
-            # Finally, build a table of all variables from all example (digital) documents
-            # splitting the load between cpu cores = num_processes
-            # This can take a while (hopefully not anymore!!!)
-            r = pool.map(extractor.build_month_table, files)
-
-            pool.close()
-            pool.join()
-            #combine resultant list of lists
-            r = [item for sublist in r for item in sublist]
-
-            #combine data and convert into dataframe
-            results = parser.flatten_data(r)
-            print(results.shape)
-
-            #save to csv
-            extractor.output_xbrl_month(results, xbrl_processed_csv, folder_month, folder_year)
-
-            # Find list of all unique tags in dataset
-            list_of_tags = results["name"].tolist()
-            list_of_tags_unique = list(set(list_of_tags))
-
-            print("Longest tag: ", len(max(list_of_tags_unique, key=len)))
-
-            # Output all unique tags to a txt file
-
-            ## Commented out while testing parser changes
-            
-            extractor.retrieve_list_of_tags(
-                results,
-                "name",
-                xbrl_tag_list,
-                folder_month,
-                folder_year
-            )
-
-            # Output all unique tags and their relative frequencies to a txt file
-            extractor.get_tag_counts(
-                results,
-                "name",
-                xbrl_tag_frequencies,
-                folder_month,
-                folder_year
-            )
-
-            # print(results.shape)
-
-        #tempcsv = pd.read_csv("/shares/xbrl_parsed_data/2020-April_xbrl_data.csv", lineterminator='\n')
-        #print(tempcsv.head(5000000))
-        #print(tempcsv.shape)
+        XbrlParser.parse_files(xbrl_parser_process_quarter,
+                               xbrl_parser_process_quarter,
+                               xbrl_unpacked_data,
+                               xbrl_processed_csv,
+                               2)
+        #
+        # extractor = XbrlExtraction()
+        # parser = XbrlParser()
+        #
+        # # Create a list of months based on what quarter in the year has been specified
+        # if xbrl_parser_process_quarter == "1":
+        #     month_list = ['January', 'February', 'March']
+        # elif xbrl_parser_process_quarter == "2":
+        #     month_list = ['April', 'May', 'June']
+        # elif xbrl_parser_process_quarter == "3":
+        #     month_list = ['July', 'August', 'September']
+        # elif xbrl_parser_process_quarter == "4":
+        #     month_list = ['October', 'November', 'December']
+        # else:
+        #     month_list = ['January', 'February', 'March', 'April', 'May', 'June',
+        #                   'July', 'August', 'September', 'October', 'November', 'December']
+        #     if xbrl_parser_process_quarter != "None":
+        #         print("Invalid quarter specified...processing one year of data!")
+        #
+        # # Create a list of directories from each month present in the month list
+        # directory_list = []
+        # if xbrl_parser_custom_input == "None":
+        #     for month in month_list:
+        #         directory_list.append(xbrl_unpacked_data
+        #                               + "/Accounts_Monthly_Data-"
+        #                               + month
+        #                               + xbrl_parser_process_year)
+        #
+        # # If a custom list has been specified as a comma separated string, use this instead
+        # else:
+        #     folder_list = xbrl_parser_custom_input.split(",")
+        #     for folder in folder_list:
+        #         directory_list.append(xbrl_unpacked_data + "/" + folder)
+        #
+        # for directory in directory_list:
+        #
+        #     print("Parsing " + directory + "...")
+        #
+        #     # Get all the filenames from the example folder
+        #     files, folder_month, folder_year = extractor.get_filepaths(directory)
+        #
+        #     print(len(files))
+        #
+        #     '''
+        #     ### Targets largest files
+        #     #limit to moderate amount of files
+        #     files = files[0:50000]
+        #     # Here you can splice/truncate the number of files you want to process for testing
+        #     # TO BE COMMENTED OUT AFTER TESTING
+        #     filesize = []
+        #     for i in range(len(files)):
+        #         filesize.append((files[i],os.path.getsize(files[i])))
+        #
+        #     filesize.sort(key = lambda filesize: filesize[1],reverse=True)
+        #
+        #     for i in range(len(filesize)):
+        #         files[i] = filesize[i][0]
+        #
+        #     total_files = len(files)
+        #     shuffle(files)
+        #     files = files
+        #     '''
+        #     #files = files[0:30]
+        #
+        #     # TO BE COMMENTED OUT AFTER TESTING
+        #     print(folder_month, folder_year)
+        #
+        #     # Code needed to split files by the number of cores before passing in as an argument
+        #     num_processes = 3
+        #     chunk_len = math.ceil(len(files) / num_processes)
+        #     files = [files[i:i + chunk_len] for i in range(0, len(files), chunk_len)]
+        #
+        #     #define number of processors
+        #     pool = mp.Pool(processes=num_processes)
+        #     # Finally, build a table of all variables from all example (digital) documents
+        #     # splitting the load between cpu cores = num_processes
+        #     # This can take a while (hopefully not anymore!!!)
+        #     r = pool.map(extractor.build_month_table, files)
+        #
+        #     pool.close()
+        #     pool.join()
+        #     #combine resultant list of lists
+        #     r = [item for sublist in r for item in sublist]
+        #
+        #     #combine data and convert into dataframe
+        #     results = parser.flatten_data(r)
+        #     print(results.shape)
+        #
+        #     #save to csv
+        #     extractor.output_xbrl_month(results, xbrl_processed_csv, folder_month, folder_year)
+        #
+        #     # Find list of all unique tags in dataset
+        #     list_of_tags = results["name"].tolist()
+        #     list_of_tags_unique = list(set(list_of_tags))
+        #
+        #     print("Longest tag: ", len(max(list_of_tags_unique, key=len)))
+        #
+        #     # Output all unique tags to a txt file
+        #
+        #     ## Commented out while testing parser changes
+        #
+        #     extractor.retrieve_list_of_tags(
+        #         results,
+        #         "name",
+        #         xbrl_tag_list,
+        #         folder_month,
+        #         folder_year
+        #     )
+        #
+        #     # Output all unique tags and their relative frequencies to a txt file
+        #     extractor.get_tag_counts(
+        #         results,
+        #         "name",
+        #         xbrl_tag_frequencies,
+        #         folder_month,
+        #         folder_year
+        #     )
+        #
+        #     # print(results.shape)
+        #
+        # #tempcsv = pd.read_csv("/shares/xbrl_parsed_data/2020-April_xbrl_data.csv", lineterminator='\n')
+        # #print(tempcsv.head(5000000))
+        # #print(tempcsv.shape)
 
     # Append XBRL data on an annual or quarterly basis
     if xbrl_file_appender == str(True):

@@ -1,7 +1,10 @@
 from bs4 import BeautifulSoup as BS  # Can parse xml or html docs
 from datetime import datetime
 from dateutil import parser
+from src.data_processing.xbrl_pd_methods import XbrlExtraction
 import pandas as pd
+import math
+import multiprocessing as mp
 
 
 class XbrlParser:
@@ -469,3 +472,210 @@ class XbrlParser:
             return doc
         except Exception as e:
             return e
+
+    @staticmethod
+    def create_month_list(quarter):
+        """
+        Create a list of the names of the months (as strings) corresponding
+        to the specified quarter.
+
+        Arguments:
+            quarter:    quarter of the year between 1 and 4 (as a string) or
+                        None to generate a list for the year
+        Returns:
+            month_list: list of the corresponding months (as strings)
+        Raises:
+            none
+        """
+        if quarter == "1":
+            month_list = ['January', 'February', 'March']
+        elif quarter == "2":
+            month_list = ['April', 'May', 'June']
+        elif quarter == "3":
+            month_list = ['July', 'August', 'September']
+        elif quarter == "4":
+            month_list = ['October', 'November', 'December']
+        else:
+            month_list = ['January', 'February', 'March', 'April',
+                          'May', 'June', 'July', 'August',
+                          'September', 'October', 'November', 'December']
+            if quarter != "None":
+                print("Invalid quarter specified...\
+                processing one year of data!")
+
+        return month_list
+
+    @staticmethod
+    def create_directory_list(months, filepath, year, custom_input="None"):
+        """
+        Creates a list of file paths for accounts which are dated in the months
+        specified in a list of months.
+
+        Arguments:
+            months:         A list of strings of the months to find files for
+            filepath:       String of the directory containing the unpacked
+                            files
+            year:           The year of which to find accounts from (string)
+            custom_input:   Used to set a specific folder of accounts
+        Returns:
+            directory_list: list containing strings of the filepaths of all
+                            accounts in the relevant year
+        Raises:
+            None
+        """
+        # Create a list of directories from each month present in the month
+        # list
+        directory_list = []
+        if custom_input == "None":
+            for month in months:
+                directory_list.append(filepath
+                                      + "/Accounts_Monthly_Data-"
+                                      + month
+                                      + year)
+
+        # If a custom list has been specified as a comma separated string, use
+        # this instead
+        else:
+            folder_list = custom_input.split(",")
+            for folder in folder_list:
+                directory_list.append(filepath + "/" + folder)
+
+        return directory_list
+
+    @staticmethod
+    def parse_directory(directory, processed_path, num_processes=1):
+        """
+        Takes a directory, parses all files contained there and saves them as
+        csv files in a specified directory.
+
+        Arguments:
+            directory: A directory (path) to be processed
+            processed_path: String of the path where processed files should be
+                            saved
+            num_processes:  The number of cores to use in multiprocessing
+        Returns:
+            None
+        Raises:
+            None
+        """
+        extractor = XbrlExtraction()
+        parser = XbrlParser()
+
+        # Get all the filenames from the example folder
+        files, folder_month, folder_year = extractor.get_filepaths(directory)
+
+        print(len(files))
+        files = files[0:50000]
+        '''
+        ### Targets largest files
+        #limit to moderate amount of files
+         
+        # Here you can splice/truncate the number of files you want to process for testing
+        # TO BE COMMENTED OUT AFTER TESTING
+        filesize = []
+        for i in range(len(files)):
+            filesize.append((files[i],os.path.getsize(files[i])))
+
+        filesize.sort(key = lambda filesize: filesize[1],reverse=True)
+
+        for i in range(len(filesize)):
+            files[i] = filesize[i][0]
+
+        total_files = len(files)
+        shuffle(files)
+        files = files
+        '''
+        # files = files[0:30]
+
+        # TO BE COMMENTED OUT AFTER TESTING
+        print(folder_month, folder_year)
+
+        # Code needed to split files by the number of cores before passing in
+        # as an argument
+        chunk_len = math.ceil(len(files) / num_processes)
+        files = [files[i:i + chunk_len] for i in
+                 range(0, len(files), chunk_len)]
+
+        # define number of processors
+        pool = mp.Pool(processes=num_processes)
+        # Finally, build a table of all variables from all example (digital) documents
+        # splitting the load between cpu cores = num_processes
+        # This can take a while (hopefully not anymore!!!)
+        r = pool.map(extractor.build_month_table, files)
+
+        pool.close()
+        pool.join()
+        # combine resultant list of lists
+        r = [item for sublist in r for item in sublist]
+
+        # combine data and convert into dataframe
+        results = parser.flatten_data(r)
+        print(results.shape)
+
+        # save to csv
+        extractor.output_xbrl_month(results, processed_path, folder_month,
+                                    folder_year)
+
+        # Find list of all unique tags in dataset
+        list_of_tags = results["name"].tolist()
+        list_of_tags_unique = list(set(list_of_tags))
+
+        print("Longest tag: ", len(max(list_of_tags_unique, key=len)))
+
+        # Output all unique tags to a txt file
+
+        ## Commented out while testing parser changes
+
+        # extractor.retrieve_list_of_tags(
+        #     results,
+        #     "name",
+        #     xbrl_tag_list,
+        #     folder_month,
+        #     folder_year
+        # )
+        #
+        # # Output all unique tags and their relative frequencies to a txt file
+        # extractor.get_tag_counts(
+        #     results,
+        #     "name",
+        #     xbrl_tag_frequencies,
+        #     folder_month,
+        #     folder_year
+        # )
+
+        # print(results.shape)
+
+    # tempcsv = pd.read_csv("/shares/xbrl_parsed_data/2020-April_xbrl_data.csv", lineterminator='\n')
+    # print(tempcsv.head(5000000))
+    # print(tempcsv.shape)
+
+    @staticmethod
+    def parse_files(quarter, year, unpacked_files,
+                    custom_input, processed_files, num_cores):
+        """
+        Parses a set of accounts for a given time period and saves as a csv in
+        a specified location.
+
+        Arguments:
+            quarter:            quarter of the given year to process files from
+            year:               year to process files from
+            unpacked_files:     path of directory where files to be processed
+                                are stored
+            processed_files:    path of directory where the files the resulting
+                                files will be saved
+            num_cores:          number of cores to use with mutliprocessing
+                                module
+            custom_input:       Used to set a specific folder of accounts
+        Returns:
+            None
+        Raises:
+            None
+        """
+        month_list = XbrlParser.create_month_list(quarter)
+        directory_list = XbrlParser.create_directory_list(month_list,
+                                                          unpacked_files,
+                                                          year,
+                                                          custom_input)
+        for directory in directory_list:
+            print("Parsing " + directory + "...")
+            XbrlParser.parse_directory(directory, processed_files, num_cores)
