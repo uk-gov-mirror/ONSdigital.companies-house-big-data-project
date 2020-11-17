@@ -169,18 +169,17 @@ class XbrlParser:
         for tag in date_tag_list:
             try:
                 date_str = each['contextref']
-                date_val = parser.parse(soup.find(id=each['contextref']). \
-                    find(tag).get_text()).date().isoformat()
-                return (date_val)
+                date_val = parser.parse(soup.find(id=each['contextref']).
+                                        find(tag).get_text()).date().isoformat()
+                return date_val
             except:
                 pass
 
         try:
             date_str = each.attrs['contextref']
-            date_val = parser.parse(each.attrs['contextref']). \
-                date(). \
+            date_val = parser.parse(each.attrs['contextref']).date().\
                 isoformat()
-            return (date_val)
+            return date_val
         except:
             pass
 
@@ -250,7 +249,7 @@ class XbrlParser:
 
         Arguments:
             element_set:    BeautifulSoup iterable search result object
-            soup            BeautifulSoup object of accounts document
+            soup:           BeautifulSoup object of accounts document
         Returns:
             elements:   A list of dicts corresponding to the elements of
                         element_set
@@ -347,6 +346,7 @@ class XbrlParser:
         Takes a document (dict) after extraction, and tries to extract
         summary variables relating to the financial state of the enterprise
         by returning all those named that exist.
+        
         Arguments:
             doc:            an extracted document dict, with "elements" entry
                             as created by the 'scrape_clean_elements' functions
@@ -397,7 +397,7 @@ class XbrlParser:
             element_set = soup.find_all()
             elements = XbrlParser.parse_elements(element_set, soup)
             if len(elements) <= 5:
-                raise Exception("Elements should be gte 5, was {}".\
+                raise Exception("Elements should be gte 5, was {}".
                                 format(len(elements)))
         except:
             # if fails parsing create dummy entry elements so entry still
@@ -405,6 +405,7 @@ class XbrlParser:
             elements = [{'name': 'NA', 'value': 'NA', 'unit': 'NA',
                          'date': 'NA', 'sign': 'NA'}]
             pass
+        
         return elements
 
     @staticmethod
@@ -414,7 +415,7 @@ class XbrlParser:
         Takes in a list of dictionaries and combines them into a
         single dictionary - assumes dictionaries all have same keys
 
-        Arguments:
+        Argument:
             doc: a list of dictionaries
         Returns:
             doc_dict: a dictionary formed by combing the list of dictionaries.
@@ -498,7 +499,7 @@ class XbrlParser:
         doc['doc_companieshouseregisterednumber'] = filepath.split("/")[-1]\
             .split(".")[0].split("_")[-2]
 
-        # loop over multithreading here - imports data and parses on seperate
+        # loop over multi-threading here - imports data and parses on separate
         # threads
         try:
             file = open(filepath)
