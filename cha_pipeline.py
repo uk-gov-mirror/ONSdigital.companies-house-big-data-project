@@ -124,8 +124,9 @@ def main():
     if xbrl_parser == str(True):
         print("XBRL parser running...")
         XbrlParser.parse_files(xbrl_parser_process_quarter,
-                               xbrl_parser_process_quarter,
+                               xbrl_parser_process_year,
                                xbrl_unpacked_data,
+                               xbrl_parser_custom_input,
                                xbrl_processed_csv,
                                2)
         #

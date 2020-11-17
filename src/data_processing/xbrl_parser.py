@@ -4,6 +4,7 @@ from dateutil import parser
 from src.data_processing.xbrl_pd_methods import XbrlExtraction
 import pandas as pd
 import math
+import time
 import multiprocessing as mp
 
 
@@ -565,7 +566,7 @@ class XbrlParser:
         files, folder_month, folder_year = extractor.get_filepaths(directory)
 
         print(len(files))
-        files = files[0:50000]
+        files = files[0:1000]
         '''
         ### Targets largest files
         #limit to moderate amount of files
@@ -598,10 +599,10 @@ class XbrlParser:
 
         # define number of processors
         pool = mp.Pool(processes=num_processes)
-        # Finally, build a table of all variables from all example (digital) documents
-        # splitting the load between cpu cores = num_processes
+        # Finally, build a table of all variables from all example (digital)
+        # documents splitting the load between cpu cores = num_processes
         # This can take a while (hopefully not anymore!!!)
-        r = pool.map(extractor.build_month_table, files)
+        r = pool.map(parser.build_month_table, files)
 
         pool.close()
         pool.join()
@@ -679,3 +680,38 @@ class XbrlParser:
         for directory in directory_list:
             print("Parsing " + directory + "...")
             XbrlParser.parse_directory(directory, processed_files, num_cores)
+
+    @staticmethod
+    def build_month_table(list_of_files):
+        """
+        """
+
+        process_start = time.time()
+
+        # Empty table awaiting results
+        results = []
+
+        COUNT = 0
+
+        # For every file
+        for file in list_of_files:
+            COUNT += 1
+
+            # Read the file and parse
+            doc = XbrlParser.process_account(file)
+
+            # flatten the elements dict into single dict
+            doc['elements'] = XbrlParser.flatten_dict(doc['elements'])
+
+            # append results to table
+            results.append(doc)
+
+            XbrlExtraction.progressBar("XBRL Accounts Parsed", COUNT,
+                                       len(list_of_files), bar_length=50,
+                                       width=20)
+
+        print(
+            "Average time to process an XBRL file: \x1b[31m{:0f}\x1b[0m".format(
+                (time.time() - process_start) / 60, 2), "minutes")
+
+        return results

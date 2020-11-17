@@ -6,9 +6,9 @@ import time
 import sys
 
 # Custom import
-from src.data_processing.xbrl_parser import XbrlParser
-
-xbrl_parser = XbrlParser()
+# from src.data_processing.xbrl_parser import XbrlParser
+#
+# xbrl_parser = XbrlParser()
 
 class XbrlExtraction:
     """
@@ -164,38 +164,38 @@ class XbrlExtraction:
             mode = "a"
         )
 
-    @staticmethod
-    def build_month_table(list_of_files):
-        """
-        """
-
-        process_start = time.time()
-
-        # Empty table awaiting results
-        results = []
-
-
-        COUNT = 0
-
-        # For every file
-        for file in list_of_files:
-
-            COUNT += 1
-
-            # Read the file and parse
-            doc = xbrl_parser.process_account(file)
-
-            #flatten the elements dict into single dict
-            doc['elements'] = xbrl_parser.flatten_dict(doc['elements'])
-
-            # append results to table
-            results.append(doc)
-
-            XbrlExtraction.progressBar("XBRL Accounts Parsed", COUNT, len(list_of_files), bar_length = 50, width = 20)
-
-        print("Average time to process an XBRL file: \x1b[31m{:0f}\x1b[0m".format((time.time() - process_start) / 60, 2), "minutes")
-
-        return results
+    # @staticmethod
+    # def build_month_table(list_of_files):
+    #     """
+    #     """
+    #
+    #     process_start = time.time()
+    #
+    #     # Empty table awaiting results
+    #     results = []
+    #
+    #
+    #     COUNT = 0
+    #
+    #     # For every file
+    #     for file in list_of_files:
+    #
+    #         COUNT += 1
+    #
+    #         # Read the file and parse
+    #         doc = xbrl_parser.process_account(file)
+    #
+    #         #flatten the elements dict into single dict
+    #         doc['elements'] = xbrl_parser.flatten_dict(doc['elements'])
+    #
+    #         # append results to table
+    #         results.append(doc)
+    #
+    #         XbrlExtraction.progressBar("XBRL Accounts Parsed", COUNT, len(list_of_files), bar_length = 50, width = 20)
+    #
+    #     print("Average time to process an XBRL file: \x1b[31m{:0f}\x1b[0m".format((time.time() - process_start) / 60, 2), "minutes")
+    #
+    #     return results
 
     @staticmethod
     def output_xbrl_month(dataframe, output_folder, folder_month, folder_year, file_type="csv"):
