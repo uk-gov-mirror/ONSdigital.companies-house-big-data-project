@@ -3,10 +3,12 @@ from os.path import isfile, exists, getsize, getmtime, join
 from datetime import datetime
 import zipfile
 
+
 class XbrlValidatorMethods:
+    """This is a class that validates the XBRL data files."""
 
     def __init__(self):
-	    self.__init__
+        self.__init__
 
     @staticmethod
     def validate_compressed_files(filepath):

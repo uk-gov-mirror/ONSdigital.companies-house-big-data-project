@@ -2,12 +2,12 @@ import os
 import csv
 import itertools
 import pandas as pd
-from typing import List, Tuple
+from typing import List
 from datetime import datetime
 
+
 class XbrlCsvAppender:
-    """
-    """
+    """ This class combines the csvs. """
 
     def __init__(self):
         self.__init__
@@ -36,7 +36,7 @@ class XbrlCsvAppender:
                     reader = csv.reader(f, delimiter=',')
                     if n > 0: next(reader)
                     for row in reader:
-                     writer.writerow(row)
+                        writer.writerow(row)
 
     @staticmethod
     def combine_csv_pd(files: List[str], outfile: str):
@@ -44,9 +44,9 @@ class XbrlCsvAppender:
         pandas
         """
 
-        combined_csv = pd.concat([pd.read_csv(f, engine = 'python')
+        combined_csv = pd.concat([pd.read_csv(f, engine='python')
                                   for f in files])
-        combined_csv.to_csv(outfile, index = False)
+        combined_csv.to_csv(outfile, index=False)
 
     @staticmethod
     def _add_path(indir: str, files: str):
@@ -123,7 +123,6 @@ class XbrlCsvAppender:
             # Combine the csvs
             XbrlCsvAppender.combine_csv(files, outdir + str(year)
                                             + quarter_str + '_xbrl.csv')
-
         else:
             print("Input file path does not exist")
 

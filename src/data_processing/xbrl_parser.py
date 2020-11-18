@@ -170,7 +170,9 @@ class XbrlParser:
             try:
                 date_str = each['contextref']
                 date_val = parser.parse(soup.find(id=each['contextref']).
-                                        find(tag).get_text()).date().isoformat()
+                                        find(tag).get_text()).date()\
+                    .isoformat()
+
                 return date_val
             except:
                 pass

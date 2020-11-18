@@ -1,7 +1,5 @@
 import os
-import numpy as np
 import pandas as pd
-import importlib
 import time
 import sys
 
@@ -10,9 +8,9 @@ from src.data_processing.xbrl_parser import XbrlParser
 
 xbrl_parser = XbrlParser()
 
+
 class XbrlExtraction:
-    """
-    """
+    """ This is a class for extracting the XBRL data. """
 
     def __init__(self):
         self.__init__
@@ -39,34 +37,34 @@ class XbrlExtraction:
             needs to be a string")
 
         files = [directory + "/" + filename
-                    for filename in os.listdir(directory)
+                 for filename in os.listdir(directory)
                         if ((".htm" in filename.lower())
                             or (".xml" in filename.lower()))
                  ]
 
-        month_and_year = ('').join(directory.split('-')[-1:])
+        month_and_year = ''.join(directory.split('-')[-1:])
         month, year = month_and_year[:-4], month_and_year[-4:]
 
         return files, month, year
 
     @staticmethod
     def progressBar(name, value, endvalue, bar_length=50, width=20):
-            percent = float(value) / endvalue
-            arrow = '-' * int(round(percent*bar_length) - 1) + '>'
-            spaces = ' ' * (bar_length - len(arrow))
-            sys.stdout.write(
-                "\r{0: <{1}} : [{2}]{3}%   ({4} / {5})".format(
-                    name,
-                    width,
-                    arrow + spaces,
-                    int(round(percent*100)),
-                    value,
-                    endvalue
-                )
+        percent = float(value) / endvalue
+        arrow = '-' * int(round(percent*bar_length) - 1) + '>'
+        spaces = ' ' * (bar_length - len(arrow))
+        sys.stdout.write(
+            "\r{0: <{1}} : [{2}]{3}%   ({4} / {5})".format(
+                name,
+                width,
+                arrow + spaces,
+                int(round(percent*100)),
+                value,
+                endvalue
             )
-            sys.stdout.flush()
-            if value == endvalue:
-                sys.stdout.write('\n\n')
+        )
+        sys.stdout.flush()
+        if value == endvalue:
+            sys.stdout.write('\n\n')
 
     @staticmethod
     def retrieve_list_of_tags(dataframe, column, output_folder,
@@ -84,7 +82,7 @@ class XbrlExtraction:
         Raises:
             TypeError: Returned when arguments are incorrect types
         """
-        ## TYPE ERRORS
+        # TYPE ERRORS
         # Check that the input df is actually dataframe type.
         if not isinstance(dataframe, pd.DataFrame):
             raise TypeError("The first argument (dataframe) needs to be a \
@@ -98,7 +96,7 @@ class XbrlExtraction:
             raise TypeError("column, output_folder, folder_month and \
             folder_year must all be strings")
 
-        ## VALUE ERRORS
+        # VALUE ERRORS
         # Check column name present in dataframe
         if column not in list(dataframe.columns):
             raise ValueError("The column should exist in the dataframe passed")
@@ -115,7 +113,7 @@ class XbrlExtraction:
         if not os.path.exists(output_folder):
             raise ValueError("Output folder provided does not exist")
 
-        # Check year string equivelent to an int (i.e. 2010)
+        # Check year string equivalent to an int (i.e. 2010)
         if not str.isdigit(folder_year):
             raise ValueError("Year specified must be an integer >= 0")
 
@@ -178,10 +176,10 @@ class XbrlExtraction:
             raise ValueError("Year specified must be an integer >= 0")
 
         cache = dataframe
-        cache["count"] = cache.groupby(by = column)[column].transform("count")
-        cache.sort_values("count", inplace = True, ascending = False)
-        cache.drop_duplicates(subset = [column, "count"], keep = "first",
-                              inplace = True)
+        cache["count"] = cache.groupby(by=column)[column].transform("count")
+        cache.sort_values("count", inplace=True, ascending=False)
+        cache.drop_duplicates(subset=[column, "count"], keep="first",
+                              inplace=True)
         cache = cache[[column, "count"]]
 
         print(cache.shape)
@@ -214,13 +212,12 @@ class XbrlExtraction:
         # Empty table awaiting results
         results = []
 
-
-        COUNT = 0
+        count = 0
 
         # For every file
         for file in list_of_files:
 
-            COUNT += 1
+            count += 1
 
             # Read the file and parse
             doc = xbrl_parser.process_account(file)
@@ -231,7 +228,7 @@ class XbrlExtraction:
             # append results to table
             results.append(doc)
 
-            XbrlExtraction.progressBar("XBRL Accounts Parsed", COUNT,
+            XbrlExtraction.progressBar("XBRL Accounts Parsed", count,
                                        len(list_of_files), bar_length=50,
                                        width=20)
 
@@ -254,7 +251,6 @@ class XbrlExtraction:
             folder_month: month to include in output folder name (str)
             folder_year: year to include in output folder name (str)
             file_type: default is csv (str)
-
         Returns:
             None
         Raises:
@@ -301,8 +297,7 @@ class XbrlExtraction:
 
 
 class XbrlSubsets:
-    """
-    """
+    """ This is a class for sub-setting the XBRL data."""
 
     def __init__(self):
         self.__init__
@@ -312,7 +307,7 @@ class XbrlSubsets:
         """
         Function that allows for a dataframe to be aggregated by a
         specified method, returning a reduced dataframe containing the
-        groupedby columns and the aggregation columns.
+        grouped by columns and the aggregation columns.
 
         Arguments:
             df = dataframe you would like to use (dataframe)
@@ -584,6 +579,3 @@ class XbrlSubsets:
             print("Error: date_col needs to be a string")
 
         return df
-
-
-
