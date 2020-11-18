@@ -566,7 +566,7 @@ class XbrlParser:
         files, folder_month, folder_year = extractor.get_filepaths(directory)
 
         print(len(files))
-        files = files[0:1000]
+        #files = files[0:1000]
         '''
         ### Targets largest files
         #limit to moderate amount of files
@@ -672,11 +672,14 @@ class XbrlParser:
         Raises:
             None
         """
+        # Construct both the list of months and list of corresponding
+        # directories
         month_list = XbrlParser.create_month_list(quarter)
         directory_list = XbrlParser.create_directory_list(month_list,
                                                           unpacked_files,
                                                           year,
                                                           custom_input)
+        # Parse each directory
         for directory in directory_list:
             print("Parsing " + directory + "...")
             XbrlParser.parse_directory(directory, processed_files, num_cores)
