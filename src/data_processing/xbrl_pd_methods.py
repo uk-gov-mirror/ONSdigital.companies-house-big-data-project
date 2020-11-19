@@ -194,57 +194,7 @@ class XbrlExtraction:
         )
 
     @staticmethod
-<<<<<<< HEAD
     def output_xbrl_month(dataframe, output_folder, folder_month, folder_year, file_type="csv"):
-=======
-    def build_month_table(list_of_files):
-        """
-        Converts a specified list of file (paths) into a list of dicts
-        containing each account's tag data.
-
-        Arguments:
-            list_of_files:  user specified list of file paths
-        Returns:
-            results:        a list of dicts containing account information
-        Raises:
-            None
-        """
-
-        process_start = time.time()
-
-        # Empty table awaiting results
-        results = []
-
-        count = 0
-
-        # For every file
-        for file in list_of_files:
-
-            count += 1
-
-            # Read the file and parse
-            doc = xbrl_parser.process_account(file)
-
-            # Flatten the elements' dict into single dict
-            doc['elements'] = xbrl_parser.flatten_dict(doc['elements'])
-
-            # append results to table
-            results.append(doc)
-
-            XbrlExtraction.progressBar("XBRL Accounts Parsed", count,
-                                       len(list_of_files), bar_length=50,
-                                       width=20)
-
-        print("Average time to process an XBRL file:\
-         \x1b[31m{:0f}\x1b[0m".format((time.time() - process_start) / 60, 2),
-              "minutes")
-
-        return results
-
-    @staticmethod
-    def output_xbrl_month(dataframe, output_folder, folder_month,
-                          folder_year, file_type="csv"):
->>>>>>> cha_412
         """
         Save dataframe to csv format in specified directory, with particular
         naming scheme "YYYY-MM_xbrl_data.csv".
