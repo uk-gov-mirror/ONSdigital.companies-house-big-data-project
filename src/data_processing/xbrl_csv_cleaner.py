@@ -2,7 +2,7 @@ import pandas as pd
 import csv
 import os
 
-class XbrlCSVClean:
+class XbrlCSVCleaner:
     """
     Class to facilitate the cleaning of csv files outputted from the
     xbrl_parsing module.
@@ -93,7 +93,7 @@ class XbrlCSVClean:
         df = df[wanted_cols]
 
         # cast columns
-        df = XbrlCSVClean.col_cast(df, str_cols, 'str')
+        df = XbrlCSVCleaner.col_cast(df, str_cols, 'str')
         # df = col_cast(df, date_cols, 'datetime64[ns]')
 
         # export cleaned dataframe
@@ -112,7 +112,7 @@ class XbrlCSVClean:
     def clean_parsed_files(import_directory, export_directory):
         """
         Cleans all .csv files in a given directory using methods in the
-        XbrlCSVClean class and saves the processed files in a given directory
+        XbrlCSVCleaner class and saves the processed files in a given directory
 
         Arguments:
             import_directory: Directory containing .csv files to be cleaned
@@ -131,8 +131,8 @@ class XbrlCSVClean:
         # Clean the parsed files from the relevant list
         for file in xbrl_files:
             print('Exporting {}......'.format(file))
-            XbrlCSVClean.parsed_csv_clean(import_directory + file,
-                             export_directory + file)
+            XbrlCSVCleaner.parsed_csv_clean(import_directory + file,
+                                            export_directory + file)
             print('Successfully exported {}!'.format(file))
         return None
 
@@ -143,6 +143,6 @@ if __name__ == "__main__":
     in_path = "/home/dylan_purches/Documents/xbrl_parsed_data/for_cleaning/"
     out_path = "/home/dylan_purches/Documents/Data/cleaned_csvs/"
 
-    cleaner = XbrlCSVClean()
+    cleaner = XbrlCSVCleaner()
 
     cleaner.clean_parsed_files(in_path, out_path)
