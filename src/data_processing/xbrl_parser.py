@@ -386,20 +386,26 @@ class XbrlParser:
         return doc_dict
 
     @staticmethod
-    def flatten_data(doc):
+    def flatten_data(doc, temp_exports= "data/temp_exports"):
         """
         Takes the data returned by flatten dict, with its tree-like
         structure and reorganises it into a long-thin format table structure
         suitable for SQL applications.
 
-        Keyword argument:
-        doc -- a list of dictionaries
+        Arguments:
+            doc:            a list of dictionaries
+            temp_exports:   file path for temporary exporting of csv files
+        Returns:
+            df_elements:    dataframe containing all information from original
+                            doc variable
+        Raises:
+            None
         """
         doc2 = doc.copy()
 
-       #check if temp file is already present
+        # Check if temp file is already present
         try:
-            os.remove("/home/dylan_purches/Documents/Data/temp_exports/df_elements.csv")
+            os.remove(temp_exports + "/df_elements.csv")
         except:
             pass
 
@@ -410,29 +416,29 @@ class XbrlParser:
         T = len(doc2)
         t0 = time.time()
         for i in range(len(doc2)):
-            #Turn each elements dict into a dataframe
+            # Turn each elements dict into a dataframe
             df_element = pd.DataFrame.from_dict(doc2[i]['elements'])
 
-            #Ensure each element has the same number of columns
+            # Ensure each element has the same number of columns
             if 'sign' not in df_element.columns.values:
                 df_element['sign'] = 'NA'
 
-            #Add a key
+            # Add a key
             df_element['key'] = i
 
-            #Dump the "elements" entry in the doc dict
+            # Dump the "elements" entry in the doc dict
             doc2[i].pop('elements')
             df_element_meta = pd.DataFrame(doc2[i], index =[0])
             df_element_meta['key'] = i
 
-            #Merge the metadata with the elements
+            # Merge the metadata with the elements
             df_element_export = df_element_meta.merge(df_element, how='left', on='key')
             del df_element_meta, df_element
             df_element_export = df_element_export.drop('key', axis= 1)
 
-            #Append the new element to a csv file stored on the disk
+            # Append the new element to a csv file stored in temp_exports
             df_element_export.to_csv(
-                "/home/dylan_purches/Documents/Data/temp_exports/df_elements.csv",
+                temp_exports + "/df_elements.csv",
                 mode=md,
                 header=hd,
                 index=None,
@@ -441,18 +447,18 @@ class XbrlParser:
             )
 
             if i % 100 == 0:
-                print("%3.2f have been processed"%(i/T))
+                print("%2.2f %% have been processed"%((i/T)*100))
             md, hd = 'a', False
 
         # convert the stored csv back into a pandas df and tidy up
         df_elements = pd.read_csv(
-            "/home/dylan_purches/Documents/Data/temp_exports/df_elements.csv",
+            temp_exports + "/df_elements.csv",
             index_col=None,
             header=0,
             sep=",",
             lineterminator="\n",
             quotechar='"')
-        os.remove("/home/dylan_purches/Documents/Data/temp_exports/df_elements.csv")
+        os.remove(temp_exports + "/df_elements.csv")
 
         return df_elements
 
