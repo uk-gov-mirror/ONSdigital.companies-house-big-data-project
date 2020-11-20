@@ -3,11 +3,9 @@ from datetime import datetime
 from dateutil import parser
 from src.data_processing.xbrl_pd_methods import XbrlExtraction
 import pandas as pd
-
 import math
 import time
 import multiprocessing as mp
-
 
 
 class XbrlParser:
@@ -38,9 +36,9 @@ class XbrlParser:
         numeric. If it's just a dash, it is taken to mean zero.
 
         Arguments:
-            string: sting to be cleaned and converted
+            string: string to be cleaned and converted (str)
         Returns:
-            string: cleaned string converted to numeric
+            string: cleaned string converted to numeric (int)
         Raises:
             None
         """
@@ -83,7 +81,7 @@ class XbrlParser:
         be in the document, and extracting the format and standard date from
         the string of the url itself.
         WARNING - That means that there's a lot of implicit hardcoded info
-        on the way these links are formatted and referenced, within this
+        on the way these links are formatted and referenced within this
         function.  Might need changing someday.
 
         Arguments:
@@ -124,7 +122,7 @@ class XbrlParser:
             soup:   BeautifulSoup souped html/xml object
             each:   element of BeautifulSoup souped object
         Returns:
-            the unit of the element
+            unit_str: the unit of the element
         Raises:
             None
         """
@@ -194,11 +192,11 @@ class XbrlParser:
         and value and associated metadata.
 
         Arguments:
-            soup:       BeautifulSoup object of accounts document
-            element:    soup object of discovered tagged element
+            soup:     BeautifulSoup object of accounts document
+            element:  soup object of discovered tagged element
         Returns:
-            element_dict:   A dictionary containing the elements name value and
-                            metadata.
+            element_dict: A dictionary containing the elements name value and
+                          metadata (dict)
         Raises:
             None
         """
@@ -246,15 +244,14 @@ class XbrlParser:
     def parse_elements(element_set, soup):
         """
         For a set of discovered elements within a document, try to parse
-        them.  Only keep valid results (test is whether field "name"
-        exists).
+        them. Only keep valid results (test is whether field "name" exists).
 
         Arguments:
             element_set:    BeautifulSoup iterable search result object
             soup:           BeautifulSoup object of accounts document
         Returns:
             elements:   A list of dicts corresponding to the elements of
-                        element_set
+                        element_set (list)
         Raises:
             None
         """
@@ -276,6 +273,7 @@ class XbrlParser:
         Arguments:
             doc:            an extracted document dict, with "elements" entry
                             as created by the 'scrape_clean_elements' functions
+                            (dict)
             variable_names: variables to find and sum (of all) if they exist
         Returns (as a dict):
             total_assets:   the totals of the given values
@@ -313,6 +311,7 @@ class XbrlParser:
         Arguments:
             doc:            an extracted document dict, with "elements" entry
                             as created by the 'scrape_clean_elements' functions
+                            (dict)
             variable_names: variables to find and check if they exist
         Returns (as a dict):
             primary_assets: total assets from given variables
@@ -352,9 +351,11 @@ class XbrlParser:
         Arguments:
             doc:            an extracted document dict, with "elements" entry
                             as created by the 'scrape_clean_elements' functions
+                            (dict)
             variable_names: variables to find and return if they exist.
         Returns:
             results: a dictionary of all the values for each in variable_names
+                     (dict)
         Raises:
             None
         """
@@ -380,15 +381,15 @@ class XbrlParser:
     def scrape_elements(soup, filepath):
         """
         Parses an XBRL (xml) company accounts file for all labelled content and
-        extracts the content (and metadata, eg; unitref) of each element found
+        extracts the content (and metadata eg; unitref) of each element found
         to a dictionary.
 
         Arguments:
             soup:        BeautifulSoup object of accounts document
-            filepath:    A filepath string
+            filepath:    A filepath (str)
         Returns:
              elements:  A list of dictionaries containing meta data for each
-                        element
+                        element (list)
         Raises:
             None
         """
@@ -415,12 +416,13 @@ class XbrlParser:
         """
         NEED TO CHANGE TO REFLECT NEW FUNCTIONALITY - IF WORKING
         Takes in a list of dictionaries and combines them into a
-        single dictionary - assumes dictionaries all have same keys
+        single dictionary - assumes dictionaries all have the same keys.
 
         Argument:
-            doc: a list of dictionaries
+            doc: a list of dictionaries (list)
         Returns:
-            doc_dict: a dictionary formed by combing the list of dictionaries.
+            doc_dict: a dictionary formed by combing the list of dictionaries
+                      (dict)
         Raises:
             None
         """
@@ -440,9 +442,9 @@ class XbrlParser:
         suitable for SQL applications.
 
         Argument:
-            doc: a list of dictionaries
+            doc: a list of dictionaries (list)
         Returns:
-            df_elements: A dataframe containing all data from doc
+            df_elements: A dataframe containing all data from doc (dataframe)
         Raises:
             None
         """
@@ -479,9 +481,9 @@ class XbrlParser:
         upload the elements and some metadata to a mongodb.
 
         Arguments:
-            filepath: complete filepath (string) from drive root
+            filepath: complete filepath from drive root (str)
         Returns:
-            doc: dictionary of all data from the relevant file
+            doc: dictionary of all data from the relevant file (dict)
         Raises:
             None
         """
@@ -544,7 +546,7 @@ class XbrlParser:
             quarter:    quarter of the year between 1 and 4 (as a string) or
                         None to generate a list for the year
         Returns:
-            month_list: list of the corresponding months (as strings)
+            month_list: list of the corresponding months (as strings) (list)
         Raises:
             none
         """
@@ -574,13 +576,14 @@ class XbrlParser:
 
         Arguments:
             months:         A list of strings of the months to find files for
+                            (list)
             filepath:       String of the directory containing the unpacked
-                            files
-            year:           The year of which to find accounts from (string)
+                            files (str)
+            year:           The year of which to find accounts from (str)
             custom_input:   Used to set a specific folder of accounts
         Returns:
-            directory_list: list containing strings of the filepaths of all
-                            accounts in the relevant year
+            directory_list: list containing strings of the file paths of all
+                            accounts in the relevant year (list)
         Raises:
             None
         """
@@ -610,10 +613,10 @@ class XbrlParser:
         csv files in a specified directory.
 
         Arguments:
-            directory: A directory (path) to be processed
+            directory: A directory (path) to be processed (str)
             processed_path: String of the path where processed files should be
-                            saved
-            num_processes:  The number of cores to use in multiprocessing
+                            saved (str)
+            num_processes:  The number of cores to use in multiprocessing (int)
         Returns:
             None
         Raises:
@@ -631,7 +634,8 @@ class XbrlParser:
         ### Targets largest files
         #limit to moderate amount of files
          
-        # Here you can splice/truncate the number of files you want to process for testing
+        # Here you can splice/truncate the number of files you want to process
+        # for testing
         # TO BE COMMENTED OUT AFTER TESTING
         filesize = []
         for i in range(len(files)):
@@ -747,6 +751,14 @@ class XbrlParser:
     @staticmethod
     def build_month_table(list_of_files):
         """
+        Description ...
+
+        Arguments:
+
+        Returns:
+
+        Raises:
+
         """
 
         process_start = time.time()
