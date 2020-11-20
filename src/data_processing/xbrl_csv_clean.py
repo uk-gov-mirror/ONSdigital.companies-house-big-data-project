@@ -135,3 +135,14 @@ class XbrlCSVClean:
                              export_directory + file)
             print('Successfully exported {}!'.format(file))
         return None
+
+if __name__ == "__main__":
+    pd.set_option('display.max_colwidth', None)
+    pd.set_option('max_columns', None)
+
+    in_path = "/home/dylan_purches/Documents/xbrl_parsed_data/for_cleaning/"
+    out_path = "/home/dylan_purches/Documents/Data/cleaned_csvs/"
+
+    cleaner = XbrlCSVClean()
+
+    cleaner.clean_parsed_files(in_path, out_path)
