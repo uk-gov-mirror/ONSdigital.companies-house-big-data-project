@@ -403,6 +403,10 @@ class XbrlParser:
         """
         doc2 = doc.copy()
 
+        # Check if the temp_exports folder is present
+        if not (os.path.isdir(temp_exports)):
+            os.mkdir(temp_exports)
+
         # Check if temp file is already present
         try:
             os.remove(temp_exports + "/df_elements.csv")
