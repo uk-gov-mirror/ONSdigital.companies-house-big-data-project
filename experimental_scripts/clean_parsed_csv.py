@@ -97,17 +97,21 @@ def parsed_csv_clean(import_path, export_path=''):
               quotechar='"', quoting=csv.QUOTE_NONNUMERIC)
 
     return None
-#parsed_csv_clean('/shares/xbrl_parsed_data/2020-April_xbrl_data.csv','/shares/test_parsed_data/2020-April_xbrl_data.csv')
+#parsed_csv_clean('/shares/xbrl_parsed_data/2020-April_xbrl_data.csv',
+# '/shares/test_parsed_data/2020-April_xbrl_data.csv')
 
+# Obtain a list of files to clean
 path = '/shares/xbrl_parsed_data/'
 extension = '.csv'
 os.chdir(path)
 xbrl_files = os.listdir(path)
 xbrl_files = [csv for csv in xbrl_files if csv.endswith(extension)]
 
+# Clean the parsed files from the relevant list
 for file in xbrl_files:
     print('Exporting {}......'.format(file))
-    parsed_csv_clean('/shares/xbrl_parsed_data/'+file,'/shares/test_parsed_data/'+file)
+    parsed_csv_clean('/shares/xbrl_parsed_data/'+file,
+                     '/shares/test_parsed_data/'+file)
     print('Successfully export {}!'.format(file))
 
 
