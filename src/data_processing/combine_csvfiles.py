@@ -49,9 +49,9 @@ class XbrlCsvAppender:
             files:
             outfile:   Filepath to write combined csv file (str)
         Returns:
-
+            None
         Raises:
-
+            None
         """
 
         combined_csv = pd.concat([pd.read_csv(f, engine='python')
@@ -67,9 +67,9 @@ class XbrlCsvAppender:
             indir:   List of csv files specified by user (list)
             files:   Filepath to write combined csv file (str)
         Returns:
-
+            None
         Raises:
-
+            None
         """
         return [indir+i for i in files]
 
