@@ -24,8 +24,8 @@ class XbrlExtraction:
             directory: User specified directory (str)
         Returns:
             files:  List of all paths of xml or html files in directory (list)
-            month:  The month of the specified directories accounts
-            year:   The year of the specified directories accounts
+            month:  The month of the specified directories accounts (str)
+            year:   The year of the specified directories accounts (str)
         Raises:
             TypeError: If the path of the directory is not a string
         """
@@ -48,14 +48,21 @@ class XbrlExtraction:
     @staticmethod
     def progressBar(name, value, endvalue, bar_length=50, width=20):
         """
-        Description
+        Function that can be called upon if a progress bar needs to be
+        displayed in the output to keep track of the progression of a process.
+        Function is called everytime the process progresses (to update the bar)
 
         Arguments:
-
+            name:       What to label the bar as in the output (str)
+            value:      Current number of total processes completed (int)
+            endvalue:   Total number of processes to complete - for the bar to
+                        reach 100% (int)
+            bar_length: How long to print the bar (number of "-") (int)
+            width:      Sets alignment space for the bar
         Returns:
-
+            None
         Raises:
-
+            None
         """
         percent = float(value) / endvalue
         arrow = '-' * int(round(percent*bar_length) - 1) + '>'
