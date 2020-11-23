@@ -26,6 +26,26 @@ class XbrlCsvAppender:
         Raises:
             None
         """
+        # Check arguments are of correct types
+        if not all(isinstance(file, str) for file in files):
+            raise TypeError(
+                "The csv paths you have specified need to be passed as \
+                strings"
+            )
+        if not isinstance(outfile, str):
+            raise TypeError(
+                "The output filepath needs to be specified as a string"
+            )
+
+        # Check file paths are valid
+        if not all(os.path.exists(file) for file in files):
+            raise ValueError(
+                "Not all of the input csv files have valid file paths"
+            )
+        if not all(file[-4:] == ".csv" for file in files):
+            raise ValueError(
+                "Not all of the input files are csv's."
+            )
 
         print("Processing " + str(len(files)) + " files...")
         with open(outfile, "w") as w:
@@ -43,6 +63,26 @@ class XbrlCsvAppender:
         """Combines all csv files listed in files into a single csv file using
         pandas
         """
+        # Check arguments are of correct types
+        if not all(isinstance(file, str) for file in files):
+            raise TypeError(
+                "The csv paths you have specified need to be passed as \
+                strings"
+            )
+        if not isinstance(outfile, str):
+            raise TypeError(
+                "The output filepath needs to be specified as a string"
+            )
+
+        # Check file paths are valid
+        if not all(os.path.exists(file) for file in files):
+            raise ValueError(
+                "Not all of the input csv files have valid file paths"
+            )
+        if not all(file[-4:] == ".csv" for file in files):
+            raise ValueError(
+                "Not all of the input files are csv's."
+            )
 
         combined_csv = pd.concat([pd.read_csv(f, engine='python')
                                   for f in files])
@@ -51,6 +91,21 @@ class XbrlCsvAppender:
     @staticmethod
     def _add_path(indir: str, files: str):
         """returns list with paths appended to file names"""
+        # Check arguments are of the correct types
+        if not isinstance(indir, str):
+            raise TypeError(
+                "input directory must be specified as a string"
+            )
+        if not all(isinstance(file, str) for file in files):
+            raise TypeError(
+                "All files must be specified as a string"
+            )
+
+        # Check arguments are the correct values
+        if not os.path.exists(indir):
+            raise ValueError(
+                "Specified input directory does not exist"
+            )
         return [indir+i for i in files]
 
     @staticmethod
@@ -70,6 +125,25 @@ class XbrlCsvAppender:
         Raises:
             None
         """
+        # Check arguments are of correct types
+        if not (
+            isinstance(indir, str) or
+            isinstance(outdir, str) or
+            isinstance(year, str) or
+            isinstance(quarter, str)
+        ):
+            raise TypeError(
+                "All arguments must be passed as strings"
+            )
+
+        # Check arguments have valid values
+        if not(
+            os.path.exists(indir) or
+            os.path.exists(outdir)
+        ):
+            raise ValueError(
+                "Invalid file path entered"
+            )
 
         year = int(year)
         if quarter == "None":
