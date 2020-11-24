@@ -1,12 +1,13 @@
 import cv2
 from os import listdir, mkdir
-from os.path import isfile, join, exists, getsize
+from os.path import isfile, join, exists, splitext
 import random
 import zipfile
 import shutil
 
 
 class DataProcessing:
+    """ This is a class for processing data. """
 
     def __init__(self):
         self.__init__
@@ -41,7 +42,7 @@ class DataProcessing:
         Raises:
             None
         """
-        return [file for file in file_list if ('.').join(file.split('.')[-1:])
+        return [file for file in file_list if '.'.join(file.split('.')[-1:])
                 in acceptable_extensions]
 
     @staticmethod
@@ -57,7 +58,7 @@ class DataProcessing:
         Raises:
             None
         """
-        return [('.').join(file.split('.')[:-1]) for file in file_list]
+        return ['.'.join(file.split('.')[:-1]) for file in file_list]
 
     @staticmethod
     def resizeMultipleImages(image_list, scale_factor,
@@ -217,12 +218,6 @@ class DataProcessing:
             print("Destination directory not valid!: " + file_dest)
 
 
-# myobj = DataProcessing()
-# file_source = "/home/peterd/repos/companies_house_accounts/data/for_testing/xbrl_data/accounts_bulk_data-2020-03-24.zip"
-# file_source = "/home/peterd/repos/companies_house_accounts/data/for_testing/xbrl_data/"
-# file_dest = "/home/peterd/repos/companies_house_accounts/data/for_testing/xbrl_data_extracted/"
-# myobj.extract_compressed_files(file_source, file_dest)
-
 def get_file_details(files, n_objects=1, x_coord=0, y_coord=0):
     """
     Returns details for a singular file.
@@ -233,16 +228,16 @@ def get_file_details(files, n_objects=1, x_coord=0, y_coord=0):
         x_coord:   horizontal position of object (float)
         y_coord:   vertical position of object (float)
     Returns:
-        List of files with specified extensions
+        List of files with specified extensions (list)
     Raises:
         None
     """
     for f in files:
         f_title, f_details = splitext(
             f + " " + str(n_objects) + " " + str(x_coord) + " " + str(y_coord)
-			+ " " + str(cv2.imread(join(path, f)).shape))
+            + " " + str(cv2.imread(join(path, f)).shape))
         f_type, f_num, f_xcoord, f_ycoord, f_height, f_width, f_num_channels \
-			= f_details.split(" ")
+            = f_details.split(" ")
         strip_f_height = f_height.strip(",")[1:]
         strip_f_width = f_width.strip(",")
 

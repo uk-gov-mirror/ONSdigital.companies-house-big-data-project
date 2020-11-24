@@ -1,4 +1,4 @@
-from os import listdir, getcwd, chdir
+from os import listdir, chdir
 from os.path import isfile, join
 from scrapy.spiders import CrawlSpider
 import hashlib
@@ -10,9 +10,11 @@ import sys
 import cv2
 import configparser
 
+
 class XbrlScraperItem(scrapy.Item):
     file_urls = scrapy.Field()
     files = scrapy.Field()
+
 
 class XBRLSpider(CrawlSpider):
     name = "xbrl_scraper"
@@ -46,9 +48,9 @@ class XBRLSpider(CrawlSpider):
         Arguments:
             self:
             response: web page scraped from website crawled by scraper
-        Yields:
+        Returns:
             XbrlScraperItem :  Url, checksum and path to scraped zip file.
-                                This will then be downloaded by scrapy
+                               This will then be downloaded by scrapy
         Raises:
             None
         """

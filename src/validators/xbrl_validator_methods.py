@@ -133,8 +133,3 @@ class XbrlValidatorMethods:
                 print("Specified directory to zip files does not exist!")
             if not exists(filepath_to_extracted_files):
                 print("Specified directory to extracted files does not exist!")
-
-#myobj = XbrlValidatorMethods()
-#file_source = "/home/peterd/repos/companies_house_accounts/data/for_testing/xbrl_data"
-#file_dest = "/home/peterd/repos/companies_house_accounts/data/for_testing/xbrl_data_extracted"
-#myobj.validate_extracted_files(file_source, file_dest)
