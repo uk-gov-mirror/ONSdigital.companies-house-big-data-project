@@ -59,10 +59,10 @@ class XbrlParser:
         Finds the relevant context element and retrieves the relevant data.
 
         Arguments:
-            soup:       BeautifulSoup souped html/xml object
+            soup:       BeautifulSoup souped html/xml object (BeautifulSoup object)
             contextref: id of the context element to be raided
         Returns:
-            contents: relevant data from the context
+            contents: relevant data from the context (string)
         """
         try:
             context = soup.find("xbrli:context", id=contextref)
@@ -85,11 +85,11 @@ class XbrlParser:
         function.  Might need changing someday.
 
         Arguments:
-            soup: BeautifulSoup souped html/xml object
+            soup: BeautifulSoup souped html/xml object (BeautifulSoup object)
         Returns:
-            standard:   The standard for the object
-            date:       The date for the object
-            original_url: The original url of the object
+            standard:   The standard for the object (string)
+            date:       The date for the object (string)
+            original_url: The original url of the object (string)
         Raises:
             None
         """
@@ -119,10 +119,10 @@ class XbrlParser:
         if it's not a reference to another element.
 
         Arguments:
-            soup:   BeautifulSoup souped html/xml object
+            soup:   BeautifulSoup souped html/xml object (BeautifulSoup object)
             each:   element of BeautifulSoup souped object
         Returns:
-            unit_str: the unit of the element
+            unit_str: the unit of the element (string)
         Raises:
             None
         """
@@ -147,10 +147,10 @@ class XbrlParser:
         to another element.
 
         Arguments:
-            soup:   BeautifulSoup souped html/xml object
+            soup:   BeautifulSoup souped html/xml object (BeautifulSoup object)
             each:   element of BeautifulSoup souped object
         Returns:
-            date_val: The reporting date of the object
+            date_val: The reporting date of the object (date)
         Raises:
             None
         """
@@ -192,7 +192,7 @@ class XbrlParser:
         and value and associated metadata.
 
         Arguments:
-            soup:     BeautifulSoup object of accounts document
+            soup:     BeautifulSoup object of accounts document (BeautifulSoup object)
             element:  soup object of discovered tagged element
         Returns:
             element_dict: A dictionary containing the elements name value and
@@ -247,8 +247,8 @@ class XbrlParser:
         them. Only keep valid results (test is whether field "name" exists).
 
         Arguments:
-            element_set:    BeautifulSoup iterable search result object
-            soup:           BeautifulSoup object of accounts document
+            element_set:    BeautifulSoup iterable search result object (list of BeautifulSoup objects)
+            soup:           BeautifulSoup object of accounts document (BeautifulSoup object)
         Returns:
             elements:   A list of dicts corresponding to the elements of
                         element_set (list)
@@ -385,7 +385,7 @@ class XbrlParser:
         to a dictionary.
 
         Arguments:
-            soup:        BeautifulSoup object of accounts document
+            soup:        BeautifulSoup object of accounts document (BeautifulSoup object)
             filepath:    A filepath (str)
         Returns:
              elements:  A list of dictionaries containing meta data for each
@@ -414,7 +414,6 @@ class XbrlParser:
     @staticmethod
     def flatten_dict(doc):
         """
-        NEED TO CHANGE TO REFLECT NEW FUNCTIONALITY - IF WORKING
         Takes in a list of dictionaries and combines them into a
         single dictionary - assumes dictionaries all have the same keys.
 
@@ -722,14 +721,14 @@ class XbrlParser:
         a specified location.
 
         Arguments:
-            quarter:            quarter of the given year to process files from
-            year:               year to process files from
+            quarter:            quarter of the given year to process files from (int)
+            year:               year to process files from (int)
             unpacked_files:     path of directory where files to be processed
-                                are stored
+                                are stored (string)
             processed_files:    path of directory where the files the resulting
-                                files will be saved
+                                files will be saved (string)
             num_cores:          number of cores to use with mutliprocessing
-                                module
+                                module (int)
             custom_input:       Used to set a specific folder of accounts
         Returns:
             None
@@ -751,14 +750,17 @@ class XbrlParser:
     @staticmethod
     def build_month_table(list_of_files):
         """
-        Description ...
+        Function which parses, sequentially, a list of xbrl/ html files,
+        converting each parsed file into a dictionary and appending to a list.
 
         Arguments:
+            list of files: list of filepaths, each coresponding to a xbrl/html file (list)
 
         Returns:
-
+            results:       list of dictionaries, each containing the parsed content of
+                           a xbrl/html file (list)
         Raises:
-
+            None
         """
 
         process_start = time.time()
