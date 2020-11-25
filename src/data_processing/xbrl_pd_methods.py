@@ -1,11 +1,9 @@
 import os
 import pandas as pd
-import time
 import sys
 
 # Custom import
 # from src.data_processing.xbrl_parser import XbrlParser
-#
 # xbrl_parser = XbrlParser()
 
 
@@ -17,17 +15,17 @@ class XbrlExtraction:
 
     @staticmethod
     def get_filepaths(directory):
-
-        """ Helper function -
+        """
+        Helper function -
         Get all of the filenames in a directory that end in htm* or xml (under
         the assumption that all files within the folder are financial records).
 
         Arguments:
-            directory: User specified directory
+            directory: User specified directory (str)
         Returns:
-            files:  List of all paths of xml or html files in directory
-            month:  The month of the specified directories accounts
-            year:   The year of the specified directories accounts
+            files:  List of all paths of xml or html files in directory (list)
+            month:  The month of the specified directories accounts (str)
+            year:   The year of the specified directories accounts (str)
         Raises:
             TypeError: If the path of the directory is not a string
         """
@@ -54,6 +52,23 @@ class XbrlExtraction:
 
     @staticmethod
     def progressBar(name, value, endvalue, bar_length=50, width=20):
+        """
+        Function that can be called upon if a progress bar needs to be
+        displayed in the output to keep track of the progression of a process.
+        Function is called everytime the process progresses (to update the bar)
+
+        Arguments:
+            name:       What to label the bar as in the output (str)
+            value:      Current number of total processes completed (int)
+            endvalue:   Total number of processes to complete - for the bar to
+                        reach 100% (int)
+            bar_length: How long to print the bar (number of "-") (int)
+            width:      Sets alignment space for the bar
+        Returns:
+            None
+        Raises:
+            None
+        """
         # Check arguments are of the correct type
         if not isinstance(name, str):
             raise TypeError(
@@ -101,13 +116,13 @@ class XbrlExtraction:
     def retrieve_list_of_tags(dataframe, column, output_folder,
                               folder_month, folder_year):
         """
-        Save dataframe containing all unique tags to txt format in
+        Saves a dataframe containing all unique tags to txt format in
         specified directory.
 
         Arguments:
-            dataframe:     tabular data
-            column:        location of xbrl tags
-            output_folder: user specified file location
+            dataframe:     tabular data (dataframe)
+            column:        location of xbrl tags (str)
+            output_folder: user specified file location (str)
         Returns:
             None
         Raises:
@@ -169,11 +184,11 @@ class XbrlExtraction:
         directory.
 
         Arguments:
-            dataframe:     tabular data
-            column:        location of xbrl tags
-            output_folder: user specified file location
-            folder_month:  month of specified folder of accounts
-            folder_year:   year of specified folder of accounts
+            dataframe:     tabular data (dataframe)
+            column:        location of xbrl tags (str)
+            output_folder: user specified file location (str)
+            folder_month:  month of specified folder of accounts (str)
+            folder_year:   year of specified folder of accounts (str)
         Returns:
             None
         Raises:
@@ -225,13 +240,14 @@ class XbrlExtraction:
         )
 
     @staticmethod
-    def output_xbrl_month(dataframe, output_folder, folder_month, folder_year, file_type="csv"):
+    def output_xbrl_month(dataframe, output_folder, folder_month, folder_year,
+                          file_type="csv"):
         """
         Save dataframe to csv format in specified directory, with particular
         naming scheme "YYYY-MM_xbrl_data.csv".
 
         Arguments:
-            dataframe: tabular data (df)
+            dataframe: tabular data (dataframe)
             output_folder: user specified file destination (str)
             folder_month: month to include in output folder name (str)
             folder_year: year to include in output folder name (str)
@@ -295,24 +311,24 @@ class XbrlSubsets:
         grouped by columns and the aggregation columns.
 
         Arguments:
-            df = dataframe you would like to use (dataframe)
-            groupby_cols =  list of column names you would like to use as
-                            your groupby clause (list)
-            agg_method =    name of the aggregation method you would like
-                            to use (string)
-                            * 'sum', 'mean', 'count', 'var', 'std', 'first',
-                            'last', 'min' or 'max'
-            agg_cols =      columns you would like to perform the aggregation
-                            method on (list)
-            naming =        naming convention for the output columns (Boolean)
-                            * True (default) = keep column names same as input
-                                df
-                            * False = before the column name add the method of
-                                aggregation (agg_method) separated by space
+            df: dataframe you would like to use (dataframe)
+            groupby_cols:  list of column names you would like to use as
+                           your groupby clause (list)
+            agg_method:    name of the aggregation method you would like
+                           to use (str)
+                           * 'sum', 'mean', 'count', 'var', 'std', 'first',
+                             'last', 'min' or 'max'
+            agg_cols:      columns you would like to perform the aggregation
+                           method on (list)
+            naming:        naming convention for the output columns (Boolean)
+                           * True (default) = keep column names same as input
+                                              df
+                           * False = before the column name add the method of
+                                   aggregation (agg_method) separated by space
         Returns:
             output: A dataframe that has been aggregated according to the
                     specified method using the specified groupby and
-                    aggregation columns.
+                    aggregation columns (dataframe)
         Raises:
             TypeError: If arguments are of incorrect types
         """
@@ -380,20 +396,20 @@ class XbrlSubsets:
         Arguments:
             df1:            Dataframe 1 (left dataframe)
             df2:            Dataframe 2 (right dataframe)
-            df1_pk:         Name of the primary key for df1 (string)
-            df2_pk:         Name of the primary key for df2 (string)
+            df1_pk:         Name of the primary key for df1 (str)
+            df2_pk:         Name of the primary key for df2 (str)
             join_method:    type of join method to be performed
-                            (conditional string);
+                            (conditional str);
                             left, right, outer, inner --- "left" is the default
             pk_keep:        dataframe primary key you want to retain
-                            (conditional string);
+                            (conditional str);
                             "df1": retain naming convention for df1_pk
                                   (default)
                             "df2": retain naming convention for df2_pk
                             "both": retain the original name of the pk's
         Returns:
             merge_df:   Merged dataframe joined using the chosen method and
-                        name convention.
+                        name convention (dataframe)
         Raises:
             TypeError: If arguments are of incorrect types
         """
@@ -447,11 +463,12 @@ class XbrlSubsets:
         DataFrame. Throws error if the wanted tags are not a string or list
 
         Arguments:
-            df:         DataFrame
-            tag_col:    name of column that contains tag name (string)
-            wanted_tag: name of extracted tag(s) (string or list)
+            df:         DataFrame (dataframe)
+            tag_col:    name of column that contains tag name (str)
+            wanted_tag: name of extracted tag(s) (str or list)
         Returns:
             output: DataFrame filtered to contain only the required tag(s)
+                    (dataframe)
         Raises:
             TypeError: If arguments are of incorrect types
         """
@@ -463,7 +480,8 @@ class XbrlSubsets:
             raise TypeError("The tag_col needs to be a string")
 
         if tag_col not in list(df.columns):
-            raise ValueError("The tag_col should exist in the dataframe passed")
+            raise ValueError("The tag_col should exist in the dataframe passed"
+                             )
 
         if isinstance(wanted_tag, str):
             tag = [wanted_tag]
@@ -484,11 +502,13 @@ class XbrlSubsets:
         list or filtered DataFrame.
 
         Arguments:
-            df:         DataFrame
-            col_name:   string of column you want to find unique values of
+            df:         DataFrame (dataframe)
+            col_name:   Column you want to find unique values of (str)
             out_list:   Bool option to choose output as a list or DataFrame
+                        (Bool)
         Returns:
             output: List or DataFrame column of unique values
+                    (list or dataframe)
         Raises:
             TypeError: If arguments are of incorrect types
         """
@@ -525,14 +545,14 @@ class XbrlSubsets:
         (of the formatting: yyyy-mm-dd).
 
         Arguments:
-            df:         DataFrame
-            date_col:   name of date column (string)
+            df:         DataFrame (dataframe)
+            date_col:   name of date column (str)
             replace:    option for new date column to replace original column,
-                        "y" or "n" respectively (string, "y" or "n")
-            col_name:   if replace = "n", name of new date column (string)
+                        "y" or "n" respectively (str, "y" or "n")
+            col_name:   if replace = "n", name of new date column (str)
         Returns:
             df: DataFrame by either replacing original column with date format
-                or creating a new column of date format
+                or creating a new column of date format (dataframe)
         Raises:
             TypeError: If arguments are of incorrect type
         """
@@ -543,7 +563,7 @@ class XbrlSubsets:
         if not isinstance(date_col, str):
             raise TypeError("The date_col needs to be a string")
 
-        if replace not in ['y','n']:
+        if replace not in ['y', 'n']:
             raise ValueError("The replace argument needs to 'y' or 'n'")
 
         if date_col not in list(df.columns):

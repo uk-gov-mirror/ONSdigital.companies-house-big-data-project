@@ -13,10 +13,11 @@ class XbrlValidatorMethods:
     @staticmethod
     def validate_compressed_files(filepath):
         """
-        Validates and returns information on files in specified directory
+        Validates and prints information, including name size and date
+        modified, on files in specified directory
 
         Arguments:
-            filepath: source directory of files of interest
+            filepath: source directory of files of interest (str)
         Returns:
             None
         Raises:
@@ -56,14 +57,16 @@ class XbrlValidatorMethods:
     def validate_extracted_files(filepath_to_zip_files,
                                  filepath_to_extracted_files):
         """
-        Validates and returns information on files in specified directory
+        Validates that zip files in specified directory have been correctly
+        extracted to another specified directory.
         To be used for validating files which have been extracted from a
         zip file.
 
         Arguments:
             filepath_to_zip_files:        source directory of files of interest
+                                          (str)
             filepath_to_extracted_files:  destination directory of files of
-                                          interest
+                                          interest (str)
         Returns:
             None
         Raises:
@@ -91,10 +94,10 @@ class XbrlValidatorMethods:
             sub-directories
 
             Arguments:
-                start_path: directory to be checked
+                start_path: directory to be checked (str)
             Returns:
                 total_size: combined size of the directory and its
-                sub-directories
+                            sub-directories in bytes (int)
             Raises:
                 None
             """
@@ -156,8 +159,3 @@ class XbrlValidatorMethods:
                 print("Some files not extracted correctly from zip file!:")
                 print(str(diff))
 
-
-#myobj = XbrlValidatorMethods()
-#file_source = "/home/peterd/repos/companies_house_accounts/data/for_testing/xbrl_data"
-#file_dest = "/home/peterd/repos/companies_house_accounts/data/for_testing/xbrl_data_extracted"
-#myobj.validate_extracted_files(file_source, file_dest)

@@ -1,6 +1,5 @@
 import os
 import csv
-import itertools
 import pandas as pd
 from typing import List
 from datetime import datetime
@@ -14,13 +13,14 @@ class XbrlCsvAppender:
 
     @staticmethod
     def combine_csv(files: List[str], outfile: str):
-        """Combines all csv files listed in files into a single csv file using
+        """
+        Combines all csv files listed in files into a single csv file using
         csv.writer. Unsuitable if files do not have the same format. Faster
         than the pandas version.
 
         Arguments:
-            files:      List of csv files specified by user
-            outfile:    Filepath to write combined csv file
+            files:      List of csv files specified by user (list)
+            outfile:    Filepath to write combined csv file (str)
         Returns:
             None
         Raises:
@@ -54,14 +54,25 @@ class XbrlCsvAppender:
                 print("Processing " + file + "...")
                 with open(file, "r") as f:
                     reader = csv.reader(f, delimiter=',')
-                    if n > 0: next(reader)
+                    if n > 0:
+                        next(reader)
                     for row in reader:
                         writer.writerow(row)
 
     @staticmethod
     def combine_csv_pd(files: List[str], outfile: str):
-        """Combines all csv files listed in files into a single csv file using
-        pandas
+        """
+        Combines all csv files listed in files into a single csv file using
+        pandas.
+
+        Arguments:
+            files:     List of the file paths of the files to be combined
+                       (list)
+            outfile:   Filepath to write combined csv file (str)
+        Returns:
+            None
+        Raises:
+            None
         """
         # Check arguments are of correct types
         if not all(isinstance(file, str) for file in files):
@@ -90,7 +101,17 @@ class XbrlCsvAppender:
 
     @staticmethod
     def _add_path(indir: str, files: str):
-        """returns list with paths appended to file names"""
+        """
+        Returns a list with the paths appended to file names.
+
+        Arguments:
+            indir:   List of csv files specified by user (list)
+            files:   Filepath to write combined csv file (str)
+        Returns:
+            None
+        Raises:
+            None
+        """
         # Check arguments are of the correct types
         if not isinstance(indir, str):
             raise TypeError(
@@ -110,16 +131,17 @@ class XbrlCsvAppender:
 
     @staticmethod
     def merge_files_by_year(indir: str, outdir: str, year: str, quarter=""):
-        """ Finds all csv files with directory indir, groups files into
+        """
+        Finds all csv files with directory indir, groups files into
         individual years and calls combine_csv function to merge into
         single file given that the years falls within the range specified
         by the user.
 
         Arguments:
-            indir:      Path of directory to search for csv files in
-            outdir:     Path of directory to write resulting files
-            year:       Find all files from this year
-            quarter:    Find all files from this quarter
+            indir:      Path of directory to search for csv files in (str)
+            outdir:     Path of directory to write resulting files (str)
+            year:       Find all files from this year (str)
+            quarter:    Find all files from this quarter (int)
         Returns:
             None
         Raises:
