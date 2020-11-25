@@ -407,19 +407,22 @@ class XbrlParser:
         if not (os.path.isdir(temp_exports)):
             os.mkdir(temp_exports)
 
-        # Check if temp file is already present
+        # Check if temp file is already present and remove
         try:
             os.remove(temp_exports + "/df_elements.csv")
         except:
             pass
 
-        # loop over each file and create a separate dataframe
-        # for each set (elements) of parsed tags, appending result to list
-        md, hd = 'w', True
-
+        #define lenth of dict and initial time
         T = len(doc2)
         t0 = time.time()
-        for i in range(len(doc2)):
+
+        #define initial mode and header boolean for exporting file to csv
+        md, hd = 'w', True
+
+        # loop over each file and create a separate dataframe
+        # for each set (elements) of parsed tags, appending result to list
+        for i in range(T):
             # Turn each elements dict into a dataframe
             df_element = pd.DataFrame.from_dict(doc2[i]['elements'])
 
@@ -450,8 +453,11 @@ class XbrlParser:
                 quotechar= '"'
             )
 
+            #print a progress update
             if i % 100 == 0:
                 print("%2.2f %% have been processed"%((i/T)*100))
+
+            #redefine mode and header value for subsequent dataframes (appending and False)
             md, hd = 'a', False
 
         # convert the stored csv back into a pandas df and tidy up
