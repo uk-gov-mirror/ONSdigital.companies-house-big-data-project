@@ -7,6 +7,7 @@ import pandas as pd
 import math
 import time
 import multiprocessing as mp
+import os
 
 
 
@@ -281,6 +282,22 @@ class XbrlParser:
             total_assets:   the totals of the given values
             units:          the units corresponding to the given sum
         """
+        # Check arguments are of correct types
+        if not isinstance(doc, dict):
+            raise TypeError(
+                "'doc' argument must be a dictionary"
+            )
+        if isinstance(variable_names, list):
+            if not all(isinstance(name, str) for name in variable_names):
+                raise TypeError (
+                    "Variable names must be passed as strings"
+                )
+        else:
+            if not isinstance(variable_names, str):
+                raise TypeError(
+                    "Variable name must be passed as a string"
+                )
+
         # Convert elements to pandas df
         df = pd.DataFrame(doc['elements'])
 
@@ -320,6 +337,22 @@ class XbrlParser:
         Raises:
             None
         """
+        # Check arguments are of correct types
+        if not isinstance(doc, dict):
+            raise TypeError(
+                "'doc' argument must be a dictionary"
+            )
+        if isinstance(variable_names, list):
+            if not all(isinstance(name, str) for name in variable_names):
+                raise TypeError(
+                    "Variable names must be passed as strings"
+                )
+        else:
+            if not isinstance(variable_names, str):
+                raise TypeError(
+                    "Variable name must be passed as a string"
+                )
+
         # Convert elements to pandas df
         df = pd.DataFrame(doc['elements'])
 
@@ -358,6 +391,22 @@ class XbrlParser:
         Raises:
             None
         """
+        # Check arguments are of correct types
+        if not isinstance(doc, dict):
+            raise TypeError(
+                "'doc' argument must be a dictionary"
+            )
+        if isinstance(variable_names, list):
+            if not all(isinstance(name, str) for name in variable_names):
+                raise TypeError(
+                    "Variable names must be passed as strings"
+                )
+        else:
+            if not isinstance(variable_names, str):
+                raise TypeError(
+                    "Variable name must be passed as a string"
+                )
+
         results = {}
 
         # Convert elements to pandas df
@@ -424,6 +473,12 @@ class XbrlParser:
         Raises:
             None
         """
+        # Check arguments are of correct types
+        if not isinstance(doc, dict):
+            raise TypeError(
+                "'doc' argument must be a dictionary"
+            )
+
         # combines list of dictionaries into one dictionary based on common
         # keys
         doc_dict = {}
@@ -446,6 +501,12 @@ class XbrlParser:
         Raises:
             None
         """
+        # Check arguments are of correct types
+        if not isinstance(doc, dict):
+            raise TypeError(
+                "'doc' argument must be a dictionary"
+            )
+
         doc2 = doc.copy()
         # define empty list
         list_elements = []
@@ -485,6 +546,19 @@ class XbrlParser:
         Raises:
             None
         """
+        # Check arguments are of the correct type
+        if not isinstance(filepath, str):
+            raise TypeError(
+                "'filepath' variable must be passed as a string"
+            )
+
+        # Check arguments take acceptable values
+        if not os.path.exists(filepath):
+            raise ValueError(
+                "The specified file path does not exist"
+            )
+        # Could add check for whether the file path is an iXBRL file
+
         doc = {}
 
         # Some metadata, doc name, upload date/time, archive file it came from
@@ -586,6 +660,35 @@ class XbrlParser:
         """
         # Create a list of directories from each month present in the month
         # list
+
+        # Check all arguments are of the correct types
+        if not (
+            isinstance(filepath, str) or
+            isinstance(year, str) or
+            isinstance(custom_input, str)
+        ):
+            raise TypeError(
+                "'filepath', 'year' and 'custom_input' arguments must all be "
+                "passed as strings"
+            )
+        if not all(isinstance(month, str) for month in months):
+            raise TypeError(
+                "All months in 'months' argument must be passed as strings"
+            )
+
+        # Check all arguments have acceptable values
+        valid_months = ['January', 'February', 'March', 'April',
+                          'May', 'June', 'July', 'August',
+                          'September', 'October', 'November', 'December']
+        if not all(month in valid_months for month in months):
+            raise ValueError(
+                "Invalid entries in 'month' argument"
+            )
+        if not os.path.exists(filepath):
+            raise ValueError(
+                "The specified file path does not exist"
+            )
+
         directory_list = []
         if custom_input == "None":
             for month in months:
@@ -619,6 +722,30 @@ class XbrlParser:
         Raises:
             None
         """
+        # Check arguments are of the correct types
+        if not(
+            isinstance(directory, str) or
+            isinstance(processed_path, str)
+        ):
+            raise TypeError(
+                "'directory' and 'processed_path' arguments must both be"
+                "passed as strings"
+            )
+        if not isinstance(num_processes, int):
+            raise TypeError(
+                "'num_processes' argument must be passed as an int"
+            )
+
+        # Check arguments have acceptable values
+        if not os.path.exists(directory):
+            raise ValueError(
+                "The specified directory does not exist"
+            )
+        if num_processes > mp.cpu_count():
+            raise ValueError(
+                "The number of cores specified exceeds the number available"
+            )
+
         extractor = XbrlExtraction()
         parser = XbrlParser()
 
@@ -748,6 +875,17 @@ class XbrlParser:
     def build_month_table(list_of_files):
         """
         """
+        # Check arguments are of the correct type
+        if not all(isinstance(file, str) for file in list_of_files):
+            raise TypeError(
+                "All files in 'list_of_files' must be specified as strings"
+            )
+
+        # Check arguments have acceptable values
+        if not all(os.path.exists(file) for file in list_of_files):
+            raise ValueError(
+                "Not all file paths specified exist"
+            )
 
         process_start = time.time()
 
