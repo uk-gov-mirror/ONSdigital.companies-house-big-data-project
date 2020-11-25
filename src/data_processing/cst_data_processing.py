@@ -1,74 +1,82 @@
 import cv2
 from os import listdir, mkdir
-from os.path import isfile, join, exists, getsize
+from os.path import isfile, join, exists, splitext
 import random
 import zipfile
 import shutil
 
 
 class DataProcessing:
+    """ This is a class for processing data. """
 
     def __init__(self):
         self.__init__
 
+    @staticmethod
     def import_files(directory):
         """
-		Returns list of all files present in given directory, complete with
-		file extensions.
-		
-		Arguments:
-			directory: source of files of interest
-		Returns:
-			List of files in a given directory
-		Raises:
-			None
-		"""
+        Returns list of all files present in given directory, complete with
+        file extensions.
+
+        Arguments:
+            directory: source of files of interest (str)
+        Returns:
+            List of files in a given directory (list)
+        Raises:
+            None
+        """
         return [f for f in listdir(directory) if isfile(join(directory, f))]
 
+    @staticmethod
     def select_extensions(file_list, acceptable_extensions):
         """
-		Returns list of files with specified file extensions.
-		
-		Arguments:
-			file_list:             list of files to filter
-			acceptable_extensions: list of extensions user wishes to keep
-		Returns:
-			List of files with specified extensions
-		Raises:
-			None
-		"""
-        return [file for file in file_list if ('.').join(file.split('.')[-1:])
+        Returns list of files with specified file extensions from the given
+        file list.
+
+        Arguments:
+            file_list:             list of files to filter (list)
+            acceptable_extensions: list of extensions user wishes to keep
+                                   (list)
+        Returns:
+            List of files with specified extensions (list)
+        Raises:
+            None
+        """
+        return [file for file in file_list if '.'.join(file.split('.')[-1:])
                 in acceptable_extensions]
 
+    @staticmethod
     def trim_extensions(file_list):
         """
-		Returns list of file names with no file extensions.
-		
-		Arguments:
-			file_list: list of files requiring extension removal
-		Returns:
-			List of files with no extensions, eg. "example.png" --> "example"
-		Raises:
-			None
-		"""
-        return [('.').join(file.split('.')[:-1]) for file in file_list]
+        Returns list of file names with no file extensions.
 
+        Arguments:
+            file_list: list of files requiring extension removal (list)
+        Returns:
+            List of files with no extensions, eg. "example.png" --> "example"
+            (list)
+        Raises:
+            None
+        """
+        return ['.'.join(file.split('.')[:-1]) for file in file_list]
+
+    @staticmethod
     def resizeMultipleImages(image_list, scale_factor,
                              input_folder, output_folder):
         """
-		Resizes a list of images to a given scale factor, outputting to given
-		directory.
-		
-		Arguments:
-			image_list:    list of images requiring resizing
-			scale_factor:  factor to scale each image by
-			input_folder:  user specified file source
-			output_folder: user specified file destination
-		Returns:
-			None
-		Raises:
-			None
-		"""
+        Resizes a list of images to a given scale factor, outputting to given
+        directory.
+
+        Arguments:
+            image_list:    list of images requiring resizing (list)
+            scale_factor:  factor to scale each image by (float)
+            input_folder:  user specified file source (str)
+            output_folder: user specified file destination (str)
+        Returns:
+            None
+        Raises:
+            None
+        """
         for image in image_list:
             original_image = cv2.imread(input_folder + "\\" + image, -1)
             new_width = int(original_image.shape[1] * scale_factor)
@@ -79,26 +87,28 @@ class DataProcessing:
             cv2.imwrite(output_folder + "\\RESIZED___" + image + ".png",
                         resized)
 
+    @staticmethod
     def create_random_ROI_from_list(list_of_images, ROI_count, rect_width,
                                     rect_height, input_folder, output_folder):
         """
-		Creates a given number (ROI_count) of images of dimension
-		(rect_width, rect_height) for each image in a list and outputs to a
-		given directory. Anchor of ROI is at each rectangle's North West
-		vertex, and is always contained within the page geometry.
-		
-		Arguments:
-			list_of_images: list of images to extract Regions Of Interests
-			ROI_count:      the number of ROIs required per source image
-			rect_width:     width of each ROI outputted
-			rect_height:    height of each ROI outputted
-			input_folder:   user specified file source
-			output_folder:  user specified file destination
-		Returns:
-			None
-		Raises:
-			None
-		"""
+        Creates a given number (ROI_count) of images of dimension
+        (rect_width, rect_height) for each image in a list and outputs to a
+        given directory. Anchor of ROI is at each rectangle's North West
+        vertex, and is always contained within the page geometry.
+
+        Arguments:
+            list_of_images: list of images to extract Regions Of Interests
+                            (list)
+            ROI_count:      the number of ROIs required per source image (int)
+            rect_width:     width of each ROI outputted (float)
+            rect_height:    height of each ROI outputted (float)
+            input_folder:   user specified file source (str)
+            output_folder:  user specified file destination (str)
+        Returns:
+            None
+        Raises:
+            None
+        """
         for image_file in list_of_images:
             image = cv2.imread(input_folder + "\\" + str(image_file), -1)
             image_height, image_width = image.shape[:-1]
@@ -132,18 +142,18 @@ class DataProcessing:
     @staticmethod
     def extract_compressed_files(file_source, file_dest):
         """
-		Extracts .zip files from a given directory or filename
-		to a given file directory.
-		
-		Arguments:
-			file_source: source of files of interest, either a filename
-						 or a directory
-			file_dest: destination directory to save extracted files to
-		Returns:
-			None
-		Raises:
-			None
-		"""
+        Extracts .zip files from a given directory or filename
+        to a given file directory.
+
+        Arguments:
+            file_source: source of files of interest, either a filename
+                         or a directory (str)
+            file_dest: destination directory to save extracted files to (str)
+        Returns:
+            None
+        Raises:
+            None
+        """
         if exists(file_dest):
             if exists(file_source):
 
@@ -208,32 +218,26 @@ class DataProcessing:
             print("Destination directory not valid!: " + file_dest)
 
 
-# myobj = DataProcessing()
-# file_source = "/home/peterd/repos/companies_house_accounts/data/for_testing/xbrl_data/accounts_bulk_data-2020-03-24.zip"
-# file_source = "/home/peterd/repos/companies_house_accounts/data/for_testing/xbrl_data/"
-# file_dest = "/home/peterd/repos/companies_house_accounts/data/for_testing/xbrl_data_extracted/"
-# myobj.extract_compressed_files(file_source, file_dest)
-
 def get_file_details(files, n_objects=1, x_coord=0, y_coord=0):
     """
     Returns details for a singular file.
     
     Arguments:
-        files:     list of files to filter
-        n_objects: number of object identified in scene
-        x_coord:   horizontal position of object
-        y_coord:   vertical position of object
+        files:     list of files to filter (list)
+        n_objects: number of object identified in scene (int)
+        x_coord:   horizontal position of object (float)
+        y_coord:   vertical position of object (float)
     Returns:
-        List of files with specified extensions
+        List of files with specified extensions (list)
     Raises:
         None
     """
     for f in files:
         f_title, f_details = splitext(
             f + " " + str(n_objects) + " " + str(x_coord) + " " + str(y_coord)
-			+ " " + str(cv2.imread(join(path, f)).shape))
+            + " " + str(cv2.imread(join(path, f)).shape))
         f_type, f_num, f_xcoord, f_ycoord, f_height, f_width, f_num_channels \
-			= f_details.split(" ")
+            = f_details.split(" ")
         strip_f_height = f_height.strip(",")[1:]
         strip_f_width = f_width.strip(",")
 
@@ -247,9 +251,9 @@ def rename_files(input_folder, file_name="chp_signature", extension=".png"):
     Renames all files in a directory to systematic structure.
     
     Arguments:
-        input_folder: directory to read in files
-        file_name:    naming convention to standardise to
-        extension:    save to specific file type
+        input_folder: directory to read in files (str)
+        file_name:    naming convention to standardise to (str)
+        extension:    save to specific file type (str)
     Returns:
         None
     Raises:
