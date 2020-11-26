@@ -75,8 +75,8 @@ class XbrlExtraction:
                 "'name' argument must be passed as a string"
             )
         if not (
-            isinstance(value, float) or
-            isinstance(endvalue, float)
+            isinstance(value, (float, int)) or
+            isinstance(endvalue, (float, int))
         ):
             raise TypeError(
                 "'value' and 'end' arguments must be passed as floats or ints"

@@ -475,7 +475,7 @@ class XbrlParser:
             None
         """
         # Check arguments are of correct types
-        if not isinstance(doc, dict):
+        if not all(isinstance(el, dict) for el in doc):
             raise TypeError(
                 "'doc' argument must be a dictionary"
             )
@@ -503,7 +503,7 @@ class XbrlParser:
             None
         """
         # Check arguments are of correct types
-        if not isinstance(doc, dict):
+        if not all(isinstance(el, dict) for el in doc):
             raise TypeError(
                 "'doc' argument must be a dictionary"
             )
@@ -755,7 +755,7 @@ class XbrlParser:
         files, folder_month, folder_year = extractor.get_filepaths(directory)
 
         print(len(files))
-        #files = files[0:1000]
+        files = files[0:1000]
         '''
         ### Targets largest files
         #limit to moderate amount of files
@@ -920,7 +920,6 @@ class XbrlParser:
 
             # append results to table
             results.append(doc)
-
             XbrlExtraction.progressBar("XBRL Accounts Parsed", COUNT,
                                        len(list_of_files), bar_length=50,
                                        width=20)

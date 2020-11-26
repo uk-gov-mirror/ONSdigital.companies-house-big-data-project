@@ -146,7 +146,7 @@ def main():
                                xbrl_unpacked_data,
                                xbrl_parser_custom_input,
                                xbrl_processed_csv,
-                               3)
+                               2)
 
     # Append XBRL data on an annual or quarterly basis
     if xbrl_file_appender == str(True):
