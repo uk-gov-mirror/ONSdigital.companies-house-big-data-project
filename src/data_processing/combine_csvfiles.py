@@ -15,6 +15,7 @@ class XbrlCsvAppender:
     def combine_csv(files: List[str], outfile: str):
         """
         Combines all csv files listed in files into a single csv file using
+
         csv.writer. Unsuitable if files do not have the same format. Faster
         than the pandas version.
 
@@ -71,6 +72,7 @@ class XbrlCsvAppender:
         Raises:
             None
         """
+        
         return [indir+i for i in files]
 
     @staticmethod

@@ -144,7 +144,6 @@ class DataProcessing:
         """
         Extracts .zip files from a given directory or filename
         to a given file directory.
-
         Arguments:
             file_source: source of files of interest, either a filename
                          or a directory (str)
@@ -216,7 +215,6 @@ class DataProcessing:
                 print("File or directory not found: " + file_source)
         else:
             print("Destination directory not valid!: " + file_dest)
-
 
 def get_file_details(files, n_objects=1, x_coord=0, y_coord=0):
     """

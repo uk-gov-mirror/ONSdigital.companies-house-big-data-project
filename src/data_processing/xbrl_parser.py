@@ -523,7 +523,6 @@ class XbrlParser:
 
         return df_elements
 
-
     @staticmethod
     def process_account(filepath):
         """
@@ -679,28 +678,10 @@ class XbrlParser:
         files, folder_month, folder_year = extractor.get_filepaths(directory)
 
         print(len(files))
-        #files = files[0:1000]
-        '''
-        ### Targets largest files
-        #limit to moderate amount of files
-         
+        
         # Here you can splice/truncate the number of files you want to process
         # for testing
-        # TO BE COMMENTED OUT AFTER TESTING
-        filesize = []
-        for i in range(len(files)):
-            filesize.append((files[i],os.path.getsize(files[i])))
-
-        filesize.sort(key = lambda filesize: filesize[1],reverse=True)
-
-        for i in range(len(filesize)):
-            files[i] = filesize[i][0]
-
-        total_files = len(files)
-        shuffle(files)
-        files = files
-        '''
-        # files = files[0:30]
+        #files = files[0:1000]
 
         # TO BE COMMENTED OUT AFTER TESTING
         print(folder_month, folder_year)
@@ -739,8 +720,6 @@ class XbrlParser:
 
         # Output all unique tags to a txt file
 
-        ## Commented out while testing parser changes
-
         # extractor.retrieve_list_of_tags(
         #     results,
         #     "name",
@@ -760,9 +739,6 @@ class XbrlParser:
 
         # print(results.shape)
 
-    # tempcsv = pd.read_csv("/shares/xbrl_parsed_data/2020-April_xbrl_data.csv", lineterminator='\n')
-    # print(tempcsv.head(5000000))
-    # print(tempcsv.shape)
 
     @staticmethod
     def parse_files(quarter, year, unpacked_files,

@@ -27,6 +27,7 @@ xbrl_web_scraper = config.get('cha_workflow', 'xbrl_web_scraper')
 xbrl_web_scraper_validator = config.get('cha_workflow', 'xbrl_validator')
 xbrl_unpacker = config.get('cha_workflow', 'xbrl_unpacker')
 xbrl_parser = config.get('cha_workflow', 'xbrl_parser')
+xbrl_csv_cleaner = config.get('cha_workflow', 'xbrl_csv_cleaner')
 xbrl_file_appender = config.get('cha_workflow', 'xbrl_file_appender')
 pdf_web_scraper = config.get('cha_workflow', 'pdf_web_scraper')
 pdfs_to_images = config.get('cha_workflow', 'pdfs_to_images')
@@ -74,6 +75,12 @@ xbrl_file_appender_year = config.get('xbrl_file_appender_args',
 xbrl_file_appender_quarter = config.get('xbrl_file_appender_args',
                                         'xbrl_file_appender_quarter')
 
+#Arguments for xbrl csv cleaner
+xbrl_csv_cleaner_indir = config.get('xbrl_csv_cleaner_args',
+                                    'xbrl_csv_cleaner_indir')
+xbrl_csv_cleaner_outdir = config.get('xbrl_csv_cleaner_args',
+                                    'xbrl_csv_cleaner_outdir')
+
 # Arguments for xbrl melt to pivot table
 
 # Arguments for xbrl subsets
@@ -107,6 +114,7 @@ from src.data_processing.xbrl_pd_methods import XbrlExtraction
 from src.data_processing.xbrl_parser import XbrlParser
 from src.validators.xbrl_validator_methods import XbrlValidatorMethods
 from src.data_processing.combine_csvfiles import XbrlCsvAppender
+from src.data_processing.xbrl_csv_cleaner import XbrlCSVCleaner
 
 def main():
     print("-" * 50)
@@ -147,6 +155,12 @@ def main():
                                xbrl_parser_custom_input,
                                xbrl_processed_csv,
                                3)
+
+    # Execute module xbrl_csv_cleaner
+    if xbrl_csv_cleaner == str(True):
+        print("XBRL CSV cleaner running...")
+        XbrlCSVCleaner.clean_parsed_files(xbrl_csv_cleaner_indir,
+                                          xbrl_csv_cleaner_outdir)
 
     # Append XBRL data on an annual or quarterly basis
     if xbrl_file_appender == str(True):

@@ -1,5 +1,7 @@
 import os
 import pandas as pd
+import time
+
 import sys
 
 # Custom import
@@ -19,7 +21,6 @@ class XbrlExtraction:
         Helper function -
         Get all of the filenames in a directory that end in htm* or xml (under
         the assumption that all files within the folder are financial records).
-
         Arguments:
             directory: User specified directory (str)
         Returns:
@@ -211,6 +212,7 @@ class XbrlExtraction:
     @staticmethod
     def output_xbrl_month(dataframe, output_folder, folder_month, folder_year,
                           file_type="csv"):
+
         """
         Save dataframe to csv format in specified directory, with particular
         naming scheme "YYYY-MM_xbrl_data.csv".
