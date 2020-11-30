@@ -3,10 +3,15 @@ from datetime import datetime
 from dateutil import parser
 from src.data_processing.xbrl_pd_methods import XbrlExtraction
 import pandas as pd
+import os
+import csv
+import time
+import sys
 import math
 import time
 import multiprocessing as mp
 import os
+
 
 
 class XbrlParser:
@@ -489,7 +494,7 @@ class XbrlParser:
         return doc_dict
 
     @staticmethod
-    def flatten_data(doc):
+    def flatten_data(doc, temp_exports= "data/temp_exports"):
         """
         Takes the data returned by flatten dict, with its tree-like
         structure and reorganises it into a long-thin format table structure
@@ -509,30 +514,75 @@ class XbrlParser:
             )
 
         doc2 = doc.copy()
-        # define empty list
-        list_elements = []
+
+        # Check if the temp_exports folder is present
+        if not (os.path.isdir(temp_exports)):
+            os.mkdir(temp_exports)
+
+        # Check if temp file is already present and remove
+        try:
+            os.remove(temp_exports + "/df_elements.csv")
+        except:
+            pass
+
+        #define lenth of dict and initial time
+        T = len(doc2)
+        t0 = time.time()
+
+        #define initial mode and header boolean for exporting file to csv
+        md, hd = 'w', True
 
         # loop over each file and create a separate dataframe
         # for each set (elements) of parsed tags, appending result to list
-        for i in range(len(doc2)):
+        for i in range(T):
+            # Turn each elements dict into a dataframe
             df_element = pd.DataFrame.from_dict(doc2[i]['elements'])
+
+            # Ensure each element has the same number of columns
+            if 'sign' not in df_element.columns.values:
+                df_element['sign'] = 'NA'
+
+            # Add a key
             df_element['key'] = i
+
             # Dump the "elements" entry in the doc dict
             doc2[i].pop('elements')
-            list_elements.append(df_element)
+            df_element_meta = pd.DataFrame(doc2[i], index =[0])
+            df_element_meta['key'] = i
 
-        # combine elements dataframes together
-        df_elements = pd.concat(list_elements)
+            # Merge the metadata with the elements
+            df_element_export = df_element_meta.merge(df_element, how='left', on='key')
+            del df_element_meta, df_element
+            df_element_export = df_element_export.drop('key', axis= 1)
 
-        # Create uniform columns for metadata (one row per file)
-        df_meta = pd.DataFrame.from_dict(doc2)
-        df_meta['key'] = df_meta.index
-        # merge two datasets based on file number (first parsed file = 0)
-        df_final = df_meta.merge(df_elements, how='left', on='key')
-        del df_meta, df_elements
-        # drop key
-        df_final = df_final.drop('key', axis=1)
-        return df_final
+            # Append the new element to a csv file stored in temp_exports
+            df_element_export.to_csv(
+                temp_exports + "/df_elements.csv",
+                mode=md,
+                header=hd,
+                index=None,
+                sep = ",",
+                quotechar= '"'
+            )
+
+            #print a progress update
+            if i % 100 == 0:
+                print("%2.2f %% have been processed"%((i/T)*100))
+
+            #redefine mode and header value for subsequent dataframes (appending and False)
+            md, hd = 'a', False
+
+        # convert the stored csv back into a pandas df and tidy up
+        df_elements = pd.read_csv(
+            temp_exports + "/df_elements.csv",
+            index_col=None,
+            header=0,
+            sep=",",
+            lineterminator="\n",
+            quotechar='"')
+        os.remove(temp_exports + "/df_elements.csv")
+
+        return df_elements
 
     @staticmethod
     def process_account(filepath):
@@ -755,31 +805,10 @@ class XbrlParser:
         files, folder_month, folder_year = extractor.get_filepaths(directory)
 
         print(len(files))
-        files = files[0:1000]
-        '''
-        ### Targets largest files
-        #limit to moderate amount of files
-         
+
         # Here you can splice/truncate the number of files you want to process
         # for testing
-        # TO BE COMMENTED OUT AFTER TESTING
-        filesize = []
-        for i in range(len(files)):
-            filesize.append((files[i],os.path.getsize(files[i])))
-
-        filesize.sort(key = lambda filesize: filesize[1],reverse=True)
-
-        for i in range(len(filesize)):
-            files[i] = filesize[i][0]
-
-        total_files = len(files)
-        shuffle(files)
-        files = files
-        '''
-        # files = files[0:30]
-
-        # TO BE COMMENTED OUT AFTER TESTING
-        print(folder_month, folder_year)
+        #files = files[0:1000]
 
         # Code needed to split files by the number of cores before passing in
         # as an argument
@@ -815,8 +844,6 @@ class XbrlParser:
 
         # Output all unique tags to a txt file
 
-        ## Commented out while testing parser changes
-
         # extractor.retrieve_list_of_tags(
         #     results,
         #     "name",
@@ -836,9 +863,6 @@ class XbrlParser:
 
         # print(results.shape)
 
-    # tempcsv = pd.read_csv("/shares/xbrl_parsed_data/2020-April_xbrl_data.csv", lineterminator='\n')
-    # print(tempcsv.head(5000000))
-    # print(tempcsv.shape)
 
     @staticmethod
     def parse_files(quarter, year, unpacked_files,

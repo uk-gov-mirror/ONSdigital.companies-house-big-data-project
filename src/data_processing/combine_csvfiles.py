@@ -15,6 +15,7 @@ class XbrlCsvAppender:
     def combine_csv(files: List[str], outfile: str):
         """
         Combines all csv files listed in files into a single csv file using
+
         csv.writer. Unsuitable if files do not have the same format. Faster
         than the pandas version.
 
@@ -112,6 +113,7 @@ class XbrlCsvAppender:
         Raises:
             None
         """
+
         # Check arguments are of the correct types
         if not isinstance(indir, str):
             raise TypeError(
@@ -127,6 +129,7 @@ class XbrlCsvAppender:
             raise ValueError(
                 "Specified input directory does not exist"
             )
+            
         return [indir+i for i in files]
 
     @staticmethod
