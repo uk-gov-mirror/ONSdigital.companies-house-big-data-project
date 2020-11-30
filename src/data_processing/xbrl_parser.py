@@ -10,6 +10,7 @@ import sys
 import math
 import time
 import multiprocessing as mp
+import numpy as np
 
 
 
@@ -503,6 +504,16 @@ class XbrlParser:
                 df_element_export.value = df_element_export.value.str\
                     .replace(char, '')
 
+            # Change the order of the columns
+            wanted_cols = ['date', 'name', 'unit', 'value', 'doc_name',
+                           'doc_type',
+                           'doc_upload_date', 'arc_name', 'parsed',
+                           'doc_balancesheetdate',
+                           'doc_companieshouseregisterednumber',
+                           'doc_standard_type',
+                           'doc_standard_date', 'doc_standard_link', ]
+            df_element_export = df_element_export[wanted_cols]
+
             # Append the new element to a csv file stored in temp_exports
             df_element_export.to_csv(
                 temp_exports + "/df_elements.csv",
@@ -692,7 +703,7 @@ class XbrlParser:
         
         # Here you can splice/truncate the number of files you want to process
         # for testing
-        files = files[0:1000]
+        files = files[0:10000]
 
         # TO BE COMMENTED OUT AFTER TESTING
         print(folder_month, folder_year)
