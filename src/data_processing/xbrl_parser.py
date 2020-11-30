@@ -468,7 +468,7 @@ class XbrlParser:
         T = len(doc2)
         t0 = time.time()
 
-        #define initial mode and header boolean for exporting file to csv
+        # Define initial mode and header boolean for exporting file to csv
         md, hd = 'w', True
 
         # loop over each file and create a separate dataframe
@@ -477,9 +477,11 @@ class XbrlParser:
             # Turn each elements dict into a dataframe
             df_element = pd.DataFrame.from_dict(doc2[i]['elements'])
 
-            # Ensure each element has the same number of columns
-            if 'sign' not in df_element.columns.values:
-                df_element['sign'] = 'NA'
+            # Remove the 'sign' column if it is present
+            try:
+                df_element = df_element.drop('sign', axis=1)
+            except:
+                None
 
             # Add a key
             df_element['key'] = i
@@ -490,9 +492,16 @@ class XbrlParser:
             df_element_meta['key'] = i
 
             # Merge the metadata with the elements
-            df_element_export = df_element_meta.merge(df_element, how='left', on='key')
+            df_element_export = df_element_meta.merge(df_element, how='left',
+                                                      on='key')
             del df_element_meta, df_element
             df_element_export = df_element_export.drop('key', axis= 1)
+
+            # Remove unwanted characters
+            unwanted_chars = ['  ', '"', '\n']
+            for char in unwanted_chars:
+                df_element_export.value = df_element_export.value.str\
+                    .replace(char, '')
 
             # Append the new element to a csv file stored in temp_exports
             df_element_export.to_csv(
@@ -501,14 +510,16 @@ class XbrlParser:
                 header=hd,
                 index=None,
                 sep = ",",
-                quotechar= '"'
+                quotechar= '"',
+                quoting=csv.QUOTE_NONNUMERIC
             )
 
-            #print a progress update
+            # Print a progress update
             if i % 100 == 0:
                 print("%2.2f %% have been processed"%((i/T)*100))
 
-            #redefine mode and header value for subsequent dataframes (appending and False)
+            # Redefine mode and header value for subsequent dataframes
+            # (appending and False)
             md, hd = 'a', False
 
         # convert the stored csv back into a pandas df and tidy up
@@ -681,7 +692,7 @@ class XbrlParser:
         
         # Here you can splice/truncate the number of files you want to process
         # for testing
-        #files = files[0:1000]
+        files = files[0:1000]
 
         # TO BE COMMENTED OUT AFTER TESTING
         print(folder_month, folder_year)
