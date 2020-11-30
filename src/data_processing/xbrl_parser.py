@@ -482,7 +482,7 @@ class XbrlParser:
         # Check arguments are of correct types
         if not all(isinstance(el, dict) for el in doc):
             raise TypeError(
-                "'doc' argument must be a dictionary"
+                "'doc' argument must be a list of dictionaries"
             )
 
         # combines list of dictionaries into one dictionary based on common
@@ -510,7 +510,7 @@ class XbrlParser:
         # Check arguments are of correct types
         if not all(isinstance(el, dict) for el in doc):
             raise TypeError(
-                "'doc' argument must be a dictionary"
+                "'doc' argument must be a list of dictionaries"
             )
 
         doc2 = doc.copy()
