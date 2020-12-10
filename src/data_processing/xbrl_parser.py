@@ -500,10 +500,13 @@ class XbrlParser:
 
             # Remove unwanted characters
             unwanted_chars = ['  ', '"', '\n']
+            #print(df_element_export.value.str, flush=True)
+            df_element_export["value"] = df_element_export["value"]\
+                .astype('str')
             for char in unwanted_chars:
-                df_element_export.value = df_element_export.value.str\
+                df_element_export["value"] = df_element_export["value"].str\
                     .replace(char, '')
-
+            #print(df_element_export.value)
             # Change the order of the columns
             wanted_cols = ['date', 'name', 'unit', 'value', 'doc_name',
                            'doc_type',
@@ -703,7 +706,7 @@ class XbrlParser:
         
         # Here you can splice/truncate the number of files you want to process
         # for testing
-        files = files[0:10000]
+        #files = files[0:1000]
 
         # TO BE COMMENTED OUT AFTER TESTING
         print(folder_month, folder_year)
@@ -724,8 +727,9 @@ class XbrlParser:
         pool.close()
         pool.join()
         # combine resultant list of lists
+        print("Combining lists...")
         r = [item for sublist in r for item in sublist]
-
+        print("Flattening data....")
         # combine data and convert into dataframe
         results = parser.flatten_data(r)
         print(results.shape)
