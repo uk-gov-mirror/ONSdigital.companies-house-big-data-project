@@ -47,9 +47,9 @@ class LineReader:
 
             # Assign variables for the bottom left vertex of tokens and set y
             # distance according to the height of the first token
-            v2, v1 = eval(vertices[i])[0], eval(vertices[k])[0]
+            v2, v1 = eval(vertices[i])[3], eval(vertices[k])[3]
             d = 0.5*(eval(vertices[k])[3][1] - eval(vertices[k])[0][1])
-            
+
             # If the next token is on the line above, skip and come back later
             # (May not be needed now we sort beforehand - line 28)
             if v2[1] < (v1[1] - d):
@@ -66,12 +66,12 @@ class LineReader:
         for i in odd_ones:
             d = 0.1*(eval(fdf["normed_vertices"][i])[3][1]
                      - eval(fdf["normed_vertices"][i])[0][1])
-            v1 = eval(fdf.loc[i, "normed_vertices"])[0][1]
+            v1 = eval(fdf.loc[i, "normed_vertices"])[3][1]
             j = 0
             # Find the vertex with already assigned line number which has a
             # close y coordinate
             while not \
-                    self.is_close(v1, eval(fdf.loc[j,"normed_vertices"])[0][1],
+                    self.is_close(v1, eval(fdf.loc[j,"normed_vertices"])[3][1],
                                   dist=d):
                 j += 1
             fdf.loc[i, "line_num"] = fdf.loc[j, "line_num"]
@@ -119,8 +119,8 @@ class LineReader:
             for j in range(1, line_df.shape[0]):
                 # Assign variables for the adjacent corners of consective
                 # tokens
-                v1 = eval(line_df["normed_vertices"][j-1])[1][0]
-                v2 = eval(line_df["normed_vertices"][j])[0][0]
+                v1 = eval(line_df["normed_vertices"][j-1])[2][0]
+                v2 = eval(line_df["normed_vertices"][j])[3][0]
 
                 # Set h to be the 'height' of the previous token
                 h = eval(line_df["normed_vertices"][j])[3][1] \
@@ -147,8 +147,8 @@ class LineReader:
                     new_dict["normed_vertices"].append(new_vertices)
                     new_dict["line_num"].append(i)
                     new_dict["white_space"].append(new_ws)
-                    new_dict["width"].append(new_vertices[1][0]
-                                             - new_vertices[0][0])
+                    new_dict["width"].append(new_vertices[2][0]
+                                             - new_vertices[3][0])
 
                     # Reset the values according to the current token
                     new_value = line_df["value"][j]
@@ -162,7 +162,7 @@ class LineReader:
             new_dict["normed_vertices"].append(new_vertices)
             new_dict["line_num"].append(i)
             new_dict["white_space"].append(new_ws)
-            new_dict["width"].append(new_vertices[1][0] - new_vertices[0][0])
+            new_dict["width"].append(new_vertices[2][0] - new_vertices[3][0])
 
         grouped_df = pd.DataFrame.from_dict(new_dict)
         grouped_df["normed_vertices"] \
@@ -192,8 +192,8 @@ class LineReader:
         # For the normed vertices of each token, add the relevant coordinates
         # to the lists
         for vertices in fdf["normed_vertices"]:
-            xs.append(eval(vertices)[0][0])
-            ys.append(eval(vertices)[0][1])
+            xs.append(eval(vertices)[3][0])
+            ys.append(eval(vertices)[3][1])
 
         # Add new columns to the data frame
         fdf["first_x_vertex"] = xs

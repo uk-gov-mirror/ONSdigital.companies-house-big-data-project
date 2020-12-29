@@ -82,11 +82,11 @@ class TableFitter(TableIdentifier):
         # For each of the indices, append the x coordinate of the left, centre
         # and right of the bounding polygon
         for i in indices:
-            assets_dist[0].append(eval(df.loc[i, "normed_vertices"])[0][0])
-            assets_dist[1].append(eval(df.loc[i, "normed_vertices"])[1][0])
+            assets_dist[0].append(eval(df.loc[i, "normed_vertices"])[3][0])
+            assets_dist[1].append(eval(df.loc[i, "normed_vertices"])[2][0])
             assets_dist[2].append(
-                0.5*(eval(df.loc[i, "normed_vertices"])[1][0]
-                     + eval(df.loc[i, "normed_vertices"])[0][0]))
+                0.5*(eval(df.loc[i, "normed_vertices"])[3][0]
+                     + eval(df.loc[i, "normed_vertices"])[2][0]))
 
         # Compute the average for each of these coordinates
         assets_summary = [stats.mean(assets_dist[0]),
@@ -117,17 +117,17 @@ class TableFitter(TableIdentifier):
         # Loop over the specified indices
         for i in df.index:
             if self.is_close(alignment[0],
-                             eval(df.loc[i, "normed_vertices"])[0][0],
+                             eval(df.loc[i, "normed_vertices"])[3][0],
                              dist = 0.01):
                 indices_close[0].append(i)
             elif self.is_close(alignment[1],
-                               eval(df.loc[i, "normed_vertices"])[1][0],
+                               eval(df.loc[i, "normed_vertices"])[2][0],
                                dist = 0.01):
                 indices_close[1].append(i)
             elif self.is_close(alignment[2],
-                               0.5*(eval(df.loc[i, "normed_vertices"])[1][0]
-                                    + eval(df.loc[i, "normed_vertices"])[0][0]),
-                               dist = 0.01):
+                               0.5*(eval(df.loc[i, "normed_vertices"])[2][0]
+                                    + eval(df.loc[i, "normed_vertices"])[3][0]),
+                               dist=0.01):
                 indices_close[2].append(i)
 
         # Select only the indices in the list with the most elements
@@ -236,8 +236,8 @@ class TableFitter(TableIdentifier):
         for col in columns:
             dists.append(
                 abs(col[2] -
-                    (0.5*(eval(df.loc[index, "normed_vertices"])[1][0]
-                          + eval(df.loc[index, "normed_vertices"])[0][0]))))
+                    (0.5*(eval(df.loc[index, "normed_vertices"])[3][0]
+                          + eval(df.loc[index, "normed_vertices"])[2][0]))))
 
         # Find the index of the one with the smallest distance (+1 since can't
         # be the first column

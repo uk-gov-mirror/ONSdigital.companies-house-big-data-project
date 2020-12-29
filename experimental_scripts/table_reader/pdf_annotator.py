@@ -4,19 +4,23 @@ from PIL import Image, ImageDraw
 from io import BytesIO
 from pdf2image import convert_from_path, convert_from_bytes
 
+from table_fitter import TableFitter
+
 
 """
 To install poppler:
     sudo apt-get install -y poppler-utils
 """
 
-fs = gcsfs.GCSFileSystem("ons-companies-house-dev")
 
 class PDFAnnotator:
+
     def __init__(self, in_path, out_path=False, gcp=False):
         self.in_path = in_path
         self.gcp = gcp
         self.bs_image = None
+        self.fs = gcsfs.GCSFileSystem("ons-companies-house-dev")
+
         if not out_path: 
             self.out_path = (in_path.split("/")[-1]).split(".")[0]
         else:
@@ -31,7 +35,7 @@ class PDFAnnotator:
                 for page, n in enumerate(pages):
                     page[0].save(self.out_path +"_"+n+ ".jpg", "JPEG")
         elif self.gcp:
-            with fs.open(self.in_path, 'rb') as f:
+            with self.fs.open(self.in_path, 'rb') as f:
                 pages = convert_from_bytes(f.read(), 500)
             if len(pages) == 1:
                 byteio = BytesIO()
@@ -53,7 +57,7 @@ class PDFAnnotator:
             draw.polygon(xy, outline = "lime",fill = "wheat")
 
         img3 = Image.blend(img, img2, 0.4)
-        with fs.open(path, 'wb') as f:
+        with self.fs.open(path, 'wb') as f:
             byteio = BytesIO()
             img3.save(byteio, 'JPEG')
             f.write(byteio.getvalue())
@@ -69,10 +73,44 @@ class PDFAnnotator:
             draw.line((line*width, 0, line*width, height), fill="red", width=5)
 
         img3 = Image.blend(img, img2, 0.4)
-        with fs.open(path, 'wb') as f:
+        with self.fs.open(path, 'wb') as f:
             byteio = BytesIO()
             img3.save(byteio, 'JPEG')
             f.write(byteio.getvalue())
+
+    def annotate_table(self, path, table_data):
+        img = Image.open(self.bs_image)
+        width, height = img.size
+
+        img2 = img.copy()
+        draw = ImageDraw.Draw(img2)
+        line_num = table_data.data.reset_index().loc[0,"line_num"]
+        while line_num <= max(table_data.data["line_num"]):
+            lines_df = table_data.data[table_data.data["line_num"] == line_num].reset_index()
+            y_coord = eval(lines_df.loc[0, "normed_vertices"])[3][1]
+            draw.line((0, y_coord * height, width, y_coord * height),
+                      fill="blue", width=5)
+            line_num += 1
+        draw.line((0.25 * width, 0, 0.25 * width, height),
+                  fill="green", width=5)
+
+        for i in range(len(table_data.columns)):
+            shapes = table_data.data.loc[table_data.columns[i],
+                                         "normed_vertices"]
+            for v in shapes:
+                xy = eval(v)
+                xy = [(x[0] * width, x[1] * height) for x in xy]
+                draw.polygon(xy, outline="lime", fill="wheat")
+            fitter = TableFitter(table_data.data)
+            x_coord = (fitter.find_alignment(table_data.data, table_data.columns[i]))[2]
+            draw.line((x_coord*width, 0, x_coord*width, height), fill="red", width=5)
+
+        img3 = Image.blend(img, img2, 0.4)
+        with self.fs.open(path, 'wb') as f:
+            byteio = BytesIO()
+            img3.save(byteio, 'JPEG')
+            f.write(byteio.getvalue())
+
             
             
 
