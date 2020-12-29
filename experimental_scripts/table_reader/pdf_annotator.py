@@ -61,6 +61,7 @@ class PDFAnnotator:
             byteio = BytesIO()
             img3.save(byteio, 'JPEG')
             f.write(byteio.getvalue())
+        self.fs.setxattrs(path, content_type = "image/jpg")
 
     def annotate_lines_pdf(self, path, lines):
         img = Image.open(self.bs_image)
@@ -77,6 +78,7 @@ class PDFAnnotator:
             byteio = BytesIO()
             img3.save(byteio, 'JPEG')
             f.write(byteio.getvalue())
+        self.fs.setxattrs(path, content_type = "image/jpg")
 
     def annotate_table(self, path, table_data):
         img = Image.open(self.bs_image)
@@ -91,8 +93,6 @@ class PDFAnnotator:
             draw.line((0, y_coord * height, width, y_coord * height),
                       fill="blue", width=5)
             line_num += 1
-        draw.line((0.25 * width, 0, 0.25 * width, height),
-                  fill="green", width=5)
 
         for i in range(len(table_data.columns)):
             shapes = table_data.data.loc[table_data.columns[i],
@@ -110,6 +110,8 @@ class PDFAnnotator:
             byteio = BytesIO()
             img3.save(byteio, 'JPEG')
             f.write(byteio.getvalue())
+        self.fs.setxattrs(path, content_type = "image/jpg")
+
 
             
             
