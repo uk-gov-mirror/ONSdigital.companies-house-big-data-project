@@ -2,16 +2,17 @@ from os import listdir, walk
 from os.path import isfile, exists, getsize, getmtime, join
 from datetime import datetime
 import zipfile
+import gcsfs
 
 
 class XbrlValidatorMethods:
     """This is a class that validates the XBRL data files."""
 
-    def __init__(self):
+    def __init__(self, fs):
         self.__init__
+        self.fs = fs
 
-    @staticmethod
-    def validate_compressed_files(filepath):
+    def validate_compressed_files(self, filepath):
         """
         Validates and prints information, including name size and date
         modified, on files in specified directory
@@ -24,19 +25,20 @@ class XbrlValidatorMethods:
             None
         """
 
-        if exists(filepath):
-            if not isfile(filepath):
+        if self.fs.exists(filepath):
+            if not self.fs.isfile(filepath):
 
-                files = [filepath + "/" + f for f in listdir(filepath)]
+                files = self.fs.ls(filepath)
+                    #[filepath + "/" + f for f in listdir(filepath)]
 
                 for file in files:
+                    gcs_file = self.fs.open(file, 'rb')
                     print("File: " + file)
-                    print("File size: " + str(getsize(file)) + " bytes")
+                    print("File size: " + str(gcs_file.info()["size"]) + " bytes")
 
-                    file_time = datetime.utcfromtimestamp(getmtime(file))
+                    #file_time = datetime.utcfromtimestamp(gcs_file.info()["updated"])
                     print("File modified: "
-                          + file_time.strftime("%Y-%m-%d \
-                          %H:%M:%S.%f+00:00 (UTC)"))
+                          + gcs_file.info()["updated"])
             else:
                 print("Specified filepath is not a directory!")
 

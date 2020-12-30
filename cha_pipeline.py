@@ -136,7 +136,7 @@ def main():
 
     # Validate xbrl data
     if xbrl_web_scraper_validator == str(True):
-        validator = XbrlValidatorMethods()
+        validator = XbrlValidatorMethods(fs)
         print("Validating xbrl web scraped data...")
         validator.validate_compressed_files(validator_scraped_dir)
 
