@@ -18,14 +18,13 @@ import gcsfs
 class XbrlParser:
     """ This is a class for parsing the XBRL data."""
 
-    def __init__(self, bucket="ons-companies-house-dev",
-                 key="/home/dylan_purches/Desktop/data_key.json"):
+    def __init__(self, fs):
         """
         Constructs all the necessary attributes for the XbrlParser object of
         which there are none.
         """
         self.__init__
-        self.fs = gcsfs.GCSFileSystem(project=bucket, token=key)
+        self.fs = fs
         
     # Table of variables and values that indicate consolidated status
     consolidation_var_table = {
@@ -682,8 +681,7 @@ class XbrlParser:
 
         return directory_list
 
-    @staticmethod
-    def parse_directory(directory, processed_path, num_processes=1):
+    def parse_directory(self, directory, processed_path, num_processes=1):
         """
         Takes a directory, parses all files contained there and saves them as
         csv files in a specified directory.
@@ -698,8 +696,7 @@ class XbrlParser:
         Raises:
             None
         """
-        extractor = XbrlExtraction()
-        parser = XbrlParser()
+        extractor = XbrlExtraction(self.fs)
 
         # Get all the filenames from the example folder
         files, folder_month, folder_year = extractor.get_filepaths(directory)
@@ -724,7 +721,7 @@ class XbrlParser:
         # Finally, build a table of all variables from all example (digital)
         # documents splitting the load between cpu cores = num_processes
         # This can take a while (hopefully not anymore!!!)
-        r = pool.map(parser.build_month_table, files)
+        r = pool.map(self.build_month_table, files)
 
         pool.close()
         pool.join()
@@ -733,7 +730,7 @@ class XbrlParser:
         r = [item for sublist in r for item in sublist]
         print("Flattening data....")
         # combine data and convert into dataframe
-        results = parser.flatten_data(r)
+        results = self.flatten_data(r)
         print(results.shape)
 
         # save to csv
@@ -767,9 +764,7 @@ class XbrlParser:
 
         # print(results.shape)
 
-
-    @staticmethod
-    def parse_files(quarter, year, unpacked_files,
+    def parse_files(self, quarter, year, unpacked_files,
                     custom_input, processed_files, num_cores):
         """
         Parses a set of accounts for a given time period and saves as a csv in
@@ -792,15 +787,15 @@ class XbrlParser:
         """
         # Construct both the list of months and list of corresponding
         # directories
-        month_list = XbrlParser.create_month_list(quarter)
-        directory_list = XbrlParser.create_directory_list(month_list,
+        month_list = self.create_month_list(quarter)
+        directory_list = self.create_directory_list(month_list,
                                                           unpacked_files,
                                                           year,
                                                           custom_input)
         # Parse each directory
         for directory in directory_list:
             print("Parsing " + directory + "...")
-            XbrlParser.parse_directory(directory, processed_files, num_cores)
+            self.parse_directory(directory, processed_files, num_cores)
 
     def build_month_table(self, list_of_files):
         """

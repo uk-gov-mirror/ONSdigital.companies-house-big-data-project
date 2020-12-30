@@ -13,10 +13,9 @@ import gcsfs
 class XbrlExtraction:
     """ This is a class for extracting the XBRL data. """
 
-    def __init__(self, bucket="ons-companies-house-dev",
-                 key="/home/dylan_purches/Desktop/data_key.json"):
+    def __init__(self, fs):
         self.__init__
-        self.fs = gcsfs.GCSFileSystem(project=bucket, token=key)
+        self.fs = fs
 
     def get_filepaths(self, directory):
         """
@@ -254,7 +253,7 @@ class XbrlExtraction:
             raise ValueError("Year specified must be an integer >= 0")
 
         if file_type == "csv":
-            name = "gs://"+output_folder + "/" + folder_year + "-"\
+            name = "gs://"+output_folder + "/0test" + folder_year + "-"\
                    + folder_month + "_xbrl_data.csv"
             dataframe.to_csv(name, index=False, header=True)
             self.fs.setxattrs(name, content_type="text/csv")
