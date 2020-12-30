@@ -11,18 +11,21 @@ import math
 import time
 import multiprocessing as mp
 import numpy as np
+import gcsfs
 
 
 
 class XbrlParser:
     """ This is a class for parsing the XBRL data."""
 
-    def __init__(self):
+    def __init__(self, bucket="ons-companies-house-dev",
+                 key="/home/dylan_purches/Desktop/data_key.json"):
         """
         Constructs all the necessary attributes for the XbrlParser object of
         which there are none.
         """
         self.__init__
+        self.fs = gcsfs.GCSFileSystem(project=bucket, token=key)
         
     # Table of variables and values that indicate consolidated status
     consolidation_var_table = {
@@ -548,8 +551,7 @@ class XbrlParser:
 
         return df_elements
 
-    @staticmethod
-    def process_account(filepath):
+    def process_account(self, filepath):
         """
         Scrape all of the relevant information from an iXBRL (html) file,
         upload the elements and some metadata to a mongodb.
@@ -580,7 +582,7 @@ class XbrlParser:
         # loop over multi-threading here - imports data and parses on separate
         # threads
         try:
-            file = open(filepath)
+            file = self.fs.open(filepath)
             soup = BS(file, "lxml")
         except:
             print("Failed to open: " + filepath)
@@ -706,7 +708,7 @@ class XbrlParser:
         
         # Here you can splice/truncate the number of files you want to process
         # for testing
-        #files = files[0:1000]
+        files = files[0:1000]
 
         # TO BE COMMENTED OUT AFTER TESTING
         print(folder_month, folder_year)
@@ -800,8 +802,7 @@ class XbrlParser:
             print("Parsing " + directory + "...")
             XbrlParser.parse_directory(directory, processed_files, num_cores)
 
-    @staticmethod
-    def build_month_table(list_of_files):
+    def build_month_table(self, list_of_files):
         """
         Function which parses, sequentially, a list of xbrl/ html files,
         converting each parsed file into a dictionary and appending to a list.
@@ -828,7 +829,7 @@ class XbrlParser:
             COUNT += 1
 
             # Read the file and parse
-            doc = XbrlParser.process_account(file)
+            doc = self.process_account(file)
 
             # flatten the elements dict into single dict
             doc['elements'] = XbrlParser.flatten_dict(doc['elements'])

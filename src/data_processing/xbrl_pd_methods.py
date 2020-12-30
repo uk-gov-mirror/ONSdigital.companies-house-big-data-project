@@ -3,6 +3,7 @@ import pandas as pd
 import time
 
 import sys
+import gcsfs
 
 # Custom import
 # from src.data_processing.xbrl_parser import XbrlParser
@@ -12,11 +13,12 @@ import sys
 class XbrlExtraction:
     """ This is a class for extracting the XBRL data. """
 
-    def __init__(self):
+    def __init__(self, bucket="ons-companies-house-dev",
+                 key="/home/dylan_purches/Desktop/data_key.json"):
         self.__init__
+        self.fs = gcsfs.GCSFileSystem(project=bucket, token=key)
 
-    @staticmethod
-    def get_filepaths(directory):
+    def get_filepaths(self, directory):
         """
         Helper function -
         Get all of the filenames in a directory that end in htm* or xml (under
@@ -35,8 +37,7 @@ class XbrlExtraction:
             raise TypeError("The input argument 'directory' \
             needs to be a string")
 
-        files = [directory + "/" + filename
-                 for filename in os.listdir(directory)
+        files = [filename for filename in self.fs.ls(directory)
                         if ((".htm" in filename.lower())
                             or (".xml" in filename.lower()))
                  ]
@@ -209,8 +210,7 @@ class XbrlExtraction:
             mode="a"
         )
 
-    @staticmethod
-    def output_xbrl_month(dataframe, output_folder, folder_month, folder_year,
+    def output_xbrl_month(self, dataframe, output_folder, folder_month, folder_year,
                           file_type="csv"):
 
         """
@@ -247,23 +247,17 @@ class XbrlExtraction:
             raise ValueError("The month provided should be a valid month from \
             January to December")
 
-        if not os.path.exists(output_folder):
+        if not self.fs.exists(output_folder):
             raise ValueError("Output folder provided does not exist")
 
         if not str.isdigit(folder_year):
             raise ValueError("Year specified must be an integer >= 0")
 
         if file_type == "csv":
-            dataframe.to_csv(
-                output_folder
-                    + "/"
-                    + folder_year
-                    + "-"
-                    + folder_month
-                    + "_xbrl_data.csv",
-                index=False,
-                header=True
-            )
+            name = "gs://"+output_folder + "/" + folder_year + "-"\
+                   + folder_month + "_xbrl_data.csv"
+            dataframe.to_csv(name, index=False, header=True)
+            self.fs.setxattrs(name, content_type="text/csv")
         else:
             print("I need a CSV for now...")
 
