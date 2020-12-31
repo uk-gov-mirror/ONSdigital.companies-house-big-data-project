@@ -199,14 +199,22 @@ class DataProcessing:
                             self.fs.rm(directory, recursive=True)
 
                         # Perform the extraction
-                        with zipfile.ZipFile(self.fs.open(file), 'r') as zip_ref:
+                        with zipfile.ZipFile(self.fs.open(file), 'r') \
+                                as zip_ref:
                             for contentfilename in zip_ref.namelist():
                                 contentfile = zip_ref.read(contentfilename)
-                                with self.fs.open(directory + "/" + contentfilename, 'wb') as f:
+                                with self.fs.open(
+                                        directory + "/" + contentfilename,
+                                        'wb') as f:
                                     f.write(contentfile)
-                                self.fs.setxattrs(
-                                    directory + "/" + contentfilename,
-                                    content_type="text/"+contentfilename.split(".")[-1])
+                                try:
+                                    self.fs.setxattrs(
+                                        directory + "/" + contentfilename,
+                                        content_type="text/"
+                                                     +contentfilename \
+                                                         .split(".")[-1])
+                                except:
+                                    print("Failed to save:", contentfilename)
                         print("Extracted files from " + file)
 
                         # Add extracted filename to file list
