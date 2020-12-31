@@ -253,9 +253,9 @@ class XbrlExtraction:
             raise ValueError("Year specified must be an integer >= 0")
 
         if file_type == "csv":
-            name = "gs://"+output_folder + "/0test" + folder_year + "-"\
+            name = output_folder + "/" + folder_year + "-"\
                    + folder_month + "_xbrl_data.csv"
-            dataframe.to_csv(name, index=False, header=True)
+            dataframe.to_csv("gs://"+name, index=False, header=True)
             self.fs.setxattrs(name, content_type="text/csv")
         else:
             print("I need a CSV for now...")

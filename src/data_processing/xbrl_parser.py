@@ -705,7 +705,7 @@ class XbrlParser:
         
         # Here you can splice/truncate the number of files you want to process
         # for testing
-        files = files[0:1000]
+        # files = files[0:1000]
 
         # TO BE COMMENTED OUT AFTER TESTING
         print(folder_month, folder_year)
