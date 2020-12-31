@@ -3,16 +3,17 @@ import csv
 import pandas as pd
 from typing import List
 from datetime import datetime
+import gcsfs
 
 
 class XbrlCsvAppender:
     """ This class combines the csvs. """
 
-    def __init__(self):
+    def __init__(self, fs):
         self.__init__
+        self.fs = fs
 
-    @staticmethod
-    def combine_csv(files: List[str], outfile: str):
+    def combine_csv(self, files: List[str], outfile: str, separator=","):
         """
         Combines all csv files listed in files into a single csv file using
 
@@ -29,19 +30,19 @@ class XbrlCsvAppender:
         """
 
         print("Processing " + str(len(files)) + " files...")
-        with open(outfile, "w") as w:
-            writer = csv.writer(w, delimiter=',')
+        with self.fs.open(outfile, "wt") as w:
+            writer = csv.writer(w, delimiter=separator)
             for n, file in enumerate(files):
                 print("Processing " + file + "...")
-                with open(file, "r") as f:
-                    reader = csv.reader(f, delimiter=',')
+                with self.fs.open(file, "r") as f:
+                    reader = csv.reader(f, delimiter=separator)
                     if n > 0:
                         next(reader)
                     for row in reader:
                         writer.writerow(row)
+        self.fs.setxattrs(outfile, content_type="text/csv")
 
-    @staticmethod
-    def combine_csv_pd(files: List[str], outfile: str):
+    def combine_csv_pd(self, files: List[str], outfile: str):
         """
         Combines all csv files listed in files into a single csv file using
         pandas.
@@ -54,10 +55,27 @@ class XbrlCsvAppender:
         Raises:
             None
         """
+        fs.cp(files[0], outfile)
+        for f in files[1:]:
+            upload = pd.read_csv("gs://"+f,
+                                              index_col=None,
+                                                header=0,
+                                                sep=",",
+                                                lineterminator="\t",
+                                                quotechar='"',
+                                              low_memory=False)
+            upload.to_csv("gs://"+outfile, mode='a', header=False,
+                          sep="\t", index=False)
 
-        combined_csv = pd.concat([pd.read_csv(f, engine='python')
-                                  for f in files])
-        combined_csv.to_csv(outfile, index=False)
+        # combined_csv = pd.concat([pd.read_csv("gs://"+f,
+        #                                       index_col=None,
+        #                                         header=0,
+        #                                         sep=",",
+        #                                         lineterminator="\t",
+        #                                         quotechar='"',
+        #                                       low_memory=False)
+        #                           for f in files])
+        # combined_csv.to_csv("gs://"+outfile, index=False)
 
     @staticmethod
     def _add_path(indir: str, files: str):
@@ -75,8 +93,7 @@ class XbrlCsvAppender:
         
         return [indir+i for i in files]
 
-    @staticmethod
-    def merge_files_by_year(indir: str, outdir: str, year: str, quarter=""):
+    def merge_files_by_year(self, indir: str, outdir: str, year: str, quarter=""):
         """
         Finds all csv files with directory indir, groups files into
         individual years and calls combine_csv function to merge into
@@ -101,22 +118,24 @@ class XbrlCsvAppender:
             quarter = int(quarter)
 
         # If the input directory is valid...
-        if os.path.exists(indir):
+        if self.fs.exists(indir):
 
             # Create the output folder if it doesn't exist
-            if not os.path.exists(outdir):
-                os.mkdir(outdir)
+            # if not os.path.exists(outdir):
+            #     os.mkdir(outdir)
 
             # Get all csv files which contain the year specified in their
             # filenames
-            files = os.listdir(indir)
+            files = self.fs.ls(indir)
             files = ([i for i in files if i[-4:] == '.csv'
-                      and i[:4].isnumeric() and int(i[:4]) == year])
+                      and i.split("/")[-1][:4].isnumeric()
+                      and int(i.split("/")[-1][:4]) == year])
 
             # Sort all files by the month contained in the file name
             files = sorted(files,
                            key=lambda day: datetime.strptime(
-                               day.split("-")[1].split("_")[0], "%B"))
+                               day.split("/")[-1].split("-")[1].split("_")[0],
+                               "%B"))
 
             # Create a list of months based on what quarter in the year has
             # been specified
@@ -134,26 +153,35 @@ class XbrlCsvAppender:
             # Filter out those files not in the specified quarter,
             # if a quarter has been specified
             if quarter != None:
-                files = [f for f in files if f.split("-")[1].split("_")[0]
+                files = [f for f in files
+                         if f.split("/")[-1].split("-")[1].split("_")[0]
                          in quarter_list]
                 quarter_str = "q" + str(quarter)
             else:
                 quarter_str = ""
 
             # Prepend input directory to filenames
-            files = [indir + f for f in files]
+            # files = [indir + f for f in files]
 
             # Combine the csvs
-            XbrlCsvAppender.combine_csv(files, outdir + str(year)
-                                            + quarter_str + '_xbrl.csv')
+            # XbrlCsvAppender.combine_csv(files, outdir + str(year)
+            #                                 + quarter_str + '_xbrl.csv')
+
+            self.combine_csv(files, outdir + "/" + str(year) + quarter_str + '_xbrl.csv',
+                             separator="\t")
         else:
             print("Input file path does not exist")
 
 if __name__ == '__main__':
 
-    indir = '/shares/data/20200519_companies_house_accounts/xbrl_parsed_data/'
-    outdir = '/home/peterd/test/'
-    year = 2011
-    quarter = None
+    indir = 'ons-companies-house-dev-parsed-csv-data'
+    outdir = 'ons-companies-house-dev-outputs-data/appender_test'
+    year = 2010
+    quarter = "None"
 
-    XbrlCsvAppender.merge_files_by_year(indir, outdir, year, quarter)
+    fs = gcsfs.GCSFileSystem("ons-companies-house-dev",
+                             token = "/home/dylan_purches/Desktop/data_key.json",
+                             cache_timeout=1)
+
+    appender = XbrlCsvAppender(fs)
+    appender.merge_files_by_year(indir, outdir, year, quarter)
