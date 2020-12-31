@@ -123,7 +123,7 @@ from src.data_processing.xbrl_csv_cleaner import XbrlCSVCleaner
 def main():
     print("-" * 50)
 
-    fs = gcsfs.GCSFileSystem(project=bucket, token=key)
+    fs = gcsfs.GCSFileSystem(project=bucket, token=key, cache_timeout=1)
     # Execute module xbrl_web_scraper
     if xbrl_web_scraper == str(True):
         print("XBRL web scraper running...")
@@ -169,7 +169,7 @@ def main():
 
     # Append XBRL data on an annual or quarterly basis
     if xbrl_file_appender == str(True):
-        appender = XbrlCsvAppender()
+        appender = XbrlCsvAppender(fs)
         print("XBRL appender running...")
         appender.merge_files_by_year(xbrl_file_appender_indir,
                                      xbrl_file_appender_outdir,
