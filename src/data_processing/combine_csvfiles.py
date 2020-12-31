@@ -55,27 +55,17 @@ class XbrlCsvAppender:
         Raises:
             None
         """
-        fs.cp(files[0], outfile)
-        for f in files[1:]:
-            upload = pd.read_csv("gs://"+f,
+
+        # WARNING: Causes memory overuse for large files
+        combined_csv = pd.concat([pd.read_csv("gs://"+f,
                                               index_col=None,
                                                 header=0,
                                                 sep=",",
                                                 lineterminator="\t",
                                                 quotechar='"',
                                               low_memory=False)
-            upload.to_csv("gs://"+outfile, mode='a', header=False,
-                          sep="\t", index=False)
-
-        # combined_csv = pd.concat([pd.read_csv("gs://"+f,
-        #                                       index_col=None,
-        #                                         header=0,
-        #                                         sep=",",
-        #                                         lineterminator="\t",
-        #                                         quotechar='"',
-        #                                       low_memory=False)
-        #                           for f in files])
-        # combined_csv.to_csv("gs://"+outfile, index=False)
+                                  for f in files])
+        combined_csv.to_csv("gs://"+outfile, index=False)
 
     @staticmethod
     def _add_path(indir: str, files: str):
@@ -93,7 +83,8 @@ class XbrlCsvAppender:
         
         return [indir+i for i in files]
 
-    def merge_files_by_year(self, indir: str, outdir: str, year: str, quarter=""):
+    def merge_files_by_year(self, indir: str, outdir: str,
+                            year: str, quarter=""):
         """
         Finds all csv files with directory indir, groups files into
         individual years and calls combine_csv function to merge into
@@ -167,7 +158,8 @@ class XbrlCsvAppender:
             # XbrlCsvAppender.combine_csv(files, outdir + str(year)
             #                                 + quarter_str + '_xbrl.csv')
 
-            self.combine_csv(files, outdir + "/" + str(year) + quarter_str + '_xbrl.csv',
+            self.combine_csv(files, outdir + "/" + str(year)
+                             + quarter_str + '_xbrl.csv',
                              separator="\t")
         else:
             print("Input file path does not exist")
