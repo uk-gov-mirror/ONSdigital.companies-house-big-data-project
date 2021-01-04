@@ -78,7 +78,7 @@ class PDFAnnotator:
             byteio = BytesIO()
             img3.save(byteio, 'JPEG')
             f.write(byteio.getvalue())
-        self.fs.setxattrs(path, content_type = "image/jpg")
+        self.fs.setxattrs(path, content_type="image/jpg")
 
     def annotate_table(self, path, table_data):
         img = Image.open(self.bs_image)

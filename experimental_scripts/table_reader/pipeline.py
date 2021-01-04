@@ -7,19 +7,25 @@ from line_reader import LineReader
 from table_identifier import TableIdentifier
 from table_fitter import TableFitter
 from pdf_annotator import PDFAnnotator
+from doc_ai_parser import DocParser
 
 fs = gcsfs.GCSFileSystem("ons-companies-house-dev")
 
-tokens = fs.ls("ons-companies-house-dev-scraped-pdf-data/doc_ai_outputs/doc_ai_token_dfs/")[1:]
-names = [((t.split("/")[-1]).split(".")[0])[:-7] for t in tokens]
+sheets = fs.ls("ons-companies-house-dev-scraped-pdf-data/doc_ai_outputs/bs_pdfs")
+names = [((t.split("/")[-1]).split(".")[0])[:-3] for t in sheets]
 
+print(sheets)
 fails = []
-for i in range(len(tokens)):
+for i in range(len(sheets)):
     try:
-        df = pd.read_csv("gs://"+tokens[i])
+        doc_parser = DocParser()
+        doc_parser.parse_document("gs://"+sheets[i],
+                                  "/home/dylan_purches/Desktop/dev_key.json",
+                                  "ons-companies-house-dev")
+        doc_parser.tokens_to_df()
 
         # Implements the line reader module
-        lines_data = LineReader(df)
+        lines_data = LineReader(doc_parser.token_df)
         lines_data.add_first_vertex()
         lines_data.get_line_nums()
         lines_data.group_within_line()
@@ -36,8 +42,7 @@ for i in range(len(tokens)):
         table_data.get_other_columns()
 
         # Create an annotated pdf
-        annotator = PDFAnnotator("ons-companies-house-dev-scraped-pdf-data/doc_ai_outputs/bs_pdfs/"
-                                 + names[i] + ".pdf", gcp=True)
+        annotator = PDFAnnotator(sheets[i], gcp=True)
         annotator.pdf_to_png()
         annotator.annotate_table("ons-companies-house-dev-scraped-pdf-data/doc_ai_outputs/visual_outputs/" + names[i]+"_table.jpg",
                                  table_data)
