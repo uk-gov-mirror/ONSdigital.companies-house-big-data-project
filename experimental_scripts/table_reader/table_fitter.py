@@ -15,6 +15,7 @@ class TableFitter(TableIdentifier):
         self.header_indices = []
         self.header_lines = []
         self.header_coords = []
+        self.header_groups = []
         
     def clean_values(self, chars = ["\n"]):
         """
@@ -76,7 +77,7 @@ class TableFitter(TableIdentifier):
             None
         """
         assets_dist = [[],[],[]]
-        if type(indices) == int:
+        if type(indices) != list:
             indices = [indices]
 
         # For each of the indices, append the x coordinate of the left, centre
@@ -94,7 +95,8 @@ class TableFitter(TableIdentifier):
                           stats.mean(assets_dist[2])]
         return assets_summary
 
-    def find_aligned_indices(self, df, alignment):
+    @staticmethod
+    def find_aligned_indices(df, alignment, d=0.01):
         """
         Finds the indices of elements in the DataFrame aligned with
         the three x coordinates in the alignment object (the result of
@@ -104,6 +106,8 @@ class TableFitter(TableIdentifier):
         Arguments:
             df:         DataFrame to be considered
             alignment:  list of 3 x coordinates from find_alignment
+            d:          Constraint on how close elements need to be to be
+                        considered aligned
         Returns (as dict):
             indices:    The indices of the dataframe that align to the given
                         alignment object
@@ -116,18 +120,18 @@ class TableFitter(TableIdentifier):
 
         # Loop over the specified indices
         for i in df.index:
-            if self.is_close(alignment[0],
+            if TableFitter.is_close(alignment[0],
                              eval(df.loc[i, "normed_vertices"])[3][0],
-                             dist = 0.01):
+                             dist=d):
                 indices_close[0].append(i)
-            elif self.is_close(alignment[1],
+            elif TableFitter.is_close(alignment[1],
                                eval(df.loc[i, "normed_vertices"])[2][0],
-                               dist = 0.01):
+                               dist=d):
                 indices_close[1].append(i)
-            elif self.is_close(alignment[2],
+            elif TableFitter.is_close(alignment[2],
                                0.5*(eval(df.loc[i, "normed_vertices"])[2][0]
                                     + eval(df.loc[i, "normed_vertices"])[3][0]),
-                               dist=0.01):
+                               dist=d):
                 indices_close[2].append(i)
 
         # Select only the indices in the list with the most elements
@@ -183,9 +187,11 @@ class TableFitter(TableIdentifier):
         self.header_lines = header_lines
         self.header_indices = header_indices
         bottom_line = max(self.header_lines)
+        self.header_groups = self.group_header_points(self.data,
+                                                      self.header_indices)
         self.header_coords = \
             [self.find_alignment(self.data, i)
-             for i in self.data[self.data["line_num"] == bottom_line].index]
+             for i in self.header_groups]
         print(len(header_lines), " header lines have been detected")
 
     def get_other_columns(self):
@@ -243,5 +249,45 @@ class TableFitter(TableIdentifier):
         # be the first column
         fitted_col = dists.index(min(dists)) + 1
         return fitted_col
+
+    @staticmethod
+    def group_header_points(df, header_indices):
+        """
+        Takes a set of indices and groups them using the find_alignment
+        function to put close indices into groups.
+
+        Arguments:
+            df:             DataFrame to use the indices to reference from
+            header_indices: Indices which we want to group
+        Returns:
+            header_groups:  List of indices grouped into lists according to
+                            which are aligned to each other.
+        Raises:
+            None
+        """
+
+        # Creates a new DataFrame to use and a list to add groups to
+        header_df = df.loc[header_indices, :]
+        header_groups = []
+
+        # While we still have ungrouped indices
+        while header_df.shape[0] > 0:
+            # Find the first elements of the dataframe
+            first_ind = header_df.index[0]
+
+            # Find the alignment object for that element
+            aligner = TableFitter.find_alignment(header_df, first_ind)
+
+            # Find the indices aligned to that object
+            grouped_inds = TableFitter.find_aligned_indices(header_df,
+                                                            aligner,
+                                                            d=0.04)
+
+            # Add the group of indices to the list and remove them from the df
+            header_groups.append(grouped_inds["indices"])
+            header_df = header_df.drop(grouped_inds["indices"])
+
+        return header_groups
+
         
 

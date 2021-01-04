@@ -128,7 +128,7 @@ class LineReader:
 
                 # Condition if two tokens are sufficiently close (as a
                 # proportion of the height) concatenate values
-                if v2 - v1 < h:
+                if v2 - v1 < 1.5*h:
                     # Concatenate the relevant values for consecutive tokens
                     new_value = new_value + line_df["value"][j]
                     new_confidence = new_confidence*line_df["confidence"][j]
