@@ -123,6 +123,7 @@ from src.data_processing.xbrl_csv_cleaner import XbrlCSVCleaner
 def main():
     print("-" * 50)
 
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = key
     fs = gcsfs.GCSFileSystem(project=bucket, token=key, cache_timeout=1)
     # Execute module xbrl_web_scraper
     if xbrl_web_scraper == str(True):
@@ -130,6 +131,7 @@ def main():
         print("Scraping XBRL data to:", scraped_dir)
         print("Running crawler from:", xbrl_scraper)
         chdir(xbrl_scraper)
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = key
         print(getcwd())
         cmdlinestr = "scrapy crawl xbrl_scraper"
         popen(cmdlinestr).read()
