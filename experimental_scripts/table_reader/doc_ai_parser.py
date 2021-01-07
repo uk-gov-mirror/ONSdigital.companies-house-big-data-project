@@ -70,6 +70,15 @@ class DocParser:
         client = documentai.DocumentUnderstandingServiceClient(credentials=
                                                                credentials)
 
+        form_extract = documentai.types.FormExtractionParams(
+            enabled=False
+        )
+        entity_extract = documentai.types.EntityExtractionParams(
+            enabled=True
+        )
+        table_extract = documentai.types.TableExtractionParams(
+            enabled=False
+        )
         gcs_source = documentai.types.GcsSource(uri=input_uri)
 
         # mime_type can be application/pdf, image/tiff,
@@ -81,7 +90,11 @@ class DocParser:
 
         request = documentai.types.ProcessDocumentRequest(
             parent=parent,
-            input_config=input_config)
+            input_config=input_config,
+            form_extraction_params=form_extract,
+            entity_extraction_params=entity_extract,
+            table_extraction_params=table_extract
+            )
 
         document = client.process_document(request=request)
         self.document = document
