@@ -54,13 +54,15 @@ class DocParser:
     def parse_document(self, input_uri, token_path,
                        project_id, processor_id="643a05097d4ab993"):
         """
-        Facilitates sending a request to the Doc AI API and saves the
-        response (a 'document') as a class attribute.
+        Facilitates sending a request to the Doc AI API (via a specified
+        processor) and saves the response (a 'document') as a class attribute.
 
         Arguments:
-            input_uri:  The gcs location of a pdf to be processed by Doc AI
-            token_path: Path to the location of json key for authorisation
-            project_id: The gcp project id
+            input_uri:      The gcs location of a pdf to be processed by Doc AI
+            token_path:     Path to the location of json key for authorisation
+            project_id:     The gcp project id
+            processor_id:   The id of the processor created in the cloud
+                            console
         Returns:
             None
         Raises:
@@ -75,23 +77,22 @@ class DocParser:
             client_options=client_options)
 
         name = f"projects/{project_id}/locations/eu/processors/{processor_id}"
+
+        # Read the file into memory
         with self.fs.open(input_uri, "rb") as image:
             image_content = image.read()
 
-        # Read the file into memory
-        document = {"content": image_content,
-                    "mime_type": "application/pdf"}
+        document = {"content": image_content, "mime_type": "application/pdf"}
 
         # Configure the process request
         request = documentai.types.ProcessRequest(name=name,
                                                   document=document,
-                                                  skip_human_review=False)
+                                                  skip_human_review=True)
 
         # Recognizes text entities in the PDF document
         result = client.process_document(request=request)
 
-        document = result.document
-        self.document = document
+        self.document = result.document
 
     def tokens_to_df(self):
         """
