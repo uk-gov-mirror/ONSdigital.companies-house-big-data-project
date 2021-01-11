@@ -1,4 +1,4 @@
-from google.cloud import documentai_v1beta2 as documentai
+from google.cloud import documentai_v1beta3 as documentai
 from google.oauth2 import service_account
 import gcsfs
 import pandas as pd
@@ -6,9 +6,10 @@ import pandas as pd
 
 class DocParser:
 
-    def __init__(self):
+    def __init__(self, fs):
         self.document = None
         self.token_df = None
+        self.fs = fs
 
     @staticmethod
     def get_text(el, document):
@@ -50,7 +51,8 @@ class DocParser:
             vertices.append([vertex.x, vertex.y])
         return vertices
 
-    def parse_document(self, input_uri, token_path, project_id):
+    def parse_document(self, input_uri, token_path,
+                       project_id, processor_id="643a05097d4ab993"):
         """
         Facilitates sending a request to the Doc AI API and saves the
         response (a 'document') as a class attribute.
@@ -64,39 +66,31 @@ class DocParser:
         Raises:
             None
         """
+        # Instantiates a client
         credentials = service_account.Credentials.from_service_account_file(
             token_path)
+        client_options = {"api_endpoint": "eu-documentai.googleapis.com"}
+        client = documentai.DocumentProcessorServiceClient(
+            credentials=credentials,
+            client_options=client_options)
 
-        client = documentai.DocumentUnderstandingServiceClient(credentials=
-                                                               credentials)
+        name = f"projects/{project_id}/locations/eu/processors/{processor_id}"
+        with self.fs.open(input_uri, "rb") as image:
+            image_content = image.read()
 
-        form_extract = documentai.types.FormExtractionParams(
-            enabled=False
-        )
-        entity_extract = documentai.types.EntityExtractionParams(
-            enabled=True
-        )
-        table_extract = documentai.types.TableExtractionParams(
-            enabled=False
-        )
-        gcs_source = documentai.types.GcsSource(uri=input_uri)
+        # Read the file into memory
+        document = {"content": image_content,
+                    "mime_type": "application/pdf"}
 
-        # mime_type can be application/pdf, image/tiff,
-        # and image/gif, or application/json
-        input_config = documentai.types.InputConfig(
-            gcs_source=gcs_source, mime_type='application/pdf')
+        # Configure the process request
+        request = documentai.types.ProcessRequest(name=name,
+                                                  document=document,
+                                                  skip_human_review=False)
 
-        parent = 'projects/{}/locations/eu'.format(project_id)
+        # Recognizes text entities in the PDF document
+        result = client.process_document(request=request)
 
-        request = documentai.types.ProcessDocumentRequest(
-            parent=parent,
-            input_config=input_config,
-            form_extraction_params=form_extract,
-            entity_extraction_params=entity_extract,
-            table_extraction_params=table_extract
-            )
-
-        document = client.process_document(request=request)
+        document = result.document
         self.document = document
 
     def tokens_to_df(self):

@@ -51,31 +51,31 @@ print(sheets)
 
 # df = pd.read_csv("gs://ons-companies-house-dev-scraped-pdf-data/doc_ai_outputs/doc_ai_token_dfs/04391694_active_bs_tokens.csv")
 #
-doc_parser = DocParser()
-doc_parser.parse_document("gs://ons-companies-house-dev-scraped-pdf-data/doc_ai_outputs/bs_pdfs/bhp_bs.pdf",
-                                  "/home/dylan_purches/Desktop/dev_key.json",
-                                  "ons-companies-house-dev")
-#         doc_parser.tokens_to_df()
-# # Implements the line reader module
-# lines_data = LineReader(df)
-# lines_data.add_first_vertex()
-# lines_data.get_line_nums()
-# lines_data.group_within_line()
-#
-# # Implement the table identifier module
-# structs_data = TableIdentifier(lines_data.data)
-# structs_data.detect_table()
-#
-# # Implement the table fitter module
-# table_data = TableFitter(structs_data.data)
-# table_data.clean_values()
-# table_data.get_first_col()
-# table_data.get_header_row()
-# table_data.get_other_columns()
+doc_parser = DocParser(fs)
+doc_parser.parse_document("ons-companies-house-dev-scraped-pdf-data/doc_ai_outputs/bs_pdfs/bhp_bs.pdf",
+                          "/home/dylan_purches/Desktop/dev_key.json",
+                          "ons-companies-house-dev")
+doc_parser.tokens_to_df()
+# Implements the line reader module
+lines_data = LineReader(doc_parser.token_df)
+lines_data.add_first_vertex()
+lines_data.get_line_nums()
+lines_data.group_within_line()
 
-        # Create an annotated pdf
-        # annotator = PDFAnnotator("ons-companies-house-dev-scraped-pdf-data/doc_ai_outputs/bs_pdfs/"
-        #                          + names[i] + ".pdf", gcp=True)
-        # annotator.pdf_to_png()
-        # annotator.annotate_table("ons-companies-house-dev-scraped-pdf-data/doc_ai_outputs/visual_outputs/" + names[i]+"_table.jpg",
-        #                          table_data)
+# Implement the table identifier module
+structs_data = TableIdentifier(lines_data.data)
+structs_data.detect_table()
+
+# Implement the table fitter module
+table_data = TableFitter(structs_data.data)
+table_data.clean_values()
+table_data.get_first_col()
+table_data.get_header_row()
+table_data.get_other_columns()
+
+# Create an annotated pdf
+annotator = PDFAnnotator("ons-companies-house-dev-scraped-pdf-data/doc_ai_outputs/bs_pdfs/"
+                         + "bhp_bs" + ".pdf", gcp=True)
+annotator.pdf_to_png()
+annotator.annotate_table("ons-companies-house-dev-scraped-pdf-data/doc_ai_outputs/visual_outputs/" + "v3_test"+"_table.jpg",
+                         table_data)
