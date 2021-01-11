@@ -165,7 +165,7 @@ def main():
                                xbrl_unpacked_data,
                                xbrl_parser_custom_input,
                                xbrl_processed_csv,
-                               1)
+                               2)
 
     timing_file.write("Parsing module took: %s minutes"%((time.time()-unpacker_finish)/60))
     timing_file.write("Whole_pipeline took: %s minutes"%((time.time()-start_time)/60))
