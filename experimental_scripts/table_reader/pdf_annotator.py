@@ -102,7 +102,7 @@ class PDFAnnotator:
                 xy = [(x[0] * width, x[1] * height) for x in xy]
                 draw.polygon(xy, outline="lime", fill="wheat")
             fitter = TableFitter(table_data.data)
-            x_coord = (fitter.find_alignment(table_data.data, table_data.columns[i]))[2]
+            x_coord = (fitter.find_alignment(table_data.data, table_data.columns[i]))["median_points"][2]
             draw.line((x_coord*width, 0, x_coord*width, height), fill="red", width=5)
 
         img3 = Image.blend(img, img2, 0.4)

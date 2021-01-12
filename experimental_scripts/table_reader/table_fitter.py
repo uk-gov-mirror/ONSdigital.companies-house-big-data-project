@@ -54,10 +54,10 @@ class TableFitter(TableIdentifier):
             None
         """
         # Find the distribution of coordinates in assets_row
-        assets_dist = self.find_alignment(self.data, self.assets_row)
+        x_dist = self.find_alignment(self.data, self.assets_row)
 
         # Find all other elements that align with the assets coordinates
-        aligned_dict = self.find_aligned_indices(self.data, assets_dist)
+        aligned_dict = self.find_aligned_indices(self.data, x_dist)
         self.columns.append(aligned_dict["indices"])
 
     @staticmethod
@@ -76,31 +76,40 @@ class TableFitter(TableIdentifier):
         Raises:
             None
         """
-        assets_dist = [[],[],[]]
+        x_dist = [[],[],[]]
         if type(indices) != list:
             indices = [indices]
 
         # For each of the indices, append the x coordinate of the left, centre
         # and right of the bounding polygon
         for i in indices:
-            assets_dist[0].append(eval(df.loc[i, "normed_vertices"])[3][0])
-            assets_dist[1].append(eval(df.loc[i, "normed_vertices"])[2][0])
-            assets_dist[2].append(
+            x_dist[0].append(eval(df.loc[i, "normed_vertices"])[3][0])
+            x_dist[1].append(eval(df.loc[i, "normed_vertices"])[2][0])
+            x_dist[2].append(
                 0.5*(eval(df.loc[i, "normed_vertices"])[3][0]
                      + eval(df.loc[i, "normed_vertices"])[2][0]))
 
+
+        aligned_medians = [stats.median(x_dist[0]),
+                        stats.median(x_dist[1]),
+                        stats.median(x_dist[2])]
+        aligned_index = None
+        aligned_x_point = None
         # Compute the variance for each of these coordinates
-        assets_vars = [stats.variance(assets_dist[0]),
-                          stats.variance(assets_dist[1]),
-                          stats.variance(assets_dist[2])]
-
-        # Find the alignment by taking the index where variance is minimised
-        aligned_index = assets_vars.index(min(assets_vars))
-
+        if len(x_dist[0]) >= 2:
+            aligned_vars = [stats.variance(x_dist[0]),
+                            stats.variance(x_dist[1]),
+                            stats.variance(x_dist[2])]
+            
+            # Find the alignment by taking the index where variance is minimised
+            aligned_index = aligned_vars.index(min(aligned_vars))
+            aligned_x_point = stats.median(x_dist[aligned_index])
         # Return a dict of the aligned index and the median x point of the alignment
         assets_summary = {"aligned_index": aligned_index,
-                            "aligned_x_point": stats.median(assets_dist[aligned_index])}
+                            "aligned_x_point": aligned_x_point,
+                            "median_points": aligned_medians}
         return assets_summary
+            
 
     @staticmethod
     def find_aligned_indices(df, alignment, d=0.01):
@@ -112,7 +121,7 @@ class TableFitter(TableIdentifier):
 
         Arguments:
             df:         DataFrame to be considered
-            alignment:  list of 3 x coordinates from find_alignment
+            alignment:  dict of alignment from find_alignment
             d:          Constraint on how close elements need to be to be
                         considered aligned
         Returns (as dict):
@@ -123,28 +132,52 @@ class TableFitter(TableIdentifier):
             None
         """
         # List of indices 'close' to each of the three coordinates
-        indices_close = [[], [], []]
+        indices_close = []
 
-        # Loop over the specified indices
-        for i in df.index:
-            if TableFitter.is_close(alignment[0],
-                             eval(df.loc[i, "normed_vertices"])[3][0],
-                             dist=d):
-                indices_close[0].append(i)
-            elif TableFitter.is_close(alignment[1],
-                               eval(df.loc[i, "normed_vertices"])[2][0],
-                               dist=d):
-                indices_close[1].append(i)
-            elif TableFitter.is_close(alignment[2],
-                               0.5*(eval(df.loc[i, "normed_vertices"])[2][0]
+        # Cases for the 3 alignment options
+        if alignment["aligned_index"] == 0:
+            for i in df.index:
+                if TableFitter.is_close(alignment["aligned_x_point"],
+                                eval(df.loc[i, "normed_vertices"])[3][0],
+                                dist=d):
+                    indices_close.append(i)
+
+        elif alignment["aligned_index"] == 1:
+            for i in df.index:
+                if TableFitter.is_close(alignment["aligned_x_point"],
+                                eval(df.loc[i, "normed_vertices"])[2][0],
+                                dist=d):
+                    indices_close.append(i)
+
+        elif alignment["aligned_index"] == 2:
+            for i in df.index:
+                if TableFitter.is_close(alignment["aligned_x_point"],
+                                0.5*(eval(df.loc[i, "normed_vertices"])[2][0]
                                     + eval(df.loc[i, "normed_vertices"])[3][0]),
-                               dist=d):
-                indices_close[2].append(i)
-
-        # Select only the indices in the list with the most elements
-        aligned = [j for j, k in enumerate(indices_close)
+                                dist=d):
+                    indices_close.append(i)
+        elif alignment["aligned_index"] == None:
+            indices_close = [[],[],[]]
+            for i in df.index:
+                if TableFitter.is_close(alignment["median_points"][0],
+                                eval(df.loc[i, "normed_vertices"])[3][0],
+                                dist=d):
+                    indices_close[0].append(i)
+                elif TableFitter.is_close(alignment["median_points"][1],
+                                eval(df.loc[i, "normed_vertices"])[2][0],
+                                dist=d):
+                    indices_close[1].append(i)
+                elif TableFitter.is_close(alignment["median_points"][2],
+                                0.5*(eval(df.loc[i, "normed_vertices"])[2][0]
+                                        + eval(df.loc[i, "normed_vertices"])[3][0]),
+                                dist=d):
+                    indices_close[2].append(i)
+            aligned = [j for j, k in enumerate(indices_close)
                    if len(k) == max([len(i) for i in indices_close])]
-        return {"indices": indices_close[aligned[0]], "alignment":aligned[0]}
+            alignment["aligned_index"] = aligned[0]
+            indices_close = indices_close[aligned[0]]
+
+        return {"indices": indices_close, "alignment":alignment["aligned_index"]}
    
     def get_header_row(self):
         """
@@ -196,7 +229,7 @@ class TableFitter(TableIdentifier):
         self.header_groups = self.group_header_points(self.data,
                                                       self.header_indices)
         self.header_coords = \
-            [self.find_alignment(self.data, i)
+            [self.find_alignment(self.data, i)["median_points"]
              for i in self.header_groups]
         print(len(header_lines), " header lines have been detected")
 
