@@ -89,10 +89,17 @@ class TableFitter(TableIdentifier):
                 0.5*(eval(df.loc[i, "normed_vertices"])[3][0]
                      + eval(df.loc[i, "normed_vertices"])[2][0]))
 
-        # Compute the average for each of these coordinates
-        assets_summary = [stats.mean(assets_dist[0]),
-                          stats.mean(assets_dist[1]),
-                          stats.mean(assets_dist[2])]
+        # Compute the variance for each of these coordinates
+        assets_vars = [stats.variance(assets_dist[0]),
+                          stats.variance(assets_dist[1]),
+                          stats.variance(assets_dist[2])]
+
+        # Find the alignment by taking the index where variance is minimised
+        aligned_index = assets_vars.index(min(assets_vars))
+
+        # Return a dict of the aligned index and the median x point of the alignment
+        assets_summary = {"aligned_index": aligned_index,
+                            "aligned_x_point": stats.median(assets_dist[aligned_index])}
         return assets_summary
 
     @staticmethod
@@ -186,7 +193,6 @@ class TableFitter(TableIdentifier):
                     list(self.data[self.data["line_num"] == l].index)
         self.header_lines = header_lines
         self.header_indices = header_indices
-        bottom_line = max(self.header_lines)
         self.header_groups = self.group_header_points(self.data,
                                                       self.header_indices)
         self.header_coords = \
