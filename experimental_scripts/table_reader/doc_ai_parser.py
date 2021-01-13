@@ -2,6 +2,7 @@ from google.cloud import documentai_v1beta3 as documentai
 from google.oauth2 import service_account
 import gcsfs
 import pandas as pd
+import math
 
 
 class DocParser:
@@ -116,16 +117,23 @@ class DocParser:
 
         # Extract the tokens reference from the document object
         tokens = self.document.pages[0].tokens
+
         for token in tokens:
-            # Get the text for each layout element
-            rows["value"].append(
-                self.get_text(token.layout, self.document))
-            rows["confidence"].append(token.layout.confidence)
-            rows["detected_break_type"].append(token.detected_break.type_.name)
-            rows["detected_break_count"].append(
-                token.detected_break.type_.value)
-            rows["normed_vertices"].append(
-                self.get_vertices(token.layout))
+            vertices = self.get_vertices(token.layout)
+
+            # Only take tokens which are horizontally aligned
+            if abs(self.get_orientation(vertices)) < math.pi/4:
+                
+                # Get the text for each layout element
+                rows["value"].append(
+                    self.get_text(token.layout, self.document))
+                rows["confidence"].append(token.layout.confidence)
+                rows["detected_break_type"].append(token.detected_break.type_.name)
+                rows["detected_break_count"].append(
+                    token.detected_break.type_.value)
+                rows["normed_vertices"].append(vertices)
+            else:
+                print(self.get_text(token.layout, self.document))
 
         df = pd.DataFrame.from_dict(rows)
 
@@ -135,3 +143,27 @@ class DocParser:
         df["value"] = df["value"].replace('"', "")
         self.token_df = df
 
+    @staticmethod
+    def get_orientation(vertices):
+        """
+        For a given set of vertices for the bounding poly of a token, calculates
+        the angle from horizontal of the edge below the text. This is an angle
+        between -pi and pi. This allows us to determine the orientation of 
+        such a token
+
+        Arguments:
+            vertices:   List of coordinates of the bounding poly around the token.
+                        Note that this should be of type list (other functions in
+                        the pipeline take these vertices as strings).
+        Returns:
+            theta:  Angle between -pi and pi of the orientation of the edge 
+                    below the token text.
+        Raises:
+            None
+        """
+        v1, v2 = vertices[3], vertices[2]
+        delta_x = v2[0] - v1[0]
+        delta_y = v1[1] - v2[1]
+
+        theta = math.atan2(delta_y, delta_x)
+        return theta
