@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import statistics as stats
+import regex
 
 from line_reader import LineReader
 from table_identifier import TableIdentifier
@@ -12,10 +13,17 @@ class TableFitter(TableIdentifier):
         self.columns = []
         self.notes_row = []
         self.assets_row = []
+
+        # Header properties
         self.header_indices = []
         self.header_lines = []
         self.header_coords = []
         self.header_groups = []
+
+        # Date/Unit properties
+        self.date_headers = []
+        self.unit_headers = []
+
         
     def clean_values(self, chars = ["\n"]):
         """
@@ -215,10 +223,11 @@ class TableFitter(TableIdentifier):
 
         # Start from the 'notes' line and look for header rows above
         l = self.data.loc[self.notes_row[0], "line_num"]
-        while l > min(self.data.index):
+        while l > min(self.data["line_num"]):
             l -= 1
             if any([(i in self.columns[0])
                     for i in self.data[self.data["line_num"] == l].index]):
+                print(f"line number is{l}")
                 break
             else:
                 header_lines.append(l)
@@ -328,5 +337,30 @@ class TableFitter(TableIdentifier):
 
         return header_groups
 
+    def get_info_headers(self, years = range(1999,2020)):
+        currency_indexes = [i for i in self.header_indices if
+                            len(regex.findall(r"\p{Sc}", self.data.loc[i, "value"]))]
+        self.unit_headers = currency_indexes
         
+        date_indexes = []
+        for i in self.header_indices:
+            print([(str(y) in self.data.loc[i, "value"]) for y in years])
+            contains_year = any([str(y) in self.data.loc[i, "value"] for y in years])
+            if contains_year:
+                date_indexes.append(i)
+        self.date_headers = date_indexes
+
+        relevant_cols = []
+        add_unit = []
+        add_date = []
+        for i, g in enumerate(self.header_groups):
+            unit_col = any([j in self.unit_headers for j in g])
+            date_col = any([j in self.date_headers for j in g])
+            if unit_col or date_col:
+                relevant_cols.append(i+1)
+                if not unit_col:
+                    add_unit.append(i)
+                elif not date_col:
+                    add_date.append(i)
+            
 

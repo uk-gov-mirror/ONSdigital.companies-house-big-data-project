@@ -56,22 +56,22 @@ doc_parser.parse_document("ons-companies-house-dev-scraped-pdf-data/doc_ai_outpu
                           "/home/dylan_purches/keys/data_key.json",
                           "ons-companies-house-dev")
 doc_parser.tokens_to_df()
-# # Implements the line reader module
-# lines_data = LineReader(doc_parser.token_df)
-# lines_data.add_first_vertex()
-# lines_data.get_line_nums()
-# lines_data.group_within_line()
+# Implements the line reader module
+lines_data = LineReader(doc_parser.token_df)
+lines_data.add_first_vertex()
+lines_data.get_line_nums()
+lines_data.group_within_line()
 
-# # Implement the table identifier module
-# structs_data = TableIdentifier(lines_data.data)
-# structs_data.detect_table()
+# Implement the table identifier module
+structs_data = TableIdentifier(lines_data.data)
+structs_data.detect_table()
 
-# # Implement the table fitter module
-# table_data = TableFitter(structs_data.data)
-# table_data.clean_values()
-# table_data.get_first_col()
-# table_data.get_header_row()
-# table_data.get_other_columns()
+# Implement the table fitter module
+table_data = TableFitter(structs_data.data)
+table_data.clean_values()
+table_data.get_first_col()
+table_data.get_header_row()
+table_data.get_other_columns()
 
 # # Create an annotated pdf
 # annotator = PDFAnnotator("ons-companies-house-dev-scraped-pdf-data/doc_ai_outputs/bs_pdfs/"
