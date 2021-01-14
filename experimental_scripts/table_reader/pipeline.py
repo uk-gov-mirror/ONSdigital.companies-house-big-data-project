@@ -8,11 +8,12 @@ from table_identifier import TableIdentifier
 from table_fitter import TableFitter
 from pdf_annotator import PDFAnnotator
 from doc_ai_parser import DocParser
+from table_to_df import Table2Df
 
-fs = gcsfs.GCSFileSystem("ons-companies-house-dev")
+fs = gcsfs.GCSFileSystem("ons-companies-house-dev", token="/home/dylan_purches/keys/data_key.json")
 
-sheets = fs.ls("ons-companies-house-dev-scraped-pdf-data/doc_ai_outputs/bs_pdfs")
-names = [((t.split("/")[-1]).split(".")[0])[:-3] for t in sheets]
+# sheets = fs.ls("ons-companies-house-dev-scraped-pdf-data/doc_ai_outputs/bs_pdfs")
+# names = [((t.split("/")[-1]).split(".")[0])[:-3] for t in sheets]
 
 # print(sheets)
 # fails = []
@@ -72,6 +73,9 @@ table_data.clean_values()
 table_data.get_first_col()
 table_data.get_header_row()
 table_data.get_other_columns()
+
+to_df = Table2Df(table_data, fs)
+x = to_df.headers_to_strings(to_df.table.header_groups)
 
 # # Create an annotated pdf
 # annotator = PDFAnnotator("ons-companies-house-dev-scraped-pdf-data/doc_ai_outputs/bs_pdfs/"

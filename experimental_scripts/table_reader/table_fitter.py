@@ -66,6 +66,8 @@ class TableFitter(TableIdentifier):
 
         # Find all other elements that align with the assets coordinates
         aligned_dict = self.find_aligned_indices(self.data, x_dist)
+        for i in aligned_dict["indices"]:
+            self.data.loc[i, "column"] = int(0)
         self.columns.append(aligned_dict["indices"])
 
     @staticmethod
@@ -266,6 +268,7 @@ class TableFitter(TableIdentifier):
         for i in other_cols_df.index:
             col_to_fit = \
                 self.find_closest_col(other_cols_df, self.header_coords, i)
+            self.data.loc[i, "column"] = int(col_to_fit)
             self.columns[col_to_fit].append(i)
         
     @staticmethod
@@ -354,13 +357,16 @@ class TableFitter(TableIdentifier):
         add_unit = []
         add_date = []
         for i, g in enumerate(self.header_groups):
-            unit_col = any([j in self.unit_headers for j in g])
-            date_col = any([j in self.date_headers for j in g])
-            if unit_col or date_col:
-                relevant_cols.append(i+1)
+            unit_col = [j for j in g if j in self.unit_headers]
+            date_col = [j for j in g if j in self.date_headers]
+            if len(unit_col)==1  or len(date_col)==1:
                 if not unit_col:
-                    add_unit.append(i)
+                    date = self.data.loc[date_col[0], "value"]
+                    unit = 0
                 elif not date_col:
                     add_date.append(i)
+    
+    def find_closest_ind(self, el, elements):
+        pass
             
 
