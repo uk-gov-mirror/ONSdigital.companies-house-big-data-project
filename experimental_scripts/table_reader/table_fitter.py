@@ -229,7 +229,6 @@ class TableFitter(TableIdentifier):
             l -= 1
             if any([(i in self.columns[0])
                     for i in self.data[self.data["line_num"] == l].index]):
-                print(f"line number is{l}")
                 break
             else:
                 header_lines.append(l)
@@ -340,33 +339,10 @@ class TableFitter(TableIdentifier):
 
         return header_groups
 
-    def get_info_headers(self, years = range(1999,2020)):
-        currency_indexes = [i for i in self.header_indices if
-                            len(regex.findall(r"\p{Sc}", self.data.loc[i, "value"]))]
-        self.unit_headers = currency_indexes
-        
-        date_indexes = []
-        for i in self.header_indices:
-            print([(str(y) in self.data.loc[i, "value"]) for y in years])
-            contains_year = any([str(y) in self.data.loc[i, "value"] for y in years])
-            if contains_year:
-                date_indexes.append(i)
-        self.date_headers = date_indexes
-
-        relevant_cols = []
-        add_unit = []
-        add_date = []
-        for i, g in enumerate(self.header_groups):
-            unit_col = [j for j in g if j in self.unit_headers]
-            date_col = [j for j in g if j in self.date_headers]
-            if len(unit_col)==1  or len(date_col)==1:
-                if not unit_col:
-                    date = self.data.loc[date_col[0], "value"]
-                    unit = 0
-                elif not date_col:
-                    add_date.append(i)
-    
-    def find_closest_ind(self, el, elements):
-        pass
-            
-
+    def remove_excess_lines(self):
+        min_line = min(self.data.loc[self.header_indices, "line_num"])
+        new_cols = []
+        for col in self.columns:
+            new_cols.append([i for i in col if self.data.loc[i,"line_num"]>= min_line])
+        self.data = self.data.drop([i for i in self.data.index if self.data.loc[i,"line_num"]< min_line])
+        self.columns = new_cols
