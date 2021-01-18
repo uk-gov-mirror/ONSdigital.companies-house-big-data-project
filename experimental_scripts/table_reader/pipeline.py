@@ -12,72 +12,72 @@ from table_to_df import Table2Df
 
 fs = gcsfs.GCSFileSystem("ons-companies-house-dev", token="/home/dylan_purches/keys/data_key.json")
 
-sheets = fs.ls("ons-companies-house-dev-scraped-pdf-data/doc_ai_outputs/bs_pdfs")
-names = [((t.split("/")[-1]).split(".")[0])[:-3] for t in sheets]
+# sheets = fs.ls("ons-companies-house-dev-scraped-pdf-data/doc_ai_outputs/bs_pdfs")
+# names = [((t.split("/")[-1]).split(".")[0])[:-3] for t in sheets]
 
-print(sheets)
-fails = []
-for i in range(len(sheets)):
-    try:
-        doc_parser = DocParser(fs)
-        doc_parser.parse_document(sheets[i],
-                                  "/home/dylan_purches/keys/data_key.json",
-                                  "ons-companies-house-dev")
-        doc_parser.tokens_to_df()
+# print(sheets)
+# fails = []
+# for i in range(len(sheets)):
+#     try:
+#         doc_parser = DocParser(fs)
+#         doc_parser.parse_document(sheets[i],
+#                                   "/home/dylan_purches/keys/data_key.json",
+#                                   "ons-companies-house-dev")
+#         doc_parser.tokens_to_df()
 
-        # Implements the line reader module
-        lines_data = LineReader(doc_parser.token_df)
-        lines_data.add_first_vertex()
-        lines_data.get_line_nums()
-        lines_data.group_within_line()
+#         # Implements the line reader module
+#         lines_data = LineReader(doc_parser.token_df)
+#         lines_data.add_first_vertex()
+#         lines_data.get_line_nums()
+#         lines_data.group_within_line()
 
-        # Implement the table identifier module
-        structs_data = TableIdentifier(lines_data.data)
-        structs_data.detect_table()
+#         # Implement the table identifier module
+#         structs_data = TableIdentifier(lines_data.data)
+#         structs_data.detect_table()
 
-        # Implement the table fitter module
-        table_data = TableFitter(structs_data.data)
-        table_data.clean_values()
-        table_data.get_first_col()
-        table_data.get_header_row()
-        table_data.get_other_columns()
-        table_data.remove_excess_lines()
+#         # Implement the table fitter module
+#         table_data = TableFitter(structs_data.data)
+#         table_data.clean_values()
+#         table_data.get_first_col()
+#         table_data.get_header_row()
+#         table_data.get_other_columns()
+#         table_data.remove_excess_lines()
 
-        # Create an annotated pdf
-        annotator = PDFAnnotator(sheets[i], gcp=True)
-        annotator.pdf_to_png()
-        annotator.annotate_table("ons-companies-house-dev-scraped-pdf-data/doc_ai_outputs/dev_visual_outputs/" + names[i]+"_table.jpg",
-                                 table_data)
+#         # Create an annotated pdf
+#         annotator = PDFAnnotator(sheets[i], gcp=True)
+#         annotator.pdf_to_png()
+#         annotator.annotate_table("ons-companies-house-dev-scraped-pdf-data/doc_ai_outputs/dev_visual_outputs/" + names[i]+"_table.jpg",
+#                                  table_data)
 
-        to_df = Table2Df(table_data, fs)
-        to_df.get_final_df()
-        df = to_df.df
-        df.to_csv("gs://ons-companies-house-dev-scraped-pdf-data/doc_ai_outputs/processed_csv_outputs/"+names[i]+"_final_df.csv",
-        index=False)        
-        fs.setxattrs("gs://ons-companies-house-dev-scraped-pdf-data/doc_ai_outputs/processed_csv_outputs/"+names[i]+"_final_df.csv",
-        content_type = "text/csv")
+#         to_df = Table2Df(table_data, fs)
+#         to_df.get_final_df()
+#         df = to_df.df
+#         df.to_csv("gs://ons-companies-house-dev-scraped-pdf-data/doc_ai_outputs/processed_csv_outputs/"+names[i]+"_final_df.csv",
+#         index=False)        
+#         fs.setxattrs("gs://ons-companies-house-dev-scraped-pdf-data/doc_ai_outputs/processed_csv_outputs/"+names[i]+"_final_df.csv",
+#         content_type = "text/csv")
 
-    except:
-        fails.append(names[i])
+#     except:
+#         fails.append(names[i])
 
 # df = pd.read_csv("gs://ons-companies-house-dev-scraped-pdf-data/doc_ai_outputs/doc_ai_token_dfs/04391694_active_bs_tokens.csv")
 #
-# doc_parser = DocParser(fs)
-# doc_parser.parse_document("ons-companies-house-dev-scraped-pdf-data/doc_ai_outputs/bs_pdfs/diageo_bs.pdf",
-#                           "/home/dylan_purches/keys/data_key.json",
-#                           "ons-companies-house-dev")
-# doc_parser.tokens_to_df()
-# # Implements the line reader module
-# lines_data = LineReader(doc_parser.token_df)
-# lines_data.add_first_vertex()
-# lines_data.get_line_nums()
-# lines_data.group_within_line()
+doc_parser = DocParser(fs)
+doc_parser.parse_document("ons-companies-house-dev-scraped-pdf-data/doc_ai_outputs/bs_pdfs/bp_bs.pdf",
+                          "/home/dylan_purches/keys/data_key.json",
+                          "ons-companies-house-dev")
+doc_parser.tokens_to_df()
+# Implements the line reader module
+lines_data = LineReader(doc_parser.token_df)
+lines_data.add_first_vertex()
+lines_data.get_line_nums()
+lines_data.group_within_line()
 
-# # Implement the table identifier module
-# structs_data = TableIdentifier(lines_data.data)
-# structs_data.detect_table()
+# Implement the table identifier module
+structs_data = TableIdentifier(lines_data.data)
+structs_data.detect_table()
 
-# # Implement the table fitter module
+# Implement the table fitter module
 # table_data = TableFitter(structs_data.data)
 # table_data.clean_values()
 # table_data.get_first_col()
@@ -86,7 +86,7 @@ for i in range(len(sheets)):
 # table_data.remove_excess_lines()
 
 # to_df = Table2Df(table_data, fs)
-# x = to_df.headers_to_strings(to_df.table.header_groups)
+# to_df.headers_to_strings(to_df.table.header_groups)
 
 # # Create an annotated pdf
 # annotator = PDFAnnotator("ons-companies-house-dev-scraped-pdf-data/doc_ai_outputs/bs_pdfs/"
