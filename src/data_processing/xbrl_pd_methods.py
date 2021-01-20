@@ -256,7 +256,10 @@ class XbrlExtraction:
             name = output_folder + "/" + folder_year + "-"\
                    + folder_month + "_xbrl_data.csv"
             dataframe.to_csv("gs://"+name, index=False, header=True)
-            self.fs.setxattrs(name, content_type="text/csv")
+            try:
+                self.fs.setxattrs(name, content_type="text/csv")
+            except:
+                print("couldn't add content_type for "+name)
         else:
             print("I need a CSV for now...")
 

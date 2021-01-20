@@ -705,7 +705,7 @@ class XbrlParser:
         
         # Here you can splice/truncate the number of files you want to process
         # for testing
-        # files = files[0:1000]
+        # files = files[0:90]
 
         # TO BE COMMENTED OUT AFTER TESTING
         print(folder_month, folder_year)
@@ -821,20 +821,23 @@ class XbrlParser:
 
         # For every file
         for file in list_of_files:
-            COUNT += 1
+            try:
+                COUNT += 1
 
-            # Read the file and parse
-            doc = self.process_account(file)
+                # Read the file and parse
+                doc = self.process_account(file)
 
-            # flatten the elements dict into single dict
-            doc['elements'] = XbrlParser.flatten_dict(doc['elements'])
+                # flatten the elements dict into single dict
+                doc['elements'] = XbrlParser.flatten_dict(doc['elements'])
 
-            # append results to table
-            results.append(doc)
+                # append results to table
+                results.append(doc)
 
-            XbrlExtraction.progressBar("XBRL Accounts Parsed", COUNT,
-                                       len(list_of_files), bar_length=50,
-                                       width=20)
+                XbrlExtraction.progressBar("XBRL Accounts Parsed", COUNT,
+                                           len(list_of_files), bar_length=50,
+                                           width=20)
+            except:
+                print(file, "has failed to parse")
 
         print(
             "Average time to process an XBRL file: \x1b[31m{:0f}\x1b[0m".format(
