@@ -503,8 +503,6 @@ class XbrlParser:
             # Remove unwanted characters
             unwanted_chars = ['  ', '"', '\n']
             #print(df_element_export.value.str, flush=True)
-            df_element_export["value"] = df_element_export["value"]\
-                .astype('str')
             for char in unwanted_chars:
                 df_element_export["value"] = df_element_export["value"].str\
                     .replace(char, '')
@@ -545,7 +543,8 @@ class XbrlParser:
             header=0,
             sep=",",
             lineterminator="\n",
-            quotechar='"')
+            quotechar='"',
+            dtype='str')
         os.remove(temp_exports + "/df_elements.csv")
 
         return df_elements

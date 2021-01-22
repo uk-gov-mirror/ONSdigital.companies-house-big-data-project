@@ -124,9 +124,7 @@ def main():
     print("-" * 50)
 
     os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = key
-    fs = gcsfs.GCSFileSystem(project=bucket, token=key, cache_timeout=1)
-    start_time = time.time()
-    timing_file = open("/home/dylan_purches/Documents/v2_timing_logs.txt", "a")
+    fs = gcsfs.GCSFileSystem(project=bucket, token=key, cache_timeout=0)
     # Execute module xbrl_web_scraper
     if xbrl_web_scraper == str(True):
         print("XBRL web scraper running...")
@@ -154,8 +152,6 @@ def main():
         unpacker.extract_compressed_files(unpacker_source_dir,
                                           unpacker_destination_dir)
 
-    timing_file.write("Unpacker module took: %s minutes"%((time.time()-start_time)/60))
-    unpacker_finish = time.time()
     # Execute module xbrl_parser
     if xbrl_parser == str(True):
         print("XBRL parser running...")
@@ -165,11 +161,7 @@ def main():
                                xbrl_unpacked_data,
                                xbrl_parser_custom_input,
                                xbrl_processed_csv,
-                               2)
-
-    timing_file.write("Parsing module took: %s minutes"%((time.time()-unpacker_finish)/60))
-    timing_file.write("Whole_pipeline took: %s minutes"%((time.time()-start_time)/60))
-    timing_file.close()
+                               3)
 
     # Execute module xbrl_csv_cleaner
     if xbrl_csv_cleaner == str(True):
