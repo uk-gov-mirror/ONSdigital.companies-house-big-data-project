@@ -2,9 +2,11 @@ import pandas as pd
 import numpy as np
 import statistics as stats
 import regex
+import gcsfs
 
 from line_reader import LineReader
 from table_identifier import TableIdentifier
+from doc_ai_parser import DocParser
 
 
 class TableFitter(TableIdentifier):
@@ -263,15 +265,64 @@ class TableFitter(TableIdentifier):
         for i in range(len(self.header_coords)):
             self.columns.append([])
 
+        exceptions = []
+
         # For each element not in a column add the index to a column
         for i in other_cols_df.index:
             col_to_fit = \
                 self.find_closest_col(other_cols_df, self.header_coords, i)
-            self.data.loc[i, "column"] = int(col_to_fit)
-            self.columns[col_to_fit].append(i)
+            if col_to_fit != None:
+                self.data.loc[i, "column"] = int(col_to_fit)
+                self.columns[col_to_fit].append(i)
+            else:
+                exceptions.append(i)
+        print(exceptions)
+        exception_aligned = TableFitter.group_header_points(other_cols_df, exceptions)
+        return(exceptions)
+
+    def get_other_columns_v2(self):
+        """
+        Function to group the indices of columns other than the first, without
+        using the detected header as a reference.
+
+        Arguments:
+            None
+        Returns:
+            None
+        Raises:
+            None
+        """
+
+        # Don't consider elements in the first column
+        other_cols_df = self.data.drop(self.columns[0]).sort_values(["line_num", "first_x_vertex"], ascending=[True, True])
+
+        columns_data = []
+
+        for index, row in other_cols_df.iterrows():
+            v1, v2 = eval(row["normed_vertices"])[3][0], eval(row["normed_vertices"])[2][0]
+            for col in columns_data:
+                if (v2 > col["xs"][0]) & (v1 < col["xs"][1]):
+                    col["indices"].append(index)
+                    col["xs"] = [min(v1, col["xs"][0]), max(v2, col["xs"][1])]
+                    break
+            else:
+                columns_data.append({"xs":[v1, v2], "indices":[index]})
+        if len(columns_data) > len(self.header_groups):
+            columns_data = sorted(columns_data, key = lambda k: len(k["indices"]))[(len(columns_data) - len(self.header_groups)):]
+        elif len(columns_data) < len(self.header_groups):
+            print("Not enough columns have been detected")
+            return 0
+
+        columns_data = sorted(columns_data, key=lambda k: k["xs"][0])
+        self.columns += [col["indices"] for col in columns_data]
+
+        for i, col in enumerate(self.columns):
+            self.data.loc[col, "column"] = i
+
+
         
     @staticmethod
-    def find_closest_col(df, columns, index):
+    def find_closest_col(df, columns, index, const=4):
         """
         Finds which column a given element (index) should be assigned to by
         finding which header element it is closest to.
@@ -297,8 +348,13 @@ class TableFitter(TableIdentifier):
 
         # Find the index of the one with the smallest distance (+1 since can't
         # be the first column
-        fitted_col = dists.index(min(dists)) + 1
-        return fitted_col
+        fitted_col = dists.index(min(dists))
+
+        if dists[fitted_col] <= const*(eval(df.loc[index, "normed_vertices"])[3][1]
+                          - eval(df.loc[index, "normed_vertices"])[0][1]):
+            return fitted_col
+        else:
+            return None
 
     @staticmethod
     def group_header_points(df, header_indices):
@@ -346,3 +402,30 @@ class TableFitter(TableIdentifier):
             new_cols.append([i for i in col if self.data.loc[i,"line_num"]>= min_line])
         self.data = self.data.drop([i for i in self.data.index if self.data.loc[i,"line_num"]< min_line])
         self.columns = new_cols
+
+if __name__ == "__main__":
+    fs = gcsfs.GCSFileSystem("ons-companies-house-dev", token="/home/dylan_purches/keys/data_key.json")
+
+    doc_parser = DocParser(fs)
+    doc_parser.parse_document("ons-companies-house-dev-scraped-pdf-data/doc_ai_outputs/bs_pdfs/04677900_bs.pdf",
+                            "/home/dylan_purches/keys/data_key.json",
+                            "ons-companies-house-dev")
+    doc_parser.tokens_to_df()
+    # Implements the line reader module
+    lines_data = LineReader(doc_parser.token_df)
+    lines_data.add_first_vertex()
+    lines_data.get_line_nums()
+    lines_data.group_within_line()
+    lines_data.add_first_vertex()
+
+    # Implement the table identifier module
+    structs_data = TableIdentifier(lines_data.data)
+    structs_data.detect_table()
+
+    # Implement the table fitter module
+    table_data = TableFitter(structs_data.data)
+    table_data.clean_values()
+    table_data.get_first_col()
+    table_data.get_header_row()
+    table_data.remove_excess_lines()
+    table_data.get_other_columns()

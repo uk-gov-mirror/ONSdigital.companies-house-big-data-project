@@ -11,6 +11,7 @@ class Table2Df:
         self.data = table_fit.data
         self.table_data = self.table.data.drop(self.table.header_indices)
 
+
     def reconstruct_table(self):
         """
         Takes the information stored in the table_fit object and reconstitutes it into
@@ -107,6 +108,46 @@ class Table2Df:
                 else:
                     header_data.loc[i, "date"] = self.data.loc[date_col[0], "value"]
                     header_data.loc[i, "unit"] = self.data.loc[unit_col[0], "value"]
+        return header_data
+
+
+    def get_info_headers_v2(self, years = range(1999,2020)):
+        """
+        Creates a DataFrame of information of column info (meta data). For each column in
+        our fitted table object, we record the corresponding date and units (currency).
+
+        Arguments:
+            years:          List of possible years to search for.
+        Returns:
+            header_data:    pandas DataFrame of column number with their relevant date and units
+                            as other variables
+        Raises:
+            None
+        """
+        self.data_cols = [i+1 for i,g in enumerate(self.table.header_groups) if self.table.notes_row[0] not in g]
+        data_cols = [i+1 for i,g in enumerate(self.table.header_groups) if self.table.notes_row[0] not in g]
+
+        currencies = [self.data.loc[i, "value"] for i in self.table.header_indices if
+                            len(regex.findall(r"\p{Sc}", self.data.loc[i, "value"]))]
+        currency = max(set(currencies), key=currencies.count)
+        
+        # As above but for where we see a year
+        dates = []
+        for i in self.table.header_indices:
+            contains_year = any([str(y) in self.data.loc[i, "value"] for y in years])
+            if contains_year:
+                dates.append(self.data.loc[i, "value"])
+        self.dates = dates
+
+        if len(data_cols)%len(dates) != 0:
+            raise(TypeError("Cannot logically fit dates to columns"))
+        else:
+            header_dict = {"column": data_cols, "date":[dates[i//(len(data_cols)//len(dates))] for i in range(len(data_cols))], 
+                        "unit":[currency]*len(data_cols)}
+
+
+        # Create an empty DataFrame to add information to
+        header_data = pd.DataFrame.from_dict(header_dict)
         return header_data
 
     def get_final_df(self):
