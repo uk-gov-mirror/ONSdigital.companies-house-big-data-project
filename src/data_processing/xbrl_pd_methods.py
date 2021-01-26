@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 import time
+import csv
 
 import sys
 import gcsfs
@@ -255,7 +256,9 @@ class XbrlExtraction:
         if file_type == "csv":
             name = output_folder + "/" + folder_year + "-"\
                    + folder_month + "_xbrl_data.csv"
-            dataframe.to_csv("gs://"+name, index=False, header=True)
+            dataframe.to_csv("gs://"+name, index=False, header=True, sep=",",
+                                line_terminator='\n', quotechar='"',
+                                quoting=csv.QUOTE_NONNUMERIC)
             try:
                 self.fs.setxattrs(name, content_type="text/csv")
             except:

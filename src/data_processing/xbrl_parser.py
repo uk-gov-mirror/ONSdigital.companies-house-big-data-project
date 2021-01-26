@@ -720,13 +720,19 @@ class XbrlParser:
         # Finally, build a table of all variables from all example (digital)
         # documents splitting the load between cpu cores = num_processes
         # This can take a while (hopefully not anymore!!!)
-        r = pool.map(self.build_month_table, files)
+        r, fails = zip(*pool.map(self.build_month_table, files))
 
         pool.close()
         pool.join()
+
+        print(fails)
         # combine resultant list of lists
         print("Combining lists...")
         r = [item for sublist in r for item in sublist]
+        fails = [item for sublist in fails for item in sublist]
+        print(self.build_month_table(fails, True)[0])
+        r+=self.build_month_table(fails, True)[0]
+
         print("Flattening data....")
         # combine data and convert into dataframe
         results = self.flatten_data(r)
@@ -796,7 +802,7 @@ class XbrlParser:
             print("Parsing " + directory + "...")
             self.parse_directory(directory, processed_files, num_cores)
 
-    def build_month_table(self, list_of_files):
+    def build_month_table(self, list_of_files, print_fails=False):
         """
         Function which parses, sequentially, a list of xbrl/ html files,
         converting each parsed file into a dictionary and appending to a list.
@@ -815,6 +821,7 @@ class XbrlParser:
 
         # Empty table awaiting results
         results = []
+        fails = []
 
         COUNT = 0
 
@@ -836,10 +843,12 @@ class XbrlParser:
                                            len(list_of_files), bar_length=50,
                                            width=20)
             except:
-                print(file, "has failed to parse")
+                if print_fails:
+                    print(file, "has failed to parse")
+                fails.append(file)
 
         print(
             "Average time to process an XBRL file: \x1b[31m{:0f}\x1b[0m".format(
                 (time.time() - process_start) / 60, 2), "minutes")
 
-        return results
+        return results, fails

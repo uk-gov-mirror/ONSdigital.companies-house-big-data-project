@@ -143,8 +143,8 @@ if __name__ == "__main__":
     pd.set_option('display.max_colwidth', None)
     pd.set_option('max_columns', None)
 
-    in_path = "gs://ons-companies-house-dev-test-parsed-csv-data/v2_parsed_data/2020-April_xbrl_data.csv"
-    out_path = "gs://ons-companies-house-dev-test-parsed-csv-data/v2_parsed_data/2020-April_xbrl_data_cleaned_v2.csv"
+    in_path = "gs://ons-companies-house-dev-test-parsed-csv-data/v2_parsed_data/2015-September_xbrl_data.csv"
+    out_path = "gs://ons-companies-house-dev-test-parsed-csv-data/v2_parsed_data/2015-September_xbrl_data_cleaned.csv"
 
     cleaner = XbrlCSVCleaner()
 

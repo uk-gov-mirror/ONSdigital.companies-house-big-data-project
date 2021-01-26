@@ -203,11 +203,12 @@ class DataProcessing:
                                 as zip_ref:
                             for contentfilename in zip_ref.namelist():
                                 contentfile = zip_ref.read(contentfilename)
-                                with self.fs.open(
-                                        directory + "/" + contentfilename,
-                                        'wb') as f:
-                                    f.write(contentfile)
                                 try:
+                                    with self.fs.open(
+                                            directory + "/" + contentfilename,
+                                            'wb') as f:
+                                        f.write(contentfile)
+
                                     self.fs.setxattrs(
                                         directory + "/" + contentfilename,
                                         content_type="text/"
