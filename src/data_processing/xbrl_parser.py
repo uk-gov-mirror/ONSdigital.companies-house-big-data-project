@@ -481,7 +481,7 @@ class XbrlParser:
         # for each set (elements) of parsed tags, appending result to list
         for i in range(T):
             # Turn each elements dict into a dataframe
-            df_element = pd.DataFrame.from_dict(doc2[i]['elements'])
+            df_element = pd.DataFrame.from_dict(doc2[i]['elements'], dtype="str")
 
             # Remove the 'sign' column if it is present
             try:
@@ -494,7 +494,7 @@ class XbrlParser:
 
             # Dump the "elements" entry in the doc dict
             doc2[i].pop('elements')
-            df_element_meta = pd.DataFrame(doc2[i], index =[0])
+            df_element_meta = pd.DataFrame(doc2[i], index =[0], dtype="str")
             df_element_meta['key'] = i
 
             # Merge the metadata with the elements
@@ -828,7 +828,23 @@ class XbrlParser:
         client = bigquery.Client()
 
         job_config = bigquery.LoadJobConfig(
-            write_disposition="WRITE_APPEND"
+            schema = [
+                bigquery.SchemaField("doc_companieshouseregisterednumber", bigquery.enums.SqlTypeNames.STRING),
+                bigquery.SchemaField("date", bigquery.enums.SqlTypeNames.DATE),
+                bigquery.SchemaField("parsed", bigquery.enums.SqlTypeNames.BOOLEAN),
+                bigquery.SchemaField("doc_balancesheetdate", bigquery.enums.SqlTypeNames.DATE),
+                bigquery.SchemaField("doc_upload_date", bigquery.enums.SqlTypeNames.TIMESTAMP),
+                bigquery.SchemaField("doc_standard_date", bigquery.enums.SqlTypeNames.DATE),
+                bigquery.SchemaField("name", bigquery.enums.SqlTypeNames.STRING),
+                bigquery.SchemaField("unit", bigquery.enums.SqlTypeNames.STRING),
+                bigquery.SchemaField("value", bigquery.enums.SqlTypeNames.STRING),
+                bigquery.SchemaField("doc_name", bigquery.enums.SqlTypeNames.STRING),
+                bigquery.SchemaField("doc_type", bigquery.enums.SqlTypeNames.STRING),
+                bigquery.SchemaField("arc_name", bigquery.enums.SqlTypeNames.STRING),
+                bigquery.SchemaField("doc_standard_type", bigquery.enums.SqlTypeNames.STRING),
+                bigquery.SchemaField("doc_standard_link", bigquery.enums.SqlTypeNames.STRING)
+            ],
+            write_disposition=bigquery.WriteDisposition.WRITE_APPEND
         )
 
         job = client.load_table_from_dataframe(
