@@ -83,7 +83,7 @@ class XbrlCSVCleaner:
         str_cols = str_cols + date_cols
 
         # import data
-        df = pd.read_csv(import_path, lineterminator="\n")
+        df = pd.read_csv(import_path, lineterminator="\n", dtype="str")
 
         # remove unwanted chars
         for char in unwanted_chars:
@@ -93,7 +93,9 @@ class XbrlCSVCleaner:
         df = df[wanted_cols]
 
         # cast columns
-        df = XbrlCSVCleaner.col_cast(df, str_cols, 'str')
+        # df = XbrlCSVCleaner.col_cast(df, str_cols, 'str')
+        df["value"] = df["value"] \
+            .astype('str')
         # df = col_cast(df, date_cols, 'datetime64[ns]')
 
         # export cleaned dataframe
@@ -103,7 +105,7 @@ class XbrlCSVCleaner:
         # numeric data
 
         print('Exporting cleaned dataframe to {}'.format(export_path))
-        df.to_csv(export_path, index=False, sep="\t", line_terminator='\n',
+        df.to_csv(export_path, index=False, sep=",", line_terminator='\n',
                   quotechar='"', quoting=csv.QUOTE_NONNUMERIC)
 
         return None
@@ -137,12 +139,13 @@ class XbrlCSVCleaner:
         return None
 
 if __name__ == "__main__":
+    import gcsfs
     pd.set_option('display.max_colwidth', None)
     pd.set_option('max_columns', None)
 
-    in_path = "/home/dylan_purches/Documents/xbrl_parsed_data/for_cleaning/"
-    out_path = "/home/dylan_purches/Documents/Data/cleaned_csvs/"
+    in_path = "gs://ons-companies-house-dev-test-parsed-csv-data/v2_parsed_data/2015-September_xbrl_data.csv"
+    out_path = "gs://ons-companies-house-dev-test-parsed-csv-data/v2_parsed_data/2015-September_xbrl_data_cleaned.csv"
 
     cleaner = XbrlCSVCleaner()
 
-    cleaner.clean_parsed_files(in_path, out_path)
+    df = cleaner.parsed_csv_clean(in_path, export_path=out_path)
