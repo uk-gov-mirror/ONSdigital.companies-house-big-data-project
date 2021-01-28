@@ -477,11 +477,13 @@ class XbrlParser:
         bq_string = "bq mk --table " + bq_export + " parsed_data_schema.txt"
         os.popen(bq_string).read()
 
+        client = bigquery.Client()
+
         # loop over each file and create a separate dataframe
         # for each set (elements) of parsed tags, appending result to list
         for i in range(T):
             # Turn each elements dict into a dataframe
-            df_element = pd.DataFrame.from_dict(doc2[i]['elements'], dtype="str")
+            df_element = pd.DataFrame.from_dict(doc2[i]['elements'])
 
             # Remove the 'sign' column if it is present
             try:
@@ -494,7 +496,7 @@ class XbrlParser:
 
             # Dump the "elements" entry in the doc dict
             doc2[i].pop('elements')
-            df_element_meta = pd.DataFrame(doc2[i], index =[0], dtype="str")
+            df_element_meta = pd.DataFrame(doc2[i], index =[0])
             df_element_meta['key'] = i
 
             # Merge the metadata with the elements
@@ -519,8 +521,24 @@ class XbrlParser:
                            'doc_standard_type',
                            'doc_standard_date', 'doc_standard_link', ]
             df_element_export = df_element_export[wanted_cols]
+            df_element_export = df_element_export.convert_dtypes()
 
-            XbrlParser.append_to_bq(df_element_export, bq_export)
+            df_element_export['doc_upload_date'] = pd.to_datetime(df_element_export['doc_upload_date'],
+                                                                  errors="coerce")
+            df_element_export['date'] \
+                = pd.to_datetime(df_element_export['date'],
+                                 format="%Y-%m-%d",
+                                 errors="coerce")
+            df_element_export['doc_balancesheetdate'] \
+                = pd.to_datetime(df_element_export['doc_balancesheetdate'],
+                                 format="%Y-%m-%d",
+                                 errors="coerce")
+            df_element_export['doc_standard_date'] \
+                = pd.to_datetime(df_element_export['doc_standard_date'],
+                                 format="%Y-%m-%d",
+                                 errors="coerce")
+
+            XbrlParser.append_to_bq(df_element_export, bq_export, client)
 
             # Print a progress update
             if i % 100 == 0:
@@ -824,26 +842,19 @@ class XbrlParser:
         return results, fails
 
     @staticmethod
-    def append_to_bq(df, table):
-        client = bigquery.Client()
+    def append_to_bq(df, table, client):
 
+        t0 = time.time()
         job_config = bigquery.LoadJobConfig(
-            schema = [
-                bigquery.SchemaField("doc_companieshouseregisterednumber", bigquery.enums.SqlTypeNames.STRING),
-                bigquery.SchemaField("date", bigquery.enums.SqlTypeNames.DATE),
-                bigquery.SchemaField("parsed", bigquery.enums.SqlTypeNames.BOOLEAN),
-                bigquery.SchemaField("doc_balancesheetdate", bigquery.enums.SqlTypeNames.DATE),
-                bigquery.SchemaField("doc_upload_date", bigquery.enums.SqlTypeNames.TIMESTAMP),
-                bigquery.SchemaField("doc_standard_date", bigquery.enums.SqlTypeNames.DATE),
-                bigquery.SchemaField("name", bigquery.enums.SqlTypeNames.STRING),
-                bigquery.SchemaField("unit", bigquery.enums.SqlTypeNames.STRING),
-                bigquery.SchemaField("value", bigquery.enums.SqlTypeNames.STRING),
-                bigquery.SchemaField("doc_name", bigquery.enums.SqlTypeNames.STRING),
-                bigquery.SchemaField("doc_type", bigquery.enums.SqlTypeNames.STRING),
-                bigquery.SchemaField("arc_name", bigquery.enums.SqlTypeNames.STRING),
-                bigquery.SchemaField("doc_standard_type", bigquery.enums.SqlTypeNames.STRING),
-                bigquery.SchemaField("doc_standard_link", bigquery.enums.SqlTypeNames.STRING)
-            ],
+            schema = [bigquery.SchemaField("date", bigquery.enums.SqlTypeNames.DATE),
+                      bigquery.SchemaField("doc_upload_date", bigquery.enums.SqlTypeNames.TIMESTAMP),
+                      bigquery.SchemaField("parsed", bigquery.enums.SqlTypeNames.BOOLEAN),
+                      bigquery.SchemaField("doc_balancesheetdate",
+                                           bigquery.enums.SqlTypeNames.DATE),
+                      bigquery.SchemaField("doc_standard_date",
+                                           bigquery.enums.SqlTypeNames.DATE),
+                      ],
+
             write_disposition=bigquery.WriteDisposition.WRITE_APPEND
         )
 
@@ -851,3 +862,4 @@ class XbrlParser:
             df, table, job_config=job_config
             )  # Make an API request.
         job.result()  # Wait for the job to complete.
+        print("This job took {secs} seconds".format(secs = time.time() - t0))
