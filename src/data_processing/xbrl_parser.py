@@ -510,6 +510,7 @@ class XbrlParser:
         # for each set (elements) of parsed tags, appending result to list
         for i in range(T):
             # Turn each elements dict into a dataframe
+            print('DOC2 I',doc2[i])
             df_element_export = pd.DataFrame.from_dict(doc2[i])
 
             # Remove the 'sign' column if it is present
@@ -727,7 +728,7 @@ class XbrlParser:
         
         # Here you can splice/truncate the number of files you want to process
         # for testing
-        #files = files[0:1000]
+        files = files[0:10]
 
         # TO BE COMMENTED OUT AFTER TESTING
         print(folder_month, folder_year)
@@ -852,7 +853,7 @@ class XbrlParser:
             doc = XbrlParser.process_account(file)
 
             # flatten the elements dict into single dict
-            doc['elements'] = XbrlParser.flatten_dict(doc['elements'])
+            #doc['elements'] = XbrlParser.flatten_dict(doc['elements'])
 
             # append results to table
             results.append(doc)
