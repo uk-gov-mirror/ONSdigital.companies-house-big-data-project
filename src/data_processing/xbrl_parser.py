@@ -247,7 +247,7 @@ class XbrlParser:
         return element_dict
 
     @staticmethod
-    def parse_elements(element_set, soup):
+    def parse_elements(soup):
         """
         For a set of discovered elements within a document, try to parse
         them. Only keep valid results (test is whether field "name" exists).
@@ -263,9 +263,10 @@ class XbrlParser:
         """
         element_dict = {'name': [], 'value': [], 'unit': [],
                          'date': [], 'sign': []}
-
+        element_set = soup.find_all()
         for i,element in enumerate(element_set):
             if "contextref" not in element.attrs:
+                print('NOT WORKING!!!!!!!!!!!!!')
                 return {}
 
             # Basic name and value
@@ -300,7 +301,7 @@ class XbrlParser:
                     element_dict['value'][i] = 0.0 - element_dict['value'][i]
             except:
                 pass
-
+        print('ELEMENT_DICT',element_dict)
         return element_dict
 
     @staticmethod
@@ -437,11 +438,7 @@ class XbrlParser:
         # now needed though.  The rest will be removed after testing this
         # but should not affect execution speed.
         try:
-            element_set = soup.find_all()
-            elements = XbrlParser.parse_elements(element_set, soup)
-            if len(elements) <= 5:
-                raise Exception("Elements should be gte 5, was {}".
-                                format(len(elements)))
+            elements = XbrlParser.parse_elements(soup)
         except:
             # if fails parsing create dummy entry elements so entry still
             # exists in dictionary
@@ -623,7 +620,7 @@ class XbrlParser:
 
         # Fetch all the marked elements of the document
         try:
-            doc.upgrade(XbrlParser.scrape_elements(soup, filepath))
+            doc.update(XbrlParser.scrape_elements(soup, filepath))
         except Exception as e:
             doc['parsed'] = False
             doc['Error'] = e
