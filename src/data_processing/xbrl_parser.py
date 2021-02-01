@@ -247,7 +247,7 @@ class XbrlParser:
         return element_dict
 
     @staticmethod
-    def parse_elements(soup):
+    def parse_elements(element_set, soup):
         """
         For a set of discovered elements within a document, try to parse
         them. Only keep valid results (test is whether field "name" exists).
@@ -263,29 +263,29 @@ class XbrlParser:
         """
         element_dict = {'name': [], 'value': [], 'unit': [],
                          'date': [], 'sign': []}
-        element_set = soup.find_all()
-        for i,element in enumerate(element_set):
-            if "contextref" not in element.attrs:
+        for i, each in enumerate(element_set):
+            print("ITER STUFF", i)
+            if "contextref" not in each.attrs:
                 print('NOT WORKING!!!!!!!!!!!!!')
                 return {}
 
             # Basic name and value
             try:
                 # Method for XBRLi docs first
-                element_dict['name'].append(element.attrs['name'].lower().split(":")[-1])
+                element_dict['name'].append(each.attrs['name'].lower().split(":")[-1])
             except:
                 # Method for XBRL docs second
-                element_dict['name'].append(element.name.lower().split(":")[-1])
+                element_dict['name'].append(each.name.lower().split(":")[-1])
 
-            element_dict['value'].append(element.get_text())
-            element_dict['unit'].append(XbrlParser.retrieve_unit(soup, element))
-            element_dict['date'].append(XbrlParser.retrieve_date(soup, element))
+            element_dict['value'].append(each.get_text())
+            element_dict['unit'].append(XbrlParser.retrieve_unit(soup, each))
+            element_dict['date'].append(XbrlParser.retrieve_date(soup, each))
 
             # If there's no value retrieved, try raiding the associated context
             # data
             if element_dict['value'][i] == "":
                 element_dict['value'][i] = XbrlParser.retrieve_from_context(
-                    soup, element.attrs['contextref'])
+                    soup, each.attrs['contextref'])
 
             # If the value has a defined unit (eg a currency) convert to numeric
             if element_dict['unit'][i] != "NA":
@@ -294,7 +294,7 @@ class XbrlParser:
 
             # Retrieve sign of element if exists
             try:
-                element_dict['sign'].append(element.attrs['sign'])
+                element_dict['sign'].append(each.attrs['sign'])
 
                 # if it's negative, convert the value then and there
                 if element_dict['sign'][i].strip() == "-":
@@ -438,7 +438,8 @@ class XbrlParser:
         # now needed though.  The rest will be removed after testing this
         # but should not affect execution speed.
         try:
-            elements = XbrlParser.parse_elements(soup)
+            element_set = soup.find_all()
+            elements = XbrlParser.parse_elements(element_set, soup)
         except:
             # if fails parsing create dummy entry elements so entry still
             # exists in dictionary
