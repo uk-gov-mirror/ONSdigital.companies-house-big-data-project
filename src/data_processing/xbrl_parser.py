@@ -262,12 +262,11 @@ class XbrlParser:
             None
         """
         element_dict = {'name': [], 'value': [], 'unit': [],
-                         'date': [], 'sign': []}
-        for i, each in enumerate(element_set):
-            print("ITER STUFF", i)
+                         'date': []}
+        i = 0
+        for each in element_set:
             if "contextref" not in each.attrs:
-                print('NOT WORKING!!!!!!!!!!!!!')
-                return {}
+                continue
 
             # Basic name and value
             try:
@@ -294,14 +293,15 @@ class XbrlParser:
 
             # Retrieve sign of element if exists
             try:
-                element_dict['sign'].append(each.attrs['sign'])
+                sign = each.attrs['sign']
 
                 # if it's negative, convert the value then and there
-                if element_dict['sign'][i].strip() == "-":
+                if sign.strip() == "-":
                     element_dict['value'][i] = 0.0 - element_dict['value'][i]
             except:
                 pass
-        print('ELEMENT_DICT',element_dict)
+
+            i+=1
         return element_dict
 
     @staticmethod
@@ -446,7 +446,7 @@ class XbrlParser:
             elements = {'name': 'NA', 'value': 'NA', 'unit': 'NA',
                          'date': 'NA', 'sign': 'NA'}
             pass
-        
+
         return elements
 
     @staticmethod
@@ -508,7 +508,6 @@ class XbrlParser:
         # for each set (elements) of parsed tags, appending result to list
         for i in range(T):
             # Turn each elements dict into a dataframe
-            print('DOC2 I',doc2[i])
             df_element_export = pd.DataFrame.from_dict(doc2[i])
 
             # Remove the 'sign' column if it is present
@@ -726,7 +725,7 @@ class XbrlParser:
         
         # Here you can splice/truncate the number of files you want to process
         # for testing
-        files = files[0:10]
+        files = files[0:1000]
 
         # TO BE COMMENTED OUT AFTER TESTING
         print(folder_month, folder_year)

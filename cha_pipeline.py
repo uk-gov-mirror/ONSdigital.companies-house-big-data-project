@@ -15,6 +15,8 @@ import re
 import numpy as np
 import pandas as pd
 import importlib
+import googlecloudprofiler
+
 
 from datetime import datetime
 from dateutil import parser
@@ -119,6 +121,18 @@ from src.data_processing.xbrl_csv_cleaner import XbrlCSVCleaner
 def main():
     print("-" * 50)
 
+    try:
+        googlecloudprofiler.start(
+            service='xbrl-pipeline-profiler',
+            service_version='1.0.3',
+            # verbose is the logging level. 0-error, 1-warning, 2-info,
+            # 3-debug. It defaults to 0 (error) if not set.
+            verbose=3,
+            # project_id must be set if not running on GCP.
+            project_id='ons-companies-house-dev',
+        )
+    except (ValueError, NotImplementedError) as exc:
+        print(exc)  # Handle errors here
     # Execute module xbrl_web_scraper
     if xbrl_web_scraper == str(True):
         print("XBRL web scraper running...")
@@ -154,7 +168,7 @@ def main():
                                xbrl_unpacked_data,
                                xbrl_parser_custom_input,
                                xbrl_processed_csv,
-                               2)
+                               3)
 
     # Execute module xbrl_csv_cleaner
     if xbrl_csv_cleaner == str(True):
