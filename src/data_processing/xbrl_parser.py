@@ -3,6 +3,7 @@ from datetime import datetime
 from dateutil import parser
 from src.data_processing.xbrl_pd_methods import XbrlExtraction
 from google.cloud import bigquery
+from google.oauth2 import service_account
 import pandas as pd
 import os
 import csv
@@ -477,6 +478,7 @@ class XbrlParser:
         bq_string = "bq mk --table " + bq_export + " parsed_data_schema.txt"
         os.popen(bq_string).read()
 
+        bq_client = bigquery.Client()
         # loop over each file and create a separate dataframe
         # for each set (elements) of parsed tags, appending result to list
         for i in range(T):
@@ -851,3 +853,10 @@ class XbrlParser:
             df, table, job_config=job_config
             )  # Make an API request.
         job.result()  # Wait for the job to complete.
+
+    @staticmethod
+    def mk_bq_table(bq_location, client, schema="parsed_data_schema.txt"):
+
+        client.delete_table(bq_location, not_found_ok=True)
+        bq_string = "bq mk --table " + bq_location + " " + schema
+        os.popen(bq_string).read()
