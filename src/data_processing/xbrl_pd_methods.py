@@ -48,7 +48,8 @@ class XbrlExtraction:
         return files, month, year
 
     @staticmethod
-    def progressBar(name, value, endvalue, bar_length=50, width=20):
+    def progressBar(name, value, endvalue, rows, batches,memory,uploading=False,
+                    bar_length=50, width=20):
         """
         Function that can be called upon if a progress bar needs to be
         displayed in the output to keep track of the progression of a process.
@@ -69,14 +70,21 @@ class XbrlExtraction:
         percent = float(value) / endvalue
         arrow = '-' * int(round(percent*bar_length) - 1) + '>'
         spaces = ' ' * (bar_length - len(arrow))
+        up_color = ""
+        if uploading:
+            up_color = "\033[1;31m"
         sys.stdout.write(
-            "\r{0: <{1}} : [{2}]{3}%   ({4} / {5})".format(
+            "\r{9}{0: <{1}} : [{2}]{3}%   ({4} / {5}) \033[1;36m ~~{6} rows uploaded in {7} batches~~ {8}% of memory used\033[0;0m".format(
                 name,
                 width,
                 arrow + spaces,
                 int(round(percent*100)),
                 value,
-                endvalue
+                endvalue,
+                rows,
+                batches,
+                memory,
+                up_color
             )
         )
         sys.stdout.flush()

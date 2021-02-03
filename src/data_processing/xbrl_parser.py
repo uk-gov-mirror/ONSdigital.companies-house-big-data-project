@@ -4,6 +4,7 @@ from dateutil import parser
 from src.data_processing.xbrl_pd_methods import XbrlExtraction
 from google.cloud import bigquery
 from google.oauth2 import service_account
+from functools import partial
 import pandas as pd
 import os
 import csv
@@ -15,6 +16,7 @@ import multiprocessing as mp
 import numpy as np
 import gcsfs
 import pytz
+import psutil
 
 
 
@@ -507,15 +509,13 @@ class XbrlParser:
         T = len(doc2)
         t0 = time.time()
 
-        bq_string = "bq mk --table " + bq_export + " parsed_data_schema.txt"
-        os.popen(bq_string).read()
-
-        bq_client = bigquery.Client()
         # loop over each file and create a separate dataframe
         # for each set (elements) of parsed tags, appending result to list
+
+        df_list = []
         for i in range(T):
             # Turn each elements dict into a dataframe
-            df_element_export = pd.DataFrame.from_dict(doc2[i], dtype='str')
+            df_element_export = pd.DataFrame.from_dict(doc2[i])
 
             # Remove the 'sign' column if it is present
             try:
@@ -540,12 +540,32 @@ class XbrlParser:
                            'doc_standard_date', 'doc_standard_link', ]
 
             df_element_export = df_element_export[wanted_cols]
+            df_element_export = df_element_export.convert_dtypes()
 
-            XbrlParser.append_to_bq(df_element_export, bq_export)
+            df_element_export['doc_upload_date'] = pd.to_datetime(
+                df_element_export['doc_upload_date'],
+                errors="coerce")
+            df_element_export['date'] \
+                = pd.to_datetime(df_element_export['date'],
+                                 format="%Y-%m-%d",
+                                 errors="coerce")
+            df_element_export['doc_balancesheetdate'] \
+                = pd.to_datetime(df_element_export['doc_balancesheetdate'],
+                                 format="%Y-%m-%d",
+                                 errors="coerce")
+            df_element_export['doc_standard_date'] \
+                = pd.to_datetime(df_element_export['doc_standard_date'],
+                                 format="%Y-%m-%d",
+                                 errors="coerce")
+            df_list.append(df_element_export)
+            # if i % 100 == 0:
+            #     print("%2.2f %% have been processed" % ((i / T) * 100))
 
-            # Print a progress update
-            if i % 100 == 0:
-                print("%2.2f %% have been processed"%((i/T)*100))
+        df_batch = pd.concat(df_list)
+        print("Batch df contains {} rows".format(df_batch.shape[0]))
+        XbrlParser.append_to_bq(df_batch, bq_export)
+
+
 
 
     def process_account(self, filepath):
@@ -703,7 +723,7 @@ class XbrlParser:
         
         # Here you can splice/truncate the number of files you want to process
         # for testing
-        #files = files[0:1000]
+        files = files[0:10000]
 
         # TO BE COMMENTED OUT AFTER TESTING
         print(folder_month, folder_year)
@@ -719,24 +739,27 @@ class XbrlParser:
         # Finally, build a table of all variables from all example (digital)
         # documents splitting the load between cpu cores = num_processes
         # This can take a while (hopefully not anymore!!!)
-        r, fails = zip(*pool.map(self.build_month_table, files))
+
+        table_export = processed_path + ".test_" + folder_month + "-" + folder_year
+
+        self.mk_bq_table(table_export)
+
+        build_month_table_partial = partial(self.build_month_table, table_export)
+        fails = pool.map(build_month_table_partial, files)
 
         pool.close()
         pool.join()
 
-        print(fails)
+        # print(fails)
         # combine resultant list of lists
-        print("Combining lists...")
-        r = [item for sublist in r for item in sublist]
+        # print("Combining lists...")
         fails = [item for sublist in fails for item in sublist]
-        print(self.build_month_table(fails, True)[0])
-        r+=self.build_month_table(fails, True)[0]
 
-        print("Flattening data....")
         # combine data and convert into dataframe
-        table_export = processed_path + ".test_" + folder_month + "-" + folder_year
 
-        self.flatten_data(r, table_export)
+        fails = self.build_month_table(table_export, files)
+        print(fails)
+        # self.flatten_data(r, table_export)
 
 
         # Output all unique tags to a txt file
@@ -793,7 +816,7 @@ class XbrlParser:
             print("Parsing " + directory + "...")
             self.parse_directory(directory, processed_files, num_cores)
 
-    def build_month_table(self, list_of_files, print_fails=False):
+    def build_month_table(self, bq_export,list_of_files):
         """
         Function which parses, sequentially, a list of xbrl/ html files,
         converting each parsed file into a dictionary and appending to a list.
@@ -814,35 +837,61 @@ class XbrlParser:
         results = []
         fails = []
 
-        COUNT = 0
+        start_memory = psutil.virtual_memory().percent
+        memory_threshold = start_memory + 0.1*(100-start_memory)
 
+        print("Start memory usuage: ", start_memory)
+        COUNT = 0
+        batch_count = 0
+        row_count = 0
         # For every file
         for file in list_of_files:
-            try:
+            # try:
                 COUNT += 1
-
                 # Read the file and parse
                 doc = self.process_account(file)
-
                 # flatten the elements dict into single dict
                 #doc['elements'] = XbrlParser.flatten_dict(doc['elements'])
 
                 # append results to table
+                # for i in range(len(results)**3):
                 results.append(doc)
 
+                if (psutil.virtual_memory().percent > memory_threshold) \
+                        or COUNT == len(list_of_files):
+                    XbrlExtraction.progressBar("XBRL Accounts Parsed", COUNT,
+                                               len(list_of_files), row_count,
+                                               batch_count,
+                                               psutil.virtual_memory().percent,
+                                               uploading=True,
+                                               bar_length=50,
+                                               width=20)
+                    XbrlParser.flatten_data(results, bq_export)
+                    row_count += len(results)
+                    batch_count += 1
+                    results = []
+                    while psutil.virtual_memory().percent > start_memory + 4:
+                        sys.stdout.write("\r Waiting, memory at {0}%".format(
+                            int(psutil.virtual_memory().percent)
+                        ))
+                        sys.stdout.flush()
+                        time.sleep(5)
                 XbrlExtraction.progressBar("XBRL Accounts Parsed", COUNT,
-                                           len(list_of_files), bar_length=50,
+                                           len(list_of_files), row_count,
+                                           batch_count,
+                                           psutil.virtual_memory().percent,
+                                           bar_length=50,
                                            width=20)
-            except:
-                if print_fails:
-                    print(file, "has failed to parse")
-                fails.append(file)
+            # except:
+            #     if print_fails:
+            #         print(file, "has failed to parse")
+            #     fails.append(file)
 
         print(
             "Average time to process an XBRL file: \x1b[31m{:0f}\x1b[0m".format(
                 (time.time() - process_start) / 60, 2), "minutes")
 
-        return results, fails
+        return fails
 
     @staticmethod
     def append_to_bq(df, table):
@@ -874,7 +923,8 @@ class XbrlParser:
         job.result()  # Wait for the job to complete.
 
     @staticmethod
-    def mk_bq_table(bq_location, client, schema="parsed_data_schema.txt"):
+    def mk_bq_table(bq_location, schema="parsed_data_schema.txt"):
+        client = bigquery.Client()
 
         client.delete_table(bq_location, not_found_ok=True)
         bq_string = "bq mk --table " + bq_location + " " + schema
