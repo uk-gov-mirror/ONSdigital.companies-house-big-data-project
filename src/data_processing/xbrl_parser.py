@@ -564,6 +564,7 @@ class XbrlParser:
         df_batch = pd.concat(df_list)
         print("Batch df contains {} rows".format(df_batch.shape[0]))
         XbrlParser.append_to_bq(df_batch, bq_export)
+        del df_list, df_batch
 
 
 
@@ -872,7 +873,7 @@ class XbrlParser:
                     results = []
                     while psutil.virtual_memory().percent > start_memory + 4:
                         sys.stdout.write("\r Waiting, memory at {0}%".format(
-                            int(psutil.virtual_memory().percent)
+                            psutil.virtual_memory().percent
                         ))
                         sys.stdout.flush()
                         time.sleep(5)
