@@ -29,7 +29,7 @@ class XbrlParser:
         """
         self.__init__
         self.fs = fs
-        
+
     # Table of variables and values that indicate consolidated status
     consolidation_var_table = {
         "includedinconsolidationsubsidiary": True,
@@ -215,7 +215,7 @@ class XbrlParser:
         if "contextref" not in element.attrs:
             return {}
 
-        element_dict = {}
+        element_dict = []
 
         # Basic name and value
         try:
@@ -267,13 +267,48 @@ class XbrlParser:
         Raises:
             None
         """
-        elements = []
+        element_dict = {'name': [], 'value': [], 'unit': [],
+                         'date': []}
+        i = 0
         for each in element_set:
-            element_dict = XbrlParser.parse_element(soup, each)
-            if 'name' in element_dict:
-                elements.append(element_dict)
+            if "contextref" not in each.attrs:
+                continue
 
-        return elements
+            # Basic name and value
+            try:
+                # Method for XBRLi docs first
+                element_dict['name'].append(each.attrs['name'].lower().split(":")[-1])
+            except:
+                # Method for XBRL docs second
+                element_dict['name'].append(each.name.lower().split(":")[-1])
+
+            element_dict['value'].append(each.get_text())
+            element_dict['unit'].append(XbrlParser.retrieve_unit(soup, each))
+            element_dict['date'].append(XbrlParser.retrieve_date(soup, each))
+
+            # If there's no value retrieved, try raiding the associated context
+            # data
+            if element_dict['value'][i] == "":
+                element_dict['value'][i] = XbrlParser.retrieve_from_context(
+                    soup, each.attrs['contextref'])
+
+            # If the value has a defined unit (eg a currency) convert to numeric
+            if element_dict['unit'][i] != "NA":
+                element_dict['value'][i] = XbrlParser.clean_value(
+                    element_dict['value'][i])
+
+            # Retrieve sign of element if exists
+            try:
+                sign = each.attrs['sign']
+
+                # if it's negative, convert the value then and there
+                if sign.strip() == "-":
+                    element_dict['value'][i] = 0.0 - element_dict['value'][i]
+            except:
+                pass
+
+            i+=1
+        return element_dict
 
     @staticmethod
     def summarise_by_sum(doc, variable_names):
@@ -411,16 +446,13 @@ class XbrlParser:
         try:
             element_set = soup.find_all()
             elements = XbrlParser.parse_elements(element_set, soup)
-            if len(elements) <= 5:
-                raise Exception("Elements should be gte 5, was {}".
-                                format(len(elements)))
         except:
             # if fails parsing create dummy entry elements so entry still
             # exists in dictionary
-            elements = [{'name': 'NA', 'value': 'NA', 'unit': 'NA',
-                         'date': 'NA', 'sign': 'NA'}]
+            elements = {'name': 'NA', 'value': 'NA', 'unit': 'NA',
+                         'date': 'NA', 'sign': 'NA'}
             pass
-        
+
         return elements
 
     @staticmethod
@@ -483,27 +515,13 @@ class XbrlParser:
         # for each set (elements) of parsed tags, appending result to list
         for i in range(T):
             # Turn each elements dict into a dataframe
-            df_element = pd.DataFrame.from_dict(doc2[i]['elements'], dtype="str")
+            df_element_export = pd.DataFrame.from_dict(doc2[i], dtype='str')
 
             # Remove the 'sign' column if it is present
             try:
-                df_element = df_element.drop('sign', axis=1)
+                df_element_export = df_element_export.drop('sign', axis=1)
             except:
                 None
-
-            # Add a key
-            df_element['key'] = i
-
-            # Dump the "elements" entry in the doc dict
-            doc2[i].pop('elements')
-            df_element_meta = pd.DataFrame(doc2[i], index =[0], dtype="str")
-            df_element_meta['key'] = i
-
-            # Merge the metadata with the elements
-            df_element_export = df_element_meta.merge(df_element, how='left',
-                                                      on='key')
-            del df_element_meta, df_element
-            df_element_export = df_element_export.drop('key', axis= 1)
 
             # Remove unwanted characters
             unwanted_chars = ['  ', '"', '\n']
@@ -520,6 +538,7 @@ class XbrlParser:
                            'doc_companieshouseregisterednumber',
                            'doc_standard_type',
                            'doc_standard_date', 'doc_standard_link', ]
+
             df_element_export = df_element_export[wanted_cols]
 
             XbrlParser.append_to_bq(df_element_export, bq_export)
@@ -581,7 +600,7 @@ class XbrlParser:
 
         # Fetch all the marked elements of the document
         try:
-            doc['elements'] = XbrlParser.scrape_elements(soup, filepath)
+            doc.update(XbrlParser.scrape_elements(soup, filepath))
         except Exception as e:
             doc['parsed'] = False
             doc['Error'] = e
@@ -684,7 +703,7 @@ class XbrlParser:
         
         # Here you can splice/truncate the number of files you want to process
         # for testing
-        files = files[0:100]
+        #files = files[0:1000]
 
         # TO BE COMMENTED OUT AFTER TESTING
         print(folder_month, folder_year)
@@ -806,7 +825,7 @@ class XbrlParser:
                 doc = self.process_account(file)
 
                 # flatten the elements dict into single dict
-                doc['elements'] = XbrlParser.flatten_dict(doc['elements'])
+                #doc['elements'] = XbrlParser.flatten_dict(doc['elements'])
 
                 # append results to table
                 results.append(doc)

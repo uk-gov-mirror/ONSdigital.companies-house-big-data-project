@@ -182,7 +182,6 @@ class DataProcessing:
                 # Filter out all files from 'files' that have already been
                 # extracted
                 files = [f for f in files if f not in list_extracted_files]
-                files = files[:3]
 
                 print("Extracting files...")
                 for file in files:
