@@ -724,7 +724,7 @@ class XbrlParser:
         
         # Here you can splice/truncate the number of files you want to process
         # for testing
-        files = files[0:10000]
+        # files = files[0:10000]
 
         # TO BE COMMENTED OUT AFTER TESTING
         print(folder_month, folder_year)
@@ -741,7 +741,7 @@ class XbrlParser:
         # documents splitting the load between cpu cores = num_processes
         # This can take a while (hopefully not anymore!!!)
 
-        table_export = processed_path + ".test_" + folder_month + "-" + folder_year
+        table_export = processed_path + ".chunky_" + folder_month + "-" + folder_year
 
         self.mk_bq_table(table_export)
 
@@ -839,7 +839,7 @@ class XbrlParser:
         fails = []
 
         start_memory = psutil.virtual_memory().percent
-        memory_threshold = start_memory + 0.1*(100-start_memory)
+        memory_threshold = start_memory + 0.25*(100-start_memory)
 
         print("Start memory usuage: ", start_memory)
         COUNT = 0
@@ -871,12 +871,16 @@ class XbrlParser:
                     row_count += len(results)
                     batch_count += 1
                     results = []
-                    while psutil.virtual_memory().percent > start_memory + 4:
-                        sys.stdout.write("\r Waiting, memory at {0}%".format(
-                            psutil.virtual_memory().percent
-                        ))
-                        sys.stdout.flush()
-                        time.sleep(5)
+                    # t = 0
+                    # while psutil.virtual_memory().percent > start_memory + 10:
+                    #     sys.stdout.write("\r Waiting, memory at {0}%".format(
+                    #         psutil.virtual_memory().percent
+                    #     ))
+                    #     sys.stdout.flush()
+                    #     t+=1
+                    #     time.sleep(6)
+                    #     if t > 100:
+                    #         break
                 XbrlExtraction.progressBar("XBRL Accounts Parsed", COUNT,
                                            len(list_of_files), row_count,
                                            batch_count,
