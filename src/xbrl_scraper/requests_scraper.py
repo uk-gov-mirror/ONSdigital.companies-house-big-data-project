@@ -65,11 +65,11 @@ class XbrlScraper:
                 if os.path.exists(filepath):
                 
                     print("Downloading " + link + "...")
-                    zip_file = requests.get(zip_url).content
+                    #zip_file = requests.get(zip_url).content
                     
                     print("Saving zip file " + link + "...")
-                    with open(filepath, 'wb') as fp:
-                        fp.write(zip_file)
+                    #with open(filepath, 'wb') as fp:
+                        #fp.write(zip_file)
 
                 else:
 

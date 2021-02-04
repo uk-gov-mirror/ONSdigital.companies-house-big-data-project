@@ -5,7 +5,7 @@ import math
 from random import shuffle
 import argparse
 import sys
-# import cv2
+#import cv2
 import configparser
 import multiprocessing as mp
 import concurrent.futures
@@ -107,16 +107,16 @@ filed_accounts_scraper = config.get('pdf_web_scraper_args',
 # Arguments for merge_xbrl_to_pdf_data
 
 from src.xbrl_scraper.requests_scraper import XbrlScraper
-# from src.data_processing.cst_data_processing import DataProcessing
-# from src.classifier.cst_classifier import Classifier
-# from src.performance_metrics.binary_classifier_metrics import (
-#     BinaryClassifierMetrics
-# )
-# from src.data_processing.xbrl_pd_methods import XbrlExtraction
-# from src.data_processing.xbrl_parser import XbrlParser
-# from src.validators.xbrl_validator_methods import XbrlValidatorMethods
-# from src.data_processing.combine_csvfiles import XbrlCsvAppender
-# from src.data_processing.xbrl_csv_cleaner import XbrlCSVCleaner
+from src.data_processing.cst_data_processing import DataProcessing
+from src.classifier.cst_classifier import Classifier
+from src.performance_metrics.binary_classifier_metrics import (
+    BinaryClassifierMetrics
+)
+from src.data_processing.xbrl_pd_methods import XbrlExtraction
+from src.data_processing.xbrl_parser import XbrlParser
+from src.validators.xbrl_validator_methods import XbrlValidatorMethods
+from src.data_processing.combine_csvfiles import XbrlCsvAppender
+from src.data_processing.xbrl_csv_cleaner import XbrlCSVCleaner
 
 def main():
     print("-" * 50)
@@ -136,47 +136,47 @@ def main():
         # cmdlinestr = "scrapy crawl xbrl_scraper"
         # popen(cmdlinestr).read()
 
-    # # Validate xbrl data
-    # if xbrl_web_scraper_validator == str(True):
-    #     validator = XbrlValidatorMethods()
-    #     print("Validating xbrl web scraped data...")
-    #     validator.validate_compressed_files(validator_scraped_dir)
+    # Validate xbrl data
+    if xbrl_web_scraper_validator == str(True):
+        validator = XbrlValidatorMethods()
+        print("Validating xbrl web scraped data...")
+        validator.validate_compressed_files(validator_scraped_dir)
 
-    # # Execute module xbrl_unpacker
-    # if xbrl_unpacker == str(True):
-    #     print("XBRL unpacker running...")
-    #     print("Unpacking zip files...")
-    #     print("Reading from directory: ", unpacker_source_dir)
-    #     print("Writing to directory: ", unpacker_destination_dir)
-    #     unpacker = DataProcessing()
-    #     unpacker.extract_compressed_files(unpacker_source_dir,
-    #                                       unpacker_destination_dir)
+    # Execute module xbrl_unpacker
+    if xbrl_unpacker == str(True):
+        print("XBRL unpacker running...")
+        print("Unpacking zip files...")
+        print("Reading from directory: ", unpacker_source_dir)
+        print("Writing to directory: ", unpacker_destination_dir)
+        unpacker = DataProcessing()
+        unpacker.extract_compressed_files(unpacker_source_dir,
+                                          unpacker_destination_dir)
 
-    # # Execute module xbrl_parser
-    # if xbrl_parser == str(True):
-    #     print("XBRL parser running...")
+    # Execute module xbrl_parser
+    if xbrl_parser == str(True):
+        print("XBRL parser running...")
 
-    #     XbrlParser.parse_files(xbrl_parser_process_quarter,
-    #                            xbrl_parser_process_year,
-    #                            xbrl_unpacked_data,
-    #                            xbrl_parser_custom_input,
-    #                            xbrl_processed_csv,
-    #                            3)
+        XbrlParser.parse_files(xbrl_parser_process_quarter,
+                               xbrl_parser_process_year,
+                               xbrl_unpacked_data,
+                               xbrl_parser_custom_input,
+                               xbrl_processed_csv,
+                               3)
 
-    # # Execute module xbrl_csv_cleaner
-    # if xbrl_csv_cleaner == str(True):
-    #     print("XBRL CSV cleaner running...")
-    #     XbrlCSVCleaner.clean_parsed_files(xbrl_csv_cleaner_indir,
-    #                                       xbrl_csv_cleaner_outdir)
+    # Execute module xbrl_csv_cleaner
+    if xbrl_csv_cleaner == str(True):
+        print("XBRL CSV cleaner running...")
+        XbrlCSVCleaner.clean_parsed_files(xbrl_csv_cleaner_indir,
+                                          xbrl_csv_cleaner_outdir)
 
-    # # Append XBRL data on an annual or quarterly basis
-    # if xbrl_file_appender == str(True):
-    #     appender = XbrlCsvAppender()
-    #     print("XBRL appender running...")
-    #     appender.merge_files_by_year(xbrl_file_appender_indir,
-    #                                  xbrl_file_appender_outdir,
-    #                                  xbrl_file_appender_year,
-    #                                  xbrl_file_appender_quarter)
+    # Append XBRL data on an annual or quarterly basis
+    if xbrl_file_appender == str(True):
+        appender = XbrlCsvAppender()
+        print("XBRL appender running...")
+        appender.merge_files_by_year(xbrl_file_appender_indir,
+                                     xbrl_file_appender_outdir,
+                                     xbrl_file_appender_year,
+                                     xbrl_file_appender_quarter)
     """
     # Execute PDF web scraper
     if pdf_web_scraper == str(True):
