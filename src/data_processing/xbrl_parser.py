@@ -17,7 +17,7 @@ import numpy as np
 import gcsfs
 import pytz
 import psutil
-
+import gc
 
 
 
@@ -558,6 +558,7 @@ class XbrlParser:
                                  format="%Y-%m-%d",
                                  errors="coerce")
             df_list.append(df_element_export)
+            del df_element_export
             # if i % 100 == 0:
             #     print("%2.2f %% have been processed" % ((i / T) * 100))
 
@@ -565,6 +566,8 @@ class XbrlParser:
         print("Batch df contains {} rows".format(df_batch.shape[0]))
         XbrlParser.append_to_bq(df_batch, bq_export)
         del df_list, df_batch
+        df_batch = pd.DataFrame()
+        gc.collect()
 
 
 
@@ -837,9 +840,11 @@ class XbrlParser:
         # Empty table awaiting results
         results = []
         fails = []
+        #
+        # big_results = []
 
         start_memory = psutil.virtual_memory().percent
-        memory_threshold = start_memory + 0.25*(100-start_memory)
+        memory_threshold = start_memory + 0.09*(100-start_memory)
 
         print("Start memory usuage: ", start_memory)
         COUNT = 0
@@ -857,6 +862,8 @@ class XbrlParser:
                 # append results to table
                 # for i in range(len(results)**3):
                 results.append(doc)
+                #
+                # big_results += [doc]*(len(big_results)+1)
 
                 if (psutil.virtual_memory().percent > memory_threshold) \
                         or COUNT == len(list_of_files):
@@ -871,16 +878,19 @@ class XbrlParser:
                     row_count += len(results)
                     batch_count += 1
                     results = []
-                    # t = 0
-                    # while psutil.virtual_memory().percent > start_memory + 10:
-                    #     sys.stdout.write("\r Waiting, memory at {0}%".format(
-                    #         psutil.virtual_memory().percent
-                    #     ))
-                    #     sys.stdout.flush()
-                    #     t+=1
-                    #     time.sleep(6)
-                    #     if t > 100:
-                    #         break
+                    # big_results = []
+                    gc.collect()
+                    t = 0
+                    while psutil.virtual_memory().percent > start_memory + 4:
+                        sys.stdout.write("\r Waiting, memory at {0}%".format(
+                            psutil.virtual_memory().percent
+                        ))
+                        sys.stdout.flush()
+                        t+=1
+                        time.sleep(6)
+                        gc.collect()
+                        if t > 100:
+                            break
                 XbrlExtraction.progressBar("XBRL Accounts Parsed", COUNT,
                                            len(list_of_files), row_count,
                                            batch_count,
@@ -926,6 +936,8 @@ class XbrlParser:
             df, table, job_config=job_config
             )  # Make an API request.
         job.result()  # Wait for the job to complete.
+        job = 0
+        del job
 
     @staticmethod
     def mk_bq_table(bq_location, schema="parsed_data_schema.txt"):
