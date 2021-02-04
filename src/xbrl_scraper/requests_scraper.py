@@ -55,21 +55,20 @@ class XbrlScraper:
             links = [link for link in links if link[-4:] == ".zip"]
 
             # Download and save zip files
-            #for link in links:
-            for link in [links[0]]:
+            for link in links:
 
                 zip_url = base_url + link
                 filepath = os.path.join(dir_save_to, link)
 
                 # Only download and save a file if it doesn't exist in the directory
-                if os.path.exists(filepath):
+                if not os.path.exists(filepath):
                 
                     print("Downloading " + link + "...")
-                    #zip_file = requests.get(zip_url).content
+                    zip_file = requests.get(zip_url).content
                     
                     print("Saving zip file " + link + "...")
-                    #with open(filepath, 'wb') as fp:
-                        #fp.write(zip_file)
+                    with open(filepath, 'wb') as fp:
+                        fp.write(zip_file)
 
                 else:
 
@@ -81,12 +80,3 @@ class XbrlScraper:
 
             print("Unable to scrape web page!")
             print("Error code: " + status)
-
-# scraper = XbrlScraper()
-
-# url = "http://download.companieshouse.gov.uk/en_monthlyaccountsdata.html"
-# base_url = "http://download.companieshouse.gov.uk/"
-
-# dir_save_to = r'/home/peter_derrick/shares/xbrl_scraped_data'
-
-# scraper.scrape_webpage(url, base_url, dir_save_to)
