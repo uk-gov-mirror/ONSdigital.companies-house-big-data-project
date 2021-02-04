@@ -62,7 +62,7 @@ class XbrlScraper:
                 filepath = os.path.join(dir_save_to, link)
 
                 # Only download and save a file if it doesn't exist in the directory
-                if os.path.exists(filepath):
+                if not os.path.exists(filepath):
                 
                     print("Downloading " + link + "...")
                     #zip_file = requests.get(zip_url).content
