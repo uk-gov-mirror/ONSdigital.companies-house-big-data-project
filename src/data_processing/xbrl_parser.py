@@ -567,6 +567,7 @@ class XbrlParser:
         XbrlParser.append_to_bq(df_batch, bq_export)
         del df_list, df_batch, doc2, doc
         df_batch = pd.DataFrame()
+        doc2, doc = [], []
         gc.collect()
 
 
@@ -735,25 +736,25 @@ class XbrlParser:
         # Code needed to split files by the number of cores before passing in
         # as an argument
         chunk_len = math.ceil(len(files) / num_processes)
-        # files = [files[i:i + chunk_len] for i in
-        #          range(0, len(files), chunk_len)]
+        files = [files[i:i + chunk_len] for i in
+                 range(0, len(files), chunk_len)]
 
         # define number of processors
-        # pool = mp.Pool(processes=num_processes)
+        pool = mp.Pool(processes=num_processes)
         # Finally, build a table of all variables from all example (digital)
         # documents splitting the load between cpu cores = num_processes
         # This can take a while (hopefully not anymore!!!)
 
-        table_export = processed_path + ".chunky_" + folder_month + "-" + folder_year
+        table_export = processed_path + "." + folder_month + "-" + folder_year
 
         self.mk_bq_table(table_export)
 
-        # build_month_table_partial = partial(self.build_month_table, table_export)
-        # fails = pool.map(build_month_table_partial, files)
-        #
-        # pool.close()
-        # pool.join()
-        #
+        build_month_table_partial = partial(self.build_month_table, table_export)
+        fails = pool.map(build_month_table_partial, files)
+
+        pool.close()
+        pool.join()
+
         # # print(fails)
         # # combine resultant list of lists
         # # print("Combining lists...")
@@ -761,7 +762,7 @@ class XbrlParser:
 
         # combine data and convert into dataframe
 
-        fails = self.build_month_table(table_export, files)
+        # fails = self.build_month_table(table_export, files)
         print(fails)
         # self.flatten_data(r, table_export)
 
@@ -874,13 +875,12 @@ class XbrlParser:
                                                uploading=True,
                                                bar_length=50,
                                                width=20)
-                    # XbrlParser.flatten_data(results, bq_export)
+                    XbrlParser.flatten_data(results, bq_export)
                     row_count += len(results)
                     batch_count += 1
                     del results
                     results = []
                     # big_results = []
-                    print(psutil.virtual_memory().percent)
                     gc.collect()
                     t = 0
                     while psutil.virtual_memory().percent > start_memory + 10:
