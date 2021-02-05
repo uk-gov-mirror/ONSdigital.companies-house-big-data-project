@@ -245,7 +245,7 @@ class TableFitter(TableIdentifier):
              for i in self.header_groups]
         print(len(header_lines), " header lines have been detected")
 
-    def get_other_columns(self):
+    def get_other_columns(self,thresh=0.95):
         """
         Function to group the indices of columns other than the first, based
         on elements which are aligned with the elements in the header row.
@@ -253,7 +253,7 @@ class TableFitter(TableIdentifier):
         Arguments:
             None
         Returns:
-            None
+            exceptions: a list containing the indices of elements that are not 
         Raises:
             None
         """
@@ -276,10 +276,53 @@ class TableFitter(TableIdentifier):
                 self.columns[col_to_fit].append(i)
             else:
                 exceptions.append(i)
-        print(exceptions)
-        exception_aligned = TableFitter.group_header_points(other_cols_df, exceptions)
-        return(exceptions)
 
+        #print('This is what it looked like',self.data)
+
+        # determine if any residual elements are aligned
+        exception_aligned = TableFitter.group_header_points(other_cols_df, exceptions)
+        print(exception_aligned)
+        
+        # evaluate residual elements and append a new column if 
+        # a critera is met:
+        # (more than 2 elements, high confidence or if any value is a digit)
+
+        for x in exception_aligned:
+            c = max(self.data.column)
+            print('Original C',c)
+            if len(x) > 1:
+                c += 1
+                self.data.loc[[i for i in x], "column"] = int(c)
+            else:
+                if self.data.loc[x[0],"confidence"] > thresh:
+                    c += 1
+                    self.data.loc[x[0], "column"] = int(c)
+
+                elif any(str.isdigit(c) for c in self.data.loc[x[0],'value']):
+                    c += 1
+                    self.data.loc[x[0], "column"] = int(c)
+                else:
+                    pass
+
+        #print('Did i do anything?', self.data)
+
+        return()
+    """
+    def headerless_column(self,exceptions):
+        
+        Function to add any exception elements in the scraped 
+        data, if are headerless columns of data. 
+        Uses a condifence threshold and the number of allined elements
+        to determine whetehr the data is an additional column 
+
+        Arguments:
+            execptions: 
+        Returns:
+            None
+        Raises:
+            None
+        
+    """
     def get_other_columns_v2(self):
         """
         Function to group the indices of columns other than the first, without

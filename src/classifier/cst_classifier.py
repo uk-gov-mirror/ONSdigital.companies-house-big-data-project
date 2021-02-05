@@ -2,7 +2,7 @@
 from os import listdir
 from os.path import isfile, join
 import sys
-import cv2
+#import cv2
 import numpy
 
 class Classifier:
