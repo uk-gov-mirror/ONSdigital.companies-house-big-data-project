@@ -848,7 +848,7 @@ class XbrlParser:
         # big_results = []
 
         start_memory = psutil.virtual_memory().percent
-        file_threshold = 500
+        file_threshold = 10000
         print("Start memory usuage: ", start_memory)
         COUNT = 0
         file_count = 0
