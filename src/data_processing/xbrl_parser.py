@@ -856,7 +856,7 @@ class XbrlParser:
         batch_count = 0
         # For every file
         for file in list_of_files:
-            # try:
+            try:
                 COUNT += 1
                 file_count += 1
                 # Read the file and parse
@@ -902,10 +902,10 @@ class XbrlParser:
                                            psutil.virtual_memory().percent,
                                            bar_length=50,
                                            width=20)
-            # except:
-            #     if print_fails:
-            #         print(file, "has failed to parse")
-            #     fails.append(file)
+            except:
+                # if print_fails:
+                print(file, "has failed to parse")
+                fails.append(file)
 
         print(
             "Average time to process an XBRL file: \x1b[31m{:0f}\x1b[0m".format(
