@@ -511,7 +511,7 @@ class XbrlParser:
 
         # loop over each file and create a separate dataframe
         # for each set (elements) of parsed tags, appending result to list
-
+        rc = 0
         df_list = []
         for i in range(T):
             # Turn each elements dict into a dataframe
@@ -558,6 +558,7 @@ class XbrlParser:
                                  format="%Y-%m-%d",
                                  errors="coerce")
             df_list.append(df_element_export)
+            rc += df_element_export.shape[0]
             del df_element_export
             # if i % 100 == 0:
             #     print("%2.2f %% have been processed" % ((i / T) * 100))
@@ -569,6 +570,8 @@ class XbrlParser:
         df_batch = pd.DataFrame()
         doc2, doc = [], []
         gc.collect()
+
+        return rc
 
 
 
@@ -845,16 +848,17 @@ class XbrlParser:
         # big_results = []
 
         start_memory = psutil.virtual_memory().percent
-        memory_threshold = start_memory + 0.20*(100-start_memory)
-
+        file_threshold = 500
         print("Start memory usuage: ", start_memory)
         COUNT = 0
-        batch_count = 0
+        file_count = 0
         row_count = 0
+        batch_count = 0
         # For every file
         for file in list_of_files:
             # try:
                 COUNT += 1
+                file_count += 1
                 # Read the file and parse
                 doc = self.process_account(file)
                 # flatten the elements dict into single dict
@@ -866,8 +870,10 @@ class XbrlParser:
                 #
                 # big_results += [doc]*(len(big_results)+1)
 
-                if (psutil.virtual_memory().percent > memory_threshold) \
+                if (file_count > file_threshold) \
                         or COUNT == len(list_of_files):
+                    file_count = 0
+                    row_count += XbrlParser.flatten_data(results, bq_export)
                     XbrlExtraction.progressBar("XBRL Accounts Parsed", COUNT,
                                                len(list_of_files), row_count,
                                                batch_count,
@@ -875,24 +881,21 @@ class XbrlParser:
                                                uploading=True,
                                                bar_length=50,
                                                width=20)
-                    XbrlParser.flatten_data(results, bq_export)
-                    row_count += len(results)
                     batch_count += 1
                     del results
                     results = []
                     # big_results = []
                     gc.collect()
-                    t = 0
-                    while psutil.virtual_memory().percent > start_memory + 10:
-                        sys.stdout.write("\r Waiting, memory at {0}%".format(
-                            psutil.virtual_memory().percent
-                        ))
-                        sys.stdout.flush()
-                        t+=1
-                        time.sleep(6)
-                        gc.collect()
-                        if t > 100:
-                            break
+                    # t = 0
+                    # while psutil.virtual_memory().percent > start_memory + 10:
+                    #     sys.stdout.write("\r Waiting, memory at {0}%".format(
+                    #         psutil.virtual_memory().percent
+                    #     ))
+                    #     sys.stdout.flush()
+                    #     t+=1
+                    #     time.sleep(6)
+                    #     if t > 100:
+                    #         break
                 XbrlExtraction.progressBar("XBRL Accounts Parsed", COUNT,
                                            len(list_of_files), row_count,
                                            batch_count,
