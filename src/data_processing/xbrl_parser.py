@@ -748,7 +748,7 @@ class XbrlParser:
         # documents splitting the load between cpu cores = num_processes
         # This can take a while (hopefully not anymore!!!)
 
-        table_export = processed_path + "." + folder_month + "-" + folder_year
+        table_export = processed_path + ".chunky_" + folder_month + "-" + folder_year
 
         self.mk_bq_table(table_export)
 
@@ -761,13 +761,13 @@ class XbrlParser:
         # # print(fails)
         # # combine resultant list of lists
         # # print("Combining lists...")
-        # fails = [item for sublist in fails for item in sublist]
+        fails = [item for sublist in fails for item in sublist]
 
         # combine data and convert into dataframe
 
         # fails = self.build_month_table(table_export, files)
         print(fails)
-        # self.flatten_data(r, table_export)
+        self.build_month_table(table_export, fails)
 
 
         # Output all unique tags to a txt file
@@ -856,8 +856,8 @@ class XbrlParser:
         batch_count = 0
         # For every file
         for file in list_of_files:
+            COUNT += 1
             try:
-                COUNT += 1
                 file_count += 1
                 # Read the file and parse
                 doc = self.process_account(file)
@@ -870,42 +870,44 @@ class XbrlParser:
                 #
                 # big_results += [doc]*(len(big_results)+1)
 
-                if (file_count > file_threshold) \
-                        or COUNT == len(list_of_files):
-                    file_count = 0
-                    row_count += XbrlParser.flatten_data(results, bq_export)
-                    XbrlExtraction.progressBar("XBRL Accounts Parsed", COUNT,
-                                               len(list_of_files), row_count,
-                                               batch_count,
-                                               psutil.virtual_memory().percent,
-                                               uploading=True,
-                                               bar_length=50,
-                                               width=20)
-                    batch_count += 1
-                    del results
-                    results = []
-                    # big_results = []
-                    gc.collect()
-                    # t = 0
-                    # while psutil.virtual_memory().percent > start_memory + 10:
-                    #     sys.stdout.write("\r Waiting, memory at {0}%".format(
-                    #         psutil.virtual_memory().percent
-                    #     ))
-                    #     sys.stdout.flush()
-                    #     t+=1
-                    #     time.sleep(6)
-                    #     if t > 100:
-                    #         break
-                XbrlExtraction.progressBar("XBRL Accounts Parsed", COUNT,
-                                           len(list_of_files), row_count,
-                                           batch_count,
-                                           psutil.virtual_memory().percent,
-                                           bar_length=50,
-                                           width=20)
             except:
                 # if print_fails:
                 print(file, "has failed to parse")
                 fails.append(file)
+                continue
+
+            if (file_count > file_threshold) \
+                    or COUNT == len(list_of_files):
+                file_count = 0
+                row_count += XbrlParser.flatten_data(results, bq_export)
+                XbrlExtraction.progressBar("XBRL Accounts Parsed", COUNT,
+                                           len(list_of_files), row_count,
+                                           batch_count,
+                                           psutil.virtual_memory().percent,
+                                           uploading=True,
+                                           bar_length=50,
+                                           width=20)
+                batch_count += 1
+                del results
+                results = []
+                # big_results = []
+                gc.collect()
+                # t = 0
+                # while psutil.virtual_memory().percent > start_memory + 10:
+                #     sys.stdout.write("\r Waiting, memory at {0}%".format(
+                #         psutil.virtual_memory().percent
+                #     ))
+                #     sys.stdout.flush()
+                #     t+=1
+                #     time.sleep(6)
+                #     if t > 100:
+                #         break
+            XbrlExtraction.progressBar("XBRL Accounts Parsed", COUNT,
+                                       len(list_of_files), row_count,
+                                       batch_count,
+                                       psutil.virtual_memory().percent,
+                                       bar_length=50,width=20)
+
 
         print(
             "Average time to process an XBRL file: \x1b[31m{:0f}\x1b[0m".format(
