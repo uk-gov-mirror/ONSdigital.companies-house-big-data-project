@@ -207,6 +207,7 @@ class TableFitter(TableIdentifier):
 
         # Set the current line we are considering - start with notes line
         l = self.data.loc[self.notes_row[0], "line_num"]
+        
 
         # Add the notes line to the relevant variables
         header_lines = [l]
@@ -215,6 +216,7 @@ class TableFitter(TableIdentifier):
         # Look for other header rows below the 'notes' row
         while l < self.total_lines:
             l += 1
+            
             # Stop at the first line with an element in the first column
             if any([(i in self.columns[0])
                     for i in self.data[self.data["line_num"] == l].index]):
@@ -227,15 +229,24 @@ class TableFitter(TableIdentifier):
 
         # Start from the 'notes' line and look for header rows above
         l = self.data.loc[self.notes_row[0], "line_num"]
+
+        y0 = stats.median(self.data[self.data["line_num"] == l]["first_y_vertex"])
+        y1 = 0
         while l > min(self.data["line_num"]):
             l -= 1
+
+            h = stats.median(self.data[self.data["line_num"] == l]["height"])
+            y1 = stats.median(self.data[self.data["line_num"] == l]["first_y_vertex"])
             if any([(i in self.columns[0])
                     for i in self.data[self.data["line_num"] == l].index]):
+                break
+            elif y0 - y1 > 1.5*h:
                 break
             else:
                 header_lines.append(l)
                 header_indices += \
                     list(self.data[self.data["line_num"] == l].index)
+                y0 = y1
         self.header_lines = header_lines
         self.header_indices = header_indices
         self.header_groups = self.group_header_points(self.data,
