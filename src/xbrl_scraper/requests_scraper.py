@@ -8,6 +8,8 @@ Created on Mon Feb  1 09:59:54 2021
 import os
 import requests
 from bs4 import BeautifulSoup
+import time
+import random
 
 class XbrlScraper:
     def scrape_webpage(self, url, base_url, dir_save_to):
@@ -70,6 +72,9 @@ class XbrlScraper:
                     print("Saving zip file " + link + "...")
                     #with open(filepath, 'wb') as fp:
                         #fp.write(zip_file)
+
+                    # Random sleep to avoid stressing the target server
+                    time.sleep((random.random() * 2.0) + 3.0)
 
                 else:
 
