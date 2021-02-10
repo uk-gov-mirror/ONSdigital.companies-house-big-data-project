@@ -4,6 +4,7 @@ from dateutil import parser
 from src.data_processing.xbrl_pd_methods import XbrlExtraction
 from google.cloud import bigquery
 from google.oauth2 import service_account
+from google.cloud import storage
 from functools import partial
 import pandas as pd
 import os
@@ -848,7 +849,7 @@ class XbrlParser:
         # big_results = []
 
         start_memory = psutil.virtual_memory().percent
-        file_threshold = 10000
+        file_threshold = 7000
         print("Start memory usuage: ", start_memory)
         COUNT = 0
         file_count = 0
@@ -953,3 +954,36 @@ class XbrlParser:
         client.delete_table(bq_location, not_found_ok=True)
         bq_string = "bq mk --table " + bq_location + " " + schema
         os.popen(bq_string).read()
+
+    def export_csv(self, bq_table, gcs_location, file_name):
+        client = bigquery.Client()
+        extract_job = client.extract_table(
+            bq_table,
+            "gs://" + gcs_location + "/" + file_name + "*.csv",
+            location="europe-west2"
+        )
+        extract_job.result()
+
+        split_files = [f.split("/", 1)[1] for f in self.fs.ls(gcs_location)
+                       if (f.split("/")[-1]).startswith(file_name)]
+
+        storage_client = storage.Client()
+        bucket = storage_client.bucket(gcs_location.split("/",1)[0])
+        destination = bucket.blob(gcs_location.split("/", 1)[1] + "/" + file_name + ".csv")
+        destination.content_type = "text/csv"
+
+        sources = [bucket.get_blob(f) for f in split_files]
+        destination.compose(sources)
+
+        self.fs.rm([f for f in self.fs.ls(gcs_location)
+                       if (f.split("/")[-1]).startswith(file_name + "0")])
+
+
+
+if __name__ == "__main__":
+    parser = XbrlParser(gcsfs.GCSFileSystem(project="ons-companies-house-dev",
+                                            key="/home/dylan_purches/Desktop/dev_key.json",
+                                            cache_timeout=0))
+    parser.export_csv("xbrl_parsed_data.chunky_December-2020",
+                          "ons-companies-house-dev-test-parsed-csv-data/v2_parsed_data",
+                          "2020-December")
