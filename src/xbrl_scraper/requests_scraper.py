@@ -10,8 +10,18 @@ import requests
 from bs4 import BeautifulSoup
 import time
 import random
+import gcsfs
 
 class XbrlScraper:
+
+    def __init__(self, fs):
+        """
+        Constructs all the necessary attributes for the XbrlScraper object of
+        which there are none.
+        """
+        self.__init__
+        self.fs = fs
+
     def scrape_webpage(self, url, base_url, dir_save_to):
         """
         Scrapes target web page and saves all zip files found to
@@ -61,24 +71,26 @@ class XbrlScraper:
             for link in [links[0]]:
 
                 zip_url = base_url + link
-                filepath = os.path.join(dir_save_to, link)
+
+                #filepath = os.path.join(dir_save_to, link)
+                filepath = dir_save_to + "/" + link
 
                 # Only download and save a file if it doesn't exist in the directory
-                if not os.path.exists(filepath):
+                #if not os.path.exists(filepath):
                 
-                    print("Downloading " + link + "...")
-                    #zip_file = requests.get(zip_url).content
-                    
-                    print("Saving zip file " + link + "...")
-                    #with open(filepath, 'wb') as fp:
-                        #fp.write(zip_file)
+                print("Downloading " + link + "...")
+                zip_file = requests.get(zip_url).content
+                
+                print("Saving zip file " + link + "...")
+                with fs.open(filepath, 'wb') as fp:
+                    fp.write(zip_file)
 
-                    # Random sleep to avoid stressing the target server
-                    time.sleep((random.random() * 2.0) + 3.0)
+                # Random sleep to avoid stressing the target server
+                time.sleep((random.random() * 2.0) + 3.0)
 
-                else:
+                #else:
 
-                    print(link + " already exists")
+                #    print(link + " already exists")
 
             print("All zip files saved")
 
@@ -87,11 +99,14 @@ class XbrlScraper:
             print("Unable to scrape web page!")
             print("Error code: " + status)
 
-# scraper = XbrlScraper()
+fs = gcsfs.GCSFileSystem(project="ons-companies-house-dev")
 
-# url = "http://download.companieshouse.gov.uk/en_monthlyaccountsdata.html"
-# base_url = "http://download.companieshouse.gov.uk/"
+scraper = XbrlScraper(fs)
 
-# dir_save_to = r'/home/peter_derrick/shares/xbrl_scraped_data'
+url = "http://download.companieshouse.gov.uk/en_monthlyaccountsdata.html"
+base_url = "http://download.companieshouse.gov.uk/"
+dir_to_save = "ons-companies-house-dev-test-xbrl-scraped-data/requests_scraper_test_folder"
 
-# scraper.scrape_webpage(url, base_url, dir_save_to)
+#dir_to_save = r'/home/peter_derrick/shares/xbrl_scraped_data'
+
+scraper.scrape_webpage(url, base_url, dir_to_save)
