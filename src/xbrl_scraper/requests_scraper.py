@@ -76,21 +76,21 @@ class XbrlScraper:
                 filepath = dir_save_to + "/" + link
 
                 # Only download and save a file if it doesn't exist in the directory
-                #if not os.path.exists(filepath):
+                if not self.fs.exists(filepath):
                 
-                print("Downloading " + link + "...")
-                zip_file = requests.get(zip_url).content
-                
-                print("Saving zip file " + link + "...")
-                with fs.open(filepath, 'wb') as fp:
-                    fp.write(zip_file)
+                    print("Downloading " + link + "...")
+                    zip_file = requests.get(zip_url).content
+                    
+                    print("Saving zip file " + link + "...")
+                    with self.fs.open(filepath, 'wb') as fp:
+                        fp.write(zip_file)
 
-                # Random sleep to avoid stressing the target server
-                time.sleep((random.random() * 2.0) + 3.0)
+                    # Random sleep to avoid stressing the target server
+                    time.sleep((random.random() * 2.0) + 3.0)
 
-                #else:
+                else:
 
-                #    print(link + " already exists")
+                    print(link + " already exists")
 
             print("All zip files saved")
 
