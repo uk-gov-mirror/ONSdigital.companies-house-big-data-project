@@ -732,7 +732,7 @@ class XbrlParser:
         
         # Here you can splice/truncate the number of files you want to process
         # for testing
-        files = files[0:600]
+        # files = files[0:600]
 
         # TO BE COMMENTED OUT AFTER TESTING
         print(folder_month, folder_year)
@@ -827,13 +827,16 @@ class XbrlParser:
             print("Parsing " + directory + "...")
             self.parse_directory(directory, bq_location, csv_dir, num_cores)
 
-    def build_month_table(self, bq_export,list_of_files):
+    def build_month_table(self, bq_export, list_of_files):
         """
         Function which parses, sequentially, a list of xbrl/ html files,
         converting each parsed file into a dictionary and appending to a list.
 
         Arguments:
-            list of files: list of filepaths, each coresponding to a xbrl/html file (list)
+            bq_export:      Location in BigQuery where (new) table of data
+                            should be constructed.
+            list of files:  list of filepaths (gcs uri's), each coresponding to
+                            a xbrl/html file (list)
 
         Returns:
             results:       list of dictionaries, each containing the parsed content of
@@ -844,44 +847,51 @@ class XbrlParser:
 
         process_start = time.time()
 
-        # Empty table awaiting results
+        # Empty list awaiting results
         results = []
         fails = []
-        #
-        # big_results = []
 
         start_memory = psutil.virtual_memory().percent
+
+        # Set a threshold on the number of files to store in memory before
+        # uploading to BigQuery
         file_threshold = 7000
         print("Start memory usuage: ", start_memory)
+
+        # Initialise counters
         COUNT = 0
         file_count = 0
         row_count = 0
         batch_count = 0
+
         # For every file
         for file in list_of_files:
             COUNT += 1
             try:
+                # file_count is the count per batch, COUNT is the overall file
+                # count
                 file_count += 1
                 # Read the file and parse
                 doc = self.process_account(file)
-                # flatten the elements dict into single dict
-                #doc['elements'] = XbrlParser.flatten_dict(doc['elements'])
 
                 # append results to table
-                # for i in range(len(results)**3):
                 results.append(doc)
-                #
-                # big_results += [doc]*(len(big_results)+1)
 
+            # If we can't process the file, save it to be re done on one
+            # processor
             except:
-                # if print_fails:
                 print(file, "has failed to parse")
                 fails.append(file)
                 continue
 
+            # If the number of files exceeds the threshold or we have done the
+            # last file
             if (file_count > file_threshold) \
                     or COUNT == len(list_of_files):
+                # Reset the file_count and add to the row_count
                 file_count = 0
+
+                # This also performs the BigQuery export
                 row_count += XbrlParser.flatten_data(results, bq_export)
                 XbrlExtraction.progressBar("XBRL Accounts Parsed", COUNT,
                                            len(list_of_files), row_count,
@@ -891,20 +901,12 @@ class XbrlParser:
                                            bar_length=50,
                                            width=20)
                 batch_count += 1
+
+                # Delete results and free up memory
                 del results
                 results = []
-                # big_results = []
                 gc.collect()
-                # t = 0
-                # while psutil.virtual_memory().percent > start_memory + 10:
-                #     sys.stdout.write("\r Waiting, memory at {0}%".format(
-                #         psutil.virtual_memory().percent
-                #     ))
-                #     sys.stdout.flush()
-                #     t+=1
-                #     time.sleep(6)
-                #     if t > 100:
-                #         break
+
             XbrlExtraction.progressBar("XBRL Accounts Parsed", COUNT,
                                        len(list_of_files), row_count,
                                        batch_count,
@@ -920,46 +922,114 @@ class XbrlParser:
 
     @staticmethod
     def append_to_bq(df, table):
+        """
+        Function to append a given DataFrame to a BigQuery table
+
+        Arguments:
+            df:     Pandas DataFrame output with columns of the correct types
+            table:  Location of BigQuery table, in form "<dataset>.<table_name>"
+        Returns:
+            None
+        Raises:
+            None
+
+        """
+        # Set up a BigQuery client
         client = bigquery.Client()
 
         job_config = bigquery.LoadJobConfig(
+            # Set the schema types to match those in parsed_data_schema.txt
             schema = [
-                bigquery.SchemaField("doc_companieshouseregisterednumber", bigquery.enums.SqlTypeNames.STRING),
+                bigquery.SchemaField("doc_companieshouseregisterednumber",
+                                     bigquery.enums.SqlTypeNames.STRING),
                 bigquery.SchemaField("date", bigquery.enums.SqlTypeNames.DATE),
-                bigquery.SchemaField("parsed", bigquery.enums.SqlTypeNames.BOOLEAN),
-                bigquery.SchemaField("doc_balancesheetdate", bigquery.enums.SqlTypeNames.DATE),
-                bigquery.SchemaField("doc_upload_date", bigquery.enums.SqlTypeNames.TIMESTAMP),
-                bigquery.SchemaField("doc_standard_date", bigquery.enums.SqlTypeNames.DATE),
-                bigquery.SchemaField("name", bigquery.enums.SqlTypeNames.STRING),
-                bigquery.SchemaField("unit", bigquery.enums.SqlTypeNames.STRING),
-                bigquery.SchemaField("value", bigquery.enums.SqlTypeNames.STRING),
-                bigquery.SchemaField("doc_name", bigquery.enums.SqlTypeNames.STRING),
-                bigquery.SchemaField("doc_type", bigquery.enums.SqlTypeNames.STRING),
-                bigquery.SchemaField("arc_name", bigquery.enums.SqlTypeNames.STRING),
-                bigquery.SchemaField("doc_standard_type", bigquery.enums.SqlTypeNames.STRING),
-                bigquery.SchemaField("doc_standard_link", bigquery.enums.SqlTypeNames.STRING)
+                bigquery.SchemaField("parsed",
+                                     bigquery.enums.SqlTypeNames.BOOLEAN),
+                bigquery.SchemaField("doc_balancesheetdate",
+                                     bigquery.enums.SqlTypeNames.DATE),
+                bigquery.SchemaField("doc_upload_date",
+                                     bigquery.enums.SqlTypeNames.TIMESTAMP),
+                bigquery.SchemaField("doc_standard_date",
+                                     bigquery.enums.SqlTypeNames.DATE),
+                bigquery.SchemaField("name",
+                                     bigquery.enums.SqlTypeNames.STRING),
+                bigquery.SchemaField("unit",
+                                     bigquery.enums.SqlTypeNames.STRING),
+                bigquery.SchemaField("value",
+                                     bigquery.enums.SqlTypeNames.STRING),
+                bigquery.SchemaField("doc_name",
+                                     bigquery.enums.SqlTypeNames.STRING),
+                bigquery.SchemaField("doc_type",
+                                     bigquery.enums.SqlTypeNames.STRING),
+                bigquery.SchemaField("arc_name",
+                                     bigquery.enums.SqlTypeNames.STRING),
+                bigquery.SchemaField("doc_standard_type",
+                                     bigquery.enums.SqlTypeNames.STRING),
+                bigquery.SchemaField("doc_standard_link",
+                                     bigquery.enums.SqlTypeNames.STRING)
             ],
+            # Append to table (rather than overwrite)
             write_disposition=bigquery.WriteDisposition.WRITE_APPEND
         )
-
+        # Make an API request.
         job = client.load_table_from_dataframe(
             df, table, job_config=job_config
-            )  # Make an API request.
-        job.result()  # Wait for the job to complete.
+            )
+        # Wait for the job to complete.
+        job.result()
+        # Free memory of job
         job = 0
         del job
 
     @staticmethod
     def mk_bq_table(bq_location, schema="parsed_data_schema.txt"):
+        """
+        Function to create a BigQuery table in a specified location with a
+        schema specified by a txt file.
+
+        Arguments:
+            bq_location:    Location of BigQuery table, in form
+                            "<dataset>.<table_name>"
+            schema:         File path of schema specified as txt file
+        Returns:
+            None
+        Raises:
+            None
+        """
+        # Create a BigQuery client
         client = bigquery.Client()
 
+        # Remove the table if it already exists
         client.delete_table(bq_location, not_found_ok=True)
+
+        # Create the table using the command line
         bq_string = "bq mk --table " + bq_location + " " + schema
         os.popen(bq_string).read()
 
     def export_csv(self, bq_table, gcs_location, file_name):
+        """
+        Takes a specified BigQuery table and saves it as a single csv file
+        (creates multiple csvs that partition the table as intermidiate steps)
+
+        Arguments:
+            bq_table:       Location of BigQuery table, in form
+                            "<dataset>.<table_name>"
+            gcs_location:   The folder in gcs where resulting csv should be
+                            saved - "gs://" prefix should NOT be included
+            file_name:      The name of resulting csv file - ".csv" suffix
+                            should NOT be included
+        Returns:
+            None
+        Raises:
+            None
+        """
+        # Create BigQuery client
         client = bigquery.Client()
+
+        # Don't include table header (will mess up combing csvs otherwise)
         job_config = bigquery.job.ExtractJobConfig(print_header=False)
+
+        # Extract table into multiple smaller csv files
         extract_job = client.extract_table(
             bq_table,
             "gs://" + gcs_location + "/" + file_name + "*.csv",
@@ -968,6 +1038,7 @@ class XbrlParser:
         )
         extract_job.result()
 
+        # Recreate the header as a single df with just the header row
         header = pd.DataFrame(columns=['date', 'name', 'unit', 'value',
                             'doc_name', 'doc_type',
                            'doc_upload_date', 'arc_name', 'parsed',
@@ -978,31 +1049,25 @@ class XbrlParser:
         header.to_csv("gs://" + gcs_location + "/header_" + file_name + ".csv",
                       header=True, index=False)
 
-
+        # Specify the files to be combined
         split_files = [f.split("/", 1)[1] for f in self.fs.ls(gcs_location)
                        if (f.split("/")[-1]).startswith("header_" + file_name)] +\
                       [f.split("/", 1)[1] for f in self.fs.ls(gcs_location)
                        if (f.split("/")[-1]).startswith(file_name)]
 
+        # Set up a gcs storage client and locations for things
         storage_client = storage.Client()
         bucket = storage_client.bucket(gcs_location.split("/",1)[0])
         destination = bucket.blob(gcs_location.split("/", 1)[1] + "/" + file_name + ".csv")
         destination.content_type = "text/csv"
 
+        # Combine all the specified files
         sources = [bucket.get_blob(f) for f in split_files]
         destination.compose(sources)
 
+        # Remove the intermediate files
         self.fs.rm([f for f in self.fs.ls(gcs_location)
                        if ((f.split("/")[-1]).startswith(file_name + "0")) or
                     ((f.split("/")[-1]).startswith("header_" + file_name))
                     ])
 
-
-
-if __name__ == "__main__":
-    parser = XbrlParser(gcsfs.GCSFileSystem(project="ons-companies-house-dev",
-                                            key="/home/dylan_purches/Desktop/dev_key.json",
-                                            cache_timeout=0))
-    parser.export_csv("xbrl_parsed_data.chunky_December-2020",
-                          "ons-companies-house-dev-test-parsed-csv-data/v2_parsed_data",
-                          "2020-December_xbrl_data")
