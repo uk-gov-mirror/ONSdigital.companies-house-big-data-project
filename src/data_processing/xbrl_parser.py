@@ -708,7 +708,7 @@ class XbrlParser:
 
         return directory_list
 
-    def parse_directory(self, directory, processed_path, num_processes=1):
+    def parse_directory(self, directory, bq_location, processed_path, num_processes=1):
         """
         Takes a directory, parses all files contained there and saves them as
         csv files in a specified directory.
@@ -732,7 +732,7 @@ class XbrlParser:
         
         # Here you can splice/truncate the number of files you want to process
         # for testing
-        # files = files[0:10000]
+        files = files[0:600]
 
         # TO BE COMMENTED OUT AFTER TESTING
         print(folder_month, folder_year)
@@ -749,7 +749,7 @@ class XbrlParser:
         # documents splitting the load between cpu cores = num_processes
         # This can take a while (hopefully not anymore!!!)
 
-        table_export = processed_path + ".chunky_" + folder_month + "-" + folder_year
+        table_export = bq_location + "." + folder_month + "-" + folder_year
 
         self.mk_bq_table(table_export)
 
@@ -770,6 +770,8 @@ class XbrlParser:
         print(fails)
         self.build_month_table(table_export, fails)
 
+        self.export_csv(table_export, processed_path,
+                        folder_month + "-" + folder_year + "_xbrl_data")
 
         # Output all unique tags to a txt file
 
@@ -793,7 +795,7 @@ class XbrlParser:
         # print(results.shape)
 
     def parse_files(self, quarter, year, unpacked_files,
-                    custom_input, processed_files, num_cores):
+                    custom_input, bq_location, csv_dir, num_cores):
         """
         Parses a set of accounts for a given time period and saves as a csv in
         a specified location.
@@ -823,7 +825,7 @@ class XbrlParser:
         # Parse each directory
         for directory in directory_list:
             print("Parsing " + directory + "...")
-            self.parse_directory(directory, processed_files, num_cores)
+            self.parse_directory(directory, bq_location, csv_dir, num_cores)
 
     def build_month_table(self, bq_export,list_of_files):
         """
@@ -957,14 +959,29 @@ class XbrlParser:
 
     def export_csv(self, bq_table, gcs_location, file_name):
         client = bigquery.Client()
+        job_config = bigquery.job.ExtractJobConfig(print_header=False)
         extract_job = client.extract_table(
             bq_table,
             "gs://" + gcs_location + "/" + file_name + "*.csv",
-            location="europe-west2"
+            location="europe-west2",
+            job_config=job_config
         )
         extract_job.result()
 
+        header = pd.DataFrame(columns=['date', 'name', 'unit', 'value',
+                            'doc_name', 'doc_type',
+                           'doc_upload_date', 'arc_name', 'parsed',
+                           'doc_balancesheetdate',
+                           'doc_companieshouseregisterednumber',
+                           'doc_standard_type',
+                           'doc_standard_date', 'doc_standard_link'],)
+        header.to_csv("gs://" + gcs_location + "/header_" + file_name + ".csv",
+                      header=True, index=False)
+
+
         split_files = [f.split("/", 1)[1] for f in self.fs.ls(gcs_location)
+                       if (f.split("/")[-1]).startswith("header_" + file_name)] +\
+                      [f.split("/", 1)[1] for f in self.fs.ls(gcs_location)
                        if (f.split("/")[-1]).startswith(file_name)]
 
         storage_client = storage.Client()
@@ -976,7 +993,9 @@ class XbrlParser:
         destination.compose(sources)
 
         self.fs.rm([f for f in self.fs.ls(gcs_location)
-                       if (f.split("/")[-1]).startswith(file_name + "0")])
+                       if ((f.split("/")[-1]).startswith(file_name + "0")) or
+                    ((f.split("/")[-1]).startswith("header_" + file_name))
+                    ])
 
 
 
@@ -986,4 +1005,4 @@ if __name__ == "__main__":
                                             cache_timeout=0))
     parser.export_csv("xbrl_parsed_data.chunky_December-2020",
                           "ons-companies-house-dev-test-parsed-csv-data/v2_parsed_data",
-                          "2020-December")
+                          "2020-December_xbrl_data")

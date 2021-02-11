@@ -59,6 +59,8 @@ unpacker_destination_dir = config.get('xbrl_unpacker_args',
 xbrl_unpacked_data = config.get('xbrl_parser_args', 'xbrl_parser_data_dir')
 xbrl_processed_csv = config.get('xbrl_parser_args',
                                 'xbrl_parser_processed_csv_dir')
+xbrl_parser_bq_location = config.get('xbrl_parser_args',
+                                'xbrl_parser_bq_location')
 xbrl_tag_frequencies = config.get('xbrl_parser_args',
                                   'xbrl_parser_tag_frequencies')
 xbrl_tag_list = config.get('xbrl_parser_args', 'xbrl_parser_tag_list')
@@ -160,11 +162,13 @@ def main():
                                xbrl_parser_process_year,
                                xbrl_unpacked_data,
                                xbrl_parser_custom_input,
+                               xbrl_parser_bq_location,
                                xbrl_processed_csv,
                                3)
 
     # Execute module xbrl_csv_cleaner
     if xbrl_csv_cleaner == str(True):
+
         print("XBRL CSV cleaner running...")
         XbrlCSVCleaner.clean_parsed_files(xbrl_csv_cleaner_indir,
                                           xbrl_csv_cleaner_outdir)
