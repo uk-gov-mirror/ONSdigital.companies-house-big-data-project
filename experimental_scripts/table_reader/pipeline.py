@@ -10,7 +10,7 @@ from pdf_annotator import PDFAnnotator
 from doc_ai_parser import DocParser
 from table_to_df import Table2Df
 
-fs = gcsfs.GCSFileSystem("ons-companies-house-dev", token="/home/lewyse_lee/key.json")
+fs = gcsfs.GCSFileSystem("ons-companies-house-dev", token="/home/kirsty_cope/keys/Feb_key.json")
 
 # sheets = fs.ls("ons-companies-house-dev-scraped-pdf-data/doc_ai_outputs/bs_pdfs")
 # names = [((t.split("/")[-1]).split(".")[0])[:-3] for t in sheets]
@@ -65,7 +65,7 @@ fs = gcsfs.GCSFileSystem("ons-companies-house-dev", token="/home/lewyse_lee/key.
 #
 doc_parser = DocParser(fs)
 doc_parser.parse_document("ons-companies-house-dev-scraped-pdf-data/doc_ai_outputs/bs_pdfs/04677900_bs.pdf",
-                          "/home/lewyse_lee/key.json",
+                          "/home/kirsty_cope/keys/Feb_key.json",
                           "ons-companies-house-dev")
 doc_parser.tokens_to_df()
 # Implements the line reader module
@@ -87,16 +87,20 @@ table_data.get_header_row()
 table_data.remove_excess_lines()
 table_data.get_other_columns()
 #table_data.remove_excess_lines()
+table_data.column_order()
 
-#print(table_data.data)
+###print(table_data.data)
 
 to_df = Table2Df(table_data, fs)
 
-print(to_df.data)
+###print(to_df.data)
+
+###to_df.get_final_df()
 
 to_df.get_final_df()
 
-print(to_df.data)
+print(to_df.data.sort_values(by=['updated_column_order']))
+
 # # Create an annotated pdf
 # annotator = PDFAnnotator("ons-companies-house-dev-scraped-pdf-data/doc_ai_outputs/bs_pdfs/"
 #                          + "diageo_bs" + ".pdf", gcp=True)

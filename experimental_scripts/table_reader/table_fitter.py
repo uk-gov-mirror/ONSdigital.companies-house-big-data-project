@@ -279,6 +279,7 @@ class TableFitter(TableIdentifier):
 
         #print('This is what it looked like',self.data)
 
+
         # determine if any residual elements are aligned
         exception_aligned = TableFitter.group_header_points(other_cols_df, exceptions)
         print(exception_aligned)
@@ -361,9 +362,34 @@ class TableFitter(TableIdentifier):
 
         for i, col in enumerate(self.columns):
             self.data.loc[col, "column"] = i
-
-
         
+
+    def column_order(self):   #### Need to overwrite 'column' with 'updated_column_order' when I am sure it works as expected.
+                              #### and reset the index.
+        """
+        Function that takes the dataframe and creates a new column
+        ('updated_column_order') that contains the order each column
+        appears on the source PDF page. The function uses the 
+        column numbers already assigned in 'column', does a groupby
+        on these and finds the min central_x_vertex value for each
+        group. The min central_x_vertex vale is then ranked 
+        ascending and this rank populates the 'updated_column_order'
+        column to be used going forward for the order in which
+        each column is represented on the source PDF. 
+
+        Arguments:
+            None
+        Returns:
+            None
+        Raises:
+            None
+        """
+        self.data['updated_column_order'] = self.data.groupby('column')[
+            'central_x_vertex'].transform('min')
+        self.data['updated_column_order'] = self.data['updated_column_order'].rank(
+            method='dense', ascending=True, na_option='keep', axis=0)
+        
+
     @staticmethod
     def find_closest_col(df, columns, index, const=4):
         """
@@ -447,11 +473,11 @@ class TableFitter(TableIdentifier):
         self.columns = new_cols
 
 if __name__ == "__main__":
-    fs = gcsfs.GCSFileSystem("ons-companies-house-dev", token="/home/dylan_purches/keys/data_key.json")
+    fs = gcsfs.GCSFileSystem("ons-companies-house-dev", token="/home/kirsty_cope/keys/Feb_key.json")
 
     doc_parser = DocParser(fs)
     doc_parser.parse_document("ons-companies-house-dev-scraped-pdf-data/doc_ai_outputs/bs_pdfs/04677900_bs.pdf",
-                            "/home/dylan_purches/keys/data_key.json",
+                            "/home/kirsty_cope/keys/Feb_key.json",
                             "ons-companies-house-dev")
     doc_parser.tokens_to_df()
     # Implements the line reader module
@@ -472,3 +498,6 @@ if __name__ == "__main__":
     table_data.get_header_row()
     table_data.remove_excess_lines()
     table_data.get_other_columns()
+    table_data.column_order()
+
+    
