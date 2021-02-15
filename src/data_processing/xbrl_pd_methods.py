@@ -1,8 +1,10 @@
 import os
 import pandas as pd
 import time
+import csv
 
 import sys
+import gcsfs
 
 # Custom import
 # from src.data_processing.xbrl_parser import XbrlParser
@@ -12,11 +14,11 @@ import sys
 class XbrlExtraction:
     """ This is a class for extracting the XBRL data. """
 
-    def __init__(self):
+    def __init__(self, fs):
         self.__init__
+        self.fs = fs
 
-    @staticmethod
-    def get_filepaths(directory):
+    def get_filepaths(self, directory):
         """
         Helper function -
         Get all of the filenames in a directory that end in htm* or xml (under
@@ -35,13 +37,7 @@ class XbrlExtraction:
             raise TypeError("The input argument 'directory' \
             needs to be a string")
 
-        # Check argument takes an acceptable value
-        if not os.path.exists(directory):
-            raise ValueError("The input argument 'directory' is not a \
-                             valid file path")
-
-        files = [directory + "/" + filename
-                 for filename in os.listdir(directory)
+        files = [filename for filename in self.fs.ls(directory)
                         if ((".htm" in filename.lower())
                             or (".xml" in filename.lower()))
                  ]
@@ -52,7 +48,8 @@ class XbrlExtraction:
         return files, month, year
 
     @staticmethod
-    def progressBar(name, value, endvalue, bar_length=50, width=20):
+    def progressBar(name, value, endvalue, rows, batches,memory,uploading=False,
+                    bar_length=50, width=20):
         """
         Function that can be called upon if a progress bar needs to be
         displayed in the output to keep track of the progression of a process.
@@ -99,14 +96,21 @@ class XbrlExtraction:
         percent = float(value) / endvalue
         arrow = '-' * int(round(percent*bar_length) - 1) + '>'
         spaces = ' ' * (bar_length - len(arrow))
+        up_color = ""
+        if uploading:
+            up_color = "\033[1;31m"
         sys.stdout.write(
-            "\r{0: <{1}} : [{2}]{3}%   ({4} / {5})".format(
+            "\r{9}{0: <{1}} : [{2}]{3}%   ({4} / {5}) \033[1;36m ~~{6} rows uploaded in {7} batches~~ {8}% of memory used\033[0;0m".format(
                 name,
                 width,
                 arrow + spaces,
                 int(round(percent*100)),
                 value,
-                endvalue
+                endvalue,
+                rows,
+                batches,
+                memory,
+                up_color
             )
         )
         sys.stdout.flush()
@@ -240,8 +244,7 @@ class XbrlExtraction:
             mode="a"
         )
 
-    @staticmethod
-    def output_xbrl_month(dataframe, output_folder, folder_month, folder_year,
+    def output_xbrl_month(self, dataframe, output_folder, folder_month, folder_year,
                           file_type="csv"):
 
         """
@@ -278,23 +281,22 @@ class XbrlExtraction:
             raise ValueError("The month provided should be a valid month from \
             January to December")
 
-        if not os.path.exists(output_folder):
+        if not self.fs.exists(output_folder):
             raise ValueError("Output folder provided does not exist")
 
         if not str.isdigit(folder_year):
             raise ValueError("Year specified must be an integer >= 0")
 
         if file_type == "csv":
-            dataframe.to_csv(
-                output_folder
-                    + "/"
-                    + folder_year
-                    + "-"
-                    + folder_month
-                    + "_xbrl_data.csv",
-                index=False,
-                header=True
-            )
+            name = output_folder + "/" + folder_year + "-"\
+                   + folder_month + "_xbrl_data.csv"
+            dataframe.to_csv("gs://"+name, index=False, header=True, sep=",",
+                                line_terminator='\n', quotechar='"',
+                                quoting=csv.QUOTE_NONNUMERIC)
+            try:
+                self.fs.setxattrs(name, content_type="text/csv")
+            except:
+                print("couldn't add content_type for "+name)
         else:
             print("I need a CSV for now...")
 

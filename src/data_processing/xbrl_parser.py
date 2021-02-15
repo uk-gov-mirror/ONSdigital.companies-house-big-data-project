@@ -2,6 +2,10 @@ from bs4 import BeautifulSoup as BS  # Can parse xml or html docs
 from datetime import datetime
 from dateutil import parser
 from src.data_processing.xbrl_pd_methods import XbrlExtraction
+from google.cloud import bigquery
+from google.oauth2 import service_account
+from google.cloud import storage
+from functools import partial
 import pandas as pd
 import os
 import csv
@@ -10,20 +14,26 @@ import sys
 import math
 import time
 import multiprocessing as mp
-import os
+import numpy as np
+import gcsfs
+import pytz
+import psutil
+import gc
+
 
 
 
 class XbrlParser:
     """ This is a class for parsing the XBRL data."""
 
-    def __init__(self):
+    def __init__(self, fs):
         """
         Constructs all the necessary attributes for the XbrlParser object of
         which there are none.
         """
         self.__init__
-        
+        self.fs = fs
+
     # Table of variables and values that indicate consolidated status
     consolidation_var_table = {
         "includedinconsolidationsubsidiary": True,
@@ -209,7 +219,7 @@ class XbrlParser:
         if "contextref" not in element.attrs:
             return {}
 
-        element_dict = {}
+        element_dict = []
 
         # Basic name and value
         try:
@@ -261,13 +271,48 @@ class XbrlParser:
         Raises:
             None
         """
-        elements = []
+        element_dict = {'name': [], 'value': [], 'unit': [],
+                         'date': []}
+        i = 0
         for each in element_set:
-            element_dict = XbrlParser.parse_element(soup, each)
-            if 'name' in element_dict:
-                elements.append(element_dict)
+            if "contextref" not in each.attrs:
+                continue
 
-        return elements
+            # Basic name and value
+            try:
+                # Method for XBRLi docs first
+                element_dict['name'].append(each.attrs['name'].lower().split(":")[-1])
+            except:
+                # Method for XBRL docs second
+                element_dict['name'].append(each.name.lower().split(":")[-1])
+
+            element_dict['value'].append(each.get_text())
+            element_dict['unit'].append(XbrlParser.retrieve_unit(soup, each))
+            element_dict['date'].append(XbrlParser.retrieve_date(soup, each))
+
+            # If there's no value retrieved, try raiding the associated context
+            # data
+            if element_dict['value'][i] == "":
+                element_dict['value'][i] = XbrlParser.retrieve_from_context(
+                    soup, each.attrs['contextref'])
+
+            # If the value has a defined unit (eg a currency) convert to numeric
+            if element_dict['unit'][i] != "NA":
+                element_dict['value'][i] = XbrlParser.clean_value(
+                    element_dict['value'][i])
+
+            # Retrieve sign of element if exists
+            try:
+                sign = each.attrs['sign']
+
+                # if it's negative, convert the value then and there
+                if sign.strip() == "-":
+                    element_dict['value'][i] = 0.0 - element_dict['value'][i]
+            except:
+                pass
+
+            i+=1
+        return element_dict
 
     @staticmethod
     def summarise_by_sum(doc, variable_names):
@@ -453,16 +498,13 @@ class XbrlParser:
         try:
             element_set = soup.find_all()
             elements = XbrlParser.parse_elements(element_set, soup)
-            if len(elements) <= 5:
-                raise Exception("Elements should be gte 5, was {}".
-                                format(len(elements)))
         except:
             # if fails parsing create dummy entry elements so entry still
             # exists in dictionary
-            elements = [{'name': 'NA', 'value': 'NA', 'unit': 'NA',
-                         'date': 'NA', 'sign': 'NA'}]
+            elements = {'name': 'NA', 'value': 'NA', 'unit': 'NA',
+                         'date': 'NA', 'sign': 'NA'}
             pass
-        
+
         return elements
 
     @staticmethod
@@ -494,7 +536,7 @@ class XbrlParser:
         return doc_dict
 
     @staticmethod
-    def flatten_data(doc, temp_exports= "data/temp_exports"):
+    def flatten_data(doc, bq_export, temp_exports= "data/temp_exports"):
         """
         Takes the data returned by flatten dict, with its tree-like
         structure and reorganises it into a long-thin format table structure
@@ -529,63 +571,74 @@ class XbrlParser:
         T = len(doc2)
         t0 = time.time()
 
-        #define initial mode and header boolean for exporting file to csv
-        md, hd = 'w', True
-
         # loop over each file and create a separate dataframe
         # for each set (elements) of parsed tags, appending result to list
+        rc = 0
+        df_list = []
         for i in range(T):
             # Turn each elements dict into a dataframe
-            df_element = pd.DataFrame.from_dict(doc2[i]['elements'])
+            df_element_export = pd.DataFrame.from_dict(doc2[i])
 
-            # Ensure each element has the same number of columns
-            if 'sign' not in df_element.columns.values:
-                df_element['sign'] = 'NA'
+            # Remove the 'sign' column if it is present
+            try:
+                df_element_export = df_element_export.drop('sign', axis=1)
+            except:
+                None
 
-            # Add a key
-            df_element['key'] = i
+            # Remove unwanted characters
+            unwanted_chars = ['  ', '"', '\n']
+            #print(df_element_export.value.str, flush=True)
+            for char in unwanted_chars:
+                df_element_export["value"] = df_element_export["value"].str\
+                    .replace(char, '')
+            #print(df_element_export.value)
+            # Change the order of the columns
+            wanted_cols = ['date', 'name', 'unit', 'value', 'doc_name',
+                           'doc_type',
+                           'doc_upload_date', 'arc_name', 'parsed',
+                           'doc_balancesheetdate',
+                           'doc_companieshouseregisterednumber',
+                           'doc_standard_type',
+                           'doc_standard_date', 'doc_standard_link', ]
 
-            # Dump the "elements" entry in the doc dict
-            doc2[i].pop('elements')
-            df_element_meta = pd.DataFrame(doc2[i], index =[0])
-            df_element_meta['key'] = i
+            df_element_export = df_element_export[wanted_cols]
+            df_element_export = df_element_export.convert_dtypes()
 
-            # Merge the metadata with the elements
-            df_element_export = df_element_meta.merge(df_element, how='left', on='key')
-            del df_element_meta, df_element
-            df_element_export = df_element_export.drop('key', axis= 1)
+            df_element_export['doc_upload_date'] = pd.to_datetime(
+                df_element_export['doc_upload_date'],
+                errors="coerce")
+            df_element_export['date'] \
+                = pd.to_datetime(df_element_export['date'],
+                                 format="%Y-%m-%d",
+                                 errors="coerce")
+            df_element_export['doc_balancesheetdate'] \
+                = pd.to_datetime(df_element_export['doc_balancesheetdate'],
+                                 format="%Y-%m-%d",
+                                 errors="coerce")
+            df_element_export['doc_standard_date'] \
+                = pd.to_datetime(df_element_export['doc_standard_date'],
+                                 format="%Y-%m-%d",
+                                 errors="coerce")
+            df_list.append(df_element_export)
+            rc += df_element_export.shape[0]
+            del df_element_export
+            # if i % 100 == 0:
+            #     print("%2.2f %% have been processed" % ((i / T) * 100))
 
-            # Append the new element to a csv file stored in temp_exports
-            df_element_export.to_csv(
-                temp_exports + "/df_elements.csv",
-                mode=md,
-                header=hd,
-                index=None,
-                sep = ",",
-                quotechar= '"'
-            )
+        df_batch = pd.concat(df_list)
+        print("Batch df contains {} rows".format(df_batch.shape[0]))
+        XbrlParser.append_to_bq(df_batch, bq_export)
+        del df_list, df_batch, doc2, doc
+        df_batch = pd.DataFrame()
+        doc2, doc = [], []
+        gc.collect()
 
-            #print a progress update
-            if i % 100 == 0:
-                print("%2.2f %% have been processed"%((i/T)*100))
+        return rc
 
-            #redefine mode and header value for subsequent dataframes (appending and False)
-            md, hd = 'a', False
 
-        # convert the stored csv back into a pandas df and tidy up
-        df_elements = pd.read_csv(
-            temp_exports + "/df_elements.csv",
-            index_col=None,
-            header=0,
-            sep=",",
-            lineterminator="\n",
-            quotechar='"')
-        os.remove(temp_exports + "/df_elements.csv")
 
-        return df_elements
 
-    @staticmethod
-    def process_account(filepath):
+    def process_account(self, filepath):
         """
         Scrape all of the relevant information from an iXBRL (html) file,
         upload the elements and some metadata to a mongodb.
@@ -629,7 +682,7 @@ class XbrlParser:
         # loop over multi-threading here - imports data and parses on separate
         # threads
         try:
-            file = open(filepath)
+            file = self.fs.open(filepath)
             soup = BS(file, "lxml")
         except:
             print("Failed to open: " + filepath)
@@ -650,7 +703,7 @@ class XbrlParser:
 
         # Fetch all the marked elements of the document
         try:
-            doc['elements'] = XbrlParser.scrape_elements(soup, filepath)
+            doc.update(XbrlParser.scrape_elements(soup, filepath))
         except Exception as e:
             doc['parsed'] = False
             doc['Error'] = e
@@ -758,8 +811,7 @@ class XbrlParser:
 
         return directory_list
 
-    @staticmethod
-    def parse_directory(directory, processed_path, num_processes=1):
+    def parse_directory(self, directory, bq_location, processed_path, num_processes=1):
         """
         Takes a directory, parses all files contained there and saves them as
         csv files in a specified directory.
@@ -774,32 +826,8 @@ class XbrlParser:
         Raises:
             None
         """
-        # Check arguments are of the correct types
-        if not(
-            isinstance(directory, str) or
-            isinstance(processed_path, str)
-        ):
-            raise TypeError(
-                "'directory' and 'processed_path' arguments must both be"
-                "passed as strings"
-            )
-        if not isinstance(num_processes, int):
-            raise TypeError(
-                "'num_processes' argument must be passed as an int"
-            )
 
-        # Check arguments have acceptable values
-        if not os.path.exists(directory):
-            raise ValueError(
-                "The specified directory does not exist"
-            )
-        if num_processes > mp.cpu_count():
-            raise ValueError(
-                "The number of cores specified exceeds the number available"
-            )
-
-        extractor = XbrlExtraction()
-        parser = XbrlParser()
+        extractor = XbrlExtraction(self.fs)
 
         # Get all the filenames from the example folder
         files, folder_month, folder_year = extractor.get_filepaths(directory)
@@ -808,7 +836,7 @@ class XbrlParser:
 
         # Here you can splice/truncate the number of files you want to process
         # for testing
-        #files = files[0:1000]
+        files = files[0:600]
 
         # Code needed to split files by the number of cores before passing in
         # as an argument
@@ -821,26 +849,30 @@ class XbrlParser:
         # Finally, build a table of all variables from all example (digital)
         # documents splitting the load between cpu cores = num_processes
         # This can take a while (hopefully not anymore!!!)
-        r = pool.map(parser.build_month_table, files)
+
+        table_export = bq_location + "." + folder_month + "-" + folder_year
+
+        self.mk_bq_table(table_export)
+
+        build_month_table_partial = partial(self.build_month_table, table_export)
+        fails = pool.map(build_month_table_partial, files)
 
         pool.close()
         pool.join()
-        # combine resultant list of lists
-        r = [item for sublist in r for item in sublist]
+
+        # # print(fails)
+        # # combine resultant list of lists
+        # # print("Combining lists...")
+        fails = [item for sublist in fails for item in sublist]
 
         # combine data and convert into dataframe
-        results = parser.flatten_data(r)
-        print(results.shape)
 
-        # save to csv
-        extractor.output_xbrl_month(results, processed_path, folder_month,
-                                    folder_year)
+        # fails = self.build_month_table(table_export, files)
+        print(fails)
+        self.build_month_table(table_export, fails)
 
-        # Find list of all unique tags in dataset
-        list_of_tags = results["name"].tolist()
-        list_of_tags_unique = list(set(list_of_tags))
-
-        print("Longest tag: ", len(max(list_of_tags_unique, key=len)))
+        self.export_csv(table_export, processed_path,
+                        folder_month + "-" + folder_year + "_xbrl_data")
 
         # Output all unique tags to a txt file
 
@@ -863,10 +895,8 @@ class XbrlParser:
 
         # print(results.shape)
 
-
-    @staticmethod
-    def parse_files(quarter, year, unpacked_files,
-                    custom_input, processed_files, num_cores):
+    def parse_files(self, quarter, year, unpacked_files,
+                    custom_input, bq_location, csv_dir, num_cores):
         """
         Parses a set of accounts for a given time period and saves as a csv in
         a specified location.
@@ -888,18 +918,17 @@ class XbrlParser:
         """
         # Construct both the list of months and list of corresponding
         # directories
-        month_list = XbrlParser.create_month_list(quarter)
-        directory_list = XbrlParser.create_directory_list(month_list,
+        month_list = self.create_month_list(quarter)
+        directory_list = self.create_directory_list(month_list,
                                                           unpacked_files,
                                                           year,
                                                           custom_input)
         # Parse each directory
         for directory in directory_list:
             print("Parsing " + directory + "...")
-            XbrlParser.parse_directory(directory, processed_files, num_cores)
+            self.parse_directory(directory, bq_location, csv_dir, num_cores)
 
-    @staticmethod
-    def build_month_table(list_of_files):
+    def build_month_table(self, bq_export,list_of_files):
         """
         Function which parses, sequentially, a list of xbrl/ html files,
         converting each parsed file into a dictionary and appending to a list.
@@ -929,27 +958,166 @@ class XbrlParser:
 
         # Empty table awaiting results
         results = []
+        fails = []
+        #
+        # big_results = []
 
+        start_memory = psutil.virtual_memory().percent
+        file_threshold = 7000
+        print("Start memory usuage: ", start_memory)
         COUNT = 0
-
+        file_count = 0
+        row_count = 0
+        batch_count = 0
         # For every file
         for file in list_of_files:
             COUNT += 1
+            try:
+                file_count += 1
+                # Read the file and parse
+                doc = self.process_account(file)
+                # flatten the elements dict into single dict
+                #doc['elements'] = XbrlParser.flatten_dict(doc['elements'])
 
-            # Read the file and parse
-            doc = XbrlParser.process_account(file)
+                # append results to table
+                # for i in range(len(results)**3):
+                results.append(doc)
+                #
+                # big_results += [doc]*(len(big_results)+1)
 
-            # flatten the elements dict into single dict
-            doc['elements'] = XbrlParser.flatten_dict(doc['elements'])
+            except:
+                # if print_fails:
+                print(file, "has failed to parse")
+                fails.append(file)
+                continue
+                
+            #logic to batch file based on threshold and upload
+            #to big query
+            if (file_count > file_threshold) \
+                    or COUNT == len(list_of_files):
+                file_count = 0
+                row_count += XbrlParser.flatten_data(results, bq_export)
+                XbrlExtraction.progressBar("XBRL Accounts Parsed", COUNT,
+                                           len(list_of_files), row_count,
+                                           batch_count,
+                                           psutil.virtual_memory().percent,
+                                           uploading=True,
+                                           bar_length=50,
+                                           width=20)
+                batch_count += 1
+                del results
+                results = []
+                # big_results = []
+                gc.collect()
+                # t = 0
+                # while psutil.virtual_memory().percent > start_memory + 10:
+                #     sys.stdout.write("\r Waiting, memory at {0}%".format(
+                #         psutil.virtual_memory().percent
+                #     ))
+                #     sys.stdout.flush()
+                #     t+=1
+                #     time.sleep(6)
+                #     if t > 100:
+                #         break
 
-            # append results to table
-            results.append(doc)
             XbrlExtraction.progressBar("XBRL Accounts Parsed", COUNT,
-                                       len(list_of_files), bar_length=50,
-                                       width=20)
+                                       len(list_of_files), row_count,
+                                       batch_count,
+                                       psutil.virtual_memory().percent,
+                                       bar_length=50,width=20)
+
 
         print(
             "Average time to process an XBRL file: \x1b[31m{:0f}\x1b[0m".format(
                 (time.time() - process_start) / 60, 2), "minutes")
 
-        return results
+        return fails
+
+    @staticmethod
+    def append_to_bq(df, table):
+        client = bigquery.Client()
+
+        job_config = bigquery.LoadJobConfig(
+            schema = [
+                bigquery.SchemaField("doc_companieshouseregisterednumber", bigquery.enums.SqlTypeNames.STRING),
+                bigquery.SchemaField("date", bigquery.enums.SqlTypeNames.DATE),
+                bigquery.SchemaField("parsed", bigquery.enums.SqlTypeNames.BOOLEAN),
+                bigquery.SchemaField("doc_balancesheetdate", bigquery.enums.SqlTypeNames.DATE),
+                bigquery.SchemaField("doc_upload_date", bigquery.enums.SqlTypeNames.TIMESTAMP),
+                bigquery.SchemaField("doc_standard_date", bigquery.enums.SqlTypeNames.DATE),
+                bigquery.SchemaField("name", bigquery.enums.SqlTypeNames.STRING),
+                bigquery.SchemaField("unit", bigquery.enums.SqlTypeNames.STRING),
+                bigquery.SchemaField("value", bigquery.enums.SqlTypeNames.STRING),
+                bigquery.SchemaField("doc_name", bigquery.enums.SqlTypeNames.STRING),
+                bigquery.SchemaField("doc_type", bigquery.enums.SqlTypeNames.STRING),
+                bigquery.SchemaField("arc_name", bigquery.enums.SqlTypeNames.STRING),
+                bigquery.SchemaField("doc_standard_type", bigquery.enums.SqlTypeNames.STRING),
+                bigquery.SchemaField("doc_standard_link", bigquery.enums.SqlTypeNames.STRING)
+            ],
+            write_disposition=bigquery.WriteDisposition.WRITE_APPEND
+        )
+
+        job = client.load_table_from_dataframe(
+            df, table, job_config=job_config
+            )  # Make an API request.
+        job.result()  # Wait for the job to complete.
+        job = 0
+        del job
+
+    @staticmethod
+    def mk_bq_table(bq_location, schema="parsed_data_schema.txt"):
+        client = bigquery.Client()
+
+        client.delete_table(bq_location, not_found_ok=True)
+        bq_string = "bq mk --table " + bq_location + " " + schema
+        os.popen(bq_string).read()
+
+    def export_csv(self, bq_table, gcs_location, file_name):
+        client = bigquery.Client()
+        job_config = bigquery.job.ExtractJobConfig(print_header=False)
+        extract_job = client.extract_table(
+            bq_table,
+            "gs://" + gcs_location + "/" + file_name + "*.csv",
+            location="europe-west2",
+            job_config=job_config
+        )
+        extract_job.result()
+
+        header = pd.DataFrame(columns=['date', 'name', 'unit', 'value',
+                            'doc_name', 'doc_type',
+                           'doc_upload_date', 'arc_name', 'parsed',
+                           'doc_balancesheetdate',
+                           'doc_companieshouseregisterednumber',
+                           'doc_standard_type',
+                           'doc_standard_date', 'doc_standard_link'],)
+        header.to_csv("gs://" + gcs_location + "/header_" + file_name + ".csv",
+                      header=True, index=False)
+
+
+        split_files = [f.split("/", 1)[1] for f in self.fs.ls(gcs_location)
+                       if (f.split("/")[-1]).startswith("header_" + file_name)] +\
+                      [f.split("/", 1)[1] for f in self.fs.ls(gcs_location)
+                       if (f.split("/")[-1]).startswith(file_name)]
+
+        storage_client = storage.Client()
+        bucket = storage_client.bucket(gcs_location.split("/",1)[0])
+        destination = bucket.blob(gcs_location.split("/", 1)[1] + "/" + file_name + ".csv")
+        destination.content_type = "text/csv"
+
+        sources = [bucket.get_blob(f) for f in split_files]
+        destination.compose(sources)
+
+        self.fs.rm([f for f in self.fs.ls(gcs_location)
+                       if ((f.split("/")[-1]).startswith(file_name + "0")) or
+                    ((f.split("/")[-1]).startswith("header_" + file_name))
+                    ])
+
+
+
+if __name__ == "__main__":
+    parser = XbrlParser(gcsfs.GCSFileSystem(project="ons-companies-house-dev",
+                                            key="/home/dylan_purches/Desktop/dev_key.json",
+                                            cache_timeout=0))
+    parser.export_csv("xbrl_parsed_data.chunky_December-2020",
+                          "ons-companies-house-dev-test-parsed-csv-data/v2_parsed_data",
+                          "2020-December_xbrl_data")
