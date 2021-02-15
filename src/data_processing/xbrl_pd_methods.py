@@ -32,7 +32,7 @@ class XbrlExtraction:
         Raises:
             TypeError: If the path of the directory is not a string
         """
-
+        # Check argument is of correct type
         if not isinstance(directory, str):
             raise TypeError("The input argument 'directory' \
             needs to be a string")
@@ -67,6 +67,32 @@ class XbrlExtraction:
         Raises:
             None
         """
+        # Check arguments are of the correct type
+        if not isinstance(name, str):
+            raise TypeError(
+                "'name' argument must be passed as a string"
+            )
+        if not (
+            isinstance(value, (float, int)) or
+            isinstance(endvalue, (float, int))
+        ):
+            raise TypeError(
+                "'value' and 'end' arguments must be passed as floats or ints"
+            )
+        if not (
+            isinstance(bar_length, int) or
+            isinstance(width, int)
+        ):
+            raise TypeError(
+                "'bar_length' and 'width' arguments must be passed as ints"
+            )
+
+        # Check arguments are of the correct values
+        if value > endvalue:
+            raise ValueError(
+                "Current value cannot exceed the end value"
+            )
+
         percent = float(value) / endvalue
         arrow = '-' * int(round(percent*bar_length) - 1) + '>'
         spaces = ' ' * (bar_length - len(arrow))
