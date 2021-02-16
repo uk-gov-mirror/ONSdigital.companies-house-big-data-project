@@ -481,14 +481,15 @@ class XbrlParser:
         return doc_dict
 
     @staticmethod
-    def flatten_data(doc, bq_export, temp_exports= "data/temp_exports"):
+    def flatten_data(doc, bq_export):
         """
         Takes the data returned by flatten dict, with its tree-like
         structure and reorganises it into a long-thin format table structure
         suitable for SQL applications.
 
         Argument:
-            doc: a list of dictionaries (list)
+            doc:        a list of dictionaries (list)
+            bq_export:  BigQuery table to upload results to (str)
         Returns:
             df_elements: A dataframe containing all data from doc (dataframe)
         Raises:
@@ -496,24 +497,16 @@ class XbrlParser:
         """
         doc2 = doc.copy()
 
-        # Check if the temp_exports folder is present
-        if not (os.path.isdir(temp_exports)):
-            os.mkdir(temp_exports)
-
-        # Check if temp file is already present and remove
-        try:
-            os.remove(temp_exports + "/df_elements.csv")
-        except:
-            pass
-
-        #define lenth of dict and initial time
+        # Define lenth of dict and initial time
         T = len(doc2)
         t0 = time.time()
 
-        # loop over each file and create a separate dataframe
-        # for each set (elements) of parsed tags, appending result to list
+        # Set up row counter and empty list to save DataFrames
         rc = 0
         df_list = []
+
+        # loop over each file and create a separate dataframe
+        # for each set (elements) of parsed tags, appending result to list
         for i in range(T):
             # Turn each elements dict into a dataframe
             df_element_export = pd.DataFrame.from_dict(doc2[i])
@@ -526,11 +519,11 @@ class XbrlParser:
 
             # Remove unwanted characters
             unwanted_chars = ['  ', '"', '\n']
-            #print(df_element_export.value.str, flush=True)
+
             for char in unwanted_chars:
                 df_element_export["value"] = df_element_export["value"].str\
                     .replace(char, '')
-            #print(df_element_export.value)
+
             # Change the order of the columns
             wanted_cols = ['date', 'name', 'unit', 'value', 'doc_name',
                            'doc_type',
@@ -540,9 +533,12 @@ class XbrlParser:
                            'doc_standard_type',
                            'doc_standard_date', 'doc_standard_link', ]
 
+            # Keep only the remaining columns and set dtypes
             df_element_export = df_element_export[wanted_cols]
             df_element_export = df_element_export.convert_dtypes()
 
+            # Set explicit data types for date columns - requirement for
+            # BigQuery upload
             df_element_export['doc_upload_date'] = pd.to_datetime(
                 df_element_export['doc_upload_date'],
                 errors="coerce")
@@ -558,24 +554,25 @@ class XbrlParser:
                 = pd.to_datetime(df_element_export['doc_standard_date'],
                                  format="%Y-%m-%d",
                                  errors="coerce")
+
             df_list.append(df_element_export)
+
+            # Update row count and free up memory
             rc += df_element_export.shape[0]
             del df_element_export
-            # if i % 100 == 0:
-            #     print("%2.2f %% have been processed" % ((i / T) * 100))
 
+        # Concatenate list of DataFrames and append to BigQuery table
         df_batch = pd.concat(df_list)
-        print("Batch df contains {} rows".format(df_batch.shape[0]))
+        print("\n Batch df contains {} rows".format(df_batch.shape[0]))
         XbrlParser.append_to_bq(df_batch, bq_export)
+
+        # Clean up memory
         del df_list, df_batch, doc2, doc
         df_batch = pd.DataFrame()
         doc2, doc = [], []
         gc.collect()
 
         return rc
-
-
-
 
     def process_account(self, filepath):
         """
@@ -708,13 +705,15 @@ class XbrlParser:
 
         return directory_list
 
-    def parse_directory(self, directory, bq_location, processed_path, num_processes=1):
+    def parse_directory(self, directory, bq_location,
+                        processed_path, num_processes=1):
         """
         Takes a directory, parses all files contained there and saves them as
         csv files in a specified directory.
 
         Arguments:
-            directory: A directory (path) to be processed (str)
+            directory:      A directory (path) to be processed (str)
+            bq_location:    Location of BigQuery table to save results (str)
             processed_path: String of the path where processed files should be
                             saved (str)
             num_processes:  The number of cores to use in multiprocessing (int)
@@ -732,10 +731,16 @@ class XbrlParser:
         
         # Here you can splice/truncate the number of files you want to process
         # for testing
-        # files = files[0:600]
+        files = files[0:600]
 
         # TO BE COMMENTED OUT AFTER TESTING
         print(folder_month, folder_year)
+
+        # Define the location where to export results to BigQuery
+        table_export = bq_location + ".chunky_" + folder_month + "-" + folder_year
+
+        # Create a BigQuery table
+        self.mk_bq_table(table_export)
 
         # Code needed to split files by the number of cores before passing in
         # as an argument
@@ -745,31 +750,23 @@ class XbrlParser:
 
         # define number of processors
         pool = mp.Pool(processes=num_processes)
-        # Finally, build a table of all variables from all example (digital)
-        # documents splitting the load between cpu cores = num_processes
-        # This can take a while (hopefully not anymore!!!)
 
-        table_export = bq_location + "." + folder_month + "-" + folder_year
-
-        self.mk_bq_table(table_export)
-
-        build_month_table_partial = partial(self.build_month_table, table_export)
+        # Create a partial function so that pool.map only takes one argument
+        build_month_table_partial = partial(self.build_month_table,
+                                            table_export)
         fails = pool.map(build_month_table_partial, files)
 
         pool.close()
         pool.join()
 
-        # # print(fails)
-        # # combine resultant list of lists
-        # # print("Combining lists...")
+        # combine resultant list of lists (of failed files)
         fails = [item for sublist in fails for item in sublist]
-
-        # combine data and convert into dataframe
-
-        # fails = self.build_month_table(table_export, files)
         print(fails)
+
+        # Retry failed files without multiprocessing
         self.build_month_table(table_export, fails)
 
+        # Export the BigQuery table to a csv file
         self.export_csv(table_export, processed_path,
                         folder_month + "-" + folder_year + "_xbrl_data")
 
@@ -805,11 +802,11 @@ class XbrlParser:
             year:               year to process files from (int)
             unpacked_files:     path of directory where files to be processed
                                 are stored (string)
-            processed_files:    path of directory where the files the resulting
-                                files will be saved (string)
+            bq_location:        Location of BigQuery table to save results (str)
+            csv_dir:            GCS folder to save csv file (str)
+            custom_input:       Used to set a specific folder of accounts
             num_cores:          number of cores to use with mutliprocessing
                                 module (int)
-            custom_input:       Used to set a specific folder of accounts
         Returns:
             None
         Raises:
@@ -819,9 +816,9 @@ class XbrlParser:
         # directories
         month_list = self.create_month_list(quarter)
         directory_list = self.create_directory_list(month_list,
-                                                          unpacked_files,
-                                                          year,
-                                                          custom_input)
+                                                  unpacked_files,
+                                                  year,
+                                                  custom_input)
         # Parse each directory
         for directory in directory_list:
             print("Parsing " + directory + "...")
@@ -835,7 +832,7 @@ class XbrlParser:
         Arguments:
             bq_export:      Location in BigQuery where (new) table of data
                             should be constructed.
-            list of files:  list of filepaths (gcs uri's), each coresponding to
+            list_of_files:  list of filepaths (gcs uri's), each coresponding to
                             a xbrl/html file (list)
 
         Returns:
@@ -999,8 +996,15 @@ class XbrlParser:
         # Create a BigQuery client
         client = bigquery.Client()
 
-        # Remove the table if it already exists
-        client.delete_table(bq_location, not_found_ok=True)
+        # Check if table exists
+        try:
+            client.get_table(bq_location)
+            table_exists = True
+        except:
+            table_exists = False
+
+        if table_exists:
+            raise ValueError("Table already exists, please remove and retry")
 
         # Create the table using the command line
         bq_string = "bq mk --table " + bq_location + " " + schema
