@@ -60,7 +60,7 @@ class Table2Df:
             str_headers.append(new_string)
         return str_headers
 
-    def get_info_headers(self, years = range(1999,2020)):
+    def get_info_headers(self, years = range(1,20)):
         """
         Creates a DataFrame of information of column info (meta data). For each column in
         our fitted table object, we record the corresponding date and units (currency).
@@ -81,7 +81,7 @@ class Table2Df:
         # As above but for where we see a year
         date_indexes = []
         for i in self.table.header_indices:
-            contains_year = any([str(y) in self.data.loc[i, "value"] for y in years])
+            contains_year = any([str(y).zfill(2) in self.data.loc[i, "value"] for y in years])
             if contains_year:
                 date_indexes.append(i)
         self.date_headers = date_indexes
@@ -111,7 +111,7 @@ class Table2Df:
         return header_data
 
 
-    def get_info_headers_v2(self, years = range(1999,2020)):
+    def get_info_headers_v2(self, years = range(1,20)):
         """
         Creates a DataFrame of information of column info (meta data). For each column in
         our fitted table object, we record the corresponding date and units (currency).
@@ -134,7 +134,7 @@ class Table2Df:
         # As above but for where we see a year
         dates = []
         for i in self.table.header_indices:
-            contains_year = any([str(y) in self.data.loc[i, "value"] for y in years])
+            contains_year = any([str(y).zfill(2) in self.data.loc[i, "value"] for y in years])
             if contains_year:
                 dates.append(self.data.loc[i, "value"])
         self.dates = dates
@@ -163,7 +163,7 @@ class Table2Df:
             None
         """
         # Merge TableFitter df with our info headers data
-        self.df = self.table_data.merge(self.get_info_headers(), on="column")
+        self.df = self.table_data.merge(self.get_info_headers_v2(), on="column")
         
         # For each row of the df, either add a "name" value if you can find one, if not just set to None
         for index, row in self.df.iterrows():

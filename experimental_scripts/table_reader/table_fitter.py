@@ -406,7 +406,7 @@ class TableFitter(TableIdentifier):
 
         if dists[fitted_col] <= const*(eval(df.loc[index, "normed_vertices"])[3][1]
                           - eval(df.loc[index, "normed_vertices"])[0][1]):
-            return fitted_col
+            return fitted_col + 1
         else:
             return None
 
