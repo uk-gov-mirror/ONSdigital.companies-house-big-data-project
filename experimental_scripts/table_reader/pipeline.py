@@ -87,8 +87,9 @@ table_data.get_header_row()
 table_data.remove_excess_lines()
 table_data.get_other_columns()
 #table_data.remove_excess_lines()
+table_data.column_order()
 
-#print(table_data.data)
+###print(table_data.data)
 
 to_df = Table2Df(table_data, fs)
 
@@ -97,6 +98,7 @@ to_df = Table2Df(table_data, fs)
 to_df.get_final_df()
 
 # print(to_df.data)
+
 # # Create an annotated pdf
 # annotator = PDFAnnotator("ons-companies-house-dev-scraped-pdf-data/doc_ai_outputs/bs_pdfs/"
 #                          + "diageo_bs" + ".pdf", gcp=True)
