@@ -292,7 +292,7 @@ class TableFitter(TableIdentifier):
 
 
         # determine if any residual elements are aligned
-        exception_aligned = TableFitter.group_header_points(other_cols_df, exceptions)
+        exception_aligned = TableFitter.group_header_points(other_cols_df, exceptions, dist=0.01)
         print(exception_aligned)
         
         # evaluate residual elements and append a new column if 
@@ -300,17 +300,14 @@ class TableFitter(TableIdentifier):
         # (more than 2 elements, high confidence or if any value is a digit)
 
         for x in exception_aligned:
-            c = max(self.data.column)
+            c = int(np.nanmax(self.data["column"]))
             print('Original C',c)
             if len(x) > 1:
                 c += 1
                 self.data.loc[[i for i in x], "column"] = int(c)
             else:
-                if self.data.loc[x[0],"confidence"] > thresh:
-                    c += 1
-                    self.data.loc[x[0], "column"] = int(c)
-
-                elif any(str.isdigit(c) for c in self.data.loc[x[0],'value']):
+                if (self.data.loc[x[0],"confidence"] > thresh) \
+                    and (any(str.isdigit(c) for c in self.data.loc[x[0],'value'])):
                     c += 1
                     self.data.loc[x[0], "column"] = int(c)
                 else:
@@ -402,7 +399,7 @@ class TableFitter(TableIdentifier):
         
 
     @staticmethod
-    def find_closest_col(df, columns, index, const=4):
+    def find_closest_col(df, columns, index, const=1.4):
         """
         Finds which column a given element (index) should be assigned to by
         finding which header element it is closest to.
@@ -430,14 +427,13 @@ class TableFitter(TableIdentifier):
         # be the first column
         fitted_col = dists.index(min(dists))
 
-        if dists[fitted_col] <= const*(eval(df.loc[index, "normed_vertices"])[3][1]
-                          - eval(df.loc[index, "normed_vertices"])[0][1]):
+        if dists[fitted_col] <= const*(stats.median(df["height"])):
             return fitted_col + 1
         else:
             return None
 
     @staticmethod
-    def group_header_points(df, header_indices):
+    def group_header_points(df, header_indices, dist = 0.01):
         """
         Takes a set of indices and groups them using the find_alignment
         function to put close indices into groups.
@@ -463,11 +459,11 @@ class TableFitter(TableIdentifier):
 
             # Find the alignment object for that element
             aligner = TableFitter.find_alignment(header_df, first_ind)
-
+            print(aligner)
             # Find the indices aligned to that object
             grouped_inds = TableFitter.find_aligned_indices(header_df,
                                                             aligner,
-                                                            d=0.04)
+                                                            d=dist)
 
             # Add the group of indices to the list and remove them from the df
             header_groups.append(grouped_inds["indices"])

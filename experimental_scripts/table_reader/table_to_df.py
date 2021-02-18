@@ -124,8 +124,11 @@ class Table2Df:
         Raises:
             None
         """
-        self.data_cols = [i+1 for i,g in enumerate(self.table.header_groups) if self.table.notes_row[0] not in g]
-        data_cols = [i+1 for i,g in enumerate(self.table.header_groups) if self.table.notes_row[0] not in g]
+        data_cols = list(range(3, int(max(self.data['updated_column_order']))+1))
+        self.data_cols = data_cols
+
+        # self.data_cols = [i+1 for i,g in enumerate(self.table.header_groups) if self.table.notes_row[0] not in g]
+        # data_cols = [i+1 for i,g in enumerate(self.table.header_groups) if self.table.notes_row[0] not in g]
 
         currencies = [self.data.loc[i, "value"] for i in self.table.header_indices if
                             len(regex.findall(r"\p{Sc}", self.data.loc[i, "value"]))]
@@ -138,11 +141,13 @@ class Table2Df:
             if contains_year:
                 dates.append(self.data.loc[i, "value"])
         self.dates = dates
+        print(self.dates)
+        print(data_cols)
 
         if len(data_cols)%len(dates) != 0:
             raise(TypeError("Cannot logically fit dates to columns"))
         else:
-            header_dict = {"column": data_cols, "date":[dates[i//(len(data_cols)//len(dates))] for i in range(len(data_cols))], 
+            header_dict = {"updated_column_order": data_cols, "date":[dates[i//(len(data_cols)//len(dates))] for i in range(len(data_cols))], 
                         "unit":[currency]*len(data_cols)}
 
 
@@ -163,7 +168,7 @@ class Table2Df:
             None
         """
         # Merge TableFitter df with our info headers data
-        self.df = self.table_data.merge(self.get_info_headers_v2(), on="column")
+        self.df = self.table_data.merge(self.get_info_headers_v2(), on="updated_column_order")
         
         # For each row of the df, either add a "name" value if you can find one, if not just set to None
         for index, row in self.df.iterrows():
