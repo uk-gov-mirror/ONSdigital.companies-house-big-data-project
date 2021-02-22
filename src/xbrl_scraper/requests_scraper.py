@@ -10,19 +10,11 @@ import requests
 from bs4 import BeautifulSoup
 import time
 import random
-import gcsfs
+from google.cloud import storage
 
 class XbrlScraper:
 
-    def __init__(self, fs):
-        """
-        Constructs all the necessary attributes for the XbrlScraper object of
-        which there are none.
-        """
-        self.__init__
-        self.fs = fs
-
-    def scrape_webpage(self, url, base_url, dir_save_to):
+    def scrape_webpage(self, url, base_url, dir_to_save):
         """
         Scrapes target web page and saves all zip files found to
         a directory
@@ -30,7 +22,7 @@ class XbrlScraper:
         Arguments:
             url:            Url of web page to scrape (str)
             base_url:       Base url of wep page to scrape (str)
-            dir_save_to:    Directory to save zip files to
+            dir_save_to:    Directory to save zip files to, consisting of bucket_name/folder
         Returns:
             None
         Raises:
@@ -43,6 +35,7 @@ class XbrlScraper:
             Example:
             url = "http://download.companieshouse.gov.uk/en_monthlyaccountsdata.html"
             base_url = "http://download.companieshouse.gov.uk/"
+            dir_to_save = "ons-companies-house-dev-xbrl-scraped-data/requests_scraper_test_folder"
         """
 
         print("Fetching content...")
@@ -66,24 +59,35 @@ class XbrlScraper:
             # Filter out files that are not zip
             links = [link for link in links if link[-4:] == ".zip"]
 
+            storage_client = storage.Client()
+            bucket = storage_client.bucket(dir_to_save.split("/")[0])
+
             # Download and save zip files
             #for link in links:
             for link in [links[0]]:
 
                 zip_url = base_url + link
 
-                #filepath = os.path.join(dir_save_to, link)
-                filepath = dir_save_to + "/" + link
+                #filepath = dir_save_to + "/" + link.split("/")[1]
+                #filepath = dir_save_to + "/" + link
+                if "/" in link: link = link.split("/")[-1]
+
+                blob = bucket.blob("/".join(dir_to_save.split("/")[1:]) + "/" + link)
+
+                #print(zip_url)
+                #print("---")
+                #print(link)
+                #print("---")
+                #print("/".join(dir_to_save.split("/")[1:]) + "/" + link)
 
                 # Only download and save a file if it doesn't exist in the directory
-                if not self.fs.exists(filepath):
+                if not blob.exists():
                 
                     print("Downloading " + link + "...")
                     zip_file = requests.get(zip_url).content
                     
                     print("Saving zip file " + link + "...")
-                    with self.fs.open(filepath, 'wb') as fp:
-                        fp.write(zip_file)
+                    blob.upload_from_string(zip_file, content_type="application/zip")
 
                     # Random sleep to avoid stressing the target server
                     time.sleep((random.random() * 2.0) + 3.0)
@@ -99,14 +103,14 @@ class XbrlScraper:
             print("Unable to scrape web page!")
             print("Error code: " + status)
 
-fs = gcsfs.GCSFileSystem(project="ons-companies-house-dev")
+scraper = XbrlScraper()
 
-scraper = XbrlScraper(fs)
+#url = "http://download.companieshouse.gov.uk/en_monthlyaccountsdata.html"
+#base_url = "http://download.companieshouse.gov.uk/"
 
-url = "http://download.companieshouse.gov.uk/en_monthlyaccountsdata.html"
+url = "http://download.companieshouse.gov.uk/historicmonthlyaccountsdata.html"
 base_url = "http://download.companieshouse.gov.uk/"
-dir_to_save = "ons-companies-house-dev-test-xbrl-scraped-data/requests_scraper_test_folder"
 
-#dir_to_save = r'/home/peter_derrick/shares/xbrl_scraped_data'
+dir_to_save = "ons-companies-house-dev-xbrl-scraped-data/requests_scraper_test_folder"
 
 scraper.scrape_webpage(url, base_url, dir_to_save)
