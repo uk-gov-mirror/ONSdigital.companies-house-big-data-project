@@ -68,17 +68,9 @@ class XbrlScraper:
 
                 zip_url = base_url + link
 
-                #filepath = dir_save_to + "/" + link.split("/")[1]
-                #filepath = dir_save_to + "/" + link
                 if "/" in link: link = link.split("/")[-1]
 
                 blob = bucket.blob("/".join(dir_to_save.split("/")[1:]) + "/" + link)
-
-                #print(zip_url)
-                #print("---")
-                #print(link)
-                #print("---")
-                #print("/".join(dir_to_save.split("/")[1:]) + "/" + link)
 
                 # Only download and save a file if it doesn't exist in the directory
                 if not blob.exists():

@@ -123,6 +123,10 @@ def main():
 
     # Execute module xbrl_web_scraper
     if xbrl_web_scraper == str(True):
+
+        print("XBRL web scraper running...")
+        print("Scraping XBRL data to:", xbrl_scraper_dir_to_save)
+
         scraper = XbrlScraper()
         scraper.scrape_webpage( xbrl_scraper_url,
                                 xbrl_scraper_base_url,
