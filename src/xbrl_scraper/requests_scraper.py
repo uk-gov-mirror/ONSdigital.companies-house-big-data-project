@@ -63,8 +63,7 @@ class XbrlScraper:
             bucket = storage_client.bucket(dir_to_save.split("/")[0])
 
             # Download and save zip files
-            #for link in links:
-            for link in [links[0]]:
+            for link in links:
 
                 zip_url = base_url + link
 
