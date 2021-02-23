@@ -2,6 +2,10 @@ from bs4 import BeautifulSoup as BS  # Can parse xml or html docs
 from datetime import datetime
 from dateutil import parser
 from src.data_processing.xbrl_pd_methods import XbrlExtraction
+from google.cloud import bigquery
+from google.oauth2 import service_account
+from google.cloud import storage
+from functools import partial
 import pandas as pd
 import os
 import csv
@@ -11,19 +15,24 @@ import math
 import time
 import multiprocessing as mp
 import numpy as np
+import gcsfs
+import pytz
+import psutil
+import gc
 
 
 
 class XbrlParser:
     """ This is a class for parsing the XBRL data."""
 
-    def __init__(self):
+    def __init__(self, fs):
         """
         Constructs all the necessary attributes for the XbrlParser object of
         which there are none.
         """
         self.__init__
-        
+        self.fs = fs
+
     # Table of variables and values that indicate consolidated status
     consolidation_var_table = {
         "includedinconsolidationsubsidiary": True,
@@ -209,7 +218,7 @@ class XbrlParser:
         if "contextref" not in element.attrs:
             return {}
 
-        element_dict = {}
+        element_dict = []
 
         # Basic name and value
         try:
@@ -261,13 +270,48 @@ class XbrlParser:
         Raises:
             None
         """
-        elements = []
+        element_dict = {'name': [], 'value': [], 'unit': [],
+                         'date': []}
+        i = 0
         for each in element_set:
-            element_dict = XbrlParser.parse_element(soup, each)
-            if 'name' in element_dict:
-                elements.append(element_dict)
+            if "contextref" not in each.attrs:
+                continue
 
-        return elements
+            # Basic name and value
+            try:
+                # Method for XBRLi docs first
+                element_dict['name'].append(each.attrs['name'].lower().split(":")[-1])
+            except:
+                # Method for XBRL docs second
+                element_dict['name'].append(each.name.lower().split(":")[-1])
+
+            element_dict['value'].append(each.get_text())
+            element_dict['unit'].append(XbrlParser.retrieve_unit(soup, each))
+            element_dict['date'].append(XbrlParser.retrieve_date(soup, each))
+
+            # If there's no value retrieved, try raiding the associated context
+            # data
+            if element_dict['value'][i] == "":
+                element_dict['value'][i] = XbrlParser.retrieve_from_context(
+                    soup, each.attrs['contextref'])
+
+            # If the value has a defined unit (eg a currency) convert to numeric
+            if element_dict['unit'][i] != "NA":
+                element_dict['value'][i] = XbrlParser.clean_value(
+                    element_dict['value'][i])
+
+            # Retrieve sign of element if exists
+            try:
+                sign = each.attrs['sign']
+
+                # if it's negative, convert the value then and there
+                if sign.strip() == "-":
+                    element_dict['value'][i] = 0.0 - element_dict['value'][i]
+            except:
+                pass
+
+            i+=1
+        return element_dict
 
     @staticmethod
     def summarise_by_sum(doc, variable_names):
@@ -285,6 +329,22 @@ class XbrlParser:
             total_assets:   the totals of the given values
             units:          the units corresponding to the given sum
         """
+        # Check arguments are of correct types
+        if not isinstance(doc, dict):
+            raise TypeError(
+                "'doc' argument must be a dictionary"
+            )
+        if isinstance(variable_names, list):
+            if not all(isinstance(name, str) for name in variable_names):
+                raise TypeError (
+                    "Variable names must be passed as strings"
+                )
+        else:
+            if not isinstance(variable_names, str):
+                raise TypeError(
+                    "Variable name must be passed as a string"
+                )
+
         # Convert elements to pandas df
         df = pd.DataFrame(doc['elements'])
 
@@ -325,6 +385,22 @@ class XbrlParser:
         Raises:
             None
         """
+        # Check arguments are of correct types
+        if not isinstance(doc, dict):
+            raise TypeError(
+                "'doc' argument must be a dictionary"
+            )
+        if isinstance(variable_names, list):
+            if not all(isinstance(name, str) for name in variable_names):
+                raise TypeError(
+                    "Variable names must be passed as strings"
+                )
+        else:
+            if not isinstance(variable_names, str):
+                raise TypeError(
+                    "Variable name must be passed as a string"
+                )
+
         # Convert elements to pandas df
         df = pd.DataFrame(doc['elements'])
 
@@ -365,6 +441,22 @@ class XbrlParser:
         Raises:
             None
         """
+        # Check arguments are of correct types
+        if not isinstance(doc, dict):
+            raise TypeError(
+                "'doc' argument must be a dictionary"
+            )
+        if isinstance(variable_names, list):
+            if not all(isinstance(name, str) for name in variable_names):
+                raise TypeError(
+                    "Variable names must be passed as strings"
+                )
+        else:
+            if not isinstance(variable_names, str):
+                raise TypeError(
+                    "Variable name must be passed as a string"
+                )
+
         results = {}
 
         # Convert elements to pandas df
@@ -405,16 +497,13 @@ class XbrlParser:
         try:
             element_set = soup.find_all()
             elements = XbrlParser.parse_elements(element_set, soup)
-            if len(elements) <= 5:
-                raise Exception("Elements should be gte 5, was {}".
-                                format(len(elements)))
         except:
             # if fails parsing create dummy entry elements so entry still
             # exists in dictionary
-            elements = [{'name': 'NA', 'value': 'NA', 'unit': 'NA',
-                         'date': 'NA', 'sign': 'NA'}]
+            elements = {'name': 'NA', 'value': 'NA', 'unit': 'NA',
+                         'date': 'NA', 'sign': 'NA'}
             pass
-        
+
         return elements
 
     @staticmethod
@@ -431,6 +520,12 @@ class XbrlParser:
         Raises:
             None
         """
+        # Check arguments are of correct types
+        if not all(isinstance(el, dict) for el in doc):
+            raise TypeError(
+                "'doc' argument must be a list of dictionaries"
+            )
+
         # combines list of dictionaries into one dictionary based on common
         # keys
         doc_dict = {}
@@ -440,37 +535,41 @@ class XbrlParser:
         return doc_dict
 
     @staticmethod
-    def flatten_data(doc, temp_exports= "data/temp_exports"):
+    def flatten_data(doc, bq_export):
         """
         Takes the data returned by flatten dict, with its tree-like
         structure and reorganises it into a long-thin format table structure
         suitable for SQL applications.
 
         Argument:
-            doc: a list of dictionaries (list)
+            doc:        a list of dictionaries (list)
+            bq_export:  BigQuery table to upload results to (str)
         Returns:
             df_elements: A dataframe containing all data from doc (dataframe)
         Raises:
             None
         """
+        # Check arguments are of correct types
+        if not all(isinstance(el, dict) for el in doc):
+            raise TypeError(
+                "'doc' argument must be a list of dictionaries"
+            )
+
         doc2 = doc.copy()
 
-        # Check if the temp_exports folder is present
-        if not (os.path.isdir(temp_exports)):
-            os.mkdir(temp_exports)
-
-        # Check if temp file is already present and remove
-        try:
-            os.remove(temp_exports + "/df_elements.csv")
-        except:
-            pass
-
-        #define lenth of dict and initial time
+        # Define lenth of dict and initial time
         T = len(doc2)
         t0 = time.time()
 
-        # Define initial mode and header boolean for exporting file to csv
-        md, hd = 'w', True
+        bq_string = "bq mk --table " + bq_export + " parsed_data_schema.txt"
+        os.popen(bq_string).read()
+
+        client = bigquery.Client()
+
+        # loop over each file and create a separate dataframe
+        # for each set (elements) of parsed tags, appending result to list
+        rc = 0
+        df_list = []
 
         # loop over each file and create a separate dataframe
         # for each set (elements) of parsed tags, appending result to list
@@ -480,7 +579,7 @@ class XbrlParser:
 
             # Remove the 'sign' column if it is present
             try:
-                df_element = df_element.drop('sign', axis=1)
+                df_element_export = df_element_export.drop('sign', axis=1)
             except:
                 None
 
@@ -500,13 +599,11 @@ class XbrlParser:
 
             # Remove unwanted characters
             unwanted_chars = ['  ', '"', '\n']
-            #print(df_element_export.value.str, flush=True)
-            df_element_export["value"] = df_element_export["value"]\
-                .astype('str')
+
             for char in unwanted_chars:
                 df_element_export["value"] = df_element_export["value"].str\
                     .replace(char, '')
-            #print(df_element_export.value)
+
             # Change the order of the columns
             wanted_cols = ['date', 'name', 'unit', 'value', 'doc_name',
                            'doc_type',
@@ -515,41 +612,50 @@ class XbrlParser:
                            'doc_companieshouseregisterednumber',
                            'doc_standard_type',
                            'doc_standard_date', 'doc_standard_link', ]
+
+            # Keep only the remaining columns and set dtypes
             df_element_export = df_element_export[wanted_cols]
+            df_element_export = df_element_export.convert_dtypes()
 
-            # Append the new element to a csv file stored in temp_exports
-            df_element_export.to_csv(
-                temp_exports + "/df_elements.csv",
-                mode=md,
-                header=hd,
-                index=None,
-                sep = ",",
-                quotechar= '"',
-                quoting=csv.QUOTE_NONNUMERIC
-            )
+            # Set explicit data types for date columns - requirement for
+            # BigQuery upload
+            df_element_export['doc_upload_date'] = pd.to_datetime(
+                df_element_export['doc_upload_date'],
+                errors="coerce")
 
-            # Print a progress update
-            if i % 100 == 0:
-                print("%2.2f %% have been processed"%((i/T)*100))
+            df_element_export['date'] \
+                = pd.to_datetime(df_element_export['date'],
+                                 format="%Y-%m-%d",
+                                 errors="coerce")
+            df_element_export['doc_balancesheetdate'] \
+                = pd.to_datetime(df_element_export['doc_balancesheetdate'],
+                                 format="%Y-%m-%d",
+                                 errors="coerce")
+            df_element_export['doc_standard_date'] \
+                = pd.to_datetime(df_element_export['doc_standard_date'],
+                                 format="%Y-%m-%d",
+                                 errors="coerce")
 
-            # Redefine mode and header value for subsequent dataframes
-            # (appending and False)
-            md, hd = 'a', False
+            df_list.append(df_element_export)
 
-        # convert the stored csv back into a pandas df and tidy up
-        df_elements = pd.read_csv(
-            temp_exports + "/df_elements.csv",
-            index_col=None,
-            header=0,
-            sep=",",
-            lineterminator="\n",
-            quotechar='"')
-        os.remove(temp_exports + "/df_elements.csv")
+            # Update row count and free up memory
+            rc += df_element_export.shape[0]
+            del df_element_export
 
-        return df_elements
+        # Concatenate list of DataFrames and append to BigQuery table
+        df_batch = pd.concat(df_list)
+        print("\n Batch df contains {} rows".format(df_batch.shape[0]))
+        XbrlParser.append_to_bq(df_batch, bq_export)
 
-    @staticmethod
-    def process_account(filepath):
+        # Clean up memory
+        del df_list, df_batch, doc2, doc
+        df_batch = pd.DataFrame()
+        doc2, doc = [], []
+        gc.collect()
+
+        return rc
+
+    def process_account(self, filepath):
         """
         Scrape all of the relevant information from an iXBRL (html) file,
         upload the elements and some metadata to a mongodb.
@@ -561,6 +667,19 @@ class XbrlParser:
         Raises:
             None
         """
+        # Check arguments are of the correct type
+        if not isinstance(filepath, str):
+            raise TypeError(
+                "'filepath' variable must be passed as a string"
+            )
+
+        # Check arguments take acceptable values
+        if not os.path.exists(filepath):
+            raise ValueError(
+                "The specified file path does not exist"
+            )
+        # Could add check for whether the file path is an iXBRL file
+
         doc = {}
 
         # Some metadata, doc name, upload date/time, archive file it came from
@@ -580,7 +699,7 @@ class XbrlParser:
         # loop over multi-threading here - imports data and parses on separate
         # threads
         try:
-            file = open(filepath)
+            file = self.fs.open(filepath)
             soup = BS(file, "lxml")
         except:
             print("Failed to open: " + filepath)
@@ -601,7 +720,7 @@ class XbrlParser:
 
         # Fetch all the marked elements of the document
         try:
-            doc['elements'] = XbrlParser.scrape_elements(soup, filepath)
+            doc.update(XbrlParser.scrape_elements(soup, filepath))
         except Exception as e:
             doc['parsed'] = False
             doc['Error'] = e
@@ -663,6 +782,35 @@ class XbrlParser:
         """
         # Create a list of directories from each month present in the month
         # list
+
+        # Check all arguments are of the correct types
+        if not (
+            isinstance(filepath, str) or
+            isinstance(year, str) or
+            isinstance(custom_input, str)
+        ):
+            raise TypeError(
+                "'filepath', 'year' and 'custom_input' arguments must all be "
+                "passed as strings"
+            )
+        if not all(isinstance(month, str) for month in months):
+            raise TypeError(
+                "All months in 'months' argument must be passed as strings"
+            )
+
+        # Check all arguments have acceptable values
+        valid_months = ['January', 'February', 'March', 'April',
+                          'May', 'June', 'July', 'August',
+                          'September', 'October', 'November', 'December']
+        if not all(month in valid_months for month in months):
+            raise ValueError(
+                "Invalid entries in 'month' argument"
+            )
+        if not os.path.exists(filepath):
+            raise ValueError(
+                "The specified file path does not exist"
+            )
+
         directory_list = []
         if custom_input == "None":
             for month in months:
@@ -680,14 +828,15 @@ class XbrlParser:
 
         return directory_list
 
-    @staticmethod
-    def parse_directory(directory, processed_path, num_processes=1):
+    def parse_directory(self, directory, bq_location,
+                        processed_path, num_processes=1):
         """
         Takes a directory, parses all files contained there and saves them as
         csv files in a specified directory.
 
         Arguments:
-            directory: A directory (path) to be processed (str)
+            directory:      A directory (path) to be processed (str)
+            bq_location:    Location of BigQuery table to save results (str)
             processed_path: String of the path where processed files should be
                             saved (str)
             num_processes:  The number of cores to use in multiprocessing (int)
@@ -696,20 +845,28 @@ class XbrlParser:
         Raises:
             None
         """
-        extractor = XbrlExtraction()
-        parser = XbrlParser()
+
+        extractor = XbrlExtraction(self.fs)
 
         # Get all the filenames from the example folder
         files, folder_month, folder_year = extractor.get_filepaths(directory)
 
         print(len(files))
-        
+
         # Here you can splice/truncate the number of files you want to process
         # for testing
-        #files = files[0:1000]
+
+        files = files[0:600]
+
 
         # TO BE COMMENTED OUT AFTER TESTING
         print(folder_month, folder_year)
+
+        # Define the location where to export results to BigQuery
+        table_export = bq_location + ".chunky_" + folder_month + "-" + folder_year
+
+        # Create a BigQuery table
+        self.mk_bq_table(table_export)
 
         # Code needed to split files by the number of cores before passing in
         # as an argument
@@ -719,30 +876,25 @@ class XbrlParser:
 
         # define number of processors
         pool = mp.Pool(processes=num_processes)
-        # Finally, build a table of all variables from all example (digital)
-        # documents splitting the load between cpu cores = num_processes
-        # This can take a while (hopefully not anymore!!!)
-        r = pool.map(parser.build_month_table, files)
+
+        # Create a partial function so that pool.map only takes one argument
+        build_month_table_partial = partial(self.build_month_table,
+                                            table_export)
+        fails = pool.map(build_month_table_partial, files)
 
         pool.close()
         pool.join()
-        # combine resultant list of lists
-        print("Combining lists...")
-        r = [item for sublist in r for item in sublist]
-        print("Flattening data....")
-        # combine data and convert into dataframe
-        results = parser.flatten_data(r)
-        print(results.shape)
 
-        # save to csv
-        extractor.output_xbrl_month(results, processed_path, folder_month,
-                                    folder_year)
+        # combine resultant list of lists (of failed files)
+        fails = [item for sublist in fails for item in sublist]
+        print(fails)
 
-        # Find list of all unique tags in dataset
-        list_of_tags = results["name"].tolist()
-        list_of_tags_unique = list(set(list_of_tags))
+        # Retry failed files without multiprocessing
+        self.build_month_table(table_export, fails)
 
-        print("Longest tag: ", len(max(list_of_tags_unique, key=len)))
+        # Export the BigQuery table to a csv file
+        self.export_csv(table_export, processed_path,
+                        folder_month + "-" + folder_year + "_xbrl_data")
 
         # Output all unique tags to a txt file
 
@@ -765,10 +917,8 @@ class XbrlParser:
 
         # print(results.shape)
 
-
-    @staticmethod
-    def parse_files(quarter, year, unpacked_files,
-                    custom_input, processed_files, num_cores):
+    def parse_files(self, quarter, year, unpacked_files,
+                    custom_input, bq_location, csv_dir, num_cores):
         """
         Parses a set of accounts for a given time period and saves as a csv in
         a specified location.
@@ -778,11 +928,11 @@ class XbrlParser:
             year:               year to process files from (int)
             unpacked_files:     path of directory where files to be processed
                                 are stored (string)
-            processed_files:    path of directory where the files the resulting
-                                files will be saved (string)
+            bq_location:        Location of BigQuery table to save results (str)
+            csv_dir:            GCS folder to save csv file (str)
+            custom_input:       Used to set a specific folder of accounts
             num_cores:          number of cores to use with mutliprocessing
                                 module (int)
-            custom_input:       Used to set a specific folder of accounts
         Returns:
             None
         Raises:
@@ -790,24 +940,26 @@ class XbrlParser:
         """
         # Construct both the list of months and list of corresponding
         # directories
-        month_list = XbrlParser.create_month_list(quarter)
-        directory_list = XbrlParser.create_directory_list(month_list,
-                                                          unpacked_files,
-                                                          year,
-                                                          custom_input)
+        month_list = self.create_month_list(quarter)
+        directory_list = self.create_directory_list(month_list,
+                                                  unpacked_files,
+                                                  year,
+                                                  custom_input)
         # Parse each directory
         for directory in directory_list:
             print("Parsing " + directory + "...")
-            XbrlParser.parse_directory(directory, processed_files, num_cores)
+            self.parse_directory(directory, bq_location, csv_dir, num_cores)
 
-    @staticmethod
-    def build_month_table(list_of_files):
+    def build_month_table(self, bq_export, list_of_files):
         """
         Function which parses, sequentially, a list of xbrl/ html files,
         converting each parsed file into a dictionary and appending to a list.
 
         Arguments:
-            list of files: list of filepaths, each coresponding to a xbrl/html file (list)
+            bq_export:      Location in BigQuery where (new) table of data
+                            should be constructed.
+            list_of_files:  list of filepaths (gcs uri's), each coresponding to
+                            a xbrl/html file (list)
 
         Returns:
             results:       list of dictionaries, each containing the parsed content of
@@ -815,33 +967,252 @@ class XbrlParser:
         Raises:
             None
         """
+        # Check arguments are of the correct type
+        if not all(isinstance(file, str) for file in list_of_files):
+            raise TypeError(
+                "All files in 'list_of_files' must be specified as strings"
+            )
+
+        # Check arguments have acceptable values
+        if not all(os.path.exists(file) for file in list_of_files):
+            raise ValueError(
+                "Not all file paths specified exist"
+            )
 
         process_start = time.time()
 
-        # Empty table awaiting results
+        # Empty list awaiting results
         results = []
+        fails = []
 
+        start_memory = psutil.virtual_memory().percent
+
+        # Set a threshold on the number of files to store in memory before
+        # uploading to BigQuery
+        file_threshold = 7000
+        print("Start memory usuage: ", start_memory)
+
+        # Initialise counters
         COUNT = 0
+        file_count = 0
+        row_count = 0
+        batch_count = 0
 
         # For every file
         for file in list_of_files:
             COUNT += 1
+            try:
+                # file_count is the count per batch, COUNT is the overall file
+                # count
+                file_count += 1
+                # Read the file and parse
+                doc = self.process_account(file)
 
-            # Read the file and parse
-            doc = XbrlParser.process_account(file)
+                # append results to table
+                results.append(doc)
 
-            # flatten the elements dict into single dict
-            doc['elements'] = XbrlParser.flatten_dict(doc['elements'])
+            # If we can't process the file, save it to be re done on one
+            # processor
+            except:
+                print(file, "has failed to parse")
+                fails.append(file)
+                continue
 
-            # append results to table
-            results.append(doc)
+            # If the number of files exceeds the threshold or we have done the
+            # last file
+            if (file_count > file_threshold) \
+                    or COUNT == len(list_of_files):
+                # Reset the file_count and add to the row_count
+                file_count = 0
+
+                # This also performs the BigQuery export
+                row_count += XbrlParser.flatten_data(results, bq_export)
+                XbrlExtraction.progressBar("XBRL Accounts Parsed", COUNT,
+                                           len(list_of_files), row_count,
+                                           batch_count,
+                                           psutil.virtual_memory().percent,
+                                           uploading=True,
+                                           bar_length=50,
+                                           width=20)
+                batch_count += 1
+
+                # Delete results and free up memory
+                del results
+                results = []
+                gc.collect()
 
             XbrlExtraction.progressBar("XBRL Accounts Parsed", COUNT,
-                                       len(list_of_files), bar_length=50,
-                                       width=20)
+                                       len(list_of_files), row_count,
+                                       batch_count,
+                                       psutil.virtual_memory().percent,
+                                       bar_length=50,width=20)
+
+
 
         print(
             "Average time to process an XBRL file: \x1b[31m{:0f}\x1b[0m".format(
                 (time.time() - process_start) / 60, 2), "minutes")
 
-        return results
+        return fails
+
+    @staticmethod
+
+    def append_to_bq(df, table):
+        """
+        Function to append a given DataFrame to a BigQuery table
+
+        Arguments:
+            df:     Pandas DataFrame output with columns of the correct types
+            table:  Location of BigQuery table, in form "<dataset>.<table_name>"
+        Returns:
+            None
+        Raises:
+            None
+
+        """
+        # Set up a BigQuery client
+        client = bigquery.Client()
+
+        t0 = time.time()
+        job_config = bigquery.LoadJobConfig(
+
+            # Set the schema types to match those in parsed_data_schema.txt
+            schema = [
+                bigquery.SchemaField("doc_companieshouseregisterednumber",
+                                     bigquery.enums.SqlTypeNames.STRING),
+                bigquery.SchemaField("date", bigquery.enums.SqlTypeNames.DATE),
+                bigquery.SchemaField("parsed",
+                                     bigquery.enums.SqlTypeNames.BOOLEAN),
+                bigquery.SchemaField("doc_balancesheetdate",
+                                     bigquery.enums.SqlTypeNames.DATE),
+                bigquery.SchemaField("doc_upload_date",
+                                     bigquery.enums.SqlTypeNames.TIMESTAMP),
+                bigquery.SchemaField("doc_standard_date",
+                                     bigquery.enums.SqlTypeNames.DATE),
+                bigquery.SchemaField("name",
+                                     bigquery.enums.SqlTypeNames.STRING),
+                bigquery.SchemaField("unit",
+                                     bigquery.enums.SqlTypeNames.STRING),
+                bigquery.SchemaField("value",
+                                     bigquery.enums.SqlTypeNames.STRING),
+                bigquery.SchemaField("doc_name",
+                                     bigquery.enums.SqlTypeNames.STRING),
+                bigquery.SchemaField("doc_type",
+                                     bigquery.enums.SqlTypeNames.STRING),
+                bigquery.SchemaField("arc_name",
+                                     bigquery.enums.SqlTypeNames.STRING),
+                bigquery.SchemaField("doc_standard_type",
+                                     bigquery.enums.SqlTypeNames.STRING),
+                bigquery.SchemaField("doc_standard_link",
+                                     bigquery.enums.SqlTypeNames.STRING)
+            ],
+            # Append to table (rather than overwrite)
+            write_disposition=bigquery.WriteDisposition.WRITE_APPEND
+        )
+        # Make an API request.
+        job = client.load_table_from_dataframe(
+            df, table, job_config=job_config
+            )
+        # Wait for the job to complete.
+        job.result()
+        # Free memory of job
+        job = 0
+        del job
+
+    @staticmethod
+    def mk_bq_table(bq_location, schema="parsed_data_schema.txt"):
+        """
+        Function to create a BigQuery table in a specified location with a
+        schema specified by a txt file.
+
+        Arguments:
+            bq_location:    Location of BigQuery table, in form
+                            "<dataset>.<table_name>"
+            schema:         File path of schema specified as txt file
+        Returns:
+            None
+        Raises:
+            None
+        """
+        # Create a BigQuery client
+        client = bigquery.Client()
+
+        # Check if table exists
+        try:
+            client.get_table(bq_location)
+            table_exists = True
+        except:
+            table_exists = False
+
+        if table_exists:
+            raise ValueError("Table already exists, please remove and retry")
+
+        # Create the table using the command line
+        bq_string = "bq mk --table " + bq_location + " " + schema
+        os.popen(bq_string).read()
+
+    def export_csv(self, bq_table, gcs_location, file_name):
+        """
+        Takes a specified BigQuery table and saves it as a single csv file
+        (creates multiple csvs that partition the table as intermidiate steps)
+
+        Arguments:
+            bq_table:       Location of BigQuery table, in form
+                            "<dataset>.<table_name>"
+            gcs_location:   The folder in gcs where resulting csv should be
+                            saved - "gs://" prefix should NOT be included
+            file_name:      The name of resulting csv file - ".csv" suffix
+                            should NOT be included
+        Returns:
+            None
+        Raises:
+            None
+        """
+        # Create BigQuery client
+        client = bigquery.Client()
+
+        # Don't include table header (will mess up combing csvs otherwise)
+        job_config = bigquery.job.ExtractJobConfig(print_header=False)
+
+        # Extract table into multiple smaller csv files
+        extract_job = client.extract_table(
+            bq_table,
+            "gs://" + gcs_location + "/" + file_name + "*.csv",
+            location="europe-west2",
+            job_config=job_config
+        )
+        extract_job.result()
+
+        # Recreate the header as a single df with just the header row
+        header = pd.DataFrame(columns=['date', 'name', 'unit', 'value',
+                            'doc_name', 'doc_type',
+                           'doc_upload_date', 'arc_name', 'parsed',
+                           'doc_balancesheetdate',
+                           'doc_companieshouseregisterednumber',
+                           'doc_standard_type',
+                           'doc_standard_date', 'doc_standard_link'],)
+        header.to_csv("gs://" + gcs_location + "/header_" + file_name + ".csv",
+                      header=True, index=False)
+
+        # Specify the files to be combined
+        split_files = [f.split("/", 1)[1] for f in self.fs.ls(gcs_location)
+                       if (f.split("/")[-1]).startswith("header_" + file_name)] +\
+                      [f.split("/", 1)[1] for f in self.fs.ls(gcs_location)
+                       if (f.split("/")[-1]).startswith(file_name)]
+
+        # Set up a gcs storage client and locations for things
+        storage_client = storage.Client()
+        bucket = storage_client.bucket(gcs_location.split("/",1)[0])
+        destination = bucket.blob(gcs_location.split("/", 1)[1] + "/" + file_name + ".csv")
+        destination.content_type = "text/csv"
+
+        # Combine all the specified files
+        sources = [bucket.get_blob(f) for f in split_files]
+        destination.compose(sources)
+
+        # Remove the intermediate files
+        self.fs.rm([f for f in self.fs.ls(gcs_location)
+                       if ((f.split("/")[-1]).startswith(file_name + "0")) or
+                    ((f.split("/")[-1]).startswith("header_" + file_name))
+                    ])
+

@@ -9,6 +9,7 @@ import sys
 import configparser
 import multiprocessing as mp
 import concurrent.futures
+import gcsfs
 
 import os
 import re
@@ -22,6 +23,9 @@ from bs4 import BeautifulSoup as BS  # Can parse xml or html docs
 pd.set_option("display.max_columns",500)
 config = configparser.ConfigParser()
 config.read("cha_pipeline.cfg")
+
+bucket = config.get('gcsfs_setup', 'bucket')
+key = config.get('gcsfs_setup', 'key')
 
 xbrl_web_scraper = config.get('cha_workflow', 'xbrl_web_scraper')
 xbrl_web_scraper_validator = config.get('cha_workflow', 'xbrl_validator')
@@ -56,6 +60,8 @@ unpacker_destination_dir = config.get('xbrl_unpacker_args',
 xbrl_unpacked_data = config.get('xbrl_parser_args', 'xbrl_parser_data_dir')
 xbrl_processed_csv = config.get('xbrl_parser_args',
                                 'xbrl_parser_processed_csv_dir')
+xbrl_parser_bq_location = config.get('xbrl_parser_args',
+                                'xbrl_parser_bq_location')
 xbrl_tag_frequencies = config.get('xbrl_parser_args',
                                   'xbrl_parser_tag_frequencies')
 xbrl_tag_list = config.get('xbrl_parser_args', 'xbrl_parser_tag_list')
@@ -121,6 +127,9 @@ from src.data_processing.xbrl_csv_cleaner import XbrlCSVCleaner
 def main():
     print("-" * 50)
 
+    os.environ["PROJECT_ID"] = bucket
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = key
+    fs = gcsfs.GCSFileSystem(project=bucket, token=key, cache_timeout=0)
     # Execute module xbrl_web_scraper
     if xbrl_web_scraper == str(True):
         scraper = XbrlScraper()
@@ -128,17 +137,18 @@ def main():
                                 xbrl_scraper_base_url,
                                 xbrl_scraper_dir_to_save)
 
-        # print("XBRL web scraper running...")
-        # print("Scraping XBRL data to:", scraped_dir)
-        # print("Running crawler from:", xbrl_scraper)
-        # chdir(xbrl_scraper)
-        # print(getcwd())
-        # cmdlinestr = "scrapy crawl xbrl_scraper"
-        # popen(cmdlinestr).read()
+        print("XBRL web scraper running...")
+        print("Scraping XBRL data to:", scraped_dir)
+        print("Running crawler from:", xbrl_scraper)
+        chdir(xbrl_scraper)
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = key
+        print(getcwd())
+        cmdlinestr = "scrapy crawl xbrl_scraper"
+        popen(cmdlinestr).read()
 
     # Validate xbrl data
     if xbrl_web_scraper_validator == str(True):
-        validator = XbrlValidatorMethods()
+        validator = XbrlValidatorMethods(fs)
         print("Validating xbrl web scraped data...")
         validator.validate_compressed_files(validator_scraped_dir)
 
@@ -148,30 +158,32 @@ def main():
         print("Unpacking zip files...")
         print("Reading from directory: ", unpacker_source_dir)
         print("Writing to directory: ", unpacker_destination_dir)
-        unpacker = DataProcessing()
+        unpacker = DataProcessing(fs)
         unpacker.extract_compressed_files(unpacker_source_dir,
                                           unpacker_destination_dir)
 
     # Execute module xbrl_parser
     if xbrl_parser == str(True):
         print("XBRL parser running...")
-
-        XbrlParser.parse_files(xbrl_parser_process_quarter,
+        parser_executer = XbrlParser(fs)
+        parser_executer.parse_files(xbrl_parser_process_quarter,
                                xbrl_parser_process_year,
                                xbrl_unpacked_data,
                                xbrl_parser_custom_input,
+                               xbrl_parser_bq_location,
                                xbrl_processed_csv,
-                               3)
+                               2)
 
     # Execute module xbrl_csv_cleaner
     if xbrl_csv_cleaner == str(True):
+
         print("XBRL CSV cleaner running...")
         XbrlCSVCleaner.clean_parsed_files(xbrl_csv_cleaner_indir,
                                           xbrl_csv_cleaner_outdir)
 
     # Append XBRL data on an annual or quarterly basis
     if xbrl_file_appender == str(True):
-        appender = XbrlCsvAppender()
+        appender = XbrlCsvAppender(fs)
         print("XBRL appender running...")
         appender.merge_files_by_year(xbrl_file_appender_indir,
                                      xbrl_file_appender_outdir,
