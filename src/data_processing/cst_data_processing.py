@@ -1,4 +1,4 @@
-import cv2
+#import cv2
 from os import listdir, mkdir
 from os.path import isfile, join, exists, splitext
 import random
