@@ -5,7 +5,7 @@ import math
 from random import shuffle
 import argparse
 import sys
-# import cv2
+#import cv2
 import configparser
 import multiprocessing as mp
 import concurrent.futures
@@ -43,8 +43,9 @@ nlp_functions = config.get('cha_workflow', 'nlp_functions')
 merge_xbrl_to_pdf_data = config.get('cha_workflow', 'merge_xbrl_to_pdf_data')
 
 # Arguments for the XBRL web scraper
-scraped_dir = config.get('xbrl_web_scraper_args', 'scraped_dir')
-xbrl_scraper = config.get('xbrl_web_scraper_args', 'xbrl_scraper')
+xbrl_scraper_url = config.get('xbrl_web_scraper_args', 'url')
+xbrl_scraper_base_url = config.get('xbrl_web_scraper_args', 'base_url')
+xbrl_scraper_dir_to_save = config.get('xbrl_web_scraper_args', 'dir_to_save')
 
 # Arguments for the XBRL web scraper validator
 validator_scraped_dir = config.get('xbrl_validator_args', 'scraped_dir')
@@ -111,6 +112,7 @@ filed_accounts_scraper = config.get('pdf_web_scraper_args',
 
 # Arguments for merge_xbrl_to_pdf_data
 
+from src.xbrl_scraper.requests_scraper import XbrlScraper
 from src.data_processing.cst_data_processing import DataProcessing
 from src.classifier.cst_classifier import Classifier
 from src.performance_metrics.binary_classifier_metrics import (
@@ -130,6 +132,11 @@ def main():
     fs = gcsfs.GCSFileSystem(project=bucket, token=key, cache_timeout=0)
     # Execute module xbrl_web_scraper
     if xbrl_web_scraper == str(True):
+        scraper = XbrlScraper()
+        scraper.scrape_webpage( xbrl_scraper_url,
+                                xbrl_scraper_base_url,
+                                xbrl_scraper_dir_to_save)
+
         print("XBRL web scraper running...")
         print("Scraping XBRL data to:", scraped_dir)
         print("Running crawler from:", xbrl_scraper)
@@ -279,6 +286,6 @@ if __name__ == "__main__":
 
     print("-" * 50)
     print("Process Complete")
-    print("The time taken to process an image is: ",
-          "{}".format((time.time() - process_start) / 60, 2),
-          " minutes")
+    # print("The time taken to process an image is: ",
+    #       "{}".format((time.time() - process_start) / 60, 2),
+    #       " minutes")

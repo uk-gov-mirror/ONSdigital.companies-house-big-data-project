@@ -85,7 +85,6 @@ ITEM_PIPELINES = {
 FILES_STORE = "gs://ons-companies-house-dev-outputs-data/"
 GCS_PROJECT_ID = "ons-companies-house-dev"
 
-
 # Enable and configure utoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
 #AUTOTHROTTLE_ENABLED = True
