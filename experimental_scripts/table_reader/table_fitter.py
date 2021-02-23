@@ -175,18 +175,23 @@ class TableFitter(TableIdentifier):
                                 eval(df.loc[i, "normed_vertices"])[3][0],
                                 dist=d):
                     indices_close[0].append(i)
-                elif TableFitter.is_close(alignment["median_points"][1],
+                if TableFitter.is_close(alignment["median_points"][1],
                                 eval(df.loc[i, "normed_vertices"])[2][0],
                                 dist=d):
                     indices_close[1].append(i)
-                elif TableFitter.is_close(alignment["median_points"][2],
+                if TableFitter.is_close(alignment["median_points"][2],
                                 0.5*(eval(df.loc[i, "normed_vertices"])[2][0]
                                         + eval(df.loc[i, "normed_vertices"])[3][0]),
                                 dist=d):
                     indices_close[2].append(i)
+            print(indices_close)
             aligned = [j for j, k in enumerate(indices_close)
                    if len(k) == max([len(i) for i in indices_close])]
-            alignment["aligned_index"] = aligned[0]
+            if len(aligned) == 1:
+                alignment["aligned_index"] = aligned[0]
+            elif len(aligned) > 1:
+                alignment["aligned_index"] = aligned[-2]
+            
             indices_close = indices_close[aligned[0]]
 
         return {"indices": indices_close, "alignment":alignment["aligned_index"]}
@@ -290,7 +295,7 @@ class TableFitter(TableIdentifier):
 
         #print('This is what it looked like',self.data)
 
-
+        print("These are the exceptions", exceptions)
         # determine if any residual elements are aligned
         exception_aligned = TableFitter.group_header_points(other_cols_df, exceptions, dist=0.01)
         print(exception_aligned)
@@ -459,7 +464,7 @@ class TableFitter(TableIdentifier):
 
             # Find the alignment object for that element
             aligner = TableFitter.find_alignment(header_df, first_ind)
-            print(aligner)
+            # print(aligner)
             # Find the indices aligned to that object
             grouped_inds = TableFitter.find_aligned_indices(header_df,
                                                             aligner,

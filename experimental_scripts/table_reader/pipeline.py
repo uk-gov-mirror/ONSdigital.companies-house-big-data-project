@@ -90,7 +90,7 @@ table_data.get_first_col()
 table_data.get_header_row()
 table_data.remove_excess_lines()
 table_data.get_other_columns()
-table_data.remove_excess_lines()
+table_data.remove_excess_lines()   
 table_data.column_order()
 
 ###print(table_data.data)
