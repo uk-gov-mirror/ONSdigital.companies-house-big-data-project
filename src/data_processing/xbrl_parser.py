@@ -856,14 +856,14 @@ class XbrlParser:
         # Here you can splice/truncate the number of files you want to process
         # for testing
 
-        files = files[0:600]
+        # files = files[0:600]
 
 
         # TO BE COMMENTED OUT AFTER TESTING
         print(folder_month, folder_year)
 
         # Define the location where to export results to BigQuery
-        table_export = bq_location + ".chunky_" + folder_month + "-" + folder_year
+        table_export = bq_location + "." + folder_month + "-" + folder_year
 
         # Create a BigQuery table
         self.mk_bq_table(table_export)
