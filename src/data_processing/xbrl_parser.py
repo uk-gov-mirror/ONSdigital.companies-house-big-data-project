@@ -22,6 +22,7 @@ import gc
 
 
 
+
 class XbrlParser:
     """ This is a class for parsing the XBRL data."""
 
@@ -561,13 +562,7 @@ class XbrlParser:
         T = len(doc2)
         t0 = time.time()
 
-        bq_string = "bq mk --table " + bq_export + " parsed_data_schema.txt"
-        os.popen(bq_string).read()
-
-        client = bigquery.Client()
-
-        # loop over each file and create a separate dataframe
-        # for each set (elements) of parsed tags, appending result to list
+        # Set up row counter and empty list to save DataFrames
         rc = 0
         df_list = []
 
@@ -575,27 +570,13 @@ class XbrlParser:
         # for each set (elements) of parsed tags, appending result to list
         for i in range(T):
             # Turn each elements dict into a dataframe
-            df_element = pd.DataFrame.from_dict(doc2[i]['elements'])
+            df_element_export = pd.DataFrame.from_dict(doc2[i])
 
             # Remove the 'sign' column if it is present
             try:
                 df_element_export = df_element_export.drop('sign', axis=1)
             except:
                 None
-
-            # Add a key
-            df_element['key'] = i
-
-            # Dump the "elements" entry in the doc dict
-            doc2[i].pop('elements')
-            df_element_meta = pd.DataFrame(doc2[i], index =[0])
-            df_element_meta['key'] = i
-
-            # Merge the metadata with the elements
-            df_element_export = df_element_meta.merge(df_element, how='left',
-                                                      on='key')
-            del df_element_meta, df_element
-            df_element_export = df_element_export.drop('key', axis= 1)
 
             # Remove unwanted characters
             unwanted_chars = ['  ', '"', '\n']
@@ -622,7 +603,6 @@ class XbrlParser:
             df_element_export['doc_upload_date'] = pd.to_datetime(
                 df_element_export['doc_upload_date'],
                 errors="coerce")
-
             df_element_export['date'] \
                 = pd.to_datetime(df_element_export['date'],
                                  format="%Y-%m-%d",
@@ -855,15 +835,14 @@ class XbrlParser:
 
         # Here you can splice/truncate the number of files you want to process
         # for testing
-
-        # files = files[0:600]
+        files = files[0:600]
 
 
         # TO BE COMMENTED OUT AFTER TESTING
         print(folder_month, folder_year)
 
         # Define the location where to export results to BigQuery
-        table_export = bq_location + "." + folder_month + "-" + folder_year
+        table_export = bq_location + ".chunky_" + folder_month + "-" + folder_year
 
         # Create a BigQuery table
         self.mk_bq_table(table_export)
@@ -1048,7 +1027,6 @@ class XbrlParser:
                                        bar_length=50,width=20)
 
 
-
         print(
             "Average time to process an XBRL file: \x1b[31m{:0f}\x1b[0m".format(
                 (time.time() - process_start) / 60, 2), "minutes")
@@ -1056,7 +1034,6 @@ class XbrlParser:
         return fails
 
     @staticmethod
-
     def append_to_bq(df, table):
         """
         Function to append a given DataFrame to a BigQuery table
@@ -1073,9 +1050,7 @@ class XbrlParser:
         # Set up a BigQuery client
         client = bigquery.Client()
 
-        t0 = time.time()
         job_config = bigquery.LoadJobConfig(
-
             # Set the schema types to match those in parsed_data_schema.txt
             schema = [
                 bigquery.SchemaField("doc_companieshouseregisterednumber",
