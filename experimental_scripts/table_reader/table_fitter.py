@@ -258,7 +258,8 @@ class TableFitter(TableIdentifier):
                                                       self.header_indices)
         self.header_coords = \
             [self.find_alignment(self.data, i)["median_points"]
-             for i in self.header_groups]
+             for i in self.header_indices 
+             if self.data.loc[i, "line_num"] == self.data.loc[self.notes_row[0], "line_num"]]
         print(len(header_lines), " header lines have been detected")
 
     def get_other_columns(self,thresh=0.95):
@@ -276,6 +277,9 @@ class TableFitter(TableIdentifier):
 
         # Don't consider elements in the first column
         other_cols_df = self.data.drop(self.columns[0])
+        other_cols_df = other_cols_df.drop(
+            [i for i in other_cols_df.index if other_cols_df.loc[i,"line_num"]< self.data.loc[self.notes_row[0], "line_num"]])
+
 
         # Add a list to the columns attribute for each in the header row
         for i in range(len(self.header_coords)):

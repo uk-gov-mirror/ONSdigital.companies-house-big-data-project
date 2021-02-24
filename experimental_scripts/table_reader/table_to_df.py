@@ -1,6 +1,7 @@
 import gcsfs
 import pandas as pd
 import regex
+import numpy as np
 
 class Table2Df:
 
@@ -124,7 +125,7 @@ class Table2Df:
         Raises:
             None
         """
-        data_cols = list(range(3, int(max(self.data['updated_column_order']))+1))
+        data_cols = list(range(3, int(np.nanmax(self.data['updated_column_order']))+1))
         self.data_cols = data_cols
 
         # self.data_cols = [i+1 for i,g in enumerate(self.table.header_groups) if self.table.notes_row[0] not in g]
