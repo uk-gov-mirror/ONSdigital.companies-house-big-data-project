@@ -24,7 +24,7 @@ pd.set_option("display.max_columns",500)
 config = configparser.ConfigParser()
 config.read("cha_pipeline.cfg")
 
-bucket = config.get('gcsfs_setup', 'bucket')
+project_id = config.get('gcsfs_setup', 'project_id')
 key = config.get('gcsfs_setup', 'key')
 
 xbrl_web_scraper = config.get('cha_workflow', 'xbrl_web_scraper')
@@ -128,7 +128,7 @@ def main():
     print("-" * 50)
 
     os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = key
-    fs = gcsfs.GCSFileSystem(project=bucket, token=key, cache_timeout=0)
+    fs = gcsfs.GCSFileSystem(project=project_id, token=key, cache_timeout=0)
     # Execute module xbrl_web_scraper
     if xbrl_web_scraper == str(True):
 

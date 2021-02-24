@@ -22,7 +22,7 @@ class XbrlScraper:
         Arguments:
             url:            Url of web page to scrape (str)
             base_url:       Base url of wep page to scrape (str)
-            dir_save_to:    Directory to save zip files to, consisting of bucket_name/folder
+            dir_save_to:    GCS directory to save zip files to, consisting of bucket_name/folder
         Returns:
             None
         Raises:
@@ -94,14 +94,15 @@ class XbrlScraper:
             print("Unable to scrape web page!")
             print("Error code: " + status)
 
-scraper = XbrlScraper()
+if __name__ == "__main__":
+    scraper = XbrlScraper()
 
-#url = "http://download.companieshouse.gov.uk/en_monthlyaccountsdata.html"
-#base_url = "http://download.companieshouse.gov.uk/"
+    url = "http://download.companieshouse.gov.uk/en_monthlyaccountsdata.html"
+    base_url = "http://download.companieshouse.gov.uk/"
 
-url = "http://download.companieshouse.gov.uk/historicmonthlyaccountsdata.html"
-base_url = "http://download.companieshouse.gov.uk/"
+    # url = "http://download.companieshouse.gov.uk/historicmonthlyaccountsdata.html"
+    # base_url = "http://download.companieshouse.gov.uk/"
 
-dir_to_save = "ons-companies-house-dev-xbrl-scraped-data/requests_scraper_test_folder"
+    dir_to_save = "ons-companies-house-dev-xbrl-scraped-data/requests_scraper_test_folder"
 
-scraper.scrape_webpage(url, base_url, dir_to_save)
+    scraper.scrape_webpage(url, base_url, dir_to_save)
