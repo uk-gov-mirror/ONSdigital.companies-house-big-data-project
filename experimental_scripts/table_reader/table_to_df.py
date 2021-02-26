@@ -146,6 +146,7 @@ class Table2Df:
         print(data_cols)
 
         if len(data_cols)%len(dates) != 0:
+            print("Can't fit {} headers into {} columns".format(len(data_cols), len(dates)))
             raise(TypeError("Cannot logically fit dates to columns"))
         else:
             header_dict = {"updated_column_order": data_cols, "date":[dates[i//(len(data_cols)//len(dates))] for i in range(len(data_cols))], 

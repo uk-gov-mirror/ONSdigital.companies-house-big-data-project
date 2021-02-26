@@ -21,6 +21,7 @@ print(sheets)
 fails = []
 for i in range(len(sheets)):
     try:
+        print(names[i])
         doc_parser = DocParser(fs)
         doc_parser.parse_document(sheets[i],
                                   "/home/dylan_purches/keys/data_key.json",
