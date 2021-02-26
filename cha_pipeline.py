@@ -93,10 +93,10 @@ xbrl_csv_cleaner_outdir = config.get('xbrl_csv_cleaner_args',
 # Arguments for xbrl subsets
 
 # Arguments for the filing_fetcher scraper
-filed_accounts_scraped_dir = config.get('pdf_web_scraper_args',
-                                        'filed_accounts_scraped_dir')
-filed_accounts_scraper = config.get('pdf_web_scraper_args',
-                                    'filed_accounts_scraper')
+# filed_accounts_scraped_dir = config.get('pdf_web_scraper_args',
+#                                         'filed_accounts_scraped_dir')
+# filed_accounts_scraper = config.get('pdf_web_scraper_args',
+#                                     'filed_accounts_scraper')
 
 # Arguments for pdfs_to_images
 
@@ -127,7 +127,7 @@ from src.data_processing.xbrl_csv_cleaner import XbrlCSVCleaner
 def main():
     print("-" * 50)
 
-    os.environ["PROJECT_ID"] = bucket
+    os.environ["PROJECT_ID"] = project_id
     os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = key
     fs = gcsfs.GCSFileSystem(project=project_id, token=key, cache_timeout=0)
     # Execute module xbrl_web_scraper

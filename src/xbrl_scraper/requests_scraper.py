@@ -72,7 +72,7 @@ class XbrlScraper:
                 blob = bucket.blob("/".join(dir_to_save.split("/")[1:]) + "/" + link)
 
                 # Only download and save a file if it doesn't exist in the directory
-                if not blob.exists():
+                if (not blob.exists()) and link == "Accounts_Monthly_Data-April2019.zip":
                 
                     print("Downloading " + link + "...")
                     zip_file = requests.get(zip_url).content

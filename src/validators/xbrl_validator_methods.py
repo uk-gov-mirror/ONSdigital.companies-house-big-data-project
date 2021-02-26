@@ -39,7 +39,8 @@ class XbrlValidatorMethods:
             if not self.fs.isfile(filepath):
 
                 files = self.fs.ls(filepath)
-                    #[filepath + "/" + f for f in listdir(filepath)]
+                files = [f for f in files if f.split(".")[-1] == "zip"]
+                #[filepath + "/" + f for f in listdir(filepath)]
 
                 for file in files:
                     gcs_file = self.fs.open(file, 'rb')
