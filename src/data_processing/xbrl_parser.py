@@ -741,8 +741,7 @@ class XbrlParser:
 
         return month_list
 
-    @staticmethod
-    def create_directory_list(months, filepath, year, custom_input="None"):
+    def create_directory_list(self, months, filepath, year, custom_input="None"):
         """
         Creates a list of file paths for accounts which are dated in the months
         specified in a list of months.
@@ -786,7 +785,7 @@ class XbrlParser:
             raise ValueError(
                 "Invalid entries in 'month' argument"
             )
-        if not os.path.exists(filepath):
+        if not self.fs.exists(filepath):
             raise ValueError(
                 "The specified file path does not exist"
             )
