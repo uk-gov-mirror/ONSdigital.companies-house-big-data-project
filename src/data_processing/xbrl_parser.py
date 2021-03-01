@@ -834,14 +834,14 @@ class XbrlParser:
 
         # Here you can splice/truncate the number of files you want to process
         # for testing
-        files = files[0:600]
+        # files = files[0:600]
 
 
         # TO BE COMMENTED OUT AFTER TESTING
         print(folder_month, folder_year)
 
         # Define the location where to export results to BigQuery
-        table_export = bq_location + ".chunky_" + folder_month + "-" + folder_year
+        table_export = bq_location + "." + folder_month + "-" + folder_year
 
         # Create a BigQuery table
         self.mk_bq_table(table_export)
@@ -979,22 +979,22 @@ class XbrlParser:
         # For every file
         for file in list_of_files:
             COUNT += 1
-            # try:
-            # file_count is the count per batch, COUNT is the overall file
-            # count
-            file_count += 1
-            # Read the file and parse
-            doc = self.process_account(file)
+            try:
+                # file_count is the count per batch, COUNT is the overall file
+                # count
+                file_count += 1
+                # Read the file and parse
+                doc = self.process_account(file)
 
-            # append results to table
-            results.append(doc)
+                # append results to table
+                results.append(doc)
 
             # If we can't process the file, save it to be re done on one
             # processor
-            # except:
-            #     print(file, "has failed to parse")
-            #     fails.append(file)
-            #     continue
+            except:
+                print(file, "has failed to parse")
+                fails.append(file)
+                continue
 
             # If the number of files exceeds the threshold or we have done the
             # last file
