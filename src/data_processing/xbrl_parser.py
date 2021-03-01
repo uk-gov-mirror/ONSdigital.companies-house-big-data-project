@@ -952,7 +952,7 @@ class XbrlParser:
             )
 
         # Check arguments have acceptable values
-        if not all(os.path.exists(file) for file in list_of_files):
+        if not all(self.fs.exists(file) for file in list_of_files):
             raise ValueError(
                 "Not all file paths specified exist"
             )
