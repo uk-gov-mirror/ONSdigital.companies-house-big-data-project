@@ -73,7 +73,7 @@ class XbrlScraper:
 
                 # Only download and save a file if it doesn't exist in the directory
                 if (not blob.exists()) and link == "Accounts_Monthly_Data-April2019.zip":
-                
+                                     
                     print("Downloading " + link + "...")
                     zip_file = requests.get(zip_url).content
                     

@@ -654,7 +654,7 @@ class XbrlParser:
             )
 
         # Check arguments take acceptable values
-        if not os.path.exists(filepath):
+        if not self.fs.exists(filepath):
             raise ValueError(
                 "The specified file path does not exist"
             )
@@ -979,22 +979,22 @@ class XbrlParser:
         # For every file
         for file in list_of_files:
             COUNT += 1
-            try:
-                # file_count is the count per batch, COUNT is the overall file
-                # count
-                file_count += 1
-                # Read the file and parse
-                doc = self.process_account(file)
+            # try:
+            # file_count is the count per batch, COUNT is the overall file
+            # count
+            file_count += 1
+            # Read the file and parse
+            doc = self.process_account(file)
 
-                # append results to table
-                results.append(doc)
+            # append results to table
+            results.append(doc)
 
             # If we can't process the file, save it to be re done on one
             # processor
-            except:
-                print(file, "has failed to parse")
-                fails.append(file)
-                continue
+            # except:
+            #     print(file, "has failed to parse")
+            #     fails.append(file)
+            #     continue
 
             # If the number of files exceeds the threshold or we have done the
             # last file
