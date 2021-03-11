@@ -34,13 +34,13 @@ for c in ${class_names[@]}; do
     echo '---'$c'---'
     instances=$(grep -rh --include \*.py ' '"$c"'(' | sed 's/^[ \t]*//g' | grep -Ev 'import|^#|^class|^return|^yield' | awk -F "=" '{print $1}')
 
-    echo "$instances"
+    echo 'instances: '"$instances"
 
     instances=($instances)
     for i in ${instances[@]}; do
 
         echo '...'$i'...'
-        instance_calls=$(grep -rh --include \*.py -E "$i"'\.[a-zA-Z0-9_\.]+\(' | sed 's/^[ \t]*//g' | grep -Ev '^#' )
+        instance_calls=$(grep -r --include \*.py -E "$i"'\.[a-zA-Z0-9_\.]+\(' | sed 's/^[ \t]*//g' | grep -Ev '^#' )
         echo "$instance_calls"
     done
 done
