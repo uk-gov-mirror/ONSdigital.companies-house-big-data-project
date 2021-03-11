@@ -27,6 +27,16 @@ config.read("cha_pipeline.cfg")
 project_id = config.get('gcsfs_setup', 'project_id')
 key = config.get('gcsfs_setup', 'key')
 
+if key == str(False):
+    xbrl_web_scraper_sa_key = config.get('sa_keys', 'xbrl_web_scraper_sa_key')
+    xbrl_unpacker_sa_key = config.get('sa_keys', 'xbrl_unpacker_sa_key')
+    xbrl_parser_sa_key = key.get('sa_keys', 'xbrl_parser_sa_key')
+else:
+    xbrl_web_scraper_sa_key = \
+    xbrl_unpacker_sa_key = \
+    xbrl_parser_sa_key = \
+    key
+
 xbrl_web_scraper = config.get('cha_workflow', 'xbrl_web_scraper')
 xbrl_web_scraper_validator = config.get('cha_workflow', 'xbrl_validator')
 xbrl_unpacker = config.get('cha_workflow', 'xbrl_unpacker')
@@ -137,9 +147,9 @@ def main():
         print("Scraping XBRL data to:", xbrl_scraper_dir_to_save)
 
         scraper = XbrlScraper()
-        scraper.scrape_webpage( xbrl_scraper_url,
-                                xbrl_scraper_base_url,
-                                xbrl_scraper_dir_to_save)
+        scraper.scrape_webpage(xbrl_scraper_url,
+                               xbrl_scraper_base_url,
+                               xbrl_scraper_dir_to_save)
 
         # print("XBRL web scraper running...")
         # print("Scraping XBRL data to:", scraped_dir)
