@@ -582,7 +582,7 @@ class XbrlParser:
             unwanted_chars = ['  ', '"', '\n']
 
             for char in unwanted_chars:
-                df_element_export["value"] = df_element_export["value"].str\
+                df_element_export["value"] = df_element_export["value"].astype(str)\
                     .replace(char, '')
 
             # Change the order of the columns
@@ -681,9 +681,9 @@ class XbrlParser:
         try:
             file = self.fs.open(filepath)
             soup = BS(file, "lxml")
-        except:
+        except Exception as e:
             print("Failed to open: " + filepath)
-            return 1
+            return e
 
         # Get metadata about the accounting standard used
         try:
@@ -831,7 +831,13 @@ class XbrlParser:
         files, folder_month, folder_year = extractor.get_filepaths(directory)
 
         print(len(files))
-
+        # unhash when you have a partially completed file
+        #sql_query = 'SELECT DISTINCT(doc_name) AS f_names FROM `ons-companies-house-dev.xbrl_parsed_data.April-2019`'
+        #f_names_df = pd.read_gbq(sql_query, project_id="ons-companies-house-dev",
+        #                     dialect='standard', use_bqstorage_api=False)
+        #f_names = list(f_names_df["f_names"])
+        #files = [f for f in files if f.split("/")[-1] not in f_names]
+        #print("This long:", len(files))
         # Here you can splice/truncate the number of files you want to process
         # for testing
         # files = files[0:600]
@@ -844,7 +850,7 @@ class XbrlParser:
         table_export = bq_location + "." + folder_month + "-" + folder_year
 
         # Create a BigQuery table
-        self.mk_bq_table(table_export)
+        # self.mk_bq_table(table_export)
 
         # Code needed to split files by the number of cores before passing in
         # as an argument
