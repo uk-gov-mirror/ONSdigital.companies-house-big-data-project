@@ -838,7 +838,7 @@ class XbrlParser:
         print("This long:", len(files))
         # Here you can splice/truncate the number of files you want to process
         # for testing
-        files = files[0:600]
+        # files = files[0:600]
 
 
         # TO BE COMMENTED OUT AFTER TESTING

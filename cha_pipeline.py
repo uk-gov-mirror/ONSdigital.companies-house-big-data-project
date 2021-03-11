@@ -137,8 +137,6 @@ from src.data_processing.xbrl_csv_cleaner import XbrlCSVCleaner
 def main():
     print("-" * 50)
 
-    os.environ["PROJECT_ID"] = project_id
-    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = key
     fs = gcsfs.GCSFileSystem(project=project_id, token=key, cache_timeout=0)
     # Execute module xbrl_web_scraper
     if xbrl_web_scraper == str(True):
