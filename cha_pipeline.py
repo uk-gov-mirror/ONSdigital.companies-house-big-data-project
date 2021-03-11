@@ -179,7 +179,7 @@ def main():
     # Execute module xbrl_parser
     if xbrl_parser == str(True):
         print("XBRL parser running...")
-        parser_executer = XbrlParser(fs)
+        parser_executer = XbrlParser({"project":project_id, "sa_key":xbrl_parser_sa_key})
         parser_executer.parse_files(xbrl_parser_process_quarter,
                                xbrl_parser_process_year,
                                xbrl_unpacked_data,

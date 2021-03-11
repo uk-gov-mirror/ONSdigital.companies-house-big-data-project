@@ -26,13 +26,12 @@ import gc
 class XbrlParser:
     """ This is a class for parsing the XBRL data."""
 
-    def __init__(self, fs):
-        """
-        Constructs all the necessary attributes for the XbrlParser object of
-        which there are none.
-        """
+    def __init__(self, auth_dict):
         self.__init__
-        self.fs = fs
+        self.project = auth_dict["project"]
+        self.key = auth_dict["sa_key"]
+        self.fs = gcsfs.GCSFileSystem(
+            project=self.project, token=self.key, cache_timeout=0)
 
     # Table of variables and values that indicate consolidated status
     consolidation_var_table = {
@@ -535,8 +534,7 @@ class XbrlParser:
 
         return doc_dict
 
-    @staticmethod
-    def flatten_data(doc, bq_export):
+    def flatten_data(self, doc, bq_export):
         """
         Takes the data returned by flatten dict, with its tree-like
         structure and reorganises it into a long-thin format table structure
@@ -625,7 +623,7 @@ class XbrlParser:
         # Concatenate list of DataFrames and append to BigQuery table
         df_batch = pd.concat(df_list)
         print("\n Batch df contains {} rows".format(df_batch.shape[0]))
-        XbrlParser.append_to_bq(df_batch, bq_export)
+        self.append_to_bq(df_batch, bq_export)
 
         # Clean up memory
         del df_list, df_batch, doc2, doc
@@ -825,7 +823,7 @@ class XbrlParser:
             None
         """
 
-        extractor = XbrlExtraction(self.fs)
+        extractor = XbrlExtraction({"project":self.project, "sa_key":self.key})
 
         # Get all the filenames from the example folder
         files, folder_month, folder_year = extractor.get_filepaths(directory)
@@ -834,7 +832,7 @@ class XbrlParser:
 
         # Here you can splice/truncate the number of files you want to process
         # for testing
-        # files = files[0:600]
+        files = files[0:600]
 
 
         # TO BE COMMENTED OUT AFTER TESTING
@@ -1004,7 +1002,7 @@ class XbrlParser:
                 file_count = 0
 
                 # This also performs the BigQuery export
-                row_count += XbrlParser.flatten_data(results, bq_export)
+                row_count += self.flatten_data(results, bq_export)
                 XbrlExtraction.progressBar("XBRL Accounts Parsed", COUNT,
                                            len(list_of_files), row_count,
                                            batch_count,
@@ -1032,8 +1030,7 @@ class XbrlParser:
 
         return fails
 
-    @staticmethod
-    def append_to_bq(df, table):
+    def append_to_bq(self, df, table):
         """
         Function to append a given DataFrame to a BigQuery table
 
@@ -1046,8 +1043,11 @@ class XbrlParser:
             None
 
         """
+        # Set up authentication
+        credentials = service_account.Credentials.from_service_account_file(self.key)
+        
         # Set up a BigQuery client
-        client = bigquery.Client()
+        client = bigquery.Client(credentials=credentials, project=self.project)
 
         job_config = bigquery.LoadJobConfig(
             # Set the schema types to match those in parsed_data_schema.txt
@@ -1093,8 +1093,7 @@ class XbrlParser:
         job = 0
         del job
 
-    @staticmethod
-    def mk_bq_table(bq_location, schema="parsed_data_schema.txt"):
+    def mk_bq_table(self, bq_location, schema="parsed_data_schema.txt"):
         """
         Function to create a BigQuery table in a specified location with a
         schema specified by a txt file.
@@ -1108,8 +1107,11 @@ class XbrlParser:
         Raises:
             None
         """
-        # Create a BigQuery client
-        client = bigquery.Client()
+        # Set up authentication
+        credentials = service_account.Credentials.from_service_account_file(self.key)
+        
+        # Set up a BigQuery client
+        client = bigquery.Client(credentials=credentials, project=self.project)
 
         # Check if table exists
         try:
@@ -1120,10 +1122,17 @@ class XbrlParser:
 
         if table_exists:
             raise ValueError("Table already exists, please remove and retry")
+        
+        # Authenticate using environment variables
+        os.environ["PROJECT_ID"] = self.project
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = self.key
 
         # Create the table using the command line
         bq_string = "bq mk --table " + bq_location + " " + schema
         os.popen(bq_string).read()
+        
+        # Remove environment variables
+        os.environ.clear()
 
     def export_csv(self, bq_table, gcs_location, file_name):
         """
@@ -1142,8 +1151,11 @@ class XbrlParser:
         Raises:
             None
         """
-        # Create BigQuery client
-        client = bigquery.Client()
+        # Set up authentication
+        credentials = service_account.Credentials.from_service_account_file(self.key)
+        
+        # Set up a BigQuery client
+        client = bigquery.Client(credentials=credentials, project=self.project)
 
         # Don't include table header (will mess up combing csvs otherwise)
         job_config = bigquery.job.ExtractJobConfig(print_header=False)
@@ -1175,7 +1187,7 @@ class XbrlParser:
                        if (f.split("/")[-1]).startswith(file_name)]
 
         # Set up a gcs storage client and locations for things
-        storage_client = storage.Client()
+        storage_client = storage.Client(project = self.project).from_service_account_json(self.key)        
         bucket = storage_client.bucket(gcs_location.split("/",1)[0])
         destination = bucket.blob(gcs_location.split("/", 1)[1] + "/" + file_name + ".csv")
         destination.content_type = "text/csv"
