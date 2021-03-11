@@ -5,14 +5,18 @@ import random
 import zipfile
 import shutil
 import io
+import gcsfs
 
 
 class DataProcessing:
     """ This is a class for processing data. """
 
-    def __init__(self, fs):
+    def __init__(self, auth_dict):
         self.__init__
-        self.fs = fs
+        self.project = auth_dict["project"]
+        self.key = auth_dict["sa_key"]
+        self.fs = gcsfs.GCSFileSystem(
+            project=self.project, token=self.key, cache_timeout=0)
 
     @staticmethod
     def import_files(directory):

@@ -172,7 +172,7 @@ def main():
         print("Unpacking zip files...")
         print("Reading from directory: ", unpacker_source_dir)
         print("Writing to directory: ", unpacker_destination_dir)
-        unpacker = DataProcessing(fs)
+        unpacker = DataProcessing({"project":project_id, "sa_key":xbrl_unpacker_sa_key})
         unpacker.extract_compressed_files(unpacker_source_dir,
                                           unpacker_destination_dir)
 
