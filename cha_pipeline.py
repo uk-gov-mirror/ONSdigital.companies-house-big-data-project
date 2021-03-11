@@ -146,7 +146,8 @@ def main():
         print("XBRL web scraper running...")
         print("Scraping XBRL data to:", xbrl_scraper_dir_to_save)
 
-        scraper = XbrlScraper()
+        scraper = XbrlScraper({"project":project_id,
+                             "sa_key":xbrl_web_scraper_sa_key})
         scraper.scrape_webpage(xbrl_scraper_url,
                                xbrl_scraper_base_url,
                                xbrl_scraper_dir_to_save)

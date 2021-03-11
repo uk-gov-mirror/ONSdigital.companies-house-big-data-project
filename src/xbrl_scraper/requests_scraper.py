@@ -14,6 +14,11 @@ from google.cloud import storage
 
 class XbrlScraper:
 
+
+    def __init__(self, auth_dict):
+        self.project = auth_dict["project"]
+        self.key = auth_dict["sa_key"]
+
     def scrape_webpage(self, url, base_url, dir_to_save):
         """
         Scrapes target web page and saves all zip files found to
@@ -59,7 +64,7 @@ class XbrlScraper:
             # Filter out files that are not zip
             links = [link for link in links if link[-4:] == ".zip"]
 
-            storage_client = storage.Client()
+            storage_client = storage.Client(project = self.project).from_service_account_json(self.key)
             bucket = storage_client.bucket(dir_to_save.split("/")[0])
 
             # Download and save zip files
@@ -72,7 +77,7 @@ class XbrlScraper:
                 blob = bucket.blob("/".join(dir_to_save.split("/")[1:]) + "/" + link)
 
                 # Only download and save a file if it doesn't exist in the directory
-                if (not blob.exists()) and link == "Accounts_Monthly_Data-April2019.zip":
+                if not blob.exists():
                                      
                     print("Downloading " + link + "...")
                     zip_file = requests.get(zip_url).content
@@ -94,15 +99,15 @@ class XbrlScraper:
             print("Unable to scrape web page!")
             print("Error code: " + status)
 
-if __name__ == "__main__":
-    scraper = XbrlScraper()
+# if __name__ == "__main__":
+    # scraper = XbrlScraper()
 
-    url = "http://download.companieshouse.gov.uk/en_monthlyaccountsdata.html"
-    base_url = "http://download.companieshouse.gov.uk/"
-
-    # url = "http://download.companieshouse.gov.uk/historicmonthlyaccountsdata.html"
+    # url = "http://download.companieshouse.gov.uk/en_monthlyaccountsdata.html"
     # base_url = "http://download.companieshouse.gov.uk/"
 
-    dir_to_save = "ons-companies-house-dev-xbrl-scraped-data/requests_scraper_test_folder"
+    # # url = "http://download.companieshouse.gov.uk/historicmonthlyaccountsdata.html"
+    # # base_url = "http://download.companieshouse.gov.uk/"
 
-    scraper.scrape_webpage(url, base_url, dir_to_save)
+    # dir_to_save = "ons-companies-house-dev-xbrl-scraped-data/requests_scraper_test_folder"
+
+    # scraper.scrape_webpage(url, base_url, dir_to_save)
