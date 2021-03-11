@@ -30,11 +30,13 @@ key = config.get('gcsfs_setup', 'key')
 if key == str(False):
     xbrl_web_scraper_sa_key = config.get('sa_keys', 'xbrl_web_scraper_sa_key')
     xbrl_unpacker_sa_key = config.get('sa_keys', 'xbrl_unpacker_sa_key')
-    xbrl_parser_sa_key = key.get('sa_keys', 'xbrl_parser_sa_key')
+    xbrl_parser_sa_key = config.get('sa_keys', 'xbrl_parser_sa_key')
+    xbrl_validator_sa_key = config.get('sa_keys', 'xbrl_parser_sa_key')
 else:
     xbrl_web_scraper_sa_key = \
     xbrl_unpacker_sa_key = \
     xbrl_parser_sa_key = \
+    xbrl_validator_sa_key = \
     key
 
 xbrl_web_scraper = config.get('cha_workflow', 'xbrl_web_scraper')
@@ -160,7 +162,8 @@ def main():
 
     # Validate xbrl data
     if xbrl_web_scraper_validator == str(True):
-        validator = XbrlValidatorMethods(fs)
+        validator = XbrlValidatorMethods({"project":project_id,
+                             "sa_key":xbrl_validator_sa_key})
         print("Validating xbrl web scraped data...")
         validator.validate_compressed_files(validator_scraped_dir)
 

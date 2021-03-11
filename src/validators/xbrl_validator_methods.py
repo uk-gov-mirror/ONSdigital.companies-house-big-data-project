@@ -8,9 +8,12 @@ import gcsfs
 class XbrlValidatorMethods:
     """This is a class that validates the XBRL data files."""
 
-    def __init__(self, fs):
+    def __init__(self, auth_dict):
         self.__init__
-        self.fs = fs
+        self.project = auth_dict["project"]
+        self.key = auth_dict["sa_key"]
+        self.fs = gcsfs.GCSFileSystem(
+            project=self.project, token=self.key, cache_timeout=0)
 
     def validate_compressed_files(self, filepath):
         """
@@ -28,11 +31,6 @@ class XbrlValidatorMethods:
         if not isinstance(filepath, str):
             raise TypeError(
                 "The output filepath needs to be specified as a string"
-            )
-        # Check input is a valid file path
-        if not exists(filepath) :
-            raise ValueError(
-                "The file path specified does not exist"
             )
 
         if self.fs.exists(filepath):
