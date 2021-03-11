@@ -186,7 +186,7 @@ def main():
                                xbrl_parser_custom_input,
                                xbrl_parser_bq_location,
                                xbrl_processed_csv,
-                               2)
+                               3)
 
     # Execute module xbrl_csv_cleaner
     if xbrl_csv_cleaner == str(True):
