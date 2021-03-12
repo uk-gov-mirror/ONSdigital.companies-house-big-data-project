@@ -12,41 +12,6 @@ class XbrlCSVCleaner:
         self.__init__
 
     @staticmethod
-    def col_cast(df, col, col_type):
-        """
-        Converts a pandas dataframe column or list of columns into
-        a specified type.
-
-        Arguments:
-            df:         A pandas dataframe
-            col:        A list of columns to be converted from the dataframe
-            col_type:   The type to convert the column to (from type specified
-                        in allowed_types)
-        Returns:
-            df: The dataframe after the conversion has been applied
-        Raises:
-            None
-        """
-
-        # can include all standard types
-        allowed_types = ['str', 'datetime64[ns]', 'int64', 'int32', 'bool']
-
-        # convert col to list if string
-        if type(col) is str:
-            col = [col]
-        else:
-            pass
-        # loop over inputted columns and apply type
-        for c in col:
-            if col_type == 'date':
-                df[c] = df[c].astype('datetime64[ns]').dt.date
-
-            elif col_type in allowed_types:
-                df[c] = df[c].astype(col_type)
-            df = df
-        return df
-
-    @staticmethod
     def parsed_csv_clean(import_path, export_path=''):
         """
         cleans a parsed xbrl csv file (from the xbrl_parsed_data storage)
@@ -59,22 +24,6 @@ class XbrlCSVCleaner:
         Returns:
             None
         Raises:
-            None
-        """
-
-        # parameters
-        unwanted_chars = ['  ', '"', '\n']
-        str_cols = ['name', 'unit', 'value', 'doc_name', 'doc_type',
-                    'arc_name',
-                    'doc_companieshouseregisterednumber', 'doc_standard_type',
-                    'doc_standard_link', ]
-        date_cols = ['date', 'doc_balancesheetdate',
-                     'doc_standard_date', 'doc_upload_date']
-
-        wanted_cols = ['date', 'name', 'unit', 'value', 'doc_name', 'doc_type',
-                       'doc_upload_date', 'arc_name', 'parsed',
-                       'doc_balancesheetdate',
-                       'doc_companieshouseregisterednumber',
                        'doc_standard_type',
                        'doc_standard_date', 'doc_standard_link', ]
 

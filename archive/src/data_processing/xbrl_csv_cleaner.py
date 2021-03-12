@@ -45,15 +45,3 @@ class XbrlCSVCleaner:
                 df[c] = df[c].astype(col_type)
             df = df
         return df
-
-if __name__ == "__main__":
-    import gcsfs
-    pd.set_option('display.max_colwidth', None)
-    pd.set_option('max_columns', None)
-
-    in_path = "gs://ons-companies-house-dev-test-parsed-csv-data/v2_parsed_data/2015-September_xbrl_data.csv"
-    out_path = "gs://ons-companies-house-dev-test-parsed-csv-data/v2_parsed_data/2015-September_xbrl_data_cleaned.csv"
-
-    cleaner = XbrlCSVCleaner()
-
-    df = cleaner.parsed_csv_clean(in_path, export_path=out_path)

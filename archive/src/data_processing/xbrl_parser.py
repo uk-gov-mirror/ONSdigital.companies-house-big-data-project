@@ -46,44 +46,6 @@ class XbrlParser:
     }
 
     @staticmethod
-    def retrieve_accounting_standard(soup):
-        """
-        Gets the account reporting standard in use in a document by hunting
-        down the link to the schema reference sheet that always appears to
-        be in the document, and extracting the format and standard date from
-        the string of the url itself.
-        WARNING - That means that there's a lot of implicit hardcoded info
-        on the way these links are formatted and referenced within this
-        function.  Might need changing someday.
-
-        Arguments:
-            soup: BeautifulSoup souped html/xml object (BeautifulSoup object)
-        Returns:
-            standard:   The standard for the object (string)
-            date:       The date for the object (string)
-            original_url: The original url of the object (string)
-        Raises:
-            None
-        """
-        # Find the relevant link by its unique attribute
-        link_obj = soup.find("link:schemaref")
-
-        # If we didn't find anything it's an xml doc using a different
-        # element name:
-        if link_obj == None:
-            link_obj = soup.find("schemaref")
-
-        # extract the name of the .xsd schema file, which contains format
-        # and date information
-        text = link_obj['xlink:href'].split("/")[-1].split(".")[0]
-
-        # Split the extracted text into format and date, return values
-        standard, date, original_url = \
-            text[:-10].strip("-"), text[-10:], link_obj['xlink:href']
-
-        return standard, date, original_url
-
-    @staticmethod
     def parse_element(soup, element):
         """
         For a discovered XBRL tagged element, go through, retrieve its name
