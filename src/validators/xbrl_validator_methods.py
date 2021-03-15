@@ -29,11 +29,6 @@ class XbrlValidatorMethods:
             raise TypeError(
                 "The output filepath needs to be specified as a string"
             )
-        # Check input is a valid file path
-        if not exists(filepath) :
-            raise ValueError(
-                "The file path specified does not exist"
-            )
 
         if self.fs.exists(filepath):
             if not self.fs.isfile(filepath):

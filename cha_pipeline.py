@@ -22,10 +22,8 @@ from src.xbrl_scraper.requests_scraper import XbrlScraper
 from src.data_processing.xbrl_pd_methods import XbrlExtraction
 from src.data_processing.xbrl_parser import XbrlParser
 from src.data_processing.cst_data_processing import DataProcessing
-from src.data_processing.xbrl_csv_cleaner import XbrlCSVCleaner
 from src.data_processing.combine_csvfiles import XbrlCsvAppender
 from src.validators.xbrl_validator_methods import XbrlValidatorMethods
-from src.classifier.cst_classifier import Classifier
 
 pd.set_option("display.max_columns", 500)
 
@@ -144,13 +142,7 @@ def main():
                                     xbrl_parser_custom_input,
                                     xbrl_parser_bq_location,
                                     xbrl_processed_csv,
-                                    xbrl_parser_no_of_cores)
-
-    # Execute module xbrl_csv_cleaner
-    if xbrl_csv_cleaner == str(True):
-        print("XBRL CSV cleaner running...")
-        XbrlCSVCleaner.clean_parsed_files(xbrl_csv_cleaner_indir,
-                                          xbrl_csv_cleaner_outdir)
+                                    int(xbrl_parser_no_of_cores))
 
     # Append XBRL data on an annual or quarterly basis
     if xbrl_file_appender == str(True):
