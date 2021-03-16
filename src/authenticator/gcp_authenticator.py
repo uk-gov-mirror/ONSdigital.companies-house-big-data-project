@@ -71,6 +71,14 @@ class GCPAuthenticator:
         service = googleapiclient.discovery.build(
             'iam', 'v1', credentials=credentials)
 
+        keys = service.projects().serviceAccounts().keys().list(
+            name='projects/-/serviceAccounts/' + service_account_email).execute()
+        
+        if len(keys) > 10:
+            raise ValueError(
+        "Too many keys have been generated for this service account. Please remove some and try again"
+        )
+
         key = service.projects().serviceAccounts().keys().create(
             name='projects/-/serviceAccounts/' + service_account_email, body={}
             ).execute()
