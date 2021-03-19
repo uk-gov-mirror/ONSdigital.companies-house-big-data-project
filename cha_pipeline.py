@@ -129,6 +129,7 @@ from src.data_processing.xbrl_csv_cleaner import XbrlCSVCleaner
 def main():
     print("-" * 50)
 
+    # Create an instance of GCPAuthenitcator and generate keys
     authenticator = GCPAuthenticator(iam_key, project_id)
     authenticator.get_sa_keys(keys_fp)
 
