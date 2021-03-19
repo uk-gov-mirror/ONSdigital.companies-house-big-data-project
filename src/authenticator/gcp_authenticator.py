@@ -102,7 +102,7 @@ class GCPAuthenticator:
     def delete_key(self, key):
         """Deletes a service account key."""
             
-        full_key_name = key["name"]
+        full_key_name = "projects/" + key["project_id"] + "/serviceAccounts/" + key["client_email"] + "/keys/" + key["private_key_id"]
 
 
         credentials = service_account.Credentials.from_service_account_file(
@@ -126,8 +126,9 @@ class GCPAuthenticator:
                 self.delete_key(self.__dict__[k])
                 self.__dict__[k] = None
             elif remove_disk_keys and type(self.__dict__[k]) == str:
-                print("Remobing disk key")
-                os.rm(self.keys_filepath + "/" + k + ".json")
+                print("Removing disk key")
+                self.delete_key(self.read_json(self.keys_filepath + "/" + k + ".json"))
+                os.remove(self.keys_filepath + "/" + k + ".json")
                 
 
     def remove_n_keys(self, sa_email, n=10):
