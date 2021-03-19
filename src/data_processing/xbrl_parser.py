@@ -20,16 +20,13 @@ import pytz
 import psutil
 import gc
 
-
-
-
 class XbrlParser:
     """ This is a class for parsing the XBRL data."""
 
-    def __init__(self, auth_dict):
+    def __init__(self, auth):
         self.__init__
-        self.project = auth_dict["project"]
-        self.key = auth_dict["sa_key"]
+        self.project = auth.project
+        self.key = auth.xbrl_parser_key
         self.fs = gcsfs.GCSFileSystem(
             project=self.project, token=self.key, cache_timeout=0)
 
@@ -783,10 +780,10 @@ class XbrlParser:
             raise ValueError(
                 "Invalid entries in 'month' argument"
             )
-        if not self.fs.exists(filepath):
-            raise ValueError(
-                "The specified file path does not exist"
-            )
+        # if not self.fs.exists(filepath):
+        #     raise ValueError(
+        #         "The specified file path does not exist"
+        #     )
 
         directory_list = []
         if custom_input == "None":
@@ -823,22 +820,22 @@ class XbrlParser:
             None
         """
 
-        extractor = XbrlExtraction({"project":self.project, "sa_key":self.key})
+        extractor = XbrlExtraction(self.fs)
 
         # Get all the filenames from the example folder
         files, folder_month, folder_year = extractor.get_filepaths(directory)
 
         print(len(files))
 
-        sql_query = 'SELECT DISTINCT(doc_name) AS f_names FROM `ons-companies-house-dev.xbrl_parsed_data.April-2019`'
-        f_names_df = pd.read_gbq(sql_query, project_id="ons-companies-house-dev",
-                             dialect='standard', use_bqstorage_api=False)
-        f_names = list(f_names_df["f_names"])
-        files = [f for f in files if f.split("/")[-1] not in f_names]
+        # sql_query = 'SELECT DISTINCT(doc_name) AS f_names FROM `ons-companies-house-dev.xbrl_parsed_data.April-2019`'
+        # f_names_df = pd.read_gbq(sql_query, project_id="ons-companies-house-dev",
+        #                      dialect='standard', use_bqstorage_api=False)
+        # f_names = list(f_names_df["f_names"])
+        #files = [f for f in files if f.split("/")[-1] not in f_names]
         print("This long:", len(files))
         # Here you can splice/truncate the number of files you want to process
         # for testing
-        # files = files[0:600]
+        files = files[0:600]
 
 
         # TO BE COMMENTED OUT AFTER TESTING

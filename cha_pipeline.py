@@ -25,19 +25,8 @@ config = configparser.ConfigParser()
 config.read("cha_pipeline.cfg")
 
 project_id = config.get('gcsfs_setup', 'project_id')
-key = config.get('gcsfs_setup', 'key')
-
-if key == str(False):
-    xbrl_web_scraper_sa_key = config.get('sa_keys', 'xbrl_web_scraper_sa_key')
-    xbrl_unpacker_sa_key = config.get('sa_keys', 'xbrl_unpacker_sa_key')
-    xbrl_parser_sa_key = config.get('sa_keys', 'xbrl_parser_sa_key')
-    xbrl_validator_sa_key = config.get('sa_keys', 'xbrl_parser_sa_key')
-else:
-    xbrl_web_scraper_sa_key = \
-    xbrl_unpacker_sa_key = \
-    xbrl_parser_sa_key = \
-    xbrl_validator_sa_key = \
-    key
+iam_key = config.get('gcsfs_setup', 'key')
+keys_fp = config.get('gcsfs_setup', 'keys_fp')
 
 xbrl_web_scraper = config.get('cha_workflow', 'xbrl_web_scraper')
 xbrl_web_scraper_validator = config.get('cha_workflow', 'xbrl_validator')
@@ -124,6 +113,7 @@ xbrl_csv_cleaner_outdir = config.get('xbrl_csv_cleaner_args',
 
 # Arguments for merge_xbrl_to_pdf_data
 
+from src.authenticator.gcp_authenticator import GCPAuthenticator
 from src.xbrl_scraper.requests_scraper import XbrlScraper
 from src.data_processing.cst_data_processing import DataProcessing
 from src.classifier.cst_classifier import Classifier
@@ -138,17 +128,22 @@ from src.data_processing.xbrl_csv_cleaner import XbrlCSVCleaner
 
 def main():
     print("-" * 50)
+
+    authenticator = GCPAuthenticator(iam_key, project_id)
+    authenticator.get_sa_keys(keys_fp)
+
     # Execute module xbrl_web_scraper
     if xbrl_web_scraper == str(True):
 
         print("XBRL web scraper running...")
         print("Scraping XBRL data to:", xbrl_scraper_dir_to_save)
 
-        scraper = XbrlScraper({"project":project_id,
-                             "sa_key":xbrl_web_scraper_sa_key})
+        scraper = XbrlScraper(authenticator)
         scraper.scrape_webpage(xbrl_scraper_url,
                                xbrl_scraper_base_url,
                                xbrl_scraper_dir_to_save)
+        
+        authenticator.delete_key(authenticator.xbrl_scraper_key)
 
         # print("XBRL web scraper running...")
         # print("Scraping XBRL data to:", scraped_dir)
@@ -160,8 +155,7 @@ def main():
 
     # Validate xbrl data
     if xbrl_web_scraper_validator == str(True):
-        validator = XbrlValidatorMethods({"project":project_id,
-                             "sa_key":xbrl_validator_sa_key})
+        validator = XbrlValidatorMethods(authenticator)
         print("Validating xbrl web scraped data...")
         validator.validate_compressed_files(validator_scraped_dir)
 
@@ -171,14 +165,14 @@ def main():
         print("Unpacking zip files...")
         print("Reading from directory: ", unpacker_source_dir)
         print("Writing to directory: ", unpacker_destination_dir)
-        unpacker = DataProcessing({"project":project_id, "sa_key":xbrl_unpacker_sa_key})
+        unpacker = DataProcessing(authenticator)
         unpacker.extract_compressed_files(unpacker_source_dir,
                                           unpacker_destination_dir)
-
+        
     # Execute module xbrl_parser
     if xbrl_parser == str(True):
         print("XBRL parser running...")
-        parser_executer = XbrlParser({"project":project_id, "sa_key":xbrl_parser_sa_key})
+        parser_executer = XbrlParser(authenticator)
         parser_executer.parse_files(xbrl_parser_process_quarter,
                                xbrl_parser_process_year,
                                xbrl_unpacked_data,
@@ -186,7 +180,7 @@ def main():
                                xbrl_parser_bq_location,
                                xbrl_processed_csv,
                                3)
-
+        
     # Execute module xbrl_csv_cleaner
     if xbrl_csv_cleaner == str(True):
 
@@ -202,6 +196,8 @@ def main():
                                      xbrl_file_appender_outdir,
                                      xbrl_file_appender_year,
                                      xbrl_file_appender_quarter)
+
+    authenticator.clean_up_keys()
     """
     # Execute PDF web scraper
     if pdf_web_scraper == str(True):

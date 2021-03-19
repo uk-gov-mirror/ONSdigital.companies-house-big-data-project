@@ -11,13 +11,14 @@ from bs4 import BeautifulSoup
 import time
 import random
 from google.cloud import storage
+from google.oauth2 import service_account
 
 class XbrlScraper:
 
 
-    def __init__(self, auth_dict):
-        self.project = auth_dict["project"]
-        self.key = auth_dict["sa_key"]
+    def __init__(self, auth):
+        self.project = auth.project
+        self.key = auth.xbrl_scraper_key
 
     def scrape_webpage(self, url, base_url, dir_to_save):
         """
@@ -64,7 +65,8 @@ class XbrlScraper:
             # Filter out files that are not zip
             links = [link for link in links if link[-4:] == ".zip"]
 
-            storage_client = storage.Client(project = self.project).from_service_account_json(self.key)
+            creds = service_account.Credentials.from_service_account_info(self.key)
+            storage_client = storage.Client(credentials=creds)
             bucket = storage_client.bucket(dir_to_save.split("/")[0])
 
             # Download and save zip files

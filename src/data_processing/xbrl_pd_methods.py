@@ -14,12 +14,9 @@ import gcsfs
 class XbrlExtraction:
     """ This is a class for extracting the XBRL data. """
 
-    def __init__(self, auth_dict):
+    def __init__(self, fs):
         self.__init__
-        self.project = auth_dict["project"]
-        self.key = auth_dict["sa_key"]
-        self.fs = gcsfs.GCSFileSystem(
-            project=self.project, token=self.key, cache_timeout=0)
+        self.fs = fs
 
     def get_filepaths(self, directory):
         """
