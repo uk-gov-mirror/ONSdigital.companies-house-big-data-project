@@ -311,168 +311,6 @@ class XbrlParser:
         return element_dict
 
     @staticmethod
-    def summarise_by_sum(doc, variable_names):
-        """
-        Takes a document (dict) after extraction, and tries to extract
-        a summary variable relating to the financial state of the enterprise
-        by summing all those named that exist.
-
-        Arguments:
-            doc:            an extracted document dict, with "elements" entry
-                            as created by the 'scrape_clean_elements' functions
-                            (dict)
-            variable_names: variables to find and sum (of all) if they exist
-        Returns (as a dict):
-            total_assets:   the totals of the given values
-            units:          the units corresponding to the given sum
-        """
-        # Check arguments are of correct types
-        if not isinstance(doc, dict):
-            raise TypeError(
-                "'doc' argument must be a dictionary"
-            )
-        if isinstance(variable_names, list):
-            if not all(isinstance(name, str) for name in variable_names):
-                raise TypeError (
-                    "Variable names must be passed as strings"
-                )
-        else:
-            if not isinstance(variable_names, str):
-                raise TypeError(
-                    "Variable name must be passed as a string"
-                )
-
-        # Convert elements to pandas df
-        df = pd.DataFrame(doc['elements'])
-
-        # Subset to most recent (latest dated)
-        df = df[df['date'] == doc['doc_balancesheetdate']]
-
-        total_assets = 0.0
-        unit = "NA"
-
-        # Find the total assets by summing components
-        for each in variable_names:
-            # Fault-tolerant, will skip whatever isn't numeric
-            try:
-                total_assets = total_assets + df[df['name'] == each]\
-                    .iloc[0]['value']
-                # Retrieve reporting unit if exists
-                unit = df[df['name'] == each].iloc[0]['unit']
-            except:
-                pass
-
-        return {"total_assets": total_assets, "unit": unit}
-
-    @staticmethod
-    def summarise_by_priority(doc, variable_names):
-        """
-        Takes a document (dict) after extraction, and tries to extract
-        a summary variable relating to the financial state of the enterprise
-        by looking for each named, in order.
-
-        Arguments:
-            doc:            an extracted document dict, with "elements" entry
-                            as created by the 'scrape_clean_elements' functions
-                            (dict)
-            variable_names: variables to find and check if they exist
-        Returns (as a dict):
-            primary_assets: total assets from given variables
-            unit:           units for corresponding assets
-        Raises:
-            None
-        """
-        # Check arguments are of correct types
-        if not isinstance(doc, dict):
-            raise TypeError(
-                "'doc' argument must be a dictionary"
-            )
-        if isinstance(variable_names, list):
-            if not all(isinstance(name, str) for name in variable_names):
-                raise TypeError(
-                    "Variable names must be passed as strings"
-                )
-        else:
-            if not isinstance(variable_names, str):
-                raise TypeError(
-                    "Variable name must be passed as a string"
-                )
-
-        # Convert elements to pandas df
-        df = pd.DataFrame(doc['elements'])
-
-        # Subset to most recent (latest dated)
-        df = df[df['date'] == doc['doc_balancesheetdate']]
-
-        primary_assets = 0.0
-        unit = "NA"
-
-        # Find the net asset/liability variable by hunting names in order
-        for each in variable_names:
-            try:
-                # Fault tolerant, will skip whatever isn't numeric
-                primary_assets = df[df['name'] == each].iloc[0]['value']
-                # Retrieve reporting unit if it exists
-                unit = df[df['name'] == each].iloc[0]['unit']
-                break
-            except:
-                pass
-
-        return {"primary_assets": primary_assets, "unit": unit}
-
-    @staticmethod
-    def summarise_set(doc, variable_names):
-        """
-        Takes a document (dict) after extraction, and tries to extract
-        summary variables relating to the financial state of the enterprise
-        by returning all those named that exist.
-        
-        Arguments:
-            doc:            an extracted document dict, with "elements" entry
-                            as created by the 'scrape_clean_elements' functions
-                            (dict)
-            variable_names: variables to find and return if they exist.
-        Returns:
-            results: a dictionary of all the values for each in variable_names
-                     (dict)
-        Raises:
-            None
-        """
-        # Check arguments are of correct types
-        if not isinstance(doc, dict):
-            raise TypeError(
-                "'doc' argument must be a dictionary"
-            )
-        if isinstance(variable_names, list):
-            if not all(isinstance(name, str) for name in variable_names):
-                raise TypeError(
-                    "Variable names must be passed as strings"
-                )
-        else:
-            if not isinstance(variable_names, str):
-                raise TypeError(
-                    "Variable name must be passed as a string"
-                )
-
-        results = {}
-
-        # Convert elements to pandas df
-        df = pd.DataFrame(doc['elements'])
-
-        # Subset to most recent (latest dated)
-        df = df[df['date'] == doc['doc_balancesheetdate']]
-
-        # Find all the variables of interest should they exist
-        for each in variable_names:
-            try:
-                results[each] = df[df['name'] == each].iloc[0]['value']
-            except:
-                pass
-
-        # Send the variables back to be appended
-        return results
-
-    @staticmethod
     def scrape_elements(soup, filepath):
         """
         Parses an XBRL (xml) company accounts file for all labelled content and
@@ -502,34 +340,6 @@ class XbrlParser:
             pass
 
         return elements
-
-    @staticmethod
-    def flatten_dict(doc):
-        """
-        Takes in a list of dictionaries and combines them into a
-        single dictionary - assumes dictionaries all have the same keys.
-
-        Argument:
-            doc: a list of dictionaries (list)
-        Returns:
-            doc_dict: a dictionary formed by combing the list of dictionaries
-                      (dict)
-        Raises:
-            None
-        """
-        # Check arguments are of correct types
-        if not all(isinstance(el, dict) for el in doc):
-            raise TypeError(
-                "'doc' argument must be a list of dictionaries"
-            )
-
-        # combines list of dictionaries into one dictionary based on common
-        # keys
-        doc_dict = {}
-        for k in doc[0].keys():
-            doc_dict[k] = [d[k] for d in doc]
-
-        return doc_dict
 
     def flatten_data(self, doc, bq_export):
         """
@@ -826,29 +636,27 @@ class XbrlParser:
         files, folder_month, folder_year = extractor.get_filepaths(directory)
 
         print(len(files))
-
-        # sql_query = 'SELECT DISTINCT(doc_name) AS f_names FROM `ons-companies-house-dev.xbrl_parsed_data.April-2019`'
-        # f_names_df = pd.read_gbq(sql_query, project_id="ons-companies-house-dev",
-        #                      dialect='standard', use_bqstorage_api=False)
-        # f_names = list(f_names_df["f_names"])
+        # unhash when you have a partially completed file
+        #sql_query = 'SELECT DISTINCT(doc_name) AS f_names FROM `ons-companies-house-dev.xbrl_parsed_data.April-2019`'
+        #f_names_df = pd.read_gbq(sql_query, project_id="ons-companies-house-dev",
+        #                     dialect='standard', use_bqstorage_api=False)
+        #f_names = list(f_names_df["f_names"])
         #files = [f for f in files if f.split("/")[-1] not in f_names]
-        print("This long:", len(files))
+        #print("This long:", len(files))
         # Here you can splice/truncate the number of files you want to process
         # for testing
-        files = files[0:600]
+        # files = files[0:600]
 
 
         # TO BE COMMENTED OUT AFTER TESTING
         print(folder_month, folder_year)
 
         # Define the location where to export results to BigQuery
-        table_export = bq_location + "." + folder_month + "-" + folder_year
+        table_export = bq_location + "." + "authenticator_test_" + folder_month + "-" + folder_year
 
         # Create a BigQuery table
         # self.mk_bq_table(table_export)
 
-        # Code needed to split files by the number of cores before passing in
-        # as an argument
         chunk_len = math.ceil(len(files) / num_processes)
         files = [files[i:i + chunk_len] for i in
                  range(0, len(files), chunk_len)]
@@ -907,9 +715,9 @@ class XbrlParser:
             year:               year to process files from (int)
             unpacked_files:     path of directory where files to be processed
                                 are stored (string)
+            custom_input:       Used to set a specific folder of accounts
             bq_location:        Location of BigQuery table to save results (str)
             csv_dir:            GCS folder to save csv file (str)
-            custom_input:       Used to set a specific folder of accounts
             num_cores:          number of cores to use with mutliprocessing
                                 module (int)
         Returns:

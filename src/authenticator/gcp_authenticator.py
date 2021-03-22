@@ -153,7 +153,7 @@ class GCPAuthenticator:
 
         return key
     
-    def delete_key(self, key):
+    def delete_key(self, key, full_name=False):
         """
         Deletes a service account key.
         
@@ -164,8 +164,11 @@ class GCPAuthenticator:
         Raises
             None  
         """
-        # Construct the full key name from the json fields
-        full_key_name = "projects/" + key["project_id"] + "/serviceAccounts/" + key["client_email"] + "/keys/" + key["private_key_id"]
+        if full_name:
+            full_key_name = key["name"]
+        else:
+            # Construct the full key name from the json fields
+            full_key_name = "projects/" + key["project_id"] + "/serviceAccounts/" + key["client_email"] + "/keys/" + key["private_key_id"]
 
         # Set up credentials to allow deletion of keys
         credentials = service_account.Credentials.from_service_account_file(
@@ -240,16 +243,21 @@ class GCPAuthenticator:
         # List the keys associated to that sa
         keys_response = service.projects().serviceAccounts().keys().list(
             name='projects/-/serviceAccounts/' + sa_email).execute()
+        
+        
         keys_list = keys_response["keys"]
-
+        
         # Reverse the list so that we delete the most recently created first
         keys_list.reverse()
         
         # count added incase n is larger than the number of keys
         count = min(n, len(keys_list))
         for i in range(count):
-            self.delete_key(keys_list[i])
-            print("DELETED A KEY")
+            try:
+                self.delete_key(keys_list[i], full_name=True)
+                print("DELETED A KEY")
+            except:
+                print("Couldn't DELETE A KEY")
 
 
     @staticmethod
@@ -315,7 +323,3 @@ if __name__ == "__main__":
     keys_folder = "/home/dylan_purches/repos/companies-house-big-data-project/test_dir"
     authenticator = GCPAuthenticator("/home/dylan_purches/keys/data_key.json", "ons-companies-house-dev")
     
-    authenticator.get_sa_keys("/home/dylan_purches/keys")
-
-    fs = gcsfs.GCSFileSystem(token=authenticator.xbrl_parser_key, cache_timeout=0)
-    print(fs.ls("ons-companies-house-dev-xbrl-unpacked-data/scraper_test/Accounts_Monthly_Data-April2019"))
