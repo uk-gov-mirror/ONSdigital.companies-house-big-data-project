@@ -5,14 +5,18 @@ import random
 import zipfile
 import shutil
 import io
+import gcsfs
 
 
 class DataProcessing:
     """ This is a class for processing data. """
 
-    def __init__(self, fs):
+    def __init__(self, auth):
         self.__init__
-        self.fs = fs
+        self.project = auth.project
+        self.key = auth.xbrl_unpacker_key
+        self.fs = gcsfs.GCSFileSystem(
+            project=self.project, token=self.key, cache_timeout=0)
 
     def extract_compressed_files(self, file_source, file_dest):
         """

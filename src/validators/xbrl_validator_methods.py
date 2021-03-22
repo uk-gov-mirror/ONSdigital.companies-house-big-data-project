@@ -8,9 +8,12 @@ import gcsfs
 class XbrlValidatorMethods:
     """This is a class that validates the XBRL data files."""
 
-    def __init__(self, fs):
+    def __init__(self, auth):
         self.__init__
-        self.fs = fs
+        self.project = auth.project
+        self.key = auth.xbrl_validator_key
+        self.fs = gcsfs.GCSFileSystem(
+            project=self.project, token=self.key, cache_timeout=0)
 
     def validate_compressed_files(self, filepath):
         """
