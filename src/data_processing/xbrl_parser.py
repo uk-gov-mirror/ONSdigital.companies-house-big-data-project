@@ -722,9 +722,9 @@ class XbrlParser:
             year:               year to process files from (int)
             unpacked_files:     path of directory where files to be processed
                                 are stored (string)
+            custom_input:       Used to set a specific folder of accounts
             bq_location:        Location of BigQuery table to save results (str)
             csv_dir:            GCS folder to save csv file (str)
-            custom_input:       Used to set a specific folder of accounts
             num_cores:          number of cores to use with mutliprocessing
                                 module (int)
         Returns:
