@@ -652,7 +652,7 @@ class XbrlParser:
         print(folder_month, folder_year)
 
         # Define the location where to export results to BigQuery
-        table_export = bq_location + "." + "authenticator_test_" + folder_month + "-" + folder_year
+        table_export = bq_location + "." + folder_month + "-" + folder_year
 
         # Create a BigQuery table
         # self.mk_bq_table(table_export)
