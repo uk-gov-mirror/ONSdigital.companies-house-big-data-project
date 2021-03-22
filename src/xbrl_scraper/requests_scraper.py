@@ -14,32 +14,32 @@ from google.cloud import storage
 
 class XbrlScraper:
 
-    def scrape_webpage(self, url, base_url, dir_to_save):
+    def scrape_webpage(self, scraper_url , domain, dir_to_save):
         """
         Scrapes target web page and saves all zip files found to
         a directory
 
         Arguments:
-            url:            Url of web page to scrape (str)
-            base_url:       Base url of wep page to scrape (str)
-            dir_save_to:    GCS directory to save zip files to, consisting of bucket_name/folder
+            scraper_url:    Url of web page to scrape (str)
+            domain:         Base url of wep page to scrape (str)
+            dir_to_save:    GCS directory to save zip files to, consisting of bucket_name/folder
         Returns:
             None
         Raises:
             None
 
         Notes:
-            The base_url is needed as the links to the zip files
+            The base url (domain) is needed as the links to the zip files
             are appended to this, not the html url
             
             Example:
-            url = "http://download.companieshouse.gov.uk/en_monthlyaccountsdata.html"
-            base_url = "http://download.companieshouse.gov.uk/"
+            scraper_url = "http://download.companieshouse.gov.uk/en_monthlyaccountsdata.html"
+            domain = "http://download.companieshouse.gov.uk/"
             dir_to_save = "ons-companies-house-dev-xbrl-scraped-data/requests_scraper_test_folder"
         """
 
         print("Fetching content...")
-        res = requests.get(url)
+        res = requests.get(scraper_url)
 
         #txt = res.text
         status = res.status_code
@@ -65,7 +65,7 @@ class XbrlScraper:
             # Download and save zip files
             for link in links:
 
-                zip_url = base_url + link
+                zip_url = domain + link
 
                 if "/" in link: link = link.split("/")[-1]
 
@@ -97,12 +97,12 @@ class XbrlScraper:
 if __name__ == "__main__":
     scraper = XbrlScraper()
 
-    url = "http://download.companieshouse.gov.uk/en_monthlyaccountsdata.html"
-    base_url = "http://download.companieshouse.gov.uk/"
+    scraper_url = "http://download.companieshouse.gov.uk/en_monthlyaccountsdata.html"
+    domain = "http://download.companieshouse.gov.uk/"
 
-    # url = "http://download.companieshouse.gov.uk/historicmonthlyaccountsdata.html"
-    # base_url = "http://download.companieshouse.gov.uk/"
+    # scraper_url = "http://download.companieshouse.gov.uk/historicmonthlyaccountsdata.html"
+    # domain = "http://download.companieshouse.gov.uk/"
 
     dir_to_save = "ons-companies-house-dev-xbrl-scraped-data/requests_scraper_test_folder"
 
-    scraper.scrape_webpage(url, base_url, dir_to_save)
+    scraper.scrape_webpage(scraper_url, domain, dir_to_save)
