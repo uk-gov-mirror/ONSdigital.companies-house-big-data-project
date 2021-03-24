@@ -20,10 +20,9 @@ from bs4 import BeautifulSoup as BS  # Can parse xml or html docs
 #custom imports
 from src.authenticator.gcp_authenticator import GCPAuthenticator
 from src.xbrl_scraper.requests_scraper import XbrlScraper
-from src.data_processing.xbrl_pd_methods import XbrlExtraction
-from src.data_processing.xbrl_parser import XbrlParser
+from src.xbrl_validator.xbrl_validator_methods import XbrlValidatorMethods
 from src.data_processing.cst_data_processing import DataProcessing
-from src.validators.xbrl_validator_methods import XbrlValidatorMethods
+from src.xbrl_parser.xbrl_parser import XbrlParser
 
 pd.set_option("display.max_columns", 500)
 
