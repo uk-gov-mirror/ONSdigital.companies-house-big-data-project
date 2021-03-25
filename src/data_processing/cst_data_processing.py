@@ -6,6 +6,8 @@ import zipfile
 import shutil
 import io
 import gcsfs
+import psutil
+import time
 
 
 class DataProcessing:
@@ -61,7 +63,21 @@ class DataProcessing:
                 files = [f for f in files if f not in list_extracted_files]
 
                 print("Extracting files...")
+
+                count=0
+                t0=time.time()
+                m0=psutil.virtual_memory().percent
+
                 for file in files:
+                    count+=1
+                    t = time.time() - t0
+                    m = psutil.virtual_memory().percent - m0
+                    if t > 540:
+                        with open("/home/dylan_purches/Documents/xbrl_unpacker_timing.csv", "a") as f:
+                            f.write(f"{t}, {count}, {m} \n")
+                        t0 = time.time()
+                        count = 0
+
                     if file.endswith('.zip'):
 
                         directory = file_dest + "/" + \
