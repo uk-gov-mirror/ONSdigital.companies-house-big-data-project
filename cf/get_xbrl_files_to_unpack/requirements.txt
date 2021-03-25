@@ -1,5 +1,5 @@
 # Function dependencies, for example:
 # package>=version
-requests>=2.25.1
 bs4>=0.0.1
-google-cloud-storage>=1.36.1
+google-cloud-pubsub>=2.4.0
+gcsfs>=0.7.2
