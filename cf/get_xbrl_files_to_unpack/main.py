@@ -27,7 +27,7 @@ def get_xbrl_files(event, context):
     topic_path = publisher.topic_path("ons-companies-house-dev", "xbrl_files_to_unpack")
 
     with zipfile.ZipFile(fs.open(zip_path), 'r') as zip_ref:
-      names = zip_ref.namelist()[0:1000] 
+      names = zip_ref.namelist()[-1000:] 
       for i, contentfilename in enumerate(names):
         upload_path = save_directory + "/" + contentfilename
         data = "Xbrl file to download: {}".format(contentfilename).encode("utf-8")
