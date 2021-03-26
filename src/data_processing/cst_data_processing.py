@@ -64,19 +64,13 @@ class DataProcessing:
 
                 print("Extracting files...")
 
-                count=0
-                t0=time.time()
-                m0=psutil.virtual_memory().percent
+                
 
                 for file in files:
-                    count+=1
-                    t = time.time() - t0
-                    m = psutil.virtual_memory().percent - m0
-                    if t > 540:
-                        with open("/home/dylan_purches/Documents/xbrl_unpacker_timing.csv", "a") as f:
-                            f.write(f"{t}, {count}, {m} \n")
-                        t0 = time.time()
-                        count = 0
+                    count=0
+                    t0=time.time()
+                    m0=psutil.virtual_memory().percent
+                    
 
                     if file.endswith('.zip'):
 
@@ -106,6 +100,15 @@ class DataProcessing:
                                         content_type="text/"
                                                      +contentfilename \
                                                          .split(".")[-1])
+                                    count+=1
+                                    t = time.time() - t0
+                                    m = psutil.virtual_memory().percent - m0
+                                    if t > 540:
+                                        print(f"{count} files unpacked in {t} seconds")
+                                        with open("/home/dylan_purches/Documents/unpacker_timing.csv", "a") as f:
+                                            f.write(f"{t}, {count}, {m} \n")
+                                        t0 = time.time()
+                                        count = 0
                                 except:
                                     print("Failed to save:", contentfilename)
                         print("Extracted files from " + file)
