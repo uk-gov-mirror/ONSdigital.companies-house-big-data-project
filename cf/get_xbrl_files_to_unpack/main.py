@@ -18,7 +18,7 @@ def get_xbrl_files(event, context):
     zip_path = event["attributes"]["zip_path"]
     fs = gcsfs.GCSFileSystem(cache_timeout=0)
 
-    save_directory = "ons-companies-house-dev-xbrl-unpacked-data/cloud_functions_test/" + (zip_path.split("/")[-1]).split(".")[0]
+    save_directory = "ons-companies-house-dev-xbrl-unpacked-data/cloud_functions_test/test_" + (zip_path.split("/")[-1]).split(".")[0]
 
     batching_settings = pubsub_v1.types.BatchSettings(
         max_messages=1000
@@ -27,7 +27,8 @@ def get_xbrl_files(event, context):
     topic_path = publisher.topic_path("ons-companies-house-dev", "xbrl_files_to_unpack")
 
     with zipfile.ZipFile(fs.open(zip_path), 'r') as zip_ref:
-      for i, contentfilename in enumerate(zip_ref.namelist()):
+      names = zip_ref.namelist()[0:1000] 
+      for i, contentfilename in enumerate(names):
         upload_path = save_directory + "/" + contentfilename
         data = "Xbrl file to download: {}".format(contentfilename).encode("utf-8")
         future = publisher.publish(
