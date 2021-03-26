@@ -28,7 +28,7 @@ def get_xbrl_files(event, context):
     
     n = 1000
     with zipfile.ZipFile(fs.open(zip_path), 'r') as zip_ref:
-      zip_list = zip_ref.namelist()
+      zip_list = zip_ref.namelist()[0:9500]
       names = [zip_list[i*n : (i+1)*n] for i in range((len(zip_list) + n - 1)//n)]
       for i, contentfilename in enumerate(names):
         # upload_path = save_directory + "/" + contentfilename
