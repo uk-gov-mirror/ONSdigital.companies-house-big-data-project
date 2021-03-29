@@ -8,12 +8,11 @@ from google.cloud import storage, pubsub_v1
 
 def collect_links(event, content):
     """
-    Scrapes target web page and saves all zip files found to
-    a directory
+    Scrapes target web page and sends the links of all
+    zip files found to the pub/sub topic 'run_xbrl_web_scraper'.
     Arguments:
-        url:            Url of web page to scrape (str)
-        base_url:       Base url of wep page to scrape (str)
-        dir_save_to:    GCS directory to save zip files to, consisting of bucket_name/folder
+        event (dict): Event payload.
+        context (google.cloud.functions.Context): Metadata for the event.
     Returns:
         None
     Raises:
@@ -71,6 +70,8 @@ def collect_links(event, content):
             # Only download and save a file if it doesn't exist in the directory
             if not blob.exists():
               data = "Zip file to download: {}".format(link).encode("utf-8")
+
+              # Publish a message to the relevant topic with arguments for which file to download
               future = publisher.publish(
                 topic_path, data, zip_path=zip_url, link_path=link
               )
