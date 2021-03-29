@@ -626,9 +626,8 @@ class XbrlParser:
         Raises:
             None
         """
-        # TO BE COMMENTED OUT AFTER TESTING
-        folder_month = directory.split("_")[-1][0:-4]
-        folder_year = directory.split("_")[-1][-4:]
+        folder_month = "".join(directory.split("/")[-1].split("-")[1:])[0:-4]
+        folder_year = "".join(directory.split("/")[-1].split("-")[1:])[-4:]
 
         # Define the location where to export results to BigQuery
         table_export = bq_location + "." + folder_month + "-" + folder_year
@@ -638,7 +637,9 @@ class XbrlParser:
 
         results, fails = self.combine_batch_data(files_list, directory)
 
-        self.flatten_data(results, table_export)
+        print(results)
+
+        rc = self.flatten_data(results, table_export)
 
         # Export the BigQuery table to a csv file
         self.export_csv(table_export, processed_path,
@@ -777,19 +778,19 @@ class XbrlParser:
         for file in filenames:
             filepath = xbrl_directory + "/" + file
             if self.fs.exists(filepath):
-                try:
+                # try:
                     # Read the file and parse
-                    doc = self.process_account(file)
+                    doc = self.process_account(filepath)
 
                     # append results to table
                     results.append(doc)
 
                 # If we can't process the file, save it to be re done on one
                 # processor
-                except:
-                    print(file, "has failed to parse")
-                    fails.append(file)
-                    continue
+                # except:
+                #     print(file, "has failed to parse")
+                #     fails.append(file)
+                #     continue
 
             else:
                 print(f"{filepath} does not exist")
@@ -809,11 +810,8 @@ class XbrlParser:
             None
 
         """
-        # Set up authentication
-        credentials = service_account.Credentials.from_service_account_file(self.key)
-        
         # Set up a BigQuery client
-        client = bigquery.Client(credentials=credentials, project=self.project)
+        client = bigquery.Client(project="ons-companies-house-dev")
 
         job_config = bigquery.LoadJobConfig(
             # Set the schema types to match those in parsed_data_schema.txt
@@ -873,11 +871,8 @@ class XbrlParser:
         Raises:
             None
         """
-        # Set up authentication
-        credentials = service_account.Credentials.from_service_account_file(self.key)
-        
         # Set up a BigQuery client
-        client = bigquery.Client(credentials=credentials, project=self.project)
+        client = bigquery.Client("ons-companies-house-dev")
 
         # Check if table exists
         try:
@@ -889,9 +884,6 @@ class XbrlParser:
         if table_exists:
             raise ValueError("Table already exists, please remove and retry")
         
-        # Authenticate using environment variables
-        os.environ["PROJECT_ID"] = self.project
-        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = self.key
 
         # Create the table using the command line
         bq_string = "bq mk --table " + bq_location + " " + schema
@@ -916,12 +908,9 @@ class XbrlParser:
             None
         Raises:
             None
-        """
-        # Set up authentication
-        credentials = service_account.Credentials.from_service_account_file(self.key)
-        
+        """        
         # Set up a BigQuery client
-        client = bigquery.Client(credentials=credentials, project=self.project)
+        client = bigquery.Client("ons-companies-house-dev")
 
         # Don't include table header (will mess up combing csvs otherwise)
         job_config = bigquery.job.ExtractJobConfig(print_header=False)
@@ -953,7 +942,7 @@ class XbrlParser:
                        if (f.split("/")[-1]).startswith(file_name)]
 
         # Set up a gcs storage client and locations for things
-        storage_client = storage.Client(project = self.project).from_service_account_json(self.key)        
+        storage_client = storage.Client() 
         bucket = storage_client.bucket(gcs_location.split("/",1)[0])
         destination = bucket.blob(gcs_location.split("/", 1)[1] + "/" + file_name + ".csv")
         destination.content_type = "text/csv"
