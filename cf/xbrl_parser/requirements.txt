@@ -10,3 +10,6 @@ gcsfs==0.7.1
 pytz==2021.1
 psutil==5.8.0
 beautifulsoup4==4.9.3
+lxml==4.6.2
+pyarrow==3.0.0
+
