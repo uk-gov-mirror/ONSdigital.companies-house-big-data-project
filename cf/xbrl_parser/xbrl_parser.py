@@ -715,7 +715,7 @@ class XbrlParser:
         job = 0
         del job
 
-    def mk_bq_table(self, bq_location, schema="../../parsed_data_schema.txt"):
+    def mk_bq_table(self, bq_location, schema="parsed_data_schema.txt"):
         """
         Function to create a BigQuery table in a specified location with a
         schema specified by a txt file.
