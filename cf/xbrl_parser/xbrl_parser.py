@@ -466,12 +466,12 @@ class XbrlParser:
 
         # loop over multi-threading here - imports data and parses on separate
         # threads
-        # try:
-        file = self.fs.open(filepath)
-        soup = BS(file, "lxml")
-        # except Exception as e:
-        #     print("Failed to open: " + filepath)
-        #     return e
+        try:
+            file = self.fs.open(filepath)
+            soup = BS(file, "lxml")
+        except Exception as e:
+            print("Failed to open: " + filepath)
+            return e
 
         # Get metadata about the accounting standard used
         try:
