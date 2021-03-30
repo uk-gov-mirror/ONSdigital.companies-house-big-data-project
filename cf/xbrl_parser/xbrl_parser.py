@@ -4,15 +4,12 @@ from dateutil import parser
 from google.cloud import bigquery
 from google.oauth2 import service_account
 from google.cloud import storage
-from functools import partial
 import pandas as pd
 import os
 import csv
 import time
 import sys
 import math
-import time
-import multiprocessing as mp
 import numpy as np
 import gcsfs
 import pytz
