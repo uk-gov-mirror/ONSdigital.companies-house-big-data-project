@@ -47,3 +47,5 @@ if __name__ == "__main__":
         }
     }
     print(event)
+
+    parse_batch(event, 0)
