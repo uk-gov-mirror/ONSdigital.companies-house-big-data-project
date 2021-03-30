@@ -4,16 +4,30 @@ import gcsfs
 from xbrl_parser import XbrlParser
 
 def parse_batch(event, context):
+    """
+    Parses a given list of files (as pub/sub message data) and
+    saves the result to a BigQuery table and as a .csv
 
+    Arguments:
+        event (dict): Event payload.
+        context (google.cloud.functions.Context): Metadata for the event.
+    Returns:
+        None
+    Raises:
+        None
+    """
+    # Create parser class instance
     parser = XbrlParser()
 
+    # Extract list of files from message data
     files = eval(base64.b64decode(event['data']).decode('utf-8'))
-    print(files)
 
+    # Obtain the relevant attributes from the pub/sub message
     xbrl_directory = event["attributes"]["xbrl_directory"]
     bq_location = event["attributes"]["bq_location"]
     csv_location = event["attributes"]["csv_location"]
 
+    # Parse the batch of files
     parser.parse_files(files, xbrl_directory, bq_location, csv_location)
 
 

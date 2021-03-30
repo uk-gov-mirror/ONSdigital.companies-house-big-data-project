@@ -362,10 +362,8 @@ class XbrlParser:
 
         # Define lenth of dict and initial time
         T = len(doc2)
-        t0 = time.time()
 
         # Set up row counter and empty list to save DataFrames
-        rc = 0
         df_list = []
 
         # loop over each file and create a separate dataframe
@@ -420,8 +418,7 @@ class XbrlParser:
 
             df_list.append(df_element_export)
 
-            # Update row count and free up memory
-            rc += df_element_export.shape[0]
+            # Free up memory
             del df_element_export
 
         # Concatenate list of DataFrames and append to BigQuery table
@@ -429,13 +426,6 @@ class XbrlParser:
         print("\n Batch df contains {} rows".format(df_batch.shape[0]))
         self.append_to_bq(df_batch, bq_export)
 
-        # Clean up memory
-        del df_list, df_batch, doc2, doc
-        df_batch = pd.DataFrame()
-        doc2, doc = [], []
-        gc.collect()
-
-        return rc
 
     def process_account(self, filepath):
         """
@@ -612,11 +602,11 @@ class XbrlParser:
     def parse_files(self, files_list, directory, bq_location,
                         processed_path):
         """
-        Takes a directory, parses all files contained there and saves them as
-        csv files in a specified directory.
+        Takes a list of files and a directory, parses all files contained there 
+        and exports them as a BigQuery table and a csv in specified locations
 
         Arguments:
-            directory:      A directory (path) to be processed (str)
+            files_list:     A list of all the files to be parsed [str]
             bq_location:    Location of BigQuery table to save results (str)
             processed_path: String of the path where processed files should be
                             saved (str)
@@ -626,6 +616,7 @@ class XbrlParser:
         Raises:
             None
         """
+        # Extract the relevant date information from the directory name
         folder_month = "".join(directory.split("/")[-1].split("-")[1:])[0:-4]
         folder_year = "".join(directory.split("/")[-1].split("-")[1:])[-4:]
 
@@ -635,142 +626,13 @@ class XbrlParser:
         # Create a BigQuery table
         self.mk_bq_table(table_export)
 
+        # Process all the files in the list of files
         results, fails = self.combine_batch_data(files_list, directory)
 
-        print(results)
+        # Combine the results and upload them to BigQuery
+        self.flatten_data(results, table_export)
 
-        rc = self.flatten_data(results, table_export)
-
-        # Export the BigQuery table to a csv file
-        self.export_csv(table_export, processed_path,
-                        folder_month + "-" + folder_year + "_xbrl_data")
-
-        # Output all unique tags to a txt file
-
-        # extractor.retrieve_list_of_tags(
-        #     results,
-        #     "name",
-        #     xbrl_tag_list,
-        #     folder_month,
-        #     folder_year
-        # )
-        #
-        # # Output all unique tags and their relative frequencies to a txt file
-        # extractor.get_tag_counts(
-        #     results,
-        #     "name",
-        #     xbrl_tag_frequencies,
-        #     folder_month,
-        #     folder_year
-        # )
-
-        # print(results.shape)
-
-    def build_month_table(self, bq_export, list_of_files):
-        """
-        Function which parses, sequentially, a list of xbrl/ html files,
-        converting each parsed file into a dictionary and appending to a list.
-
-        Arguments:
-            bq_export:      Location in BigQuery where (new) table of data
-                            should be constructed.
-            list_of_files:  list of filepaths (gcs uri's), each coresponding to
-                            a xbrl/html file (list)
-
-        Returns:
-            results:       list of dictionaries, each containing the parsed content of
-                           a xbrl/html file (list)
-        Raises:
-            None
-        """
-        # Check arguments are of the correct type
-        if not all(isinstance(file, str) for file in list_of_files):
-            raise TypeError(
-                "All files in 'list_of_files' must be specified as strings"
-            )
-
-        # Check arguments have acceptable values
-        if not all(self.fs.exists(file) for file in list_of_files):
-            raise ValueError(
-                "Not all file paths specified exist"
-            )
-
-        process_start = time.time()
-
-        # Empty list awaiting results
-        results = []
-        fails = []
-
-        start_memory = psutil.virtual_memory().percent
-
-        # Set a threshold on the number of files to store in memory before
-        # uploading to BigQuery
-        file_threshold = 7000
-        print("Start memory usuage: ", start_memory)
-
-        # Initialise counters
-        COUNT = 0
-        file_count = 0
-        row_count = 0
-        batch_count = 0
-
-        # For every file
-        for file in list_of_files:
-            COUNT += 1
-            try:
-                # file_count is the count per batch, COUNT is the overall file
-                # count
-                file_count += 1
-                # Read the file and parse
-                doc = self.process_account(file)
-
-                # append results to table
-                results.append(doc)
-
-            # If we can't process the file, save it to be re done on one
-            # processor
-            except:
-                print(file, "has failed to parse")
-                fails.append(file)
-                continue
-
-            # If the number of files exceeds the threshold or we have done the
-            # last file
-            if (file_count > file_threshold) \
-                    or COUNT == len(list_of_files):
-                # Reset the file_count and add to the row_count
-                file_count = 0
-
-                # This also performs the BigQuery export
-                row_count += self.flatten_data(results, bq_export)
-                XbrlExtraction.progressBar("XBRL Accounts Parsed", COUNT,
-                                           len(list_of_files), row_count,
-                                           batch_count,
-                                           psutil.virtual_memory().percent,
-                                           uploading=True,
-                                           bar_length=50,
-                                           width=20)
-                batch_count += 1
-
-                # Delete results and free up memory
-                del results
-                results = []
-                gc.collect()
-
-            XbrlExtraction.progressBar("XBRL Accounts Parsed", COUNT,
-                                       len(list_of_files), row_count,
-                                       batch_count,
-                                       psutil.virtual_memory().percent,
-                                       bar_length=50,width=20)
-
-
-        print(
-            "Average time to process an XBRL file: \x1b[31m{:0f}\x1b[0m".format(
-                (time.time() - process_start) / 60, 2), "minutes")
-
-        return fails
-
-
+   
     def combine_batch_data(self, filenames, xbrl_directory):
         results = []
         fails = []
@@ -857,7 +719,7 @@ class XbrlParser:
         job = 0
         del job
 
-    def mk_bq_table(self, bq_location, schema="parsed_data_schema.txt"):
+    def mk_bq_table(self, bq_location, schema="../../parsed_data_schema.txt"):
         """
         Function to create a BigQuery table in a specified location with a
         schema specified by a txt file.
@@ -891,69 +753,3 @@ class XbrlParser:
         
         # Remove environment variables
         os.environ.clear()
-
-    def export_csv(self, bq_table, gcs_location, file_name):
-        """
-        Takes a specified BigQuery table and saves it as a single csv file
-        (creates multiple csvs that partition the table as intermidiate steps)
-
-        Arguments:
-            bq_table:       Location of BigQuery table, in form
-                            "<dataset>.<table_name>"
-            gcs_location:   The folder in gcs where resulting csv should be
-                            saved - "gs://" prefix should NOT be included
-            file_name:      The name of resulting csv file - ".csv" suffix
-                            should NOT be included
-        Returns:
-            None
-        Raises:
-            None
-        """        
-        # Set up a BigQuery client
-        client = bigquery.Client("ons-companies-house-dev")
-
-        # Don't include table header (will mess up combing csvs otherwise)
-        job_config = bigquery.job.ExtractJobConfig(print_header=False)
-
-        # Extract table into multiple smaller csv files
-        extract_job = client.extract_table(
-            bq_table,
-            "gs://" + gcs_location + "/" + file_name + "*.csv",
-            location="europe-west2",
-            job_config=job_config
-        )
-        extract_job.result()
-
-        # Recreate the header as a single df with just the header row
-        header = pd.DataFrame(columns=['date', 'name', 'unit', 'value',
-                            'doc_name', 'doc_type',
-                           'doc_upload_date', 'arc_name', 'parsed',
-                           'doc_balancesheetdate',
-                           'doc_companieshouseregisterednumber',
-                           'doc_standard_type',
-                           'doc_standard_date', 'doc_standard_link'],)
-        header.to_csv("gs://" + gcs_location + "/header_" + file_name + ".csv",
-                      header=True, index=False)
-
-        # Specify the files to be combined
-        split_files = [f.split("/", 1)[1] for f in self.fs.ls(gcs_location)
-                       if (f.split("/")[-1]).startswith("header_" + file_name)] +\
-                      [f.split("/", 1)[1] for f in self.fs.ls(gcs_location)
-                       if (f.split("/")[-1]).startswith(file_name)]
-
-        # Set up a gcs storage client and locations for things
-        storage_client = storage.Client() 
-        bucket = storage_client.bucket(gcs_location.split("/",1)[0])
-        destination = bucket.blob(gcs_location.split("/", 1)[1] + "/" + file_name + ".csv")
-        destination.content_type = "text/csv"
-
-        # Combine all the specified files
-        sources = [bucket.get_blob(f) for f in split_files]
-        destination.compose(sources)
-
-        # Remove the intermediate files
-        self.fs.rm([f for f in self.fs.ls(gcs_location)
-                       if ((f.split("/")[-1]).startswith(file_name + "0")) or
-                    ((f.split("/")[-1]).startswith("header_" + file_name))
-                    ])
-
