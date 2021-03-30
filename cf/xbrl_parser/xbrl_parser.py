@@ -1,7 +1,6 @@
 from bs4 import BeautifulSoup as BS  # Can parse xml or html docs
 from datetime import datetime
 from dateutil import parser
-from src.data_processing.xbrl_pd_methods import XbrlExtraction
 from google.cloud import bigquery
 from google.oauth2 import service_account
 from google.cloud import storage
