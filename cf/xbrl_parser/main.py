@@ -46,4 +46,4 @@ if __name__ == "__main__":
             "csv_location":"ons-companies-house-dev-test-parsed-csv-data/cloud_functions_test"
         }
     }
-    parse_batch(event, 0)
+    print(event)
