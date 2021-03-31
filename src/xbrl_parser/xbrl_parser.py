@@ -761,7 +761,7 @@ class XbrlParser:
         table_export = bq_location + "." + folder_month + "-" + folder_year
 
         # Create a BigQuery table
-        # self.mk_bq_table(table_export)
+        self.mk_bq_table(table_export)
 
         chunk_len = math.ceil(len(files) / num_processes)
         files = [files[i:i + chunk_len] for i in
