@@ -71,7 +71,7 @@ class GCPAuthenticator:
             self.xbrl_scraper_key = master_key
             self.xbrl_unpacker_key = master_key
             self.xbrl_validator_key = master_key
-            self.xbrl_parser_key = master_key
+            self.xbrl_parser_key = keys_filepath + "/master_key.json"
 
         # If not, for each module key, check if one already exists and if not create one
         # which is saved (as a dict) to the relevant class attribute
@@ -203,19 +203,22 @@ class GCPAuthenticator:
         # List the names of the xbrl keys
         keys_names = [name for name in self.__dict__.keys() if (name.split("_")[-1] == "key" and name.split("_")[0] != "master")]
         
-        for k in keys_names:
+        if self.master_key == None:
+            for k in keys_names:
 
-            # If the key has been created and it is saved in memory delete
-            if (self.__dict__[k] != None) and type(self.__dict__[k]) == dict:
-                self.delete_key(self.__dict__[k])
-                self.__dict__[k] = None
+                # If the key has been created and it is saved in memory delete
+                if (self.__dict__[k] != None) and type(self.__dict__[k]) == dict:
+                    self.delete_key(self.__dict__[k])
+                    self.__dict__[k] = None
 
-            # If we should remove disk keys and the key is specified locally, delete key
-            # and remove local file
-            elif remove_disk_keys and type(self.__dict__[k]) == str:
-                print("Removing disk key")
-                self.delete_key(self.read_json(self.keys_filepath + "/" + k + ".json"))
-                os.remove(self.keys_filepath + "/" + k + ".json")
+                # If we should remove disk keys and the key is specified locally, delete key
+                # and remove local file
+                elif remove_disk_keys and type(self.__dict__[k]) == str:
+                    print("Removing disk key")
+                    self.delete_key(self.read_json(self.keys_filepath + "/" + k + ".json"))
+                    os.remove(self.keys_filepath + "/" + k + ".json")
+        else:
+            print("Master key specified, nothing to clean up")
                 
 
     def remove_n_keys(self, sa_email, n=10):
