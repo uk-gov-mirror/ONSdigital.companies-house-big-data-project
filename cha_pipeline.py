@@ -76,6 +76,13 @@ def main():
         unpacker.extract_compressed_files(unpacker_args['source_dir'],
                                           unpacker_args['output_dir'])
 
+    # Execute module xbrl_batcher
+    if cha_workflow['xbrl_parser'] == str(True):
+        print("XBRL batcher running...")
+        batcher = XbrlBatcher(authenticator)
+        directory = "ons-companies-house-dev-xbrl-unpacked-data/test_uploads/Accounts_Monthly_Data-April2010"
+        batch_list = batcher.batch_files(directory, authenticator)
+
     # # Execute module xbrl_parser
     # if cha_workflow['xbrl_parser'] == str(True):
     #     print("XBRL parser running...")
@@ -87,13 +94,6 @@ def main():
     #                                 parser_args['bq_location'],
     #                                 parser_args['processed_csv_dir'],
     #                                 int(parser_args['no_of_cores']))
-
-    # Execute module xbrl_batcher
-    if cha_workflow['xbrl_parser'] == str(True):
-        print("XBRL batcher running...")
-        batcher = XbrlBatcher(authenticator)
-        directory = "ons-companies-house-dev-xbrl-unpacked-data/test_uploads/Accounts_Monthly_Data-April2010"
-        batcher.batch_files(directory)
     
     authenticator.clean_up_keys()
 
