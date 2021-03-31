@@ -25,6 +25,8 @@ from src.data_processing.xbrl_parser import XbrlParser
 from src.data_processing.cst_data_processing import DataProcessing
 from src.validators.xbrl_validator_methods import XbrlValidatorMethods
 
+from src.cf.xbrl_parser import XbrlBatcher
+
 pd.set_option("display.max_columns", 500)
 
 # Reads from the config file
@@ -74,17 +76,24 @@ def main():
         unpacker.extract_compressed_files(unpacker_args['source_dir'],
                                           unpacker_args['output_dir'])
 
-    # Execute module xbrl_parser
+    # # Execute module xbrl_parser
+    # if cha_workflow['xbrl_parser'] == str(True):
+    #     print("XBRL parser running...")
+    #     parser_executer = XbrlParser(authenticator)
+    #     parser_executer.parse_files(parser_args['quarter'],
+    #                                 parser_args['year'],
+    #                                 parser_args['unpacked_data_dir'],
+    #                                 parser_args['custom_input'],
+    #                                 parser_args['bq_location'],
+    #                                 parser_args['processed_csv_dir'],
+    #                                 int(parser_args['no_of_cores']))
+
+    # Execute module xbrl_batcher
     if cha_workflow['xbrl_parser'] == str(True):
-        print("XBRL parser running...")
-        parser_executer = XbrlParser(authenticator)
-        parser_executer.parse_files(parser_args['quarter'],
-                                    parser_args['year'],
-                                    parser_args['unpacked_data_dir'],
-                                    parser_args['custom_input'],
-                                    parser_args['bq_location'],
-                                    parser_args['processed_csv_dir'],
-                                    int(parser_args['no_of_cores']))
+        print("XBRL batcher running...")
+        batcher = XbrlBatcher(authenticator)
+        directory = "ons-companies-house-dev-xbrl-unpacked-data/test_uploads/Accounts_Monthly_Data-April2010"
+        batcher.batch_files(directory)
     
     authenticator.clean_up_keys()
 
