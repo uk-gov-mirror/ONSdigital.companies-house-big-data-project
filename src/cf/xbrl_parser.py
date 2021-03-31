@@ -29,11 +29,13 @@ class XbrlBatcher:
         #batch_size_hard_limit = 4e9
         batch_size_hard_limit = 80000
 
+        # Retrieve all files in specified bucket/directory
         files = [filename for filename in self.fs.ls(directory)
                         if ((".htm" in filename.lower())
                             or (".xml" in filename.lower()))
                 ]
 
+        # Retrieve a list of all file sizes for all files retrieved
         sizes = []
         num_files = 100
         #num_files = len(files) + 1
@@ -44,19 +46,14 @@ class XbrlBatcher:
             
             sizes.append(self.fs.size(filename))
 
-        authenticator.clean_up_keys()
-
-        print("File sizes...")
-        print(sizes)
-
-        dir_size = sum(sizes)
-        print(dir_size)
+        #authenticator.clean_up_keys()
 
         # Create list of files and their sizes and sort in descending order
         data_descending = sorted(zip(files, sizes), key=lambda t: t[1], reverse=True)
         data_ascending = sorted(data_descending, key=lambda t: t[1], reverse=False)
-        print(data_descending)
 
+        # Create batches of files using the Gauss approach of pairing the largest and
+        # smallest files
         batch_list = [[]]
         batch_size_list = [[]]
         batch_size = 0
