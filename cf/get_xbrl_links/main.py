@@ -80,8 +80,7 @@ def collect_links(event, content):
             else:
                 message = dict(
                     severity="INFO",
-                    message=f"{link} already exists",
-                    labels={"log_type":"file_exists"}
+                    message=f"{link} already exists"
                     )
                 print(json.dumps(message))
             
