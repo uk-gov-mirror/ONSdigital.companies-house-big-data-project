@@ -1,10 +1,12 @@
 import base64
 import os
 import requests
+import json
 from bs4 import BeautifulSoup
 import time
 import random
 from google.cloud import storage, pubsub_v1
+
 
 def collect_links(event, content):
     """
@@ -30,7 +32,6 @@ def collect_links(event, content):
     base_url = "http://download.companieshouse.gov.uk/"
     dir_to_save = "ons-companies-house-dev-xbrl-scraped-data"
     
-    print("Fetching content...")
     res = requests.get(url)
 
     #txt = res.text
@@ -77,6 +78,16 @@ def collect_links(event, content):
               )
               print(future.result())
             else:
-
-                print(link + " already exists")
+                message = dict(
+                    severity="INFO",
+                    message=f"{link} already exists",
+                    labels={"log_type":"file_exists"}
+                    )
+                print(json.dumps(message))
+            
             time.sleep((random.random() * 2.0) + 3.0)
+    else:
+        # Report Stackdriver error
+        raise RuntimeError(
+            f"Could not scrape web page, encountered error code: {status}"
+        )
