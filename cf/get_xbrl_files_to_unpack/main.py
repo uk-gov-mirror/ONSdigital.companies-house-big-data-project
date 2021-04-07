@@ -33,14 +33,16 @@ def get_xbrl_files(event, context):
     # Create a GCSFS object
     fs = gcsfs.GCSFileSystem(cache_timeout=0)
 
+    # Check the specified directory is valid
+    if not fs.exists(zip_path):
+        raise ValueError(
+            f"Directory {zip_path} does not exist"
+    )
+
     # Specify the directory where unpacked files should be saved
     save_directory = "ons-companies-house-dev-xbrl-unpacked-data/cloud_functions_test/" + (zip_path.split("/")[-1]).split(".")[0]
 
-    # Check the specified directory is valid
-    if not fs.exists(save_directory):
-        raise ValueError(
-            f"Directory {save_directory} does not exist"
-    )
+    
     # Configure batching settings to optimise publishing efficiency
     batching_settings = pubsub_v1.types.BatchSettings(
         max_messages=1000
