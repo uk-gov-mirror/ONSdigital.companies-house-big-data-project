@@ -26,8 +26,12 @@ def send_test_logs(event, context):
 
     cloud_logger.error("CL: This is an error")
     cloud_logger.critical("CL: This is critical")
-    cloud_logger.debug("CL: This a debug")
-    
+    cloud_logger.debug("CL: This a debug")#
+    try:
+        cloud_logger.notice("CL: This is a notice")
+    except:
+        print("Notice didn't work")
+
     raise TypeError(
         "This is to test error reporting"
     )
