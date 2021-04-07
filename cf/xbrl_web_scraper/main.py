@@ -24,7 +24,13 @@ def scrape_webpage(event, context):
 
     # Set up a GCS client to handle the download to GCS
     storage_client = storage.Client()
-    bucket = storage_client.bucket(dir_to_save.split("/")[0])
+
+    try:
+        bucket = storage_client.bucket(dir_to_save.split("/")[0])
+    except:
+        raise ValueError(
+        f"The specified directory {dir_to_save} does not exist"
+        )
 
     # Extract relevant attributes from the pub/sub message
     zip_url = event["attributes"]["zip_path"]

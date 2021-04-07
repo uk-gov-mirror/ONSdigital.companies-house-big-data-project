@@ -57,6 +57,7 @@ def collect_links(event, content):
         storage_client = storage.Client()
         bucket = storage_client.bucket(dir_to_save.split("/")[0])
 
+        print(f"{len(links)} have been scraped from the page.")
         # Download and save zip files
         for link in links:
 
@@ -76,17 +77,13 @@ def collect_links(event, content):
               future = publisher.publish(
                 topic_path, data, zip_path=zip_url, link_path=link
               )
-              print(future.result())
+              print(f"{link} is being downloaded")
             else:
-                message = dict(
-                    severity="INFO",
-                    message=f"{link} already exists"
-                    )
-                print(json.dumps(message))
+             print(f"{link} has already been downloaded")
             
             time.sleep((random.random() * 2.0) + 3.0)
     else:
         # Report Stackdriver error
         raise RuntimeError(
-            f"Could not scrape web page, encountered error code: {status}"
+            f"Could not scrape web page, encountered unexpected status code: {status}"
         )
