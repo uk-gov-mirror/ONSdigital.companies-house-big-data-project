@@ -18,8 +18,8 @@ def callback(future):
         None
     """
     message_id = future.result()
-    print(message_id)
-
+    
+    
 def get_xbrl_files(event, context):
     """Triggered from a message on a Cloud Pub/Sub topic.
     Sends all files to be unpacked within a .zip file as pubsub messages.
