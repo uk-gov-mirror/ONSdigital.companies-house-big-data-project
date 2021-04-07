@@ -36,6 +36,11 @@ def get_xbrl_files(event, context):
     # Specify the directory where unpacked files should be saved
     save_directory = "ons-companies-house-dev-xbrl-unpacked-data/cloud_functions_test/" + (zip_path.split("/")[-1]).split(".")[0]
 
+    # Check the specified directory is valid
+    if not fs.exists(save_directory):
+        raise ValueError(
+            f"Directory {save_directory} does not exist"
+    )
     # Configure batching settings to optimise publishing efficiency
     batching_settings = pubsub_v1.types.BatchSettings(
         max_messages=1000
@@ -48,13 +53,14 @@ def get_xbrl_files(event, context):
     # Set the message batch size
     n = 1000
 
-
     with zipfile.ZipFile(fs.open(zip_path), 'r') as zip_ref:
       
       # Compile all files within the .zip and separate them into batches of
       # size n
       zip_list = zip_ref.namelist()
       names = [zip_list[i*n : (i+1)*n] for i in range((len(zip_list) + n - 1)//n)]
+
+      print(f"Unpacking {len(names)} files using batches of size {n}")
       
       # For each batch, publish a message with the list of files to be unpacked
       for i, contentfilename in enumerate(names):
