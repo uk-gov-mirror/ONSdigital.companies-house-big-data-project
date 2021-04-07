@@ -60,7 +60,7 @@ def get_xbrl_files(event, context):
       zip_list = zip_ref.namelist()
       names = [zip_list[i*n : (i+1)*n] for i in range((len(zip_list) + n - 1)//n)]
 
-      print(f"Unpacking {len(names)} files using batches of size {n}")
+      print(f"Unpacking {len(zip_list)} files using batches of size {n}")
       
       # For each batch, publish a message with the list of files to be unpacked
       for i, contentfilename in enumerate(names):
