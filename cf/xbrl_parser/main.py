@@ -34,7 +34,7 @@ def parse_batch(event, context):
 if __name__ == "__main__":
     fs = gcsfs.GCSFileSystem()
 
-    files = [x.split("/")[-1] for x in fs.ls("ons-companies-house-dev-xbrl-unpacked-data/cloud_functions_test/Accounts_Monthly_Data-February2021")[0:10]]
+    files = [x.split("/")[-1] for x in fs.ls("ons-companies-house-dev-xbrl-unpacked-data/cloud_functions_test/Accounts_Monthly_Data-February2021")[10:10000]]
 
     print(files)
 

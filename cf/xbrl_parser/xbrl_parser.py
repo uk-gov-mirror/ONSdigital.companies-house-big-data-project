@@ -22,6 +22,7 @@ class XbrlParser:
     def __init__(self):
         self.__init__
         self.fs = gcsfs.GCSFileSystem(cache_timeout=0)
+        self.t0 = 0
 
     # Table of variables and values that indicate consolidated status
     consolidation_var_table = {
@@ -473,6 +474,9 @@ class XbrlParser:
             print("Failed to open: " + filepath)
             return e
 
+        with open("/home/dylan_purches/Data/parser_file_timing_metrics.csv", "a") as f:
+                f.write(f"{time.time() - self.t0}, ")
+    
         # Get metadata about the accounting standard used
         try:
             doc['doc_standard_type'],\
@@ -492,6 +496,8 @@ class XbrlParser:
         except Exception as e:
             doc['parsed'] = False
             doc['Error'] = e
+        with open("/home/dylan_purches/Data/parser_file_timing_metrics.csv", "a") as f:
+                f.write(f"{time.time() - self.t0}, ")
         try:
             return doc
         except Exception as e:
@@ -620,13 +626,13 @@ class XbrlParser:
         table_export = bq_location + "." + folder_month + "-" + folder_year
 
         # Create a BigQuery table
-        self.mk_bq_table(table_export)
+        # self.mk_bq_table(table_export)
 
         # Process all the files in the list of files
         results, fails = self.combine_batch_data(files_list, directory)
 
         # Combine the results and upload them to BigQuery
-        self.flatten_data(results, table_export)
+        # self.flatten_data(results, table_export)
 
    
     def combine_batch_data(self, filenames, xbrl_directory):
@@ -634,7 +640,10 @@ class XbrlParser:
         fails = []
 
         for file in filenames:
+            self.t0 = time.time()
             filepath = xbrl_directory + "/" + file
+            with open("/home/dylan_purches/Data/parser_file_timing_metrics.csv", "a") as f:
+                f.write(f"\n{file}, {self.fs.size(filepath)}, ")
             if self.fs.exists(filepath):
                 # try:
                     # Read the file and parse
@@ -652,6 +661,8 @@ class XbrlParser:
 
             else:
                 print(f"{filepath} does not exist")
+            with open("/home/dylan_purches/Data/parser_file_timing_metrics.csv", "a") as f:
+                f.write(f"{time.time() - self.t0}")
         
         return results, fails
 
