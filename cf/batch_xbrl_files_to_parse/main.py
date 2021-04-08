@@ -1,7 +1,9 @@
 import base64
 import gcsfs
 import os
-from google.cloud import pubsub_v1, bigquery
+from google.cloud import pubsub_v1
+from google.cloud import bigquery
+
 
 def callback(future):
     message_id = future.result()
