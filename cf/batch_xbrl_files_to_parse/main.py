@@ -73,6 +73,7 @@ def batch_files(event, context):
 
     batched_files = [all_files[i*n : (i+1)*n] for i in range((len(all_files) + n - 1)//n)]
 
+    print(f"Parsing files in {len(batched_files)} batches")
     ps_batching_settings = pubsub_v1.types.BatchSettings(
         max_messages=1000
     )
