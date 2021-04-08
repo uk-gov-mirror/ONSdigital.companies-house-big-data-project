@@ -48,7 +48,7 @@ def batch_files(event, context):
 
     fs = gcsfs.GCSFileSystem(cache_timeout=0)
 
-    xbrl_directory = event["xbrl_directory"]
+    xbrl_directory = event["attributes"]["xbrl_directory"]
 
     bq_location = "xbrl_parsed_data"
     csv_location = "ons-companies-house-dev-test-parsed-csv-data/cloud_functions_test"
