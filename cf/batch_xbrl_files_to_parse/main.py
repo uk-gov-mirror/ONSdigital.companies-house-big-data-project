@@ -61,8 +61,15 @@ def batch_files(event, context):
         raise ValueError(
             "Batch size is too small (will exceed BQ max uploads)"
     )
-    
-    mk_bq_table(bq_location)
+    # Extract the relevant date information from the directory name
+    folder_month = "".join(xbrl_directory.split("/")[-1].split("-")[1:])[0:-4]
+    folder_year = "".join(xbrl_directory.split("/")[-1].split("-")[1:])[-4:]
+
+    # Define the location where to export results to BigQuery
+    table_export = bq_location + "." + folder_month + "-" + folder_year
+
+    # Create a BigQuery table
+    mk_bq_table(table_export)
 
     batched_files = [all_files[i*n : (i+1)*n] for i in range((len(all_files) + n - 1)//n)]
 
@@ -75,7 +82,7 @@ def batch_files(event, context):
     for batch in batched_files:
         data = str(batch).encode("utf-8")
         future = publisher.publish(
-            topic_path, data, bq_location=bq_location, csv_location=csv_location
+            topic_path, data, xbrl_directory=xbrl_directory, table_export=table_export, csv_location=csv_location
         )
         future.add_done_callback(callback)
 

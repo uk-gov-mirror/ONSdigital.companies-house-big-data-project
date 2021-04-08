@@ -595,7 +595,7 @@ class XbrlParser:
 
         return directory_list
 
-    def parse_files(self, files_list, directory, bq_location,
+    def parse_files(self, files_list, directory, table_export,
                         processed_path):
         """
         Takes a list of files and a directory, parses all files contained there 
@@ -612,29 +612,29 @@ class XbrlParser:
         Raises:
             None
         """
-        # Extract the relevant date information from the directory name
-        folder_month = "".join(directory.split("/")[-1].split("-")[1:])[0:-4]
-        folder_year = "".join(directory.split("/")[-1].split("-")[1:])[-4:]
+        # # Extract the relevant date information from the directory name
+        # folder_month = "".join(directory.split("/")[-1].split("-")[1:])[0:-4]
+        # folder_year = "".join(directory.split("/")[-1].split("-")[1:])[-4:]
 
-        # Define the location where to export results to BigQuery
-        table_export = bq_location + "." + folder_month + "-" + folder_year
+        # # Define the location where to export results to BigQuery
+        # table_export = bq_location + "." + folder_month + "-" + folder_year
 
-        # Create a BigQuery table
-        self.mk_bq_table(table_export)
+        # # Create a BigQuery table
+        # self.mk_bq_table(table_export)
 
         # Process all the files in the list of files
-        results, fails = self.combine_batch_data(files_list, directory)
+        results, fails = self.combine_batch_data(files_list)
 
         # Combine the results and upload them to BigQuery
         self.flatten_data(results, table_export)
 
    
-    def combine_batch_data(self, filenames, xbrl_directory):
+    def combine_batch_data(self, filenames):
         results = []
         fails = []
 
-        for file in filenames:
-            filepath = xbrl_directory + "/" + file
+        for filepath in filenames:
+
             if self.fs.exists(filepath):
                 # try:
                     # Read the file and parse

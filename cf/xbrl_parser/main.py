@@ -24,25 +24,26 @@ def parse_batch(event, context):
 
     # Obtain the relevant attributes from the pub/sub message
     xbrl_directory = event["attributes"]["xbrl_directory"]
-    bq_location = event["attributes"]["bq_location"]
+    table_export = event["attributes"]["table_export"]
     csv_location = event["attributes"]["csv_location"]
 
     # Parse the batch of files
-    parser.parse_files(files, xbrl_directory, bq_location, csv_location)
+    parser.parse_files(files, xbrl_directory, table_export, csv_location)
 
 
 if __name__ == "__main__":
     fs = gcsfs.GCSFileSystem()
 
-    files = [x.split("/")[-1] for x in fs.ls("ons-companies-house-dev-xbrl-unpacked-data/cloud_functions_test/Accounts_Monthly_Data-February2021")[0:10]]
+    # files = [x.split("/")[-1] for x in fs.ls("ons-companies-house-dev-xbrl-unpacked-data/cloud_functions_test/Accounts_Monthly_Data-February2021")[0:10]]
 
+    files = fs.ls("ons-companies-house-dev-xbrl-unpacked-data/cloud_functions_test/Accounts_Monthly_Data-February2021")[0:10]
     print(files)
 
     event = {
         "data": base64.b64encode((str(files)).encode("utf-8")),
         "attributes":{
             "xbrl_directory":"ons-companies-house-dev-xbrl-unpacked-data/cloud_functions_test/Accounts_Monthly_Data-February2021",
-            "bq_location":"xbrl_parsed_data",
+            "table_export":"xbrl_parsed_data.test_Feb_2021",
             "csv_location":"ons-companies-house-dev-test-parsed-csv-data/cloud_functions_test"
         }
     }
