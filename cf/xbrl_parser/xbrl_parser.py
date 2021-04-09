@@ -22,6 +22,7 @@ class XbrlParser:
     def __init__(self):
         self.__init__
         self.fs = gcsfs.GCSFileSystem(cache_timeout=0)
+        self.t0 = time.time()
 
     # Table of variables and values that indicate consolidated status
     consolidation_var_table = {
@@ -471,7 +472,7 @@ class XbrlParser:
             soup = BS(file, "lxml")
         except Exception as e:
             print("Failed to open: " + filepath)
-            return e
+            return ""
 
         # Get metadata about the accounting standard used
         try:
@@ -495,7 +496,8 @@ class XbrlParser:
         try:
             return doc
         except Exception as e:
-            return e
+            print(e)
+            return ""
 
     @staticmethod
     def create_month_list(quarter):
@@ -625,8 +627,14 @@ class XbrlParser:
         # Process all the files in the list of files
         results, fails = self.combine_batch_data(files_list)
 
-        # Log unparsed files
+        # Retry unparsed files
         if len(fails) > 0:
+            # Check enough time is left
+            if time.time() - self.t0 < 420:
+                # Retry failed files
+                results0, fails0 = self.combine_batch_data(fails)
+                results.append(results0)
+                fails = fails0
             print(f"{fails} files did not parse")
 
         # Combine the results and upload them to BigQuery
@@ -644,8 +652,12 @@ class XbrlParser:
                     # Read the file and parse
                     doc = self.process_account(filepath)
 
-                    # append results to table
-                    results.append(doc)
+                    if len(doc) > 0: 
+                        # append results to table
+                        results.append(doc)
+                    else:
+                        print(filepath, "has failed to parse")
+                        fails.append(filepath)
 
                 # If we can't process the file, save it to be re done on one
                 # processor
