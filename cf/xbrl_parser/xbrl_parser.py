@@ -633,7 +633,7 @@ class XbrlParser:
             if time.time() - self.t0 < 420:
                 # Retry failed files
                 results0, fails0 = self.combine_batch_data(fails)
-                results.append(results0)
+                results += results0
                 fails = fails0
             print(f"{fails} files did not parse")
 
