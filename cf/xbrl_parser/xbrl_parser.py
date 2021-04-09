@@ -625,6 +625,10 @@ class XbrlParser:
         # Process all the files in the list of files
         results, fails = self.combine_batch_data(files_list)
 
+        # Log unparsed files
+        if len(fails) > 0:
+            print(f"{fails} files did not parse")
+
         # Combine the results and upload them to BigQuery
         self.flatten_data(results, table_export)
 
@@ -636,7 +640,7 @@ class XbrlParser:
         for filepath in filenames:
 
             if self.fs.exists(filepath):
-                # try:
+                try:
                     # Read the file and parse
                     doc = self.process_account(filepath)
 
@@ -645,10 +649,10 @@ class XbrlParser:
 
                 # If we can't process the file, save it to be re done on one
                 # processor
-                # except:
-                #     print(file, "has failed to parse")
-                #     fails.append(file)
-                #     continue
+                except:
+                    print(filepath, "has failed to parse")
+                    fails.append(filepath)
+                    continue
 
             else:
                 print(f"{filepath} does not exist")
