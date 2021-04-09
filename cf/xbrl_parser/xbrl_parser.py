@@ -15,6 +15,7 @@ import gcsfs
 import pytz
 import psutil
 import gc
+import random
 
 class XbrlParser:
     """ This is a class for parsing the XBRL data."""
@@ -721,12 +722,23 @@ class XbrlParser:
             # Append to table (rather than overwrite)
             write_disposition=bigquery.WriteDisposition.WRITE_APPEND
         )
-        # Make an API request.
-        job = client.load_table_from_dataframe(
-            df, table, job_config=job_config
-            )
-        # Wait for the job to complete.
-        job.result()
+
+        count = 0
+        while (time.time() - self.t0 < 480):
+            try:
+                # Make an API request.
+                job = client.load_table_from_dataframe(
+                    df, table, job_config=job_config
+                    )
+                # Wait for the job to complete.
+                job.result()
+                print(f"uploaded after {count} attempts")
+                break
+            except Exception as e:
+                count += 1
+                print(e)
+                print(f"tried {count} times")
+                time.sleep(random.randint(0,20))
         # Free memory of job
         job = 0
         del job
