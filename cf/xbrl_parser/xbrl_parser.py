@@ -687,46 +687,42 @@ class XbrlParser:
         # Set up a BigQuery client
         client = bigquery.Client(project="ons-companies-house-dev")
 
-        job_config = bigquery.LoadJobConfig(
-            # Set the schema types to match those in parsed_data_schema.txt
-            schema = [
-                bigquery.SchemaField("doc_companieshouseregisterednumber",
-                                     bigquery.enums.SqlTypeNames.STRING),
-                bigquery.SchemaField("date", bigquery.enums.SqlTypeNames.DATE),
-                bigquery.SchemaField("parsed",
-                                     bigquery.enums.SqlTypeNames.BOOLEAN),
-                bigquery.SchemaField("doc_balancesheetdate",
-                                     bigquery.enums.SqlTypeNames.DATE),
-                bigquery.SchemaField("doc_upload_date",
-                                     bigquery.enums.SqlTypeNames.TIMESTAMP),
-                bigquery.SchemaField("doc_standard_date",
-                                     bigquery.enums.SqlTypeNames.DATE),
-                bigquery.SchemaField("name",
-                                     bigquery.enums.SqlTypeNames.STRING),
-                bigquery.SchemaField("unit",
-                                     bigquery.enums.SqlTypeNames.STRING),
-                bigquery.SchemaField("value",
-                                     bigquery.enums.SqlTypeNames.STRING),
-                bigquery.SchemaField("doc_name",
-                                     bigquery.enums.SqlTypeNames.STRING),
-                bigquery.SchemaField("doc_type",
-                                     bigquery.enums.SqlTypeNames.STRING),
-                bigquery.SchemaField("arc_name",
-                                     bigquery.enums.SqlTypeNames.STRING),
-                bigquery.SchemaField("doc_standard_type",
-                                     bigquery.enums.SqlTypeNames.STRING),
-                bigquery.SchemaField("doc_standard_link",
-                                     bigquery.enums.SqlTypeNames.STRING)
-            ],
-            # Append to table (rather than overwrite)
-            write_disposition=bigquery.WriteDisposition.WRITE_APPEND
-        )
+        # Set the schema types to match those in parsed_data_schema.txt
+        schema = [
+            bigquery.SchemaField("doc_companieshouseregisterednumber",
+                                    bigquery.enums.SqlTypeNames.STRING),
+            bigquery.SchemaField("date", bigquery.enums.SqlTypeNames.DATE),
+            bigquery.SchemaField("parsed",
+                                    bigquery.enums.SqlTypeNames.BOOLEAN),
+            bigquery.SchemaField("doc_balancesheetdate",
+                                    bigquery.enums.SqlTypeNames.DATE),
+            bigquery.SchemaField("doc_upload_date",
+                                    bigquery.enums.SqlTypeNames.TIMESTAMP),
+            bigquery.SchemaField("doc_standard_date",
+                                    bigquery.enums.SqlTypeNames.DATE),
+            bigquery.SchemaField("name",
+                                    bigquery.enums.SqlTypeNames.STRING),
+            bigquery.SchemaField("unit",
+                                    bigquery.enums.SqlTypeNames.STRING),
+            bigquery.SchemaField("value",
+                                    bigquery.enums.SqlTypeNames.STRING),
+            bigquery.SchemaField("doc_name",
+                                    bigquery.enums.SqlTypeNames.STRING),
+            bigquery.SchemaField("doc_type",
+                                    bigquery.enums.SqlTypeNames.STRING),
+            bigquery.SchemaField("arc_name",
+                                    bigquery.enums.SqlTypeNames.STRING),
+            bigquery.SchemaField("doc_standard_type",
+                                    bigquery.enums.SqlTypeNames.STRING),
+            bigquery.SchemaField("doc_standard_link",
+                                    bigquery.enums.SqlTypeNames.STRING)
+        ],
+
         # Make an API request.
-        job = client.load_table_from_dataframe(
-            df, table, job_config=job_config
+        errors = client.insert_rows_from_dataframe(
+            table, df, schema
             )
-        # Wait for the job to complete.
-        job.result()
+        print(errors)
         # Free memory of job
         job = 0
         del job
