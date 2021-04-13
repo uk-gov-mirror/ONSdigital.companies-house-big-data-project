@@ -1,9 +1,6 @@
 import itertools
 import keras
-import matplotlib.pyplot as plt
-#import matplotlib
 import matplotlib
-
 matplotlib.use('GTK3Agg')
 import matplotlib.pyplot as plt
 #from matplotlib import pyplot as plt
