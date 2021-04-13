@@ -71,7 +71,7 @@ def batch_files(event, context):
     table_export = bq_location + "." + folder_month + "-" + folder_year
 
     # Create a BigQuery table
-    mk_bq_table(table_export)
+    # mk_bq_table(table_export)
 
     batched_files = [all_files[i*n : (i+1)*n] for i in range((len(all_files) + n - 1)//n)]
 
