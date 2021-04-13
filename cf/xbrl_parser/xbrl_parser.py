@@ -400,6 +400,7 @@ class XbrlParser:
             df_element_export['doc_upload_date'] = pd.to_datetime(
                 df_element_export['doc_upload_date'],
                 errors="coerce")
+            df_element_export['doc_upload_date'] = df_element_export['doc_upload_date'].astype("str")
             df_element_export['date'] \
                 = pd.to_datetime(df_element_export['date'],
                                  format="%Y-%m-%d",
@@ -411,7 +412,7 @@ class XbrlParser:
             df_element_export['doc_standard_date'] \
                 = pd.to_datetime(df_element_export['doc_standard_date'],
                                  format="%Y-%m-%d",
-                                 errors="coerce")
+                                 errors="coerce")            
 
             df_list.append(df_element_export)
 
@@ -419,9 +420,9 @@ class XbrlParser:
             del df_element_export
 
         # Concatenate list of DataFrames and append to BigQuery table
-        df_batch = pd.concat(df_list)
-        print("\n Batch df contains {} rows".format(df_batch.shape[0]))
-        self.append_to_bq(df_batch, bq_export)
+        # df_batch = pd.concat(df_list)
+        # print("\n Batch df contains {} rows".format(df_batch.shape[0]))
+        self.append_to_bq(df_list, bq_export)
 
 
     def process_account(self, filepath):
@@ -671,7 +672,8 @@ class XbrlParser:
         
         return results, fails
 
-    def append_to_bq(self, df, table):
+
+    def append_to_bq(self, df_list, table):
         """
         Function to append a given DataFrame to a BigQuery table
 
@@ -718,14 +720,19 @@ class XbrlParser:
                                     bigquery.enums.SqlTypeNames.STRING)
         ],
 
-        # Make an API request.
-        errors = client.insert_rows_from_dataframe(
-            table, df, schema
-            )
-        print(errors)
+        for df in df_list:
+            df = df.astype(str)
+            print(df.to_dict("records"))
+            print(len(df.to_dict('records')))
+            # Make an API request.
+            errors = client.insert_rows_json(
+                table, df.to_dict('records'), skip_invalid_rows=False
+                )
+            print(f"Errors from bq upload: {errors}")
         # Free memory of job
         job = 0
         del job
+
 
     def mk_bq_table(self, bq_location, schema="parsed_data_schema.txt"):
         """

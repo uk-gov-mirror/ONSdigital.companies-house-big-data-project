@@ -32,18 +32,21 @@ def parse_batch(event, context):
 
 
 if __name__ == "__main__":
-    fs = gcsfs.GCSFileSystem()
+    fs = gcsfs.GCSFileSystem(token="/home/dylan_purches/keys/data_key.json")
+    parser = XbrlParser()
+
+    # parser.mk_bq_table("xbrl_parsed_data.test1_Feb_2021", schema="parsed_data_schema.txt")
 
     # files = [x.split("/")[-1] for x in fs.ls("ons-companies-house-dev-xbrl-unpacked-data/cloud_functions_test/Accounts_Monthly_Data-February2021")[0:10]]
 
-    files = fs.ls("ons-companies-house-dev-xbrl-unpacked-data/cloud_functions_test/Accounts_Monthly_Data-February2021")[0:10]
+    files = fs.ls("ons-companies-house-dev-xbrl-unpacked-data/cloud_functions_test/Accounts_Monthly_Data-February2021")[0:20]
     print(files)
 
     event = {
         "data": base64.b64encode((str(files)).encode("utf-8")),
         "attributes":{
             "xbrl_directory":"ons-companies-house-dev-xbrl-unpacked-data/cloud_functions_test/Accounts_Monthly_Data-February2021",
-            "table_export":"xbrl_parsed_data.test_Feb_2021",
+            "table_export":"xbrl_parsed_data.test1_Feb_2021",
             "csv_location":"ons-companies-house-dev-test-parsed-csv-data/cloud_functions_test"
         }
     }
