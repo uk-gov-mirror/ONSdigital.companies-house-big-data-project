@@ -30,12 +30,14 @@ def parse_batch(event, context):
     # Parse the batch of files
     parser.parse_files(files, xbrl_directory, table_export, csv_location)
 
+    return 0
+
 
 if __name__ == "__main__":
     fs = gcsfs.GCSFileSystem(token="/home/dylan_purches/keys/data_key.json")
     parser = XbrlParser()
 
-    # parser.mk_bq_table("xbrl_parsed_data.test1_Feb_2021", schema="parsed_data_schema.txt")
+    parser.mk_bq_table("xbrl_parsed_data.February-2021", schema="parsed_data_schema.txt")
 
     # files = [x.split("/")[-1] for x in fs.ls("ons-companies-house-dev-xbrl-unpacked-data/cloud_functions_test/Accounts_Monthly_Data-February2021")[0:10]]
 
@@ -52,4 +54,4 @@ if __name__ == "__main__":
     }
     print(event)
 
-    parse_batch(event, 0)
+    # parse_batch(event, 0)

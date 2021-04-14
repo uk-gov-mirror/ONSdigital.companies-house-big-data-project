@@ -420,9 +420,9 @@ class XbrlParser:
             del df_element_export
 
         # Concatenate list of DataFrames and append to BigQuery table
-        df_batch = pd.concat(df_list)
-        print("\n Batch df contains {} rows".format(df_batch.shape[0]))
-        self.append_to_bq(df_batch, bq_export)
+        # df_batch = pd.concat(df_list)
+        # print("\n Batch df contains {} rows".format(df_batch.shape[0]))
+        self.append_to_bq(df_list, bq_export)
 
 
     def process_account(self, filepath):
@@ -641,6 +641,8 @@ class XbrlParser:
         # Combine the results and upload them to BigQuery
         self.flatten_data(results, table_export)
 
+        return 0
+
    
     def combine_batch_data(self, filenames):
         results = []
@@ -673,7 +675,7 @@ class XbrlParser:
         return results, fails
 
 
-    def append_to_bq(self, df, table):
+    def append_to_bq(self, df_list, table):
         """
         Function to append a given DataFrame to a BigQuery table
 
@@ -720,14 +722,14 @@ class XbrlParser:
                                     bigquery.enums.SqlTypeNames.STRING)
         ],
 
-        # for df in df_list:
-        df = df.astype(str)
-        
-        # Make an API request.
-        errors = client.insert_rows_json(
-            table, df.to_dict('records'), skip_invalid_rows=False
-            )
-        print(f"Errors from bq upload: {errors}")
+        for df in df_list:
+            df = df.astype(str)
+            
+            # Make an API request.
+            errors = client.insert_rows_json(
+                table, df.to_dict('records'), skip_invalid_rows=False
+                )
+            print(f"Errors from bq upload: {errors}")
         # Free memory of job
         job = 0
         del job
