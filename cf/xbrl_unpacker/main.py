@@ -2,6 +2,7 @@ import base64
 import gcsfs
 import zipfile
 import time
+import logging
 
 def unpack_xbrl_file(event, context):
     """Triggered from a message on a Cloud Pub/Sub topic.
@@ -23,12 +24,23 @@ def unpack_xbrl_file(event, context):
     with zipfile.ZipFile(fs.open(zip_path), 'r') as zip_ref:
       # For each file listed, download it to the specified location
       for xbrl_path in xbrl_list:
-        print(f"unpacking {xbrl_path} from {zip_path}")
         upload_path = save_directory + "/" + xbrl_path
-        content_file = zip_ref.read(xbrl_path)
-        with fs.open(upload_path, 'wb') as f:
-            f.write(content_file)
-        fs.setxattrs(
-            upload_path,
-            content_type="text/"+xbrl_path.split(".")[-1]
-            )
+
+        # Attempt to read the relevant file to be unpacked
+        try:
+            content_file = zip_ref.read(xbrl_path)
+        except:
+            logging.warn(f"Unable to open {xbrl_path}")
+            continue
+
+        # Attempt to write the file to the desired location
+        try:
+            with fs.open(upload_path, 'wb') as f:
+                f.write(content_file)
+            fs.setxattrs(
+                upload_path,
+                content_type="text/"+xbrl_path.split(".")[-1]
+                )
+        except:
+            logging.warn(f"Unable to write to {upload_path}")
+            continue
