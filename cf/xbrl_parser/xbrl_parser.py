@@ -413,18 +413,13 @@ class XbrlParser:
                 = pd.to_datetime(df_element_export['doc_standard_date'],
                                  format="%Y-%m-%d",
                                  errors="coerce")            
-
-            df_list.append(df_element_export)
+            
+            self.append_to_bq(df_element_export, bq_export)
 
             # Free up memory
             del df_element_export
 
-        # Concatenate list of DataFrames and append to BigQuery table
-        # df_batch = pd.concat(df_list)
-        # print("\n Batch df contains {} rows".format(df_batch.shape[0]))
-        self.append_to_bq(df_list, bq_export)
-
-
+        
     def process_account(self, filepath):
         """
         Scrape all of the relevant information from an iXBRL (html) file,
@@ -602,29 +597,18 @@ class XbrlParser:
                         processed_path):
         """
         Takes a list of files and a directory, parses all files contained there 
-        and exports them as a BigQuery table and a csv in specified locations
+        and exports them as a BigQuery table in a specified location.
 
         Arguments:
             files_list:     A list of all the files to be parsed [str]
             bq_location:    Location of BigQuery table to save results (str)
             processed_path: String of the path where processed files should be
                             saved (str)
-            num_processes:  The number of cores to use in multiprocessing (int)
         Returns:
             None
         Raises:
             None
         """
-        # # Extract the relevant date information from the directory name
-        # folder_month = "".join(directory.split("/")[-1].split("-")[1:])[0:-4]
-        # folder_year = "".join(directory.split("/")[-1].split("-")[1:])[-4:]
-
-        # # Define the location where to export results to BigQuery
-        # table_export = bq_location + "." + folder_month + "-" + folder_year
-
-        # # Create a BigQuery table
-        # self.mk_bq_table(table_export)
-
         # Process all the files in the list of files
         results, fails = self.combine_batch_data(files_list)
 
@@ -641,20 +625,37 @@ class XbrlParser:
         # Combine the results and upload them to BigQuery
         self.flatten_data(results, table_export)
 
-        return 0
+        return None
 
    
     def combine_batch_data(self, filenames):
+        """
+        For each xbrl file in a given list of file names, try to process
+        it and append the result to a list.
+        
+        Arguments
+            filenames:  List of strings of the full GCS file path of the
+                        xbrl files to be processed
+        Returns
+            results:    List of dicts containing the data from files that have
+                        been successfully processed
+            fails:      List of the filepaths of all xbrl files that failed to
+                        be processed.
+        Raises
+            None
+        """
         results = []
         fails = []
 
+        # Loop over all the files listed
         for filepath in filenames:
-
             if self.fs.exists(filepath):
+                # If the file exists try and process it
                 try:
                     # Read the file and parse
                     doc = self.process_account(filepath)
 
+                    # Will return an emtpy string if it fails
                     if len(doc) > 0: 
                         # append results to table
                         results.append(doc)
@@ -662,8 +663,7 @@ class XbrlParser:
                         print(filepath, "has failed to parse")
                         fails.append(filepath)
 
-                # If we can't process the file, save it to be re done on one
-                # processor
+                # If we can't process the file, save it to be re done later
                 except:
                     print(filepath, "has failed to parse")
                     fails.append(filepath)
@@ -675,9 +675,10 @@ class XbrlParser:
         return results, fails
 
 
-    def append_to_bq(self, df_list, table):
+    def append_to_bq(self, df, table):
         """
-        Function to append a given DataFrame to a BigQuery table
+        Function to append a given DataFrame to a BigQuery table using
+        streaming insert method.
 
         Arguments:
             df:     Pandas DataFrame output with columns of the correct types
@@ -721,20 +722,21 @@ class XbrlParser:
             bigquery.SchemaField("doc_standard_link",
                                     bigquery.enums.SqlTypeNames.STRING)
         ],
-
-        for df in df_list:
-            df = df.astype(str)
-            
-            # Make an API request.
-            errors = client.insert_rows_json(
-                table, df.to_dict('records'), skip_invalid_rows=False
-                )
-            print(f"Errors from bq upload: {errors}")
-        # Free memory of job
-        job = 0
-        del job
-
-
+        # Convert Dataframe columns to string so they are JSON serializable
+        df = df.astype(str)
+        
+        # Make an API request.
+        errors = client.insert_rows_json(
+            table, df.to_dict('records'), skip_invalid_rows=False
+            )
+        # Print errors if any are returned
+        if len(errors) > 0:
+            try:
+                doc_name = df["doc_name"][0]
+            except:
+                doc_name = "Unkown"
+            print(f"Errors from bq upload for {doc_name}: {errors}")
+        
     def mk_bq_table(self, bq_location, schema="parsed_data_schema.txt"):
         """
         Function to create a BigQuery table in a specified location with a
