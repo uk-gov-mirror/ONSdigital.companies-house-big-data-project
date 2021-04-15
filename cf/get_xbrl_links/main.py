@@ -1,10 +1,12 @@
 import base64
 import os
 import requests
+import json
 from bs4 import BeautifulSoup
 import time
 import random
 from google.cloud import storage, pubsub_v1
+
 
 def collect_links(event, content):
     """
@@ -30,7 +32,6 @@ def collect_links(event, content):
     base_url = "http://download.companieshouse.gov.uk/"
     dir_to_save = "ons-companies-house-dev-xbrl-scraped-data"
     
-    print("Fetching content...")
     res = requests.get(url)
 
     #txt = res.text
@@ -56,6 +57,7 @@ def collect_links(event, content):
         storage_client = storage.Client()
         bucket = storage_client.bucket(dir_to_save.split("/")[0])
 
+        print(f"{len(links)} have been scraped from the page.")
         # Download and save zip files
         for link in links:
 
@@ -75,8 +77,13 @@ def collect_links(event, content):
               future = publisher.publish(
                 topic_path, data, zip_path=zip_url, link_path=link
               )
-              print(future.result())
+              print(f"{link} is being downloaded")
             else:
-
-                print(link + " already exists")
+             print(f"{link} has already been downloaded")
+            
             time.sleep((random.random() * 2.0) + 3.0)
+    else:
+        # Report Stackdriver error
+        raise RuntimeError(
+            f"Could not scrape web page, encountered unexpected status code: {status}"
+        )
